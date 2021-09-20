@@ -1,0 +1,18 @@
+functions: [schema-field-check]
+rules:
+  schema-properties-must-have-example:
+    message: "${{error}}"
+    given: $
+    severity: error
+    then:
+      function: schema-field-check
+      functionOptions:
+        field: "example"
+  schema-properties-must-have-description:
+    message: "${{error}}"
+    given: $
+    severity: error
+    then:
+      function: schema-field-check
+      functionOptions:
+        field: "description"

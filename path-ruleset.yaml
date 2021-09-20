@@ -1,0 +1,45 @@
+functions: [parameter-example-check, word-length]
+rules:
+  path-parameters-must-have-description:
+    description: Path/Query parameters must have a description
+    given: $.[*].parameters[?(@.$ref == null)]
+    severity: error
+    then:
+      field: description
+      function: truthy
+  path-parameters-must-have-a-lengthy-description:
+    description: The description of parameters must be at least 8 characters
+    type: style
+    given: $.[*].parameters[?(@.$ref == null)]
+    severity: error
+    then:
+      field: description
+      function: length
+      functionOptions:
+        min: 8
+  path-parameters-must-have-example:
+    given: $.[*].parameters.*
+    severity: error
+    then:
+      function: parameter-example-check
+  path-summary-length:
+    given: $[*].summary
+    severity: error
+    then:
+      function: word-length
+      functionOptions:
+        maxWordCount: 5
+  path-must-have-security-defined:
+    description: Operations must have bearerAuth security defined as to the access needed for the endpoint
+    given: $[*]
+    severity: error
+    then:
+      field: security
+      function: truthy
+  path-must-have-security-bearerAuth-defined:
+    description: Operations must have security.bearerAuth with at least one scope defined to access the endpoint
+    given: $[*].security.*
+    severity: error
+    then:
+      field: bearerAuth
+      function: truthy

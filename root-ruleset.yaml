@@ -1,0 +1,33 @@
+rules:
+  root-tags-must-have-description:
+    description: Tags must have a description
+    given: $.tags[*]
+    severity: error
+    then:
+      field: description
+      function: truthy
+  root-tags-must-have-externalDocs:
+    description: Tags must have externalDocs
+    given: $.tags[*]
+    severity: error
+    then:
+      field: externalDocs
+      function: truthy
+  info-x-audience-rule:
+    description: Info object must have a target audience specified by key x-audience
+    given: $
+    severity: error
+    then:
+      field: info.x-audience
+      function: truthy
+  info-x-audience-specific-values:
+    description: info.x-audience value must be either internal-company or external-public
+    given: $.info
+    severity: error
+    then:
+      field: x-audience
+      function: enumeration
+      functionOptions:
+        values:
+          - internal-company
+          - external-public
