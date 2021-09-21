@@ -1,4 +1,4 @@
-functions: [parameter-example-check, word-length]
+functions: [parameter-example-check, word-length, deprecation]
 rules:
   path-parameters-must-have-description:
     description: Path/Query parameters must have a description
@@ -24,7 +24,7 @@ rules:
       function: parameter-example-check
   path-summary-length:
     given: $[*].summary
-    severity: error
+    severity: warn
     then:
       function: word-length
       functionOptions:
@@ -43,3 +43,16 @@ rules:
     then:
       field: bearerAuth
       function: truthy
+  path-deprecated-apis-must-have-deprecation-and-sunset-dates:
+    description: "${{error}}"
+    given: $[*]
+    severity: error
+    then:
+      function: deprecation
+  # path-must-have-required-key-on-all-parameters:
+  #   description: Operations must have required key on all parameters
+  #   given: $[*].parameters.*
+  #   severity: error
+  #   then:
+  #     field: required
+  #     function: defined

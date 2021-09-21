@@ -1,11 +1,11 @@
-functions: [schema-field-check]
+functions: [schema-properties-field-check, schema-object-field-check]
 rules:
   schema-properties-must-have-example:
     message: "${{error}}"
     given: $
     severity: error
     then:
-      function: schema-field-check
+      function: schema-properties-field-check
       functionOptions:
         field: "example"
   schema-properties-must-have-description:
@@ -13,6 +13,14 @@ rules:
     given: $
     severity: error
     then:
-      function: schema-field-check
+      function: schema-properties-field-check
       functionOptions:
         field: "description"
+  schema-objects-must-have-required-parameters:
+    message: "${{error}}"
+    given: $
+    severity: error
+    then:
+      function: schema-object-field-check
+      functionOptions:
+        field: required
