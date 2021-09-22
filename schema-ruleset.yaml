@@ -1,4 +1,4 @@
-functions: [schema-properties-field-check, schema-object-field-check]
+functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats]
 rules:
   schema-properties-must-have-example:
     message: "${{error}}"
@@ -24,3 +24,9 @@ rules:
       function: schema-object-field-check
       functionOptions:
         field: required
+  schema-properties-must-have-valid-formats-for-numbers-and-integers:
+    message: "${{error}}"
+    given: $
+    severity: error
+    then:
+      function: validate-schema-integer-number-formats

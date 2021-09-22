@@ -1,4 +1,4 @@
-functions: [parameter-example-check, word-length, deprecation]
+functions: [parameter-example-check, word-length, deprecation, path-parameter-integer-number-formats]
 rules:
   path-parameters-must-have-description:
     description: Path/Query parameters must have a description
@@ -22,6 +22,11 @@ rules:
     severity: error
     then:
       function: parameter-example-check
+  path-parameters-must-have-valid-formats-for-numbers-and-integers:
+    given: $.[*].parameters.*
+    severity: error
+    then:
+      function: path-parameter-integer-number-formats
   path-summary-length:
     given: $[*].summary
     severity: warn
@@ -30,12 +35,12 @@ rules:
       functionOptions:
         maxWordCount: 5
   path-must-have-security-defined:
-    description: Operations must have bearerAuth security defined as to the access needed for the endpoint
+    description: Operations must have security defined as to the access needed for the endpoint
     given: $[*]
     severity: error
     then:
       field: security
-      function: truthy
+      function: defined
   path-must-have-security-bearerAuth-defined:
     description: Operations must have security.bearerAuth with at least one scope defined to access the endpoint
     given: $[*].security.*
@@ -49,10 +54,10 @@ rules:
     severity: error
     then:
       function: deprecation
-  # path-must-have-required-key-on-all-parameters:
-  #   description: Operations must have required key on all parameters
-  #   given: $[*].parameters.*
-  #   severity: error
-  #   then:
-  #     field: required
-  #     function: defined
+  path-must-have-required-key-on-all-parameters:
+    description: Operations must have required key on all parameters
+    given: $[*].parameters.*
+    severity: error
+    then:
+      field: required
+      function: defined
