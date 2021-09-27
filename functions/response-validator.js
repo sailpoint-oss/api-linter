@@ -14,7 +14,7 @@ function removeErrorCode(arr, value) {
   return arr;
 }
 
-module.exports = (targetVal, opts, paths) => {
+module.exports = (targetVal) => {
   error_response_codes = ["400", "401", "403", "429", "500"]; // Error Codes to check
   contains_2xx_code = false;
 

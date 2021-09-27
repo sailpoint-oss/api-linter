@@ -1,4 +1,0 @@
-type: number
-description: the count of access item added
-example: 10.0
-format: double
