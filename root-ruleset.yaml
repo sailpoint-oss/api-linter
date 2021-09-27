@@ -1,3 +1,4 @@
+functions: [path-validator]
 rules:
   root-tags-must-have-description:
     description: Tags must have a description
@@ -31,3 +32,9 @@ rules:
         values:
           - internal-company
           - external-public
+  paths-should-not-have-more-than-three-sub-resources:
+    description: "The path must not exceed 3 sub-resources"
+    given: $.paths.*~
+    severity: warn
+    then:
+      function: path-validator

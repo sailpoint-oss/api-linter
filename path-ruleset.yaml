@@ -1,4 +1,12 @@
-functions: [parameter-example-check, word-length, deprecation, path-parameter-integer-number-formats]
+functions:
+  [
+    parameter-example-check,
+    word-length,
+    deprecation,
+    path-parameter-integer-number-formats,
+    response-validator,
+    path-query-parameter-check,
+  ]
 rules:
   path-parameters-must-have-description:
     description: Path/Query parameters must have a description
@@ -61,3 +69,22 @@ rules:
     then:
       field: required
       function: defined
+  path-must-define-specific-response-codes:
+    given: $.[*].responses
+    severity: error
+    then:
+      function: response-validator
+  path-parameters-should-have-query-parameter-fields:
+    given: $.[get]
+    severity: warn
+    then:
+      function: path-query-parameter-check
+      functionOptions:
+        field: fields
+  path-parameters-should-have-query-parameter-embed:
+    given: $.[get]
+    severity: warn
+    then:
+      function: path-query-parameter-check
+      functionOptions:
+        field: embed
