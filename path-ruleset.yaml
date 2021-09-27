@@ -56,12 +56,12 @@ rules:
     then:
       field: bearerAuth
       function: truthy
-  path-deprecated-apis-must-have-deprecation-and-sunset-dates:
-    description: "${{error}}"
-    given: $[*]
-    severity: error
-    then:
-      function: deprecation
+  # path-deprecated-apis-must-have-deprecation-and-sunset-dates:
+  #   description: "${{error}}"
+  #   given: $[*]
+  #   severity: error
+  #   then:
+  #     function: deprecation
   path-must-have-required-key-on-all-parameters:
     description: Operations must have required key on all parameters
     given: $[*].parameters.*
