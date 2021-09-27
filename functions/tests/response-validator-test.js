@@ -1,3 +1,4 @@
+var assert = require("assert");
 let responseValidator = require("../response-validator.js");
 
 let jsonResponseWithAllResponsesDefined = {
@@ -89,7 +90,6 @@ let jsonWith2xxLevelResponseMissing = {
   },
 };
 
-var assert = require("assert");
 describe("Response Validator", function () {
   it("Should not return any error messages when all responses defined in the provided json", function () {
     assert.equal(

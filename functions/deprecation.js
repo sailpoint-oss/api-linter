@@ -1,4 +1,4 @@
-module.exports = (targetVal, _opts, paths) => {
+module.exports = (targetVal, paths) => {
   results = [];
 
   const rootPath = paths.target !== void 0 ? paths.target : paths.given;
@@ -8,14 +8,14 @@ module.exports = (targetVal, _opts, paths) => {
       deprecatedKeyFound = false;
       sunsetKeyFound = false;
       for (const [key, value] of Object.entries(targetVal.parameters)) {
-        if (JSON.stringify(value).indexOf('"in":"header","name":"Deprecation"') == 1) {
+        if (JSON.stringify(value).indexOf('"in":"header","name":"deprecation"') == 1) {
             deprecatedKeyFound = true
-        } else if (JSON.stringify(value).indexOf('"in":"header","name":"Sunset"') == 1) {
+        } else if (JSON.stringify(value).indexOf('"in":"header","name":"sunset"') == 1) {
             sunsetKeyFound = true
         }
       }
 
-      if (!deprecatedKeyFound || !sunsetKeyFound) {
+      if (!deprecatedKeyFound && !sunsetKeyFound) {
         results.push({
             message: `The path ${rootPath} must define deprecation and sunset dates in the header if api is marked as deprecated`,
             path: [...rootPath, "deprecated"],
