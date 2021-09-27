@@ -1,4 +1,4 @@
-module.exports = (targetVal, paths) => {
+module.exports = (targetVal, _opts, paths) => {
   results = [];
 
   const rootPath = paths.target !== void 0 ? paths.target : paths.given;
