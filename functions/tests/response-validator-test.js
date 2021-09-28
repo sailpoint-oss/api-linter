@@ -1,5 +1,6 @@
 var assert = require("assert");
 let responseValidator = require("../response-validator.js");
+let ruleNumber = 151;
 
 let jsonResponseWithAllResponsesDefined = {
   200: {
@@ -94,7 +95,9 @@ describe("Response Validator", function () {
   it("Should not return any error messages when all responses defined in the provided json", function () {
     assert.equal(
       undefined,
-      responseValidator(jsonResponseWithAllResponsesDefined)
+      responseValidator(jsonResponseWithAllResponsesDefined, {
+        rule: ruleNumber,
+      })
     );
   });
 
@@ -102,11 +105,10 @@ describe("Response Validator", function () {
     assert.deepEqual(
       [
         {
-          message:
-            "Operation must have the following error codes defined: 429,500",
+          message: `Rule ${ruleNumber}: Operation must have the following error codes defined: 429,500`,
         },
       ],
-      responseValidator(jsonWithMissingErrorResponses)
+      responseValidator(jsonWithMissingErrorResponses, { rule: ruleNumber })
     );
   });
 
@@ -114,11 +116,13 @@ describe("Response Validator", function () {
     assert.deepEqual(
       [
         {
-          message:
-            "Operation must have at least one 200 level response code defined and the following error codes defined: 500",
+          message: `Rule ${ruleNumber}: Operation must have at least one 200 level response code defined and the following error codes defined: 500`,
         },
       ],
-      responseValidator(jsonWithMissing2xxLevelResponseAndMissingErrorResponse)
+      responseValidator(
+        jsonWithMissing2xxLevelResponseAndMissingErrorResponse,
+        { rule: ruleNumber }
+      )
     );
   });
 
@@ -126,11 +130,10 @@ describe("Response Validator", function () {
     assert.deepEqual(
       [
         {
-          message:
-            "Operation must have at least one 200 level response code defined",
+          message: `Rule ${ruleNumber}: Operation must have at least one 200 level response code defined`,
         },
       ],
-      responseValidator(jsonWith2xxLevelResponseMissing)
+      responseValidator(jsonWith2xxLevelResponseMissing, { rule: ruleNumber })
     );
   });
 });

@@ -12,7 +12,7 @@ module.exports = (targetVal, _opts) => {
     if (targetVal.split(" ").length > maxWordCount) {
         return [
             {
-                message: `The summary value for a paths must not exceed 5 words`
+                message: `The summary value for a path should not exceed 5 words`
             }
         ]
     }

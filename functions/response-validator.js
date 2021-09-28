@@ -14,7 +14,8 @@ function removeErrorCode(arr, value) {
   return arr;
 }
 
-module.exports = (targetVal) => {
+module.exports = (targetVal, _opts) => {
+  const { rule } = _opts;
   error_response_codes = ["400", "401", "403", "429", "500"]; // Error Codes to check
   contains_2xx_code = false;
 
@@ -50,21 +51,21 @@ module.exports = (targetVal) => {
   if (contains_2xx_code == true && error_response_codes.length >= 1) {
     return [
       {
-        message: `Operation must have the following error codes defined: ${error_response_codes}`
+        message: `Rule ${rule}: Operation must have the following error codes defined: ${error_response_codes}`
       }
     ];
     // If the responses are missing a 2xx level response and one or more error codes need to be defined
   } else if (contains_2xx_code == false && error_response_codes.length >= 1) {
     return [
       {
-        message: `Operation must have at least one 200 level response code defined and the following error codes defined: ${error_response_codes}`
+        message: `Rule ${rule}: Operation must have at least one 200 level response code defined and the following error codes defined: ${error_response_codes}`
       }
     ];  
     // If the responses are missing a 2xx level response, but all required error code responses are defined
   } else if (contains_2xx_code == false && error_response_codes.length == 0) {
     return [
       {
-        message: `Operation must have at least one 200 level response code defined`
+        message: `Rule ${rule}: Operation must have at least one 200 level response code defined`
       }
     ];
   }
