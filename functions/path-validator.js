@@ -6,6 +6,7 @@
 //   function: path-validator
 
 module.exports = (targetVal, _opts) => {
+  const { rule } = _opts;
   path = targetVal.substring(1).split("/");
 
   count = 0;
@@ -17,9 +18,9 @@ module.exports = (targetVal, _opts) => {
 
   if (count > 3) {
     return [
-        {
-            message: `The path must not exceed 3 sub-resources`
-        }
-    ]
-}
+      {
+        message: `Rule ${rule}: The path must not exceed 3 sub-resources`,
+      },
+    ];
+  }
 };

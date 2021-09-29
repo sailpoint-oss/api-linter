@@ -380,7 +380,7 @@ describe("Deprecation Tests", function () {
       [
         {
           message:
-            "The path get must define deprecation and sunset dates in the header if api is marked as deprecated"
+            "The path get should define deprecation and sunset dates in the header if api is marked as deprecated"
         },
       ],
       deprecation(jsonWithDeprecationSetMissingRequiredParameters, {}, path)
@@ -392,7 +392,7 @@ describe("Deprecation Tests", function () {
       [
         {
           message:
-            "The path get must define sunset date in the header if api is marked as deprecated"
+            "The path get should define sunset date in the header if api is marked as deprecated"
         },
       ],
       deprecation(jsonWithDeprecationSetMissingSunsetRequiredParameter, {}, path)
@@ -405,7 +405,7 @@ describe("Deprecation Tests", function () {
       [
         {
           message:
-            "The path get must define deprecation date in the header if api is marked as deprecated"
+            "The path get should define deprecation date in the header if api is marked as deprecated"
         },
       ],
       deprecation(jsonWithDeprecationSetMissingDeprecationRequiredParameter, {}, path)
