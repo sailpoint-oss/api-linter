@@ -1,7 +1,5 @@
-module.exports = (targetVal, _opts, paths) => {
-    const { field } = _opts;
-
-    const rootPath = paths.target !== void 0 ? paths.target : paths.given;
+module.exports = (targetVal, _opts) => {
+    const { rule, field } = _opts;
 
     keyFound = false;
     for (const [key, value] of Object.entries(targetVal.parameters)) {
@@ -13,7 +11,7 @@ module.exports = (targetVal, _opts, paths) => {
     if (!keyFound) {
         return [
             {
-                message: `All GET operations should have ${field} as a query parameter`
+                message: `Rule ${rule}: All GET operations should have ${field} as a query parameter`
             }
         ];
       }
