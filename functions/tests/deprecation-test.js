@@ -372,7 +372,7 @@ let jsonWithDeprecationSetWithRequiredParameters = {
 
 describe("Deprecation Tests", function () {
   it("Should not return any error messages when depcreation flag is not set", function () {
-    assert.deepEqual([], deprecation(jsonWithDeprecationNotSet, path));
+    assert.deepEqual([], deprecation(jsonWithDeprecationNotSet, {}, path));
   });
 
   it("Should return error message when depcreation flag is set but the headers (deprecation and sunset) are not defined", function () {
@@ -380,11 +380,10 @@ describe("Deprecation Tests", function () {
       [
         {
           message:
-            "The path get must define deprecation and sunset dates in the header if api is marked as deprecated",
-          path: ["get", "deprecated"],
+            "The path get must define deprecation and sunset dates in the header if api is marked as deprecated"
         },
       ],
-      deprecation(jsonWithDeprecationSetMissingRequiredParameters, path)
+      deprecation(jsonWithDeprecationSetMissingRequiredParameters, {}, path)
     );
   });
 
@@ -393,11 +392,10 @@ describe("Deprecation Tests", function () {
       [
         {
           message:
-            "The path get must define sunset date in the header if api is marked as deprecated",
-          path: ["get", "deprecated"],
+            "The path get must define sunset date in the header if api is marked as deprecated"
         },
       ],
-      deprecation(jsonWithDeprecationSetMissingSunsetRequiredParameter, path)
+      deprecation(jsonWithDeprecationSetMissingSunsetRequiredParameter, {}, path)
     );
   });
 
@@ -407,18 +405,17 @@ describe("Deprecation Tests", function () {
       [
         {
           message:
-            "The path get must define deprecation date in the header if api is marked as deprecated",
-          path: ["get", "deprecated"],
+            "The path get must define deprecation date in the header if api is marked as deprecated"
         },
       ],
-      deprecation(jsonWithDeprecationSetMissingDeprecationRequiredParameter, path)
+      deprecation(jsonWithDeprecationSetMissingDeprecationRequiredParameter, {}, path)
     );
   });
 
   it("Should not return any errors when json is valid and the rule is followed", function () {
     assert.deepEqual(
       [],
-      deprecation(jsonWithDeprecationSetWithRequiredParameters, path)
+      deprecation(jsonWithDeprecationSetWithRequiredParameters, {}, path)
     );
   });
 });

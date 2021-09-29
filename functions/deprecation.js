@@ -1,5 +1,6 @@
 module.exports = (targetVal, _opts, paths) => {
   results = [];
+  console.log("Deprecation Function: ")
 
   const rootPath = paths.target !== void 0 ? paths.target : paths.given;
 
@@ -17,24 +18,24 @@ module.exports = (targetVal, _opts, paths) => {
 
       if (!deprecatedKeyFound && !sunsetKeyFound) {
         results.push({
-            message: `The path ${rootPath} must define deprecation and sunset dates in the header if api is marked as deprecated`,
-            path: [...rootPath, "deprecated"],
+            message: `The path ${rootPath} should define deprecation and sunset dates in the header if api is marked as deprecated`,
+            //path: [...rootPath, "deprecated"],
           });
       } else if (!sunsetKeyFound) {
         results.push({
-            message: `The path ${rootPath} must define sunset date in the header if api is marked as deprecated`,
-            path: [...rootPath, "deprecated"],
+            message: `The path ${rootPath} should define sunset date in the header if api is marked as deprecated`,
+            //path: [...rootPath, "deprecated"],
           });
       } else if (!deprecatedKeyFound) {
         results.push({
-            message: `The path ${rootPath} must define deprecation date in the header if api is marked as deprecated`,
-            path: [...rootPath, "deprecated"],
+            message: `The path ${rootPath} should define deprecation date in the header if api is marked as deprecated`,
+            //path: [...rootPath, "deprecated"],
           });
       }
     } else {
       results.push({
-        message: `The path ${rootPath} must define deprecation and sunset dates in the header if api is marked as deprecated`,
-        path: [...rootPath, "deprecated"],
+        message: `The path ${rootPath} should define deprecation and sunset dates in the header if api is marked as deprecated`,
+        //path: [...rootPath, "deprecated"],
       });
     }
   }
