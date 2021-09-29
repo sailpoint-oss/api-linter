@@ -1,4 +1,4 @@
-function parseYamlProperties(targetYaml, field, pathPrefix, errorResults) {
+function parseYamlProperties(targetYaml, field, pathPrefix, errorResults, rule) {
   if (targetYaml.properties != undefined || targetYaml.properties != null) {
     for (const [key, value] of Object.entries(targetYaml.properties)) {
       //console.dir(`The property ${key} value: ${typeof(value.properties)}`)
@@ -8,20 +8,22 @@ function parseYamlProperties(targetYaml, field, pathPrefix, errorResults) {
       ) {
         //console.log(`${key} has type object to parse further`)
         if (pathPrefix == null) {
-          parseYamlProperties(value, field, key, errorResults);
+          parseYamlProperties(value, field, key, errorResults, rule);
         } else if (pathPrefix == "properties") {
           parseYamlProperties(
             value,
             field,
             pathPrefix + "." + key,
-            errorResults
+            errorResults,
+            rule
           );
         } else {
           parseYamlProperties(
             value,
             field,
             pathPrefix + ".properties." + key,
-            errorResults
+            errorResults,
+            rule
           );
         }
       } else {
@@ -29,7 +31,7 @@ function parseYamlProperties(targetYaml, field, pathPrefix, errorResults) {
         if (!value.hasOwnProperty(field) && value[field] == null) {
           //console.log(`Example is defined for ${key}:  ${value.example}`)
           errorResults.push({
-            message: `The property ${key} must have a ${field}`,
+            message: `Rule ${rule}: The property ${key} must have a ${field}`,
             path: [...pathPrefix.split("."), "properties", key, field],
           });
         }
@@ -39,7 +41,7 @@ function parseYamlProperties(targetYaml, field, pathPrefix, errorResults) {
 }
 
 module.exports = (targetYaml, _opts, context, paths) => {
-  const { field } = _opts;
+  const { field, rule } = _opts;
   //console.log(JSON.stringify(targetYaml));
 
   results = [];
@@ -56,7 +58,7 @@ module.exports = (targetYaml, _opts, context, paths) => {
           if (!value.hasOwnProperty(field) && value[field] == null) {
             //console.log(`The property ${key} must have a ${field}`);
             results.push({
-              message: `The property ${key} must have an ${field}`,
+              message: `Rule ${rule}: The property ${key} must have a ${field}`,
               path: [`allOf`, parseInt(index), "properties", key, field],
             });
           }
@@ -71,14 +73,14 @@ module.exports = (targetYaml, _opts, context, paths) => {
     targetYaml.type == "object" &&
     targetYaml.properties != undefined
   ) {
-    parseYamlProperties(targetYaml, field, "properties", results);
+    parseYamlProperties(targetYaml, field, "properties", results, rule);
   }
 
   // Type String
   if (Object.keys(targetYaml).includes("type") && targetYaml.type != "object") {
     if (!targetYaml.hasOwnProperty(field) || targetYaml[field] == null) {
       results.push({
-        message: `This field must have a ${field}`,
+        message: `Rule ${rule}: This field must have a ${field}`,
         path: [field],
       });
     }
