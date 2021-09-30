@@ -1,6 +1,6 @@
 module.exports = (targetVal, _opts, paths) => {
   results = [];
-  console.log("Deprecation Function: ")
+  console.log(`Deprecation Function: ${JSON.stringify(paths)}`)
 
   const rootPath = paths.target !== void 0 ? paths.target : paths.given;
 
