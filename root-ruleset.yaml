@@ -38,4 +38,5 @@ rules:
     severity: warn
     then:
       function: path-validator
-      rule: 147
+      functionOptions:
+        rule: 147
