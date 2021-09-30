@@ -62,7 +62,6 @@ rules:
   #     field: bearerAuth
   #     function: truthy
   path-deprecated-apis-should-have-deprecation-and-sunset-dates:
-    description: "${{error}}"
     given: $[*]
     severity: warn
     then:
