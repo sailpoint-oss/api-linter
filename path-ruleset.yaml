@@ -1,7 +1,7 @@
 functions:
   [
     parameter-example-check,
-    word-length,
+    word-count,
     deprecation,
     path-parameter-integer-number-formats,
     response-validator,
@@ -43,7 +43,7 @@ rules:
     given: $[*].summary
     severity: warn
     then:
-      function: word-length
+      function: word-count
       functionOptions:
         maxWordCount: 5
         rule: 305
