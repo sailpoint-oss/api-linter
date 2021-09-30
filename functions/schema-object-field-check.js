@@ -9,8 +9,8 @@
 //   functionOptions:
 //     field: required
 
-module.exports = (targetYaml, _opts, context, paths) => {
-  const { field } = _opts;
+module.exports = (targetYaml, _opts) => {
+  const { rule, field } = _opts;
   
   results = [];
 
@@ -23,7 +23,7 @@ module.exports = (targetYaml, _opts, context, paths) => {
         !element.hasOwnProperty(field)
       ) {
         results.push({
-          message: `All schema objects must have a ${field} field defined`,
+          message: `Rule ${rule}: All schema objects must have a ${field} field defined`,
           path: [`allOf`, parseInt(index), field],
         });
       }
@@ -37,7 +37,7 @@ module.exports = (targetYaml, _opts, context, paths) => {
     !targetYaml.hasOwnProperty(field)
   ) {
     results.push({
-      message: `All schema objects must have a ${field} field defined`,
+      message: `Rule ${rule}: All schema objects must have a ${field} field defined`,
       path: [field],
     });
   }
