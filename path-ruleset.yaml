@@ -9,14 +9,14 @@ functions:
   ]
 rules:
   path-parameters-must-have-description:
-    description: Path/Query parameters must have a description
+    description: "Rule 303: Path/Query parameters must have a description" 
     given: $.[*].parameters[?(@.$ref == null)]
     severity: error
     then:
       field: description
       function: truthy
   path-parameters-must-have-a-lengthy-description:
-    description: The description of parameters must be at least 8 characters
+    description: "Rule 303: The description of parameters must be at least 8 characters"
     type: style
     given: $.[*].parameters[?(@.$ref == null)]
     severity: error
@@ -30,11 +30,15 @@ rules:
     severity: error
     then:
       function: parameter-example-check
+      functionOptions:
+        rule: 304
   path-parameters-must-have-valid-formats-for-numbers-and-integers:
     given: $.[*].parameters.*
     severity: error
     then:
       function: path-parameter-integer-number-formats
+      functionOptions:
+        rule: 171
   path-summary-length:
     given: $[*].summary
     severity: warn
@@ -42,28 +46,31 @@ rules:
       function: word-length
       functionOptions:
         maxWordCount: 5
-  path-must-have-security-defined:
-    description: Operations must have security defined as to the access needed for the endpoint
-    given: $[*]
-    severity: error
-    then:
-      field: security
-      function: defined
-  path-must-have-security-bearerAuth-defined:
-    description: Operations must have security.bearerAuth with at least one scope defined to access the endpoint
-    given: $[*].security.*
-    severity: error
-    then:
-      field: bearerAuth
-      function: truthy
-  # path-deprecated-apis-must-have-deprecation-and-sunset-dates:
-  #   description: "${{error}}"
+        rule: 305
+  # path-must-have-security-defined:
+  #   description: "Rule 104: Operations must have security defined as to the access needed for the endpoint"
   #   given: $[*]
   #   severity: error
   #   then:
-  #     function: deprecation
+  #     field: security
+  #     function: defined
+  # path-must-have-security-bearerAuth-defined:
+  #   description: "Rule 105: Operations must have security.bearerAuth with at least one scope defined to access the endpoint"
+  #   given: $[*].security.*
+  #   severity: error
+  #   then:
+  #     field: bearerAuth
+  #     function: truthy
+  path-deprecated-apis-should-have-deprecation-and-sunset-dates:
+    description: "${{error}}"
+    given: $[*]
+    severity: warn
+    then:
+      function: deprecation
+      functionOptions:
+        rule: 189
   path-must-have-required-key-on-all-parameters:
-    description: Operations must have required key on all parameters
+    description: "Rule 317: Operations must have required key on all parameters"
     given: $[*].parameters.*
     severity: error
     then:
@@ -74,6 +81,8 @@ rules:
     severity: error
     then:
       function: response-validator
+      functionOptions:
+        rule: 151
   path-parameters-should-have-query-parameter-fields:
     given: $.[get]
     severity: warn
@@ -81,6 +90,7 @@ rules:
       function: path-query-parameter-check
       functionOptions:
         field: fields
+        rule: 157
   path-parameters-should-have-query-parameter-embed:
     given: $.[get]
     severity: warn
@@ -88,3 +98,4 @@ rules:
       function: path-query-parameter-check
       functionOptions:
         field: embed
+        rule: 158
