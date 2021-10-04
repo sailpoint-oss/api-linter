@@ -1,7 +1,12 @@
-function parseYamlProperties(targetYaml, field, pathPrefix, errorResults, rule) {
+function parseYamlProperties(
+  targetYaml,
+  field,
+  pathPrefix,
+  errorResults,
+  rule
+) {
   if (targetYaml.properties != undefined || targetYaml.properties != null) {
     for (const [key, value] of Object.entries(targetYaml.properties)) {
-      //console.dir(`The property ${key} value: ${typeof(value.properties)}`)
       if (
         value.properties != undefined &&
         typeof value.properties == "object"
@@ -26,14 +31,74 @@ function parseYamlProperties(targetYaml, field, pathPrefix, errorResults, rule) 
             rule
           );
         }
+      } else if (
+        value.hasOwnProperty("type") &&
+        value.type == "array" &&
+        value.hasOwnProperty("items") &&
+        value.items.type == "object"
+      ) {
+        if (pathPrefix == null) {
+          parseYamlProperties(value.items, field, key, errorResults, rule);
+        } else if (pathPrefix == "properties") {
+          parseYamlProperties(
+            value.items,
+            field,
+            pathPrefix + ".items." + key,
+            errorResults,
+            rule
+          );
+        } else {
+          parseYamlProperties(
+            value.items,
+            field,
+            pathPrefix + ".properties." + key + ".items",
+            errorResults,
+            rule
+          );
+        }
       } else {
-        //console.log(`${key} is low level, ready to check for example. ${pathPrefix + "." + key}`)
-        if (!value.hasOwnProperty(field) && value[field] == null) {
-          //console.log(`Example is defined for ${key}:  ${value.example}`)
-          errorResults.push({
-            message: `Rule ${rule}: The property ${key} must have a ${field}`,
-            path: [...pathPrefix.split("."), "properties", key, field],
-          });
+        // console.log(
+        //   `${key} is low level, ready to check for example. ${
+        //     pathPrefix + ".properties." + key
+        //   }`
+        // );
+        if (value.type == "array" && value.items != undefined && field == "example" && value.items.hasOwnProperty(field)) {
+        } else {
+          if (!value.hasOwnProperty(field) && value[field] == null) {
+            if (
+              pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+              "properties"
+            ) {
+              errorResults.push({
+                message: `Rule ${rule}: The property ${key} must have a ${field}`,
+                path: [...pathPrefix.split("."), key, field],
+              });
+            } else {
+              errorResults.push({
+                message: `Rule ${rule}: The property ${key} must have a ${field}`,
+                path: [...pathPrefix.split("."), "properties", key, field],
+              });
+            }
+          } else if (value.hasOwnProperty(field) && value[field] == null) {
+            // console.log(
+            //   `Rule ${rule}: The property ${key} must have a ${field} that is not null: : ${pathPrefix}.properties.${key}.${field}`
+            // );
+
+            if (
+              pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+              "properties"
+            ) {
+              errorResults.push({
+                message: `Rule ${rule}: The property ${key} must have a ${field} that is not null`,
+                path: [...pathPrefix.split("."), key, field],
+              });
+            } else {
+              errorResults.push({
+                message: `Rule ${rule}: The property ${key} must have a ${field} that is not null`,
+                path: [...pathPrefix.split("."), "properties", key, field],
+              });
+            }
+          }
         }
       }
     }
