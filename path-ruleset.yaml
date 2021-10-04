@@ -82,19 +82,19 @@ rules:
       function: response-validator
       functionOptions:
         rule: 151
-  path-parameters-should-have-query-parameter-fields:
-    given: $.[get]
-    severity: warn
-    then:
-      function: path-query-parameter-check
-      functionOptions:
-        field: fields
-        rule: 157
-  path-parameters-should-have-query-parameter-embed:
-    given: $.[get]
-    severity: warn
-    then:
-      function: path-query-parameter-check
-      functionOptions:
-        field: embed
-        rule: 158
+  # path-parameters-should-have-query-parameter-fields:
+  #   given: $.[get]
+  #   severity: warn
+  #   then:
+  #     function: path-query-parameter-check
+  #     functionOptions:
+  #       field: fields
+  #       rule: 157
+  # path-parameters-should-have-query-parameter-embed:
+  #   given: $.[get]
+  #   severity: warn
+  #   then:
+  #     function: path-query-parameter-check
+  #     functionOptions:
+  #       field: embed
+  #       rule: 158
