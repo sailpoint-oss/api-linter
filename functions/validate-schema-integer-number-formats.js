@@ -67,6 +67,7 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
 
 module.exports = (targetYaml, _opts, context, paths) => {
   //console.log(JSON.stringify(targetYaml));
+  const { rule } = _opts;
 
   results = [];
 
@@ -125,6 +126,10 @@ module.exports = (targetYaml, _opts, context, paths) => {
     }
   }
 
+  // Add the rule number to each result message
+  results.forEach(result => {
+    result.message = `Rule ${rule}: ${result.message}`
+  });
 
   return results;
 };
