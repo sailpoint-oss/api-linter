@@ -69,7 +69,7 @@ module.exports = (targetYaml, _opts, context, paths) => {
   //console.log(JSON.stringify(targetYaml));
   const { rule } = _opts;
 
-  results = [];
+  let results = [];
 
   // All Of - If the root level yaml contains the key allOf
   if (Object.keys(targetYaml)[0] == "allOf") {

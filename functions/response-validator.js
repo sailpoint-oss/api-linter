@@ -16,8 +16,8 @@ function removeErrorCode(arr, value) {
 
 module.exports = (targetVal, _opts) => {
   const { rule } = _opts;
-  error_response_codes = ["400", "401", "403", "429", "500"]; // Error Codes to check
-  contains_2xx_code = false;
+  let error_response_codes = ["400", "401", "403", "429", "500"]; // Error Codes to check
+  let contains_2xx_code = false;
 
   // Loop through each key in the reponses objects 
   for (const [key, value] of Object.entries(targetVal)) {

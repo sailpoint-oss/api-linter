@@ -1,6 +1,6 @@
 module.exports = (targetVal, _opts, paths) => {
   const { rule } = _opts;
-  results = [];
+  let results = [];
 
   const rootPath = paths.target !== void 0 ? paths.target : paths.given;
 
