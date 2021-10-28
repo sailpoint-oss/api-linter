@@ -7,6 +7,7 @@ do
     if echo $file | grep "sailpoint-api.*" --quiet
     then
 	# Don't ignore unkown format because we want to know if the root API spec is a valid OpenAPI version
+        echo "Linting Document using root ruleset"
         spectral lint $file --ruleset "${LINTER_URL}/root-ruleset.yaml" 
     fi
 
