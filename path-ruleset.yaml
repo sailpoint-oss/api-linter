@@ -10,7 +10,7 @@ functions:
 rules:
   path-parameters-must-have-description:
     description: "Rule 303: Path/Query parameters must have a description" 
-    given: $.[*].parameters[?(@.$ref == null)]
+    given: $.[get, head, post, patch, put, delete].parameters[?(@.$ref == null)]
     severity: error
     then:
       field: description
@@ -18,7 +18,7 @@ rules:
   path-parameters-must-have-a-lengthy-description:
     description: "Rule 303: The description of parameters must be at least 8 characters"
     type: style
-    given: $.[*].parameters[?(@.$ref == null)]
+    given: $.[get, head, post, patch, put, delete].parameters[?(@.$ref == null)]
     severity: error
     then:
       field: description
@@ -26,14 +26,14 @@ rules:
       functionOptions:
         min: 8
   path-parameters-must-have-example:
-    given: $.[*].parameters.*
+    given: $.[get, head, post, patch, put, delete].parameters.*
     severity: error
     then:
       function: parameter-example-check
       functionOptions:
         rule: 304
   path-parameters-must-have-valid-formats-for-numbers-and-integers:
-    given: $.[*].parameters.*
+    given: $.[get, head, post, patch, put, delete].parameters.*
     severity: error
     then:
       function: path-parameter-integer-number-formats
@@ -70,7 +70,7 @@ rules:
         rule: 189
   path-must-have-required-key-on-all-parameters:
     description: "Rule 317: Operations must have required key on all parameters"
-    given: $[*].parameters.*
+    given: $[get, head, post, patch, put, delete].parameters.*
     severity: error
     then:
       field: required
