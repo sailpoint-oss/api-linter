@@ -39,3 +39,27 @@ An example command for running the schema ruleset:
 ```
 spectral lint ~/path-to-spec/schema.yaml --ruleset https://raw.githubusercontent.com/sailpoint-oss/api-linter/main/schema-ruleset.yaml --ignore-unknown-format
 ```
+
+## Using the Linter
+
+Typically, contributions to the SailPoint OpenAPI specification involve creating a branch of the API specification in Git and making changes within the branch.  Rather than having to manually run the linter on each file that was changed in the branch, we have provided [lint.sh](./lint.sh), which will automatically run the linter on only the files that have changed in the branch.  To use this script, make sure you are on the correct branch of the API specification repo and run the following command in the root project directory:
+
+```sh
+sh /path/to/lint.sh
+```
+
+This script uses the git command `git diff --name-only HEAD master` to print the file paths that have changed, and then it loops through each file and applies the appropriate ruleset based on whether the file is a root spec file, path file, or schema file.  This script also has the benefit of referencing the rule files directly from this GitHub repository, so it will always apply the latest rules without the user having to download or synchronize any files.
+
+## Understanding the Linter Results
+
+The linter will print every problem it finds to stdout.  The following is an example of this output:
+![image](https://user-images.githubusercontent.com/75683148/139263011-b9ef3881-6482-4c64-8b29-07a3aafab021.png)
+The linter will print the path to the file that it linted, one or more problems, and then a summary of problems.  Each problem line can be broken down as follows:
+
+1. `20:13` indicates the line and character in the file where the problem was found.
+2. `error` indicates the severity of the problem found.  `error` translates to a `MUST` in the [API guidelines](https://sailpoint-oss.github.io/sailpoint-api-guidelines/), `warn` translates to `SHOULD`, and `info` translates` to `MAY`.
+3. `path-must-define-specific-response-codes` is the name of the rule in the API guidelines that has been violated.
+4. `Rule 151:` is the rule number in the API guidelines.  You can use this number to look up more information about that rule in the guidelines.
+5. `Operation must have the following ...` is a detailed description of the violation
+
+If the linter reports no problems, then the spec has passed the linter.
