@@ -31,7 +31,7 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
         // console.dir(value);
         if (value.hasOwnProperty("type") && value["type"] == "number") {
           if (!value.hasOwnProperty("format")) {
-            results.push({
+            errorResults.push({
               message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
               path: [...pathPrefix.split("."), "properties", key, "format"],
             });
@@ -39,14 +39,14 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
             value.hasOwnProperty("format") &&
             !["float", "double", "decimal"].includes(value["format"])
           ) {
-            results.push({
+            errorResults.push({
               message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
               path: [...pathPrefix.split("."), "properties", key, "format"],
             });
           }
         } else if (value.hasOwnProperty("type") && value["type"] == "integer") {
           if (!value.hasOwnProperty("format")) {
-            results.push({
+            errorResults.push({
               message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
               path: [...pathPrefix.split("."), "properties", key, "format"],
             });
@@ -54,7 +54,7 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
             value.hasOwnProperty("format") &&
             !["int32", "int64", "bigint"].includes(value["format"])
           ) {
-            results.push({
+            errorResults.push({
               message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
               path: [...pathPrefix.split("."), "properties", key, "format"],
             });

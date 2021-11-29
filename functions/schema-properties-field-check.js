@@ -1,3 +1,13 @@
+// schema-properties-must-have-description:
+// message: "{{error}}"
+// given: $
+// severity: error
+// then:
+//   function: schema-properties-field-check
+//   functionOptions:
+//     field: "description"
+//     rule: 303
+
 function parseYamlProperties(
   targetYaml,
   field,
@@ -6,7 +16,9 @@ function parseYamlProperties(
   rule
 ) {
   if (targetYaml.properties != undefined || targetYaml.properties != null) {
+    // Loop through each key under properties
     for (const [key, value] of Object.entries(targetYaml.properties)) {
+      // If you run into a key that is an object that has more properties call the function again passing in the lower level object to parse
       if (
         value.properties != undefined &&
         typeof value.properties == "object"
@@ -58,7 +70,7 @@ function parseYamlProperties(
         }
       } else {
         // console.log(
-        //   `${key} is low level, ready to check for example. ${
+        //   `${key} is low level, ready to check for ${field}. ${
         //     pathPrefix + ".properties." + key
         //   }`
         // );
@@ -105,7 +117,7 @@ function parseYamlProperties(
   }
 }
 
-module.exports = (targetYaml, _opts, context, paths) => {
+module.exports = (targetYaml, _opts) => {
   const { field, rule } = _opts;
   //console.log(JSON.stringify(targetYaml));
 
@@ -150,6 +162,8 @@ module.exports = (targetYaml, _opts, context, paths) => {
       });
     }
   }
+
+  //console.log(results)
 
   return results;
 };
