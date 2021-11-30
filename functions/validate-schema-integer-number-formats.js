@@ -10,11 +10,7 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
         if (pathPrefix == null) {
           parseYamlProperties(value, field, key, errorResults);
         } else if (pathPrefix == "properties") {
-          parseYamlProperties(
-            value,
-            pathPrefix + "." + key,
-            errorResults
-          );
+          parseYamlProperties(value, pathPrefix + "." + key, errorResults);
         } else {
           parseYamlProperties(
             value,
@@ -30,34 +26,74 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
         // );
         // console.dir(value);
         if (value.hasOwnProperty("type") && value["type"] == "number") {
-          if (!value.hasOwnProperty("format")) {
-            errorResults.push({
-              message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
-              path: [...pathPrefix.split("."), "properties", key, "format"],
-            });
-          } else if (
-            value.hasOwnProperty("format") &&
-            !["float", "double", "decimal"].includes(value["format"])
+          if (
+            pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+            "properties"
           ) {
-            errorResults.push({
-              message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
-              path: [...pathPrefix.split("."), "properties", key, "format"],
-            });
+            if (!value.hasOwnProperty("format")) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
+                path: [...pathPrefix.split("."), key, "format"],
+              });
+            } else if (
+              value.hasOwnProperty("format") &&
+              !["float", "double", "decimal"].includes(value["format"])
+            ) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
+                path: [...pathPrefix.split("."), key, "format"],
+              });
+            }
+          } else {
+            if (!value.hasOwnProperty("format")) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
+                path: [...pathPrefix.split("."), "properties", key, "format"],
+              });
+            } else if (
+              value.hasOwnProperty("format") &&
+              !["float", "double", "decimal"].includes(value["format"])
+            ) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
+                path: [...pathPrefix.split("."), "properties", key, "format"],
+              });
+            }
           }
         } else if (value.hasOwnProperty("type") && value["type"] == "integer") {
-          if (!value.hasOwnProperty("format")) {
-            errorResults.push({
-              message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
-              path: [...pathPrefix.split("."), "properties", key, "format"],
-            });
-          } else if (
-            value.hasOwnProperty("format") &&
-            !["int32", "int64", "bigint"].includes(value["format"])
+          if (
+            pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+            "properties"
           ) {
-            errorResults.push({
-              message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
-              path: [...pathPrefix.split("."), "properties", key, "format"],
-            });
+            if (!value.hasOwnProperty("format")) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
+                path: [...pathPrefix.split("."), key, "format"],
+              });
+            } else if (
+              value.hasOwnProperty("format") &&
+              !["int32", "int64", "bigint"].includes(value["format"])
+            ) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
+                path: [...pathPrefix.split("."), key, "format"],
+              });
+            }
+          } else {
+            if (!value.hasOwnProperty("format")) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
+                path: [...pathPrefix.split("."), "properties", key, "format"],
+              });
+            } else if (
+              value.hasOwnProperty("format") &&
+              !["int32", "int64", "bigint"].includes(value["format"])
+            ) {
+              errorResults.push({
+                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
+                path: [...pathPrefix.split("."), "properties", key, "format"],
+              });
+            }
           }
         }
       }
@@ -79,7 +115,7 @@ module.exports = (targetYaml, _opts, context, paths) => {
         element.type == "object" &&
         element.properties != undefined
       ) {
-          parseYamlProperties(element, "properties", results)
+        parseYamlProperties(element, "properties", results);
       }
     });
   }
@@ -109,7 +145,10 @@ module.exports = (targetYaml, _opts, context, paths) => {
         path: ["format"],
       });
     }
-  } else if (targetYaml.hasOwnProperty("type") && targetYaml["type"] == "integer") {
+  } else if (
+    targetYaml.hasOwnProperty("type") &&
+    targetYaml["type"] == "integer"
+  ) {
     if (!targetYaml.hasOwnProperty("format")) {
       results.push({
         message: `The property must have a format defined with type:integer [int32, int64, bigint]`,
@@ -127,8 +166,8 @@ module.exports = (targetYaml, _opts, context, paths) => {
   }
 
   // Add the rule number to each result message
-  results.forEach(result => {
-    result.message = `Rule ${rule}: ${result.message}`
+  results.forEach((result) => {
+    result.message = `Rule ${rule}: ${result.message}`;
   });
 
   return results;
