@@ -9,14 +9,14 @@ functions:
   ]
 rules:
   path-parameters-must-have-description:
-    description: "Rule 303: Path/Query parameters must have a description" 
+    description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303" 
     given: $.[get, head, post, patch, put, delete].parameters[?(@.$ref == null)]
     severity: error
     then:
       field: description
       function: truthy
   path-parameters-must-have-a-lengthy-description:
-    description: "Rule 303: The description of parameters must be at least 8 characters"
+    description: "Rule 303: The description of parameters must be at least 8 characters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     type: style
     given: $.[get, head, post, patch, put, delete].parameters[?(@.$ref == null)]
     severity: error
@@ -26,6 +26,7 @@ rules:
       functionOptions:
         min: 8
   path-parameters-must-have-example:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
     given: $.[get, head, post, patch, put, delete].parameters.*
     severity: error
     then:
@@ -33,6 +34,7 @@ rules:
       functionOptions:
         rule: 304
   path-parameters-must-have-valid-formats-for-numbers-and-integers:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171"
     given: $.[get, head, post, patch, put, delete].parameters.*
     severity: error
     then:
@@ -40,6 +42,7 @@ rules:
       functionOptions:
         rule: 171
   path-summary-length:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#305"
     given: $[*].summary
     severity: warn
     then:
@@ -62,6 +65,7 @@ rules:
   #     field: bearerAuth
   #     function: truthy
   path-deprecated-apis-should-have-deprecation-and-sunset-dates:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
     given: $[*]
     severity: warn
     then:
@@ -69,13 +73,14 @@ rules:
       functionOptions:
         rule: 189
   path-must-have-required-key-on-all-parameters:
-    description: "Rule 317: Operations must have required key on all parameters"
+    description: "Rule 317: Operations must have required key on all parameters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
     given: $[get, head, post, patch, put, delete].parameters.*
     severity: error
     then:
       field: required
       function: defined
   path-must-define-specific-response-codes:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#151"
     given: $.[*].responses
     severity: error
     then:

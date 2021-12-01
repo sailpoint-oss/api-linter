@@ -26,7 +26,7 @@ function parseYamlProperties(
         //console.log(`${key} has type object to parse further`)
         if (pathPrefix == null) {
           parseYamlProperties(value, field, key, errorResults, rule);
-        } else if (pathPrefix == "properties") {
+        } else if (pathPrefix == "properties") { // If the path to the error to check has properties key then add a . and the key name that you are currently iterating on
           parseYamlProperties(
             value,
             field,
@@ -34,7 +34,7 @@ function parseYamlProperties(
             errorResults,
             rule
           );
-        } else {
+        } else { // if you come into the function again and the pathPrefix is a key name, then you are in a multi-level object add the current pathPrefix + .properties. + the current key name 
           parseYamlProperties(
             value,
             field,
@@ -43,7 +43,7 @@ function parseYamlProperties(
             rule
           );
         }
-      } else if (
+      } else if ( // If the code is an array type and it has items and its items are of an object type, handle adding "items" to the pathPrefix appropriately
         value.hasOwnProperty("type") &&
         value.type == "array" &&
         value.hasOwnProperty("items") &&
@@ -75,7 +75,8 @@ function parseYamlProperties(
         //   }`
         // );
         if (value.type == "array" && value.items != undefined && field == "example" && value.items.hasOwnProperty(field)) {
-        } else {
+          console.log("Array Type, checking if items exist");
+        } else { // If the key does not define the field we are looking for 
           if (!value.hasOwnProperty(field) && value[field] == null) {
             if (
               pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
@@ -91,7 +92,7 @@ function parseYamlProperties(
                 path: [...pathPrefix.split("."), "properties", key, field],
               });
             }
-          } else if (value.hasOwnProperty(field) && value[field] == null) {
+          } else if (value.hasOwnProperty(field) && value[field] == null) { // If the key defines the field we are looking for but is null or empty
             // console.log(
             //   `Rule ${rule}: The property ${key} must have a ${field} that is not null: : ${pathPrefix}.properties.${key}.${field}`
             // );
