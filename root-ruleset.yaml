@@ -1,28 +1,28 @@
 functions: [path-validator]
 rules:
   root-tags-must-have-description:
-    description: "Rule 302: Tags must have a description"
+    description: "Rule 302: Tags must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#302"
     given: $.tags[*]
     severity: error
     then:
       field: description
       function: truthy
   root-tags-must-have-externalDocs:
-    description: "Rule 102: Tags must have externalDocs"
+    description: "Rule 102: Tags must have externalDocs: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#102"
     given: $.tags[*]
     severity: error
     then:
       field: externalDocs
       function: truthy
   info-x-audience-rule:
-    description: "Rule 218: Info object must have a target audience specified by key x-audience"
+    description: "Rule 218: Info object must have a target audience specified by key x-audience: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#218"
     given: $
     severity: error
     then:
       field: info.x-audience
       function: truthy
   info-x-audience-specific-values:
-    description: "Rule 219: info.x-audience value must be either internal-company or external-public"
+    description: "Rule 219: info.x-audience value must be either internal-company or external-public: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#219"
     given: $.info
     severity: error
     then:
@@ -33,7 +33,7 @@ rules:
           - internal-company
           - external-public
   paths-should-not-have-more-than-three-sub-resources:
-    description: "Rule 147: The path must not exceed 3 sub-resources"
+    description: "Rule 147: The path must not exceed 3 sub-resources: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#147"
     given: $.paths.*~
     severity: warn
     then:
