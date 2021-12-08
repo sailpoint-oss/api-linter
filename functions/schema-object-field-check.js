@@ -12,7 +12,7 @@
 module.exports = (targetYaml, _opts) => {
   const { rule, field } = _opts;
 
-  console.dir(targetYaml);
+  //console.dir(targetYaml);
   let results = [];
 
   // All Of - If the root level yaml contains the key allOf
