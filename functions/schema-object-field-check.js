@@ -22,8 +22,8 @@ module.exports = (targetYaml, _opts) => {
         (element.type != undefined &&
           element.type == "object" &&
           element.hasOwnProperty(field) &&
-          (targetYaml[field] == null) ||
-    (targetYaml[field] != null && targetYaml[field].length == 0))
+          (element[field] == null) ||
+    (element[field] != null && element[field].length == 0))
       ) {
         results.push({
           message: `Rule ${rule}: If a ${field} key is defined for a schema object, it must not be null or empty`,
