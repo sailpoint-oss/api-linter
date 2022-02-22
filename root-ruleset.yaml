@@ -1,19 +1,19 @@
-functions: [path-validator]
+functions: [path-validator, path-counter]
 rules:
-  root-tags-must-have-description:
-    description: "Rule 302: Tags must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#302"
-    given: $.tags[*]
-    severity: error
-    then:
-      field: description
-      function: truthy
-  root-tags-must-have-externalDocs:
-    description: "Rule 102: Tags must have externalDocs: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#102"
-    given: $.tags[*]
-    severity: error
-    then:
-      field: externalDocs
-      function: truthy
+  # root-tags-must-have-description:
+  #   description: "Rule 302: Tags must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#302"
+  #   given: $.tags[*]
+  #   severity: error
+  #   then:
+  #     field: description
+  #     function: truthy
+  # root-tags-must-have-externalDocs:
+  #   description: "Rule 102: Tags must have externalDocs: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#102"
+  #   given: $.tags[*]
+  #   severity: error
+  #   then:
+  #     field: externalDocs
+  #     function: truthy
   info-x-audience-rule:
     description: "Rule 218: Info object must have a target audience specified by key x-audience: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#218"
     given: $
@@ -32,11 +32,17 @@ rules:
         values:
           - internal-company
           - external-public
-  paths-should-not-have-more-than-three-sub-resources:
-    description: "Rule 147: The path must not exceed 3 sub-resources: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#147"
-    given: $.paths.*~
-    severity: warn
-    then:
-      function: path-validator
-      functionOptions:
-        rule: 147
+  # paths-should-not-have-more-than-three-sub-resources:
+  #   description: "Rule 147: The path must not exceed 3 sub-resources: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#147"
+  #   given: $.paths.*~
+  #   severity: warn
+  #   then:
+  #     function: path-validator
+  #     functionOptions:
+  #       rule: 147
+  # paths-counter:
+  #   description: "Rule 147: The path must not exceed 3 sub-resources: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#147"
+  #   given: $
+  #   severity: warn
+  #   then:
+  #     function: path-counter
