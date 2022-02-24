@@ -8,6 +8,14 @@
 //     field: "description"
 //     rule: 303
 
+const toNumbers = arr => arr.map(function(item) {
+  if(isNaN(parseInt(item, 10))) {
+      return item
+  } else {
+      return parseInt(item, 10);  
+  }
+});
+
 function parseYamlProperties(
   targetYaml,
   field,
@@ -68,6 +76,81 @@ function parseYamlProperties(
             rule
           );
         }
+      } else if (value.hasOwnProperty("anyOf") || value.hasOwnProperty("oneOf") || value.hasOwnProperty("allOf")) {
+
+        // If the property you are checking for a description or example has oneOf as its key, 
+        // go into the oneOf array and check its properties
+        if (value.hasOwnProperty("oneOf")) {
+          value.oneOf.forEach((element, index) => {
+            if (pathPrefix == null) {
+              parseYamlProperties(value.items, field, key, errorResults, rule);
+            } else if (pathPrefix == "properties") {
+              parseYamlProperties(
+                element,
+                field,
+                pathPrefix + ".oneOf." + index + "." + key,
+                errorResults,
+                rule
+              );
+            } else {
+              parseYamlProperties(
+                element,
+                field,
+                pathPrefix + ".properties." + key + ".oneOf." + index,
+                errorResults,
+                rule
+              );
+            }
+          });
+        } else if (value.hasOwnProperty("anyOf")) {
+          // If the property you are checking for a description or example has anyOf as its key,
+          // go into the anyOf array and check its properties
+          value.anyOf.forEach((element, index) => {
+            if (pathPrefix == null) {
+              parseYamlProperties(value.items, field, key, errorResults, rule);
+            } else if (pathPrefix == "properties") {
+              parseYamlProperties(
+                element,
+                field,
+                pathPrefix + ".anyOf." + index + "." + key,
+                errorResults,
+                rule
+              );
+            } else {
+              parseYamlProperties(
+                element,
+                field,
+                pathPrefix + ".properties." + key + ".anyOf." + index,
+                errorResults,
+                rule
+              );
+            }
+          });
+        } else if (value.hasOwnProperty("allOf")){
+          // If the property you are checking for a description or example has allOf as its key,
+          // go into the allOf array and check its properties
+          value.allOf.forEach((element, index) => {
+            if (pathPrefix == null) {
+              parseYamlProperties(value.items, field, key, errorResults, rule);
+            } else if (pathPrefix == "properties") {
+              parseYamlProperties(
+                element,
+                field,
+                pathPrefix + ".allOf." + index + "." + key,
+                errorResults,
+                rule
+              );
+            } else {
+              parseYamlProperties(
+                element,
+                field,
+                pathPrefix + ".properties." + key + ".allOf." + index,
+                errorResults,
+                rule
+              );
+            }
+          });
+        }
       } else {
         // console.log(
         //   `${key} is low level, ready to check for ${field}. ${
@@ -84,12 +167,12 @@ function parseYamlProperties(
             ) {
               errorResults.push({
                 message: `Rule ${rule}: The property ${key} must have a ${field}`,
-                path: [...pathPrefix.split("."), key, field],
+                path: [...toNumbers(pathPrefix.split(".")), key, field],
               });
             } else {
               errorResults.push({
                 message: `Rule ${rule}: The property ${key} must have a ${field}`,
-                path: [...pathPrefix.split("."), "properties", key, field],
+                path: [...toNumbers(pathPrefix.split(".")), "properties", key, field],
               });
             }
           } else if (value.hasOwnProperty(field) && value[field] == null) { // If the key defines the field we are looking for but is null or empty
@@ -103,12 +186,12 @@ function parseYamlProperties(
             ) {
               errorResults.push({
                 message: `Rule ${rule}: The property ${key} must have a ${field} that is not null`,
-                path: [...pathPrefix.split("."), key, field],
+                path: [...toNumbers(pathPrefix.split(".")), key, field],
               });
             } else {
               errorResults.push({
                 message: `Rule ${rule}: The property ${key} must have a ${field} that is not null`,
-                path: [...pathPrefix.split("."), "properties", key, field],
+                path: [...toNumbers(pathPrefix.split(".")), "properties", key, field],
               });
             }
           }
@@ -165,6 +248,6 @@ module.exports = (targetYaml, _opts) => {
   }
 
   //console.log(results)
-
+  
   return results;
 };
