@@ -22,4 +22,4 @@ lint_file () {
 
 export -f lint_file
 
-find . -type f | grep -v "legacy\|DS_Store" | parallel --progress lint_file {}
+git diff --name-only HEAD master | parallel --progress lint_file {}
