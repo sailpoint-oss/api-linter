@@ -52,6 +52,22 @@ function parseYamlProperties(
           );
         }
       } else if ( // If the code is an array type and it has items and its items are of an object type, handle adding "items" to the pathPrefix appropriately
+      /* Example Structure
+      {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+
+              }
+            }
+          }
+        }
+      }
+      */
         value.hasOwnProperty("type") &&
         value.type == "array" &&
         value.hasOwnProperty("items") &&
@@ -63,7 +79,7 @@ function parseYamlProperties(
           parseYamlProperties(
             value.items,
             field,
-            pathPrefix + ".items." + key,
+            pathPrefix + "." + key + ".items",
             errorResults,
             rule
           );
@@ -76,8 +92,55 @@ function parseYamlProperties(
             rule
           );
         }
-      } else if (value.hasOwnProperty("anyOf") || value.hasOwnProperty("oneOf") || value.hasOwnProperty("allOf")) {
+      } 
+      else if ( // If the code is an array type and it has items and those items are of type array and its items are of an object type, handle adding "items.items" to the pathPrefix appropriately
 
+      /* Example Structure
+      {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "propertyToCheck": {
+
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      */
+        value.hasOwnProperty("type") &&
+        value.type == "array" &&
+        value.hasOwnProperty("items") &&
+        value.items.type == "array"
+      ) {
+        if (pathPrefix == null) {
+          parseYamlProperties(value.items.items, field, key, errorResults, rule);
+        } else if (pathPrefix == "properties") {
+          parseYamlProperties(
+            value.items.items,
+            field,
+            pathPrefix + "." + key + ".items.items",
+            errorResults,
+            rule
+          );
+        } else {
+          parseYamlProperties(
+            value.items.items,
+            field,
+            pathPrefix + ".properties." + key + ".items.items",
+            errorResults,
+            rule
+          );
+        }
+      } else if (value.hasOwnProperty("anyOf") || value.hasOwnProperty("oneOf") || value.hasOwnProperty("allOf")) {
         // If the property you are checking for a description or example has oneOf as its key, 
         // go into the oneOf array and check its properties
         if (value.hasOwnProperty("oneOf")) {
