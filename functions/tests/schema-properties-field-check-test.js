@@ -1809,6 +1809,34 @@ let multiItemArrayUsecase = {
   },
 };
 
+
+let nullableExampleUsecase = {
+  type: "object",
+  properties: {
+    oldApproverName: {
+      type: "string",
+      nullable: true
+    },
+    newApproverName: {
+      type: "string",
+      description:
+        "Display name of approver to whom the approval was forwarded.",
+      nullable: true
+    },
+    comment: {
+      type: "string",
+      description: "Comment made by old approver when forwarding.",
+      example: "Fusce id orci vel consectetur amet ipsum quam.",
+    },
+    modified: {
+      type: "string",
+      format: "date-time",
+      description: "Time at which approval was forwarded.",
+      example: "2019-08-23T18:52:57.398Z",
+    },
+  },
+};
+
 describe("Parameter example check", function () {
   it("Should not return any error messages when all parameters have an example", function () {
     assert.deepEqual(
@@ -1927,113 +1955,91 @@ describe("Parameter example check", function () {
     assert.deepEqual(
       [
         {
-          message: `Rule ${ruleNumber}: The property completionStatus must have a example`,
-          path: ["properties", "completionStatus", "example"],
-        },
-        {
-          message: `Rule ${ruleNumber}: The property completed must have a example`,
+          message: 'Rule 304: The property completed must have a example',
           path: [
-            "properties",
-            "requesterIdentitySummary",
-            "properties",
-            "completed",
-            "example",
-          ],
+            'properties',
+            'requesterIdentitySummary',
+            'properties',
+            'completed',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property completed must have a example`,
+          message: 'Rule 304: The property completed must have a example',
           path: [
-            "properties",
-            "targetIdentitySummary",
-            "properties",
-            "completed",
-            "example",
-          ],
+            'properties',
+            'targetIdentitySummary',
+            'properties',
+            'completed',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property warnings must have a example that is not null`,
-          path: ["properties", "warnings", "example"],
+          message: 'Rule 304: The property warnings must have a example that is not null',
+          path: [ 'properties', 'warnings', 'example' ]
         },
         {
-          message: `Rule ${ruleNumber}: The property name must have a example`,
+          message: 'Rule 304: The property name must have a example',
+          path: [ 'properties', 'items', 'items', 'properties', 'name', 'example' ]
+        },
+        {
+          message: 'Rule 304: The property approvalStatus must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "name",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'approvalStatus',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property approvalStatus must have a example`,
+          message: 'Rule 304: The property provisioningStatus must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "approvalStatus",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'provisioningStatus',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property provisioningStatus must have a example`,
+          message: 'Rule 304: The property completed must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "provisioningStatus",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'reviewerIdentitySummary',
+            'properties',
+            'completed',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property completed must have a example`,
+          message: 'Rule 304: The property operation must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "reviewerIdentitySummary",
-            "properties",
-            "completed",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'operation',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property operation must have a example`,
-          path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "operation",
-            "example",
-          ],
+          message: 'Rule 304: The property executionStatus must have a example',
+          path: [ 'properties', 'executionStatus', 'example' ]
         },
         {
-          message: `Rule ${ruleNumber}: The property clientMetadata must have a example`,
-          path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "clientMetadata",
-            "example",
-          ],
+          message: 'Rule 304: The property clientMetadata must have a example',
+          path: [ 'properties', 'clientMetadata', 'example' ]
         },
         {
-          message: `Rule ${ruleNumber}: The property executionStatus must have a example`,
-          path: ["properties", "executionStatus", "example"],
-        },
-        {
-          message: `Rule ${ruleNumber}: The property clientMetadata must have a example`,
-          path: ["properties", "clientMetadata", "example"],
-        },
-        {
-          message: `Rule ${ruleNumber}: The property cancelable must have a example`,
-          path: ["properties", "cancelable", "example"],
-        },
+          message: 'Rule 304: The property cancelable must have a example',
+          path: [ 'properties', 'cancelable', 'example' ]
+        }
       ],
       schemaPropertiesFieldCheck(superMultilevelSchemaObject, {
         rule: ruleNumber,
@@ -2092,6 +2098,35 @@ describe("Parameter example check", function () {
       schemaPropertiesFieldCheck(multiItemArrayUsecase, {
         rule: ruleNumber,
         field: "example",
+      })
+    );
+  });
+
+  it("Should return no errors with nullable true fields missing examples", function () {
+    assert.deepEqual(
+      [],
+      schemaPropertiesFieldCheck(nullableExampleUsecase, {
+        rule: ruleNumber,
+        field: "example",
+      })
+    );
+  });
+
+  it("Should return errors with nullable true fields with missing description", function () {
+    assert.deepEqual(
+      [
+          {
+            message: "Rule 304: The property oldApproverName must have a description",
+            path: [
+              "properties",
+              "oldApproverName",
+              "description"
+            ]
+          }
+        ],
+      schemaPropertiesFieldCheck(nullableExampleUsecase, {
+        rule: ruleNumber,
+        field: "description",
       })
     );
   });

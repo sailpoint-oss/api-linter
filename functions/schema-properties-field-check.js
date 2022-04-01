@@ -220,7 +220,11 @@ function parseYamlProperties(
         //     pathPrefix + ".properties." + key
         //   }`
         // );
-        if (value.type == "array" && value.items != undefined && field == "example" && value.items.hasOwnProperty(field)) {
+        if (value.hasOwnProperty("nullable") && value.nullable == true && field == "example") {
+          // If the property has a nullable:true flag set, allow the example to be null
+          //console.log(`${key}: ${JSON.stringify(value)}`)
+        }
+        else if (value.type == "array" && value.items != undefined && field == "example" && value.items.hasOwnProperty(field)) {
           console.log("Array Type, checking if items exist");
         } else { // If the key does not define the field we are looking for 
           if (!value.hasOwnProperty(field) && value[field] == null) {
