@@ -24,6 +24,18 @@ function parseYamlProperties(
   rule
 ) {
   if (targetYaml.properties != undefined || targetYaml.properties != null) {
+
+    if (field == "example" && targetYaml.example != undefined && targetYaml.example != null) {
+      // console.log("I got here")
+      // console.log(...toNumbers(pathPrefix.split(".")), field)
+      // console.dir(targetYaml.example)
+
+      errorResults.push({
+        message: `Rule ${rule}: Example detected at root level of object. Instead, please provide examples within each property.`,
+        path: [...toNumbers(pathPrefix.split(".")), field],
+      });
+    }
+
     // Loop through each key under properties
     for (const [key, value] of Object.entries(targetYaml.properties)) {
       // If you run into a key that is an object that has more properties call the function again passing in the lower level object to parse
@@ -151,7 +163,7 @@ function parseYamlProperties(
               parseYamlProperties(
                 element,
                 field,
-                pathPrefix + ".oneOf." + index + "." + key,
+                pathPrefix + "." + key + ".oneOf." + index,
                 errorResults,
                 rule
               );
@@ -175,7 +187,7 @@ function parseYamlProperties(
               parseYamlProperties(
                 element,
                 field,
-                pathPrefix + ".anyOf." + index + "." + key,
+                pathPrefix + "." + key + ".anyOf." + index,
                 errorResults,
                 rule
               );
@@ -199,7 +211,7 @@ function parseYamlProperties(
               parseYamlProperties(
                 element,
                 field,
-                pathPrefix + ".allOf." + index + "." + key,
+                pathPrefix + "." + key + ".allOf." + index,
                 errorResults,
                 rule
               );
@@ -219,15 +231,19 @@ function parseYamlProperties(
         //   `${key} is low level, ready to check for ${field}. ${
         //     pathPrefix + ".properties." + key
         //   }`
-        // );
+        //);
         if (value.hasOwnProperty("nullable") && value.nullable == true && field == "example") {
           // If the property has a nullable:true flag set, allow the example to be null
           //console.log(`${key}: ${JSON.stringify(value)}`)
         }
         else if (value.type == "array" && value.items != undefined && field == "example" && value.items.hasOwnProperty(field)) {
-          console.log("Array Type, checking if items exist");
+          // console.log("Array Type, checking if items exist");
         } else { // If the key does not define the field we are looking for 
           if (!value.hasOwnProperty(field) && value[field] == null) {
+            // console.log(`${field} IS MISSING`)
+            // console.log(
+            //   `Rule ${rule}: The property ${key} must have a ${field}: ${pathPrefix}.properties.${key}.${field}`
+            // );
             if (
               pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
               "properties"
@@ -243,9 +259,9 @@ function parseYamlProperties(
               });
             }
           } else if (value.hasOwnProperty(field) && value[field] == null) { // If the key defines the field we are looking for but is null or empty
-            // console.log(
-            //   `Rule ${rule}: The property ${key} must have a ${field} that is not null: : ${pathPrefix}.properties.${key}.${field}`
-            // );
+            console.log(
+              `Rule ${rule}: The property ${key} must have a ${field} that is not null: : ${pathPrefix}.properties.${key}.${field}`
+            );
 
             if (
               pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
@@ -282,15 +298,7 @@ module.exports = (targetYaml, _opts) => {
         element.type == "object" &&
         element.properties != undefined
       ) {
-        for (const [key, value] of Object.entries(element.properties)) {
-          if (!value.hasOwnProperty(field) && value[field] == null) {
-            //console.log(`The property ${key} must have a ${field}`);
-            results.push({
-              message: `Rule ${rule}: The property ${key} must have a ${field}`,
-              path: [`allOf`, parseInt(index), "properties", key, field],
-            });
-          }
-        }
+        parseYamlProperties(element, field, `allOf.${index}`,results, rule);
       }
     });
   }
