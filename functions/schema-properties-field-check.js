@@ -25,13 +25,13 @@ function parseYamlProperties(
 ) {
   if (targetYaml.properties != undefined || targetYaml.properties != null) {
 
-    if (field == "example" && targetYaml.example != undefined && targetYaml.example != null) {
+    if (field == "example" && targetYaml.example != undefined && targetYaml.example != null && targetYaml.additionalProperties == undefined && targetYaml.additionalProperties == null) {
       // console.log("I got here")
       // console.log(...toNumbers(pathPrefix.split(".")), field)
       // console.dir(targetYaml.example)
 
       errorResults.push({
-        message: `Rule ${rule}: Example detected at root level of object. Instead, please provide examples within each property.`,
+        message: `Rule ${rule}: Example detected at root level of object without the use of additionalProperties. If you need to provide an example object without concrete properties, use the additionalProperties key and define a root level example. Otherwise, when you have concrete properties, provide examples within each property.`,
         path: [...toNumbers(pathPrefix.split(".")), field],
       });
     }
