@@ -6,6 +6,8 @@ functions:
     path-parameter-integer-number-formats,
     response-validator,
     path-query-parameter-check,
+    path-descriptions-check,
+    path-oauth-scope-check
   ]
 rules:
   path-parameters-must-have-description:
@@ -50,20 +52,22 @@ rules:
       functionOptions:
         maxWordCount: 5
         rule: 305
-  # path-must-have-security-defined:
-  #   description: "Rule 104: Operations must have security defined as to the access needed for the endpoint"
-  #   given: $[*]
-  #   severity: error
-  #   then:
-  #     field: security
-  #     function: defined
-  # path-must-have-security-bearerAuth-defined:
-  #   description: "Rule 105: Operations must have security.bearerAuth with at least one scope defined to access the endpoint"
-  #   given: $[*].security.*
-  #   severity: error
-  #   then:
-  #     field: bearerAuth
-  #     function: truthy
+  path-description-html-chars:
+    message: "{{error}}"
+    given: $[*].description
+    severity: error
+    then:
+      function: path-descriptions-check
+      functionOptions:
+        rule: 405
+  path-must-have-security-defined:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#104"
+    given: $[*]
+    severity: error
+    then:
+      function: path-oauth-scope-check
+      functionOptions:
+        rule: 104
   path-deprecated-apis-should-have-deprecation-and-sunset-dates:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
     given: $[*]
