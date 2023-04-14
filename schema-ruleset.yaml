@@ -1,4 +1,4 @@
-functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats]
+functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats, schema-boolean-field-check]
 rules:
   schema-properties-must-have-example:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
@@ -35,3 +35,11 @@ rules:
       function: validate-schema-integer-number-formats
       functionOptions:
         rule: 171
+  schema-optional-boolean-properties-must-have-default:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#310"
+    given: $
+    severity: error
+    then:
+      function: schema-boolean-field-check
+      functionOptions:
+        rule: 310
