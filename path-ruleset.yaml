@@ -91,6 +91,13 @@ rules:
       function: response-validator
       functionOptions:
         rule: 151
+  path-boolean-parameters-must-have-default:
+    message: "Rule 310: Optional boolean values must have a default https://sailpoint-oss.github.io/sailpoint-api-guidelines/#310"
+    given: $.[*].parameters.[?(@.$ref == null && @.required == false && @.schema.type == 'boolean')].schema
+    severity: error
+    then:
+      field: default
+      function: defined
   # path-parameters-should-have-query-parameter-fields:
   #   given: $.[get]
   #   severity: warn
