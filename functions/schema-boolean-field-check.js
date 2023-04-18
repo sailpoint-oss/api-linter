@@ -246,19 +246,21 @@ function parseYamlProperties(
               }
             }
           } else if (value.type == 'boolean') {
-            if (
-              pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
-              "properties"
-            ) {
-              errorResults.push({
-                message: `Rule ${rule}: The boolean property ${key} must have a default value`,
-                path: [...toNumbers(pathPrefix.split(".")), key, 'default'],
-              });
-            } else {
-              errorResults.push({
-                message: `Rule ${rule}: The boolean property ${key} must have a default value`,
-                path: [...toNumbers(pathPrefix.split(".")), "properties", key, 'default'],
-              });
+            if (!value.hasOwnProperty('default')) {
+              if (
+                pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+                "properties"
+              ) {
+                errorResults.push({
+                  message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                  path: [...toNumbers(pathPrefix.split(".")), key, 'default'],
+                });
+              } else {
+                errorResults.push({
+                  message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                  path: [...toNumbers(pathPrefix.split(".")), "properties", key, 'default'],
+                });
+            }
             }
           }
         }
