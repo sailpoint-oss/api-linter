@@ -230,19 +230,21 @@ function parseYamlProperties(
         } else { // If the key does not define the field we are looking for 
           if(value.type == 'boolean' && targetYaml.hasOwnProperty('required')) {
             if(!targetYaml.required[key]) {
-              if (
-                pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
-                "properties"
-              ) {
-                errorResults.push({
-                  message: `Rule ${rule}: The boolean property ${key} must have a default value`,
-                  path: [...toNumbers(pathPrefix.split(".")), key, 'default'],
-                });
-              } else {
-                errorResults.push({
-                  message: `Rule ${rule}: The boolean property ${key} must have a default value`,
-                  path: [...toNumbers(pathPrefix.split(".")), "properties", key, 'default'],
-                });
+              if (!value.hasOwnProperty('default')) {
+                if (
+                  pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+                  "properties"
+                ) {
+                  errorResults.push({
+                    message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                    path: [...toNumbers(pathPrefix.split(".")), key, 'default'],
+                  });
+                } else {
+                  errorResults.push({
+                    message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                    path: [...toNumbers(pathPrefix.split(".")), "properties", key, 'default'],
+                  });
+                }
               }
             }
           } else if (value.type == 'boolean') {
@@ -299,9 +301,9 @@ module.exports = (targetYaml, _opts) => {
 
   // Type String
   if (Object.keys(targetYaml).includes("type") && targetYaml.type != "object") {
-    if (!targetYaml.hasOwnProperty(field) || targetYaml[field] == null) {
+    if(targetYaml.type == 'boolean' && !targetYaml.hasOwnProperty('default')) {
       results.push({
-        message: `Rule ${rule}: This field must have a ${field}`,
+        message: `Rule ${rule}: This field must have a default value.`,
         path: [field],
       });
     }
