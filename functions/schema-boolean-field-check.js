@@ -227,9 +227,10 @@ function parseYamlProperties(
         }
         else if (value.type == "array" && value.items != undefined && field == "example" && value.items.hasOwnProperty(field)) {
           // console.log("Array Type, checking if items exist");
-        } else { // If the key does not define the field we are looking for 
+        } else { // If the key does not define the field we are looking for
+          //console.log(targetYaml); 
           if(value.type == 'boolean' && targetYaml.hasOwnProperty('required')) {
-            if(!targetYaml.required[key]) {
+            if(!targetYaml.required.includes(key)) {
               if (!value.hasOwnProperty('default')) {
                 if (
                   pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
