@@ -52,7 +52,7 @@ module.exports = (targetVal, _opts) => {
             if (matchArray.length > 0) {
                 const descriptor = matchArray[0]
 
-                if (key == 'get' && value.responses["200"]?.content["application/json"]?.schema?.type == 'array') {
+                if (key == 'get' && value.responses["200"] !== undefined && value.responses["200"].content["application/json"] !== undefined && value.responses["200"].content !== undefined && value.responses["200"].content["application/json"] !== undefined && value.responses["200"].content["application/json"].schema !== undefined && value.responses["200"].content["application/json"].schema.type !== undefined && value.responses["200"].content["application/json"].schema.type == "array") {
                     //operationId must start with get or list
                     if (!allowedOperationsForGetArrayMethods.includes(descriptor)) {
                         results.push({
