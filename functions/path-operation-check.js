@@ -48,7 +48,8 @@ module.exports = (targetVal, _opts) => {
               });
         }
         // GET operations
-        const descriptorTest = value.operationId
+        const descriptorTest = value.operationId?.match(/([A-Z]?[^A-Z]*)/g)
+        console.log(descriptorTest)
         //const descriptor = value.operationId?.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1)[0];
 
         // if (key == 'get' && value.responses["200"]?.content["application/json"]?.schema?.type == 'array') {
