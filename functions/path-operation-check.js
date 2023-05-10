@@ -14,8 +14,8 @@ module.exports = (targetVal, _opts) => {
 
     let results = [];
 
-    const allowedOperationsForGetArrayMethods = [ 'compare', 'export', 'get', 'list', 'search' ]
-    const allowedOperationsForGetMethods = ['get', 'search', 'test' ]
+    const allowedOperationsForGetArrayMethods = [ 'compare', 'export', 'get', 'list', 'search' ];
+    const allowedOperationsForGetMethods = ['get', 'search', 'test' ];
     
     const allowedOperationsForPostMethods = [
         'approve', 'cancel',     'complete',
@@ -34,11 +34,11 @@ module.exports = (targetVal, _opts) => {
 
     const allowedOperationsForPatchMethods = [
         'patch', 'update'
-    ]
+    ];
 
     const allowedOperationsForDeleteMethods = [
         'delete', 'remove'
-    ]
+    ];
 
     for (const [key, value] of Object.entries(targetVal)) {
         if (value.operationId === undefined) {
@@ -48,7 +48,7 @@ module.exports = (targetVal, _opts) => {
               });
         }
         // GET operations
-        const descriptor = value.operationId?.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1)[0]
+        const descriptor = value.operationId?.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1)[0];
 
         // if (key == 'get' && value.responses["200"]?.content["application/json"]?.schema?.type == 'array') {
         //     //operationId must start with get or list
