@@ -41,63 +41,65 @@ module.exports = (targetVal, _opts) => {
     ];
 
     for (const [key, value] of Object.entries(targetVal)) {
-        if (value.operationId === undefined) {
+        if (value.operationId === undefined || value.operationId == null) {
             results.push({
-                message: `Rule ${rule}: operationId must be provided`,
+                message: `Rule ${rule}: a camelCased operationId must be provided`,
                 path: [key, 'operationId'],
               });
-        }
-        // GET operations
-        const descriptorTest = value.operationId.match(/([A-Z]?[^A-Z]*)/g)
-        console.log(descriptorTest)
-        //const descriptor = value.operationId?.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1)[0];
+        } else {
+            const matchArray = value.operationId.match(/([A-Z]?[^A-Z]*)/g)
 
-        // if (key == 'get' && value.responses["200"]?.content["application/json"]?.schema?.type == 'array') {
-        //     //operationId must start with get or list
-        //     if (!allowedOperationsForGetArrayMethods.includes(descriptor)) {
-        //         results.push({
-        //             message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForGetArrayMethods}] for get endpoints that return an array of results`,
-        //             path: [key, 'operationId'],
-        //           });
-        //     }
-        // } 
-        // else if (key == 'get') {
-        //     //operationId must start with get
-        //     if(!allowedOperationsForGetMethods.includes(descriptor)) {
-        //         results.push({
-        //             message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForGetMethods}] for get endpoints that return a single result`,
-        //             path: [key, 'operationId'],
-        //           });
-        //     }
-        // } else if (key == 'post') {
-        //     if (!allowedOperationsForPostMethods.includes(descriptor)) {
-        //         results.push({
-        //             message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForPostMethods}] for post endpoints`,
-        //             path: [key, 'operationId'],
-        //           });
-        //     }
-        // } else if (key == 'put'){
-        //     if (!allowedOperationsForPutMethods.includes(descriptor)) {
-        //         results.push({
-        //             message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForPutMethods}] for put endpoints`,
-        //             path: [key, 'operationId'],
-        //           });
-        //     }
-        // } else if (key == 'patch') {
-        //     if(!allowedOperationsForPatchMethods.includes(descriptor)) {
-        //         results.push({
-        //             message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForPatchMethods}] for patch endpoints`,
-        //             path: [key, 'operationId'],
-        //           });
-        //     }
-        // } else if (key == 'delete') {
-        //     if(!allowedOperationsForDeleteMethods.includes(descriptor)) {
-        //         results.push({
-        //             message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForDeleteMethods}] for delete endpoints`,
-        //             path: [key, 'operationId'],
-        //           });
-        //     }
-        // }
+            if (matchArray.length > 0) {
+                const descriptor = matchArray[0]
+
+                if (key == 'get' && value.responses["200"]?.content["application/json"]?.schema?.type == 'array') {
+                    //operationId must start with get or list
+                    if (!allowedOperationsForGetArrayMethods.includes(descriptor)) {
+                        results.push({
+                            message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForGetArrayMethods}] for get endpoints that return an array of results`,
+                            path: [key, 'operationId'],
+                        });
+                    }
+                } 
+                else if (key == 'get') {
+                    //operationId must start with get
+                    if(!allowedOperationsForGetMethods.includes(descriptor)) {
+                        results.push({
+                            message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForGetMethods}] for get endpoints that return a single result`,
+                            path: [key, 'operationId'],
+                        });
+                    }
+                } else if (key == 'post') {
+                    if (!allowedOperationsForPostMethods.includes(descriptor)) {
+                        results.push({
+                            message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForPostMethods}] for post endpoints`,
+                            path: [key, 'operationId'],
+                        });
+                    }
+                } else if (key == 'put'){
+                    if (!allowedOperationsForPutMethods.includes(descriptor)) {
+                        results.push({
+                            message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForPutMethods}] for put endpoints`,
+                            path: [key, 'operationId'],
+                        });
+                    }
+                } else if (key == 'patch') {
+                    if(!allowedOperationsForPatchMethods.includes(descriptor)) {
+                        results.push({
+                            message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForPatchMethods}] for patch endpoints`,
+                            path: [key, 'operationId'],
+                        });
+                    }
+                } else if (key == 'delete') {
+                    if(!allowedOperationsForDeleteMethods.includes(descriptor)) {
+                        results.push({
+                            message: `Rule ${rule}: ${descriptor} is invalid, the operationId must start with one of the allowed values [${allowedOperationsForDeleteMethods}] for delete endpoints`,
+                            path: [key, 'operationId'],
+                        });
+                    }
+                }
+            }
+        }
     }
 
     return results;
