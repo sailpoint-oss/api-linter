@@ -2,7 +2,16 @@
 
 LINTER_URL="https://raw.githubusercontent.com/sailpoint-oss/api-linter/main"
 
-for file in $(git diff --name-only HEAD master)
+args=("$@")
+
+if [ "${args[0]}" = "all" ] 
+then
+  files=$(find . -name "*.yaml")
+else
+  files=$(git diff --name-only HEAD main)
+fi
+
+for file in $files
 do
     if echo $file | grep "sailpoint-api.*" --quiet
     then

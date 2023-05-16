@@ -42,13 +42,21 @@ spectral lint ~/path-to-spec/schema.yaml --ruleset https://raw.githubusercontent
 
 ## Using the Linter
 
-Typically, contributions to the SailPoint OpenAPI specification involve creating a branch of the API specification in Git and making changes within the branch.  Rather than having to manually run the linter on each file that was changed in the branch, we have provided [lint.sh](./lint.sh), which will automatically run the linter on only the files that have changed in the branch.  To use this script, make sure you are on the correct branch of the API specification repo and run the following command in the root project directory:
+Typically, contributions to the SailPoint OpenAPI specification involve creating a branch of the API specification in Git and making changes within the branch.  Rather than having to manually run the linter on each file that was changed in the branch, we have provided [lint.sh](./lint.sh), which has two modes. 
+
+The first default mode will automatically run the linter on only the files that have changed in the branch.  To use this script, make sure you are on the correct branch of the API specification repo and run the following command in the root project directory:
 
 ```sh
 sh /path/to/lint.sh
 ```
 
 This script uses the git command `git diff --name-only HEAD master` to print the file paths that have changed, and then it loops through each file and applies the appropriate ruleset based on whether the file is a root spec file, path file, or schema file.  This script also has the benefit of referencing the rule files directly from this GitHub repository, so it will always apply the latest rules without the user having to download or synchronize any files.
+
+The second mode is accessed by passing `all` as the first parameter to the script. This will run lint on all yaml files in the path, regardless of if they've changed.
+
+```sh
+sh /path/to/lint.sh all
+```
 
 ## Understanding the Linter Results
 
