@@ -71,3 +71,4 @@ The linter will print the path to the file that it linted, one or more problems,
 5. `Operation must have the following ...` is a detailed description of the violation
 
 If the linter reports no problems, then the spec has passed the linter.
+
