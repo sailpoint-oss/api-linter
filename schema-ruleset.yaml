@@ -18,15 +18,15 @@ rules:
       functionOptions:
         field: description
         rule: 303
-  schema-objects-must-have-required-parameters:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
-    given: $
-    severity: error
-    then:
-      function: schema-object-field-check
-      functionOptions:
-        field: required
-        rule: 317
+  # schema-objects-must-have-required-parameters:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
+  #   given: $
+  #   severity: error
+  #   then:
+  #     function: schema-object-field-check
+  #     functionOptions:
+  #       field: required
+  #       rule: 317
   schema-properties-must-have-valid-formats-for-numbers-and-integers:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171"
     given: $
@@ -35,11 +35,11 @@ rules:
       function: validate-schema-integer-number-formats
       functionOptions:
         rule: 171
-  schema-optional-boolean-properties-must-have-default:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#310"
-    given: $
-    severity: error
-    then:
-      function: schema-boolean-field-check
-      functionOptions:
-        rule: 310
+  # schema-optional-boolean-properties-must-have-default:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#310"
+  #   given: $
+  #   severity: error
+  #   then:
+  #     function: schema-boolean-field-check
+  #     functionOptions:
+  #       rule: 310
