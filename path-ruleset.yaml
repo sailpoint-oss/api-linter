@@ -8,7 +8,8 @@ functions:
     path-query-parameter-check,
     path-descriptions-check,
     path-oauth-scope-check,
-    path-operation-check
+    path-operation-check,
+    ascii
   ]
 rules:
   path-parameters-must-have-description:
@@ -107,6 +108,14 @@ rules:
       function: path-operation-check
       functionOptions:
         rule: 400
+  ascii-characters:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#401"
+    given: $
+    severity: error
+    then:
+      function: ascii
+      functionOptions:
+        rule: 401
   # path-parameters-should-have-query-parameter-fields:
   #   given: $.[get]
   #   severity: warn

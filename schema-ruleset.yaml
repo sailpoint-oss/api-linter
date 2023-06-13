@@ -1,4 +1,4 @@
-functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats, schema-boolean-field-check]
+functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats, schema-boolean-field-check, ascii]
 rules:
   schema-properties-must-have-example:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
@@ -43,3 +43,11 @@ rules:
       function: schema-boolean-field-check
       functionOptions:
         rule: 310
+  ascii-characters:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#401"
+    given: $
+    severity: error
+    then:
+      function: ascii
+      functionOptions:
+        rule: 401
