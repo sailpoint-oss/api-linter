@@ -70,14 +70,14 @@ rules:
       function: path-oauth-scope-check
       functionOptions:
         rule: 104
-  path-deprecated-apis-should-have-deprecation-and-sunset-dates:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
-    given: $[*]
-    severity: warn
-    then:
-      function: deprecation
-      functionOptions:
-        rule: 189
+  # path-deprecated-apis-should-have-deprecation-and-sunset-dates:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
+  #   given: $[*]
+  #   severity: warn
+  #   then:
+  #     function: deprecation
+  #     functionOptions:
+  #       rule: 189
   path-must-have-required-key-on-all-parameters:
     description: "Rule 317: Operations must have required key on all parameters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
     given: $.[*].parameters[?(@.$ref == null)]
