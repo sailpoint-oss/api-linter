@@ -25,7 +25,8 @@ module.exports = (targetVal, _opts) => {
         'reject',  'reset',      'search',
         'send',    'set',        'show',
         'start',   'submit',     'sync',
-        'unlock',  'unregister', 'update'
+        'test',    'unlock',     'unregister', 
+        'update'
       ];
 
     const allowedOperationsForPutMethods = [
