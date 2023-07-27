@@ -1,4 +1,4 @@
-functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats, schema-boolean-field-check, ascii]
+functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats, schema-boolean-field-check, ascii, schema-reserved-keywords-check]
 rules:
   schema-properties-must-have-example:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
@@ -51,3 +51,12 @@ rules:
       function: ascii
       functionOptions:
         rule: 401
+  schema-properties-must-not-contain-reserved-keywords:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
+    given: $
+    severity: error
+    then:
+      function: schema-reserved-keywords-check
+      functionOptions:
+        field: description
+        rule: 504
