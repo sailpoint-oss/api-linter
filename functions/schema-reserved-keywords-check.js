@@ -215,11 +215,11 @@ const toNumbers = arr => arr.map(function(item) {
             });
           }
         } else {
-          // console.log(
-          //   `${key} is low level, ready to check for ${field}. ${
-          //     pathPrefix + ".properties." + key
-          //   }`
-          // );
+          console.log(
+            `${key} is low level, ready to check for ${field}. ${
+              pathPrefix + ".properties." + key
+            }`
+          );
           const reservedKeywords = [
             'type', 'format', 'description',
             'items', 'properties', 'additionalProperties',

@@ -15,8 +15,6 @@ module.exports = (targetVal, _opts) => {
 
   const { rule } = _opts;
 
-  console.log(targetVal.name);
-
   if (
     targetVal.name != undefined &&
     reservedKeywords.includes(targetVal.name)
