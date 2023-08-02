@@ -51,12 +51,12 @@ rules:
       function: ascii
       functionOptions:
         rule: 401
-  schema-properties-must-not-contain-reserved-keywords:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
-    given: $
-    severity: error
-    then:
-      function: schema-reserved-keywords-check
-      functionOptions:
-        field: description
-        rule: 504
+  # schema-properties-must-not-contain-reserved-keywords:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
+  #   given: $
+  #   severity: error
+  #   then:
+  #     function: schema-reserved-keywords-check
+  #     functionOptions:
+  #       field: description
+  #       rule: 504

@@ -117,14 +117,14 @@ rules:
       function: ascii
       functionOptions:
         rule: 401
-  path-parameters-must-not-use-reserved-keywords:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
-    given: $.[*].parameters[?(@.$ref == null)]
-    severity: error
-    then:
-      function: path-reserved-keywords-check
-      functionOptions:
-        rule: 504
+  # path-parameters-must-not-use-reserved-keywords:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
+  #   given: $.[*].parameters[?(@.$ref == null)]
+  #   severity: error
+  #   then:
+  #     function: path-reserved-keywords-check
+  #     functionOptions:
+  #       rule: 504
   # path-parameters-should-have-query-parameter-fields:
   #   given: $.[get]
   #   severity: warn

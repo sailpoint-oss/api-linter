@@ -215,11 +215,6 @@ const toNumbers = arr => arr.map(function(item) {
             });
           }
         } else {
-          console.log(
-            `${key} is low level, ready to check for ${field}. ${
-              pathPrefix + ".properties." + key
-            }`
-          );
           const reservedKeywords = [
             'type', 'format', 'description',
             'items', 'properties', 'additionalProperties',
@@ -227,6 +222,13 @@ const toNumbers = arr => arr.map(function(item) {
           ];
 
           if(reservedKeywords.includes(key)) {
+            console.log(
+              `${key} is low level, ready to check for ${field}. ${
+                pathPrefix + ".properties." + key
+              }`
+            );
+            console.log("Reserved Keyword Used")
+            console.log(pathPrefix.split(".")[pathPrefix.split(".").length - 1])
             if (
                 pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
                 "properties"
@@ -284,6 +286,8 @@ const toNumbers = arr => arr.map(function(item) {
         });
       }
     }
+
+    console.log(results);
         
     return results;
   };
