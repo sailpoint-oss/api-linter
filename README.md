@@ -48,6 +48,12 @@ Typically, contributions to the SailPoint OpenAPI specification involve creating
 sh /path/to/lint.sh
 ```
 
+Or use the parallel lint script to greatly speed up the linting process:
+
+```sh
+sh /path/to/lint-parallel.sh
+```
+
 This script uses the git command `git diff --name-only HEAD master` to print the file paths that have changed, and then it loops through each file and applies the appropriate ruleset based on whether the file is a root spec file, path file, or schema file.  This script also has the benefit of referencing the rule files directly from this GitHub repository, so it will always apply the latest rules without the user having to download or synchronize any files.
 
 ## Understanding the Linter Results
