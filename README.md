@@ -63,3 +63,8 @@ The linter will print the path to the file that it linted, one or more problems,
 5. `Operation must have the following ...` is a detailed description of the violation
 
 If the linter reports no problems, then the spec has passed the linter.
+
+## Testing for local development
+
+1. install mocha testing framework: ```npm install --global mocha```
+2. run the tests on any of the files in the functions/tests folder: ```mocha functions/tests/deprecation-test.js```

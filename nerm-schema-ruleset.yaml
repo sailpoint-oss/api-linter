@@ -1,0 +1,28 @@
+functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats]
+rules:
+  schema-properties-must-have-example:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
+    given: $
+    severity: error
+    then:
+      function: schema-properties-field-check
+      functionOptions:
+        field: example
+        rule: 304
+  schema-properties-must-have-description:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
+    given: $
+    severity: error
+    then:
+      function: schema-properties-field-check
+      functionOptions:
+        field: description
+        rule: 303
+  schema-properties-must-have-valid-formats-for-numbers-and-integers:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171"
+    given: $
+    severity: error
+    then:
+      function: validate-schema-integer-number-formats
+      functionOptions:
+        rule: 171

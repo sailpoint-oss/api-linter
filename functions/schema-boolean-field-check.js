@@ -1,12 +1,11 @@
-// schema-properties-must-have-description:
+// schema-optional-boolean-properties-must-have-default:
 // message: "{{error}}"
 // given: $
 // severity: error
 // then:
-//   function: schema-properties-field-check
+//   function: schema-boolean-field-check
 //   functionOptions:
-//     field: "description"
-//     rule: 303
+//     rule: 310
 
 const toNumbers = arr => arr.map(function(item) {
   if(isNaN(parseInt(item, 10))) {
@@ -16,6 +15,8 @@ const toNumbers = arr => arr.map(function(item) {
   }
 });
 
+let output = "";
+
 function parseYamlProperties(
   targetYaml,
   field,
@@ -24,18 +25,6 @@ function parseYamlProperties(
   rule
 ) {
   if (targetYaml.properties != undefined || targetYaml.properties != null) {
-
-    if (field == "example" && targetYaml.example != undefined && targetYaml.example != null && targetYaml.additionalProperties == undefined && targetYaml.additionalProperties == null) {
-      // console.log("I got here")
-      // console.log(...toNumbers(pathPrefix.split(".")), field)
-      // console.dir(targetYaml.example)
-
-      errorResults.push({
-        message: `Rule ${rule}: Example detected at root level of object without the use of additionalProperties. If you need to provide an example object without concrete properties, use the additionalProperties key and define a root level example. Otherwise, when you have concrete properties, provide examples within each property.`,
-        path: [...toNumbers(pathPrefix.split(".")), field],
-      });
-    }
-
     // Loop through each key under properties
     for (const [key, value] of Object.entries(targetYaml.properties)) {
       // If you run into a key that is an object that has more properties call the function again passing in the lower level object to parse
@@ -238,44 +227,43 @@ function parseYamlProperties(
         }
         else if (value.type == "array" && value.items != undefined && field == "example" && value.items.hasOwnProperty(field)) {
           // console.log("Array Type, checking if items exist");
-        } else { // If the key does not define the field we are looking for 
-          if (!value.hasOwnProperty(field) && value[field] == null) {
-            // console.log(`${field} IS MISSING`)
-            // console.log(
-            //   `Rule ${rule}: The property ${key} must have a ${field}: ${pathPrefix}.properties.${key}.${field}`
-            // );
-            if (
-              pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
-              "properties"
-            ) {
-              errorResults.push({
-                message: `Rule ${rule}: The property ${key} must have a ${field}`,
-                path: [...toNumbers(pathPrefix.split(".")), key, field],
-              });
-            } else {
-              errorResults.push({
-                message: `Rule ${rule}: The property ${key} must have a ${field}`,
-                path: [...toNumbers(pathPrefix.split(".")), "properties", key, field],
-              });
+        } else { // If the key does not define the field we are looking for
+          //console.log(targetYaml); 
+          if(value.type == 'boolean' && targetYaml.hasOwnProperty('required')) {
+            if(!targetYaml.required.includes(key)) {
+              if (!value.hasOwnProperty('default')) {
+                if (
+                  pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+                  "properties"
+                ) {
+                  errorResults.push({
+                    message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                    path: [...toNumbers(pathPrefix.split(".")), key, 'default'],
+                  });
+                } else {
+                  errorResults.push({
+                    message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                    path: [...toNumbers(pathPrefix.split(".")), "properties", key, 'default'],
+                  });
+                }
+              }
             }
-          } else if (value.hasOwnProperty(field) && value[field] == null) { // If the key defines the field we are looking for but is null or empty
-            console.log(
-              `Rule ${rule}: The property ${key} must have a ${field} that is not null: : ${pathPrefix}.properties.${key}.${field}`
-            );
-
-            if (
-              pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
-              "properties"
-            ) {
-              errorResults.push({
-                message: `Rule ${rule}: The property ${key} must have a ${field} that is not null`,
-                path: [...toNumbers(pathPrefix.split(".")), key, field],
-              });
-            } else {
-              errorResults.push({
-                message: `Rule ${rule}: The property ${key} must have a ${field} that is not null`,
-                path: [...toNumbers(pathPrefix.split(".")), "properties", key, field],
-              });
+          } else if (value.type == 'boolean') {
+            if (!value.hasOwnProperty('default')) {
+              if (
+                pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+                "properties"
+              ) {
+                errorResults.push({
+                  message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                  path: [...toNumbers(pathPrefix.split(".")), key, 'default'],
+                });
+              } else {
+                errorResults.push({
+                  message: `Rule ${rule}: The boolean property ${key} must have a default value`,
+                  path: [...toNumbers(pathPrefix.split(".")), "properties", key, 'default'],
+                });
+            }
             }
           }
         }
@@ -314,15 +302,13 @@ module.exports = (targetYaml, _opts) => {
 
   // Type String
   if (Object.keys(targetYaml).includes("type") && targetYaml.type != "object") {
-    if (!targetYaml.hasOwnProperty(field) || targetYaml[field] == null) {
+    if(targetYaml.type == 'boolean' && !targetYaml.hasOwnProperty('default')) {
       results.push({
-        message: `Rule ${rule}: This field must have a ${field}`,
+        message: `Rule ${rule}: This field must have a default value.`,
         path: [field],
       });
     }
   }
-
-  //console.log(results)
   
   return results;
 };

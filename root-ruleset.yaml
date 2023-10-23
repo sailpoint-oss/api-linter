@@ -1,4 +1,4 @@
-functions: [path-validator, path-counter]
+functions: [path-validator]
 rules:
   # root-tags-must-have-description:
   #   description: "Rule 302: Tags must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#302"

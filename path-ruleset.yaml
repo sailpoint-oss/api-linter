@@ -6,11 +6,16 @@ functions:
     path-parameter-integer-number-formats,
     response-validator,
     path-query-parameter-check,
+    path-descriptions-check,
+    path-oauth-scope-check,
+    path-operation-check,
+    ascii,
+    path-reserved-keywords-check
   ]
 rules:
   path-parameters-must-have-description:
     description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303" 
-    given: $.[get, head, post, patch, put, delete].parameters[?(@.$ref == null)]
+    given: $.[*].parameters[?(@.$ref == null)]
     severity: error
     then:
       field: description
@@ -18,7 +23,7 @@ rules:
   path-parameters-must-have-a-lengthy-description:
     description: "Rule 303: The description of parameters must be at least 8 characters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     type: style
-    given: $.[get, head, post, patch, put, delete].parameters[?(@.$ref == null)]
+    given: $.[*].parameters[?(@.$ref == null)]
     severity: error
     then:
       field: description
@@ -27,7 +32,7 @@ rules:
         min: 8
   path-parameters-must-have-example:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
-    given: $.[get, head, post, patch, put, delete].parameters.*
+    given: $.[*].parameters[?(@.$ref == null)]
     severity: error
     then:
       function: parameter-example-check
@@ -35,7 +40,7 @@ rules:
         rule: 304
   path-parameters-must-have-valid-formats-for-numbers-and-integers:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171"
-    given: $.[get, head, post, patch, put, delete].parameters.*
+    given: $.[*].parameters[?(@.$ref == null)]
     severity: error
     then:
       function: path-parameter-integer-number-formats
@@ -50,31 +55,33 @@ rules:
       functionOptions:
         maxWordCount: 5
         rule: 305
-  # path-must-have-security-defined:
-  #   description: "Rule 104: Operations must have security defined as to the access needed for the endpoint"
-  #   given: $[*]
-  #   severity: error
-  #   then:
-  #     field: security
-  #     function: defined
-  # path-must-have-security-bearerAuth-defined:
-  #   description: "Rule 105: Operations must have security.bearerAuth with at least one scope defined to access the endpoint"
-  #   given: $[*].security.*
-  #   severity: error
-  #   then:
-  #     field: bearerAuth
-  #     function: truthy
-  path-deprecated-apis-should-have-deprecation-and-sunset-dates:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
-    given: $[*]
-    severity: warn
+  path-description-html-chars:
+    message: "{{error}}"
+    given: $[*].description
+    severity: error
     then:
-      function: deprecation
+      function: path-descriptions-check
       functionOptions:
-        rule: 189
+        rule: 405
+  path-must-have-security-defined:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#104"
+    given: $[*]
+    severity: error
+    then:
+      function: path-oauth-scope-check
+      functionOptions:
+        rule: 104
+  # path-deprecated-apis-should-have-deprecation-and-sunset-dates:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
+  #   given: $[*]
+  #   severity: warn
+  #   then:
+  #     function: deprecation
+  #     functionOptions:
+  #       rule: 189
   path-must-have-required-key-on-all-parameters:
     description: "Rule 317: Operations must have required key on all parameters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
-    given: $[get, head, post, patch, put, delete].parameters.*
+    given: $.[*].parameters[?(@.$ref == null)]
     severity: error
     then:
       field: required
@@ -87,6 +94,37 @@ rules:
       function: response-validator
       functionOptions:
         rule: 151
+  path-boolean-parameters-must-have-default:
+    message: "Rule 310: Optional boolean values must have a default https://sailpoint-oss.github.io/sailpoint-api-guidelines/#310"
+    given: $.[*].parameters.[?(@.$ref == null && @.required == false && @.schema.type == 'boolean')].schema
+    severity: error
+    then:
+      field: default
+      function: defined
+  path-operation-check:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#400"
+    given: $
+    severity: error
+    then:
+      function: path-operation-check
+      functionOptions:
+        rule: 400
+  ascii-characters:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#401"
+    given: $
+    severity: error
+    then:
+      function: ascii
+      functionOptions:
+        rule: 401
+  # path-parameters-must-not-use-reserved-keywords:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
+  #   given: $.[*].parameters[?(@.$ref == null)]
+  #   severity: error
+  #   then:
+  #     function: path-reserved-keywords-check
+  #     functionOptions:
+  #       rule: 504
   # path-parameters-should-have-query-parameter-fields:
   #   given: $.[get]
   #   severity: warn

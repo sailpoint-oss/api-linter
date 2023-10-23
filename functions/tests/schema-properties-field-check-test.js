@@ -690,6 +690,1153 @@ let itemArrayExample = {
   required: ["requestedFor", "requestedItems"],
 };
 
+let multiItemArrayUsecase = {
+  type: "object",
+  properties: {
+    name: {
+      type: "string",
+      description: "Human-readable display name of the item being requested.",
+      example: "AccessProfile1",
+    },
+    type: {
+      type: "string",
+      enum: ["ACCESS_PROFILE", "ROLE", "ENTITLEMENT"],
+      description: "Type of requested object.",
+      example: "ACCESS_PROFILE",
+    },
+    cancelledRequestDetails: {
+      type: "object",
+      properties: {
+        comment: {
+          type: "string",
+          description:
+            "Comment made by the owner when cancelling the associated request.",
+          example:
+            "Nisl quis ipsum quam quisque condimentum nunc ut dolor nunc.",
+        },
+        owner: {
+          type: "object",
+          properties: {
+            type: {
+              type: "string",
+              enum: [
+                "ACCOUNT_CORRELATION_CONFIG",
+                "ACCESS_PROFILE",
+                "ACCESS_REQUEST_APPROVAL",
+                "ACCOUNT",
+                "APPLICATION",
+                "CAMPAIGN",
+                "CAMPAIGN_FILTER",
+                "CERTIFICATION",
+                "CLUSTER",
+                "CONNECTOR_SCHEMA",
+                "ENTITLEMENT",
+                "GOVERNANCE_GROUP",
+                "IDENTITY",
+                "IDENTITY_PROFILE",
+                "IDENTITY_REQUEST",
+                "LIFECYCLE_STATE",
+                "PASSWORD_POLICY",
+                "ROLE",
+                "RULE",
+                "SOD_POLICY",
+                "SOURCE",
+                "TAG_CATEGORY",
+                "TASK_RESULT",
+                "REPORT_RESULT",
+                "SOD_VIOLATION",
+                "ACCOUNT_ACTIVITY",
+              ],
+              description:
+                "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+              example: "IDENTITY",
+            },
+            id: {
+              type: "string",
+              description: "ID of the object to which this reference applies",
+              example: "2c91808568c529c60168cca6f90c1313",
+            },
+            name: {
+              type: "string",
+              description:
+                "Human-readable display name of the object to which this reference applies",
+              example: "William Wilson",
+            },
+          },
+        },
+        modified: {
+          type: "string",
+          format: "date-time",
+          description:
+            "Date comment was added by the owner when cancelling the associated request",
+          example: "2019-12-20T09:17:12.192Z",
+        },
+      },
+      description:
+        "Provides additional details for a request that has been cancelled.",
+    },
+    errorMessages: {
+      type: "array",
+      items: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            locale: {
+              type: "string",
+              description:
+                "The locale for the message text, a BCP 47 language tag.",
+              example: "en-US",
+            },
+            localeOrigin: {
+              type: "string",
+              enum: ["DEFAULT", "REQUEST"],
+              description:
+                "An indicator of how the locale was selected. *DEFAULT* means the locale is the system default. *REQUEST* means the locale was selected from the request context (i.e., best match based on the *Accept-Language* header). Additional values may be added in the future without notice.",
+              example: "DEFAULT",
+            },
+            text: {
+              type: "string",
+              description:
+                "Actual text of the error message in the indicated locale.",
+              example:
+                "The request was syntactically correct but its content is semantically invalid.",
+            },
+          },
+        },
+      },
+      description:
+        "List of list of localized error messages, if any, encountered during the approval/provisioning process.",
+    },
+    state: {
+      type: "string",
+      enum: [
+        "EXECUTING",
+        "REQUEST_COMPLETED",
+        "CANCELLED",
+        "TERMINATED",
+        "PROVISIONING_VERIFICATION_PENDING",
+        "REJECTED",
+        "PROVISIONING_FAILED",
+        "NOT_ALL_ITEMS_PROVISIONED",
+        "ERROR",
+      ],
+      description:
+        "Indicates the state of an access request:\n* EXECUTING: The request is executing, which indicates the system is doing some processing.\n* REQUEST_COMPLETED: Indicates the request  has been completed.\n* CANCELLED: The request was cancelled with no user input.\n* TERMINATED: The request has been terminated before it was able to complete.\n* PROVISIONING_VERIFICATION_PENDING: The request has finished any approval steps and provisioning is waiting to be verified.\n* REJECTED: The request was rejected.\n* PROVISIONING_FAILED: The request has failed to complete.\n* NOT_ALL_ITEMS_PROVISIONED: One or more of the requested items failed to complete, but there were one or more  successes.\n* ERROR: An error occurred during request processing.",
+      example: "EXECUTING",
+    },
+    approvalDetails: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          forwarded: {
+            type: "boolean",
+            description:
+              "True if the request for this item was forwarded from one owner to another.",
+          },
+          originalOwner: {
+            type: "object",
+            properties: {
+              type: {
+                type: "string",
+                enum: [
+                  "ACCOUNT_CORRELATION_CONFIG",
+                  "ACCESS_PROFILE",
+                  "ACCESS_REQUEST_APPROVAL",
+                  "ACCOUNT",
+                  "APPLICATION",
+                  "CAMPAIGN",
+                  "CAMPAIGN_FILTER",
+                  "CERTIFICATION",
+                  "CLUSTER",
+                  "CONNECTOR_SCHEMA",
+                  "ENTITLEMENT",
+                  "GOVERNANCE_GROUP",
+                  "IDENTITY",
+                  "IDENTITY_PROFILE",
+                  "IDENTITY_REQUEST",
+                  "LIFECYCLE_STATE",
+                  "PASSWORD_POLICY",
+                  "ROLE",
+                  "RULE",
+                  "SOD_POLICY",
+                  "SOURCE",
+                  "TAG_CATEGORY",
+                  "TASK_RESULT",
+                  "REPORT_RESULT",
+                  "SOD_VIOLATION",
+                  "ACCOUNT_ACTIVITY",
+                ],
+                description:
+                  "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                example: "IDENTITY",
+              },
+              id: {
+                type: "string",
+                description: "ID of the object to which this reference applies",
+                example: "2c91808568c529c60168cca6f90c1313",
+              },
+              name: {
+                type: "string",
+                description:
+                  "Human-readable display name of the object to which this reference applies",
+                example: "William Wilson",
+              },
+            },
+          },
+          currentOwner: {
+            type: "object",
+            properties: {
+              type: {
+                type: "string",
+                enum: [
+                  "ACCOUNT_CORRELATION_CONFIG",
+                  "ACCESS_PROFILE",
+                  "ACCESS_REQUEST_APPROVAL",
+                  "ACCOUNT",
+                  "APPLICATION",
+                  "CAMPAIGN",
+                  "CAMPAIGN_FILTER",
+                  "CERTIFICATION",
+                  "CLUSTER",
+                  "CONNECTOR_SCHEMA",
+                  "ENTITLEMENT",
+                  "GOVERNANCE_GROUP",
+                  "IDENTITY",
+                  "IDENTITY_PROFILE",
+                  "IDENTITY_REQUEST",
+                  "LIFECYCLE_STATE",
+                  "PASSWORD_POLICY",
+                  "ROLE",
+                  "RULE",
+                  "SOD_POLICY",
+                  "SOURCE",
+                  "TAG_CATEGORY",
+                  "TASK_RESULT",
+                  "REPORT_RESULT",
+                  "SOD_VIOLATION",
+                  "ACCOUNT_ACTIVITY",
+                ],
+                description:
+                  "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                example: "IDENTITY",
+              },
+              id: {
+                type: "string",
+                description: "ID of the object to which this reference applies",
+                example: "2c91808568c529c60168cca6f90c1313",
+              },
+              name: {
+                type: "string",
+                description:
+                  "Human-readable display name of the object to which this reference applies",
+                example: "William Wilson",
+              },
+            },
+          },
+          reviewedBy: {
+            type: "object",
+            properties: {
+              type: {
+                type: "string",
+                enum: [
+                  "ACCOUNT_CORRELATION_CONFIG",
+                  "ACCESS_PROFILE",
+                  "ACCESS_REQUEST_APPROVAL",
+                  "ACCOUNT",
+                  "APPLICATION",
+                  "CAMPAIGN",
+                  "CAMPAIGN_FILTER",
+                  "CERTIFICATION",
+                  "CLUSTER",
+                  "CONNECTOR_SCHEMA",
+                  "ENTITLEMENT",
+                  "GOVERNANCE_GROUP",
+                  "IDENTITY",
+                  "IDENTITY_PROFILE",
+                  "IDENTITY_REQUEST",
+                  "LIFECYCLE_STATE",
+                  "PASSWORD_POLICY",
+                  "ROLE",
+                  "RULE",
+                  "SOD_POLICY",
+                  "SOURCE",
+                  "TAG_CATEGORY",
+                  "TASK_RESULT",
+                  "REPORT_RESULT",
+                  "SOD_VIOLATION",
+                  "ACCOUNT_ACTIVITY",
+                ],
+                description:
+                  "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                example: "IDENTITY",
+              },
+              id: {
+                type: "string",
+                description: "ID of the object to which this reference applies",
+                example: "2c91808568c529c60168cca6f90c1313",
+              },
+              name: {
+                type: "string",
+                description:
+                  "Human-readable display name of the object to which this reference applies",
+                example: "William Wilson",
+              },
+            },
+          },
+          modified: {
+            type: "string",
+            format: "date-time",
+            description: "Time at which item was modified.",
+            example: "2019-08-23T18:52:57.398Z",
+          },
+          status: {
+            type: "string",
+            enum: [
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
+              "EXPIRED",
+              "CANCELLED",
+              "ARCHIVED",
+            ],
+            description:
+              "Indicates the state of the request processing for this item:\n* PENDING: The request for this item is awaiting processing.\n* APPROVED: The request for this item has been approved.\n* REJECTED: The request for this item was rejected.\n* EXPIRED: The request for this item expired with no action taken.\n* CANCELLED: The request for this item was cancelled with no user action.\n* ARCHIVED: The request for this item has been archived after completion.",
+            example: "PENDING",
+          },
+          scheme: {
+            type: "string",
+            enum: [
+              "APP_OWNER",
+              "SOURCE_OWNER",
+              "MANAGER",
+              "ROLE_OWNER",
+              "ACCESS_PROFILE_OWNER",
+              "GOVERNANCE_GROUP",
+            ],
+            description:
+              "Describes the individual or group that is responsible for an approval step.",
+          },
+          errorMessages: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                locale: {
+                  type: "string",
+                  description:
+                    "The locale for the message text, a BCP 47 language tag.",
+                  example: "en-US",
+                },
+                localeOrigin: {
+                  type: "string",
+                  enum: ["DEFAULT", "REQUEST"],
+                  description:
+                    "An indicator of how the locale was selected. *DEFAULT* means the locale is the system default. *REQUEST* means the locale was selected from the request context (i.e., best match based on the *Accept-Language* header). Additional values may be added in the future without notice.",
+                  example: "DEFAULT",
+                },
+                text: {
+                  type: "string",
+                  description:
+                    "Actual text of the error message in the indicated locale.",
+                  example:
+                    "The request was syntactically correct but its content is semantically invalid.",
+                },
+              },
+            },
+            description:
+              "If the request failed, includes any error messages that were generated.",
+          },
+          comment: {
+            type: "string",
+            description: "Comment, if any, provided by the approver.",
+          },
+          removeDate: {
+            type: "string",
+            description:
+              "The date the role or access profile is no longer assigned to the specified identity.",
+            format: "date-time",
+            example: "2020-07-11T00:00:00Z",
+          },
+        },
+      },
+      description: "Approval details for each item.",
+    },
+    manualWorkItemDetails: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          forwarded: {
+            type: "boolean",
+            description:
+              "True if the request for this item was forwarded from one owner to another.",
+            example: true,
+          },
+          originalOwner: {
+            type: "object",
+            properties: {
+              type: {
+                type: "string",
+                enum: [
+                  "ACCOUNT_CORRELATION_CONFIG",
+                  "ACCESS_PROFILE",
+                  "ACCESS_REQUEST_APPROVAL",
+                  "ACCOUNT",
+                  "APPLICATION",
+                  "CAMPAIGN",
+                  "CAMPAIGN_FILTER",
+                  "CERTIFICATION",
+                  "CLUSTER",
+                  "CONNECTOR_SCHEMA",
+                  "ENTITLEMENT",
+                  "GOVERNANCE_GROUP",
+                  "IDENTITY",
+                  "IDENTITY_PROFILE",
+                  "IDENTITY_REQUEST",
+                  "LIFECYCLE_STATE",
+                  "PASSWORD_POLICY",
+                  "ROLE",
+                  "RULE",
+                  "SOD_POLICY",
+                  "SOURCE",
+                  "TAG_CATEGORY",
+                  "TASK_RESULT",
+                  "REPORT_RESULT",
+                  "SOD_VIOLATION",
+                  "ACCOUNT_ACTIVITY",
+                ],
+                description:
+                  "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                example: "IDENTITY",
+              },
+              id: {
+                type: "string",
+                description: "ID of the object to which this reference applies",
+                example: "2c91808568c529c60168cca6f90c1313",
+              },
+              name: {
+                type: "string",
+                description:
+                  "Human-readable display name of the object to which this reference applies",
+                example: "William Wilson",
+              },
+            },
+          },
+          currentOwner: {
+            type: "object",
+            properties: {
+              type: {
+                type: "string",
+                enum: [
+                  "ACCOUNT_CORRELATION_CONFIG",
+                  "ACCESS_PROFILE",
+                  "ACCESS_REQUEST_APPROVAL",
+                  "ACCOUNT",
+                  "APPLICATION",
+                  "CAMPAIGN",
+                  "CAMPAIGN_FILTER",
+                  "CERTIFICATION",
+                  "CLUSTER",
+                  "CONNECTOR_SCHEMA",
+                  "ENTITLEMENT",
+                  "GOVERNANCE_GROUP",
+                  "IDENTITY",
+                  "IDENTITY_PROFILE",
+                  "IDENTITY_REQUEST",
+                  "LIFECYCLE_STATE",
+                  "PASSWORD_POLICY",
+                  "ROLE",
+                  "RULE",
+                  "SOD_POLICY",
+                  "SOURCE",
+                  "TAG_CATEGORY",
+                  "TASK_RESULT",
+                  "REPORT_RESULT",
+                  "SOD_VIOLATION",
+                  "ACCOUNT_ACTIVITY",
+                ],
+                description:
+                  "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                example: "IDENTITY",
+              },
+              id: {
+                type: "string",
+                description: "ID of the object to which this reference applies",
+                example: "2c91808568c529c60168cca6f90c1313",
+              },
+              name: {
+                type: "string",
+                description:
+                  "Human-readable display name of the object to which this reference applies",
+                example: "William Wilson",
+              },
+            },
+          },
+          modified: {
+            type: "string",
+            format: "date-time",
+            description: "Time at which item was modified.",
+            example: "2019-08-23T18:52:57.398Z",
+          },
+          status: {
+            type: "string",
+            enum: [
+              "PENDING",
+              "APPROVED",
+              "REJECTED",
+              "EXPIRED",
+              "CANCELLED",
+              "ARCHIVED",
+            ],
+            description:
+              "Indicates the state of the request processing for this item:\n* PENDING: The request for this item is awaiting processing.\n* APPROVED: The request for this item has been approved.\n* REJECTED: The request for this item was rejected.\n* EXPIRED: The request for this item expired with no action taken.\n* CANCELLED: The request for this item was cancelled with no user action.\n* ARCHIVED: The request for this item has been archived after completion.",
+            example: "PENDING",
+          },
+        },
+      },
+      description: "Manual work items created for provisioning the item.",
+    },
+    accountActivityItemId: {
+      type: "string",
+      description: "Id of associated account activity item.",
+      example: "2c9180926cbfbddd016cbfc7c3b10010",
+    },
+    requestType: {
+      type: "string",
+      enum: ["GRANT_ACCESS", "REVOKE_ACCESS"],
+      description:
+        "Access request type. Defaults to GRANT_ACCESS. REVOKE_ACCESS type can only have a single Identity ID in the requestedFor field. Currently REVOKE_ACCESS is not supported for entitlements.",
+      example: "GRANT_ACCESS",
+    },
+    modified: {
+      type: "string",
+      format: "date-time",
+      description: "When the request was last modified.",
+      example: "2019-08-23T18:52:59.162Z",
+    },
+    created: {
+      type: "string",
+      format: "date-time",
+      description: "When the request was created.",
+      example: "2019-08-23T18:40:35.772Z",
+    },
+    requester: {
+      type: "object",
+      properties: {
+        type: {
+          type: "string",
+          enum: [
+            "ACCOUNT_CORRELATION_CONFIG",
+            "ACCESS_PROFILE",
+            "ACCESS_REQUEST_APPROVAL",
+            "ACCOUNT",
+            "APPLICATION",
+            "CAMPAIGN",
+            "CAMPAIGN_FILTER",
+            "CERTIFICATION",
+            "CLUSTER",
+            "CONNECTOR_SCHEMA",
+            "ENTITLEMENT",
+            "GOVERNANCE_GROUP",
+            "IDENTITY",
+            "IDENTITY_PROFILE",
+            "IDENTITY_REQUEST",
+            "LIFECYCLE_STATE",
+            "PASSWORD_POLICY",
+            "ROLE",
+            "RULE",
+            "SOD_POLICY",
+            "SOURCE",
+            "TAG_CATEGORY",
+            "TASK_RESULT",
+            "REPORT_RESULT",
+            "SOD_VIOLATION",
+            "ACCOUNT_ACTIVITY",
+          ],
+          description:
+            "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+          example: "IDENTITY",
+        },
+        id: {
+          type: "string",
+          description: "ID of the object to which this reference applies",
+          example: "2c91808568c529c60168cca6f90c1313",
+        },
+        name: {
+          type: "string",
+          description:
+            "Human-readable display name of the object to which this reference applies",
+          example: "William Wilson",
+        },
+      },
+    },
+    requestedFor: {
+      type: "object",
+      properties: {
+        type: {
+          type: "string",
+          enum: [
+            "ACCOUNT_CORRELATION_CONFIG",
+            "ACCESS_PROFILE",
+            "ACCESS_REQUEST_APPROVAL",
+            "ACCOUNT",
+            "APPLICATION",
+            "CAMPAIGN",
+            "CAMPAIGN_FILTER",
+            "CERTIFICATION",
+            "CLUSTER",
+            "CONNECTOR_SCHEMA",
+            "ENTITLEMENT",
+            "GOVERNANCE_GROUP",
+            "IDENTITY",
+            "IDENTITY_PROFILE",
+            "IDENTITY_REQUEST",
+            "LIFECYCLE_STATE",
+            "PASSWORD_POLICY",
+            "ROLE",
+            "RULE",
+            "SOD_POLICY",
+            "SOURCE",
+            "TAG_CATEGORY",
+            "TASK_RESULT",
+            "REPORT_RESULT",
+            "SOD_VIOLATION",
+            "ACCOUNT_ACTIVITY",
+          ],
+          description:
+            "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+          example: "IDENTITY",
+        },
+        id: {
+          type: "string",
+          description: "ID of the object to which this reference applies",
+          example: "2c91808568c529c60168cca6f90c1313",
+        },
+        name: {
+          type: "string",
+          description:
+            "Human-readable display name of the object to which this reference applies",
+          example: "William Wilson",
+        },
+      },
+    },
+    requesterComment: {
+      type: "object",
+      properties: {
+        comment: {
+          type: "string",
+          description: "Content of the comment",
+          example:
+            "Et quam massa maximus vivamus nisi ut urna tincidunt metus elementum erat",
+        },
+        author: {
+          type: "object",
+          properties: {
+            type: {
+              type: "string",
+              enum: [
+                "ACCOUNT_CORRELATION_CONFIG",
+                "ACCESS_PROFILE",
+                "ACCESS_REQUEST_APPROVAL",
+                "ACCOUNT",
+                "APPLICATION",
+                "CAMPAIGN",
+                "CAMPAIGN_FILTER",
+                "CERTIFICATION",
+                "CLUSTER",
+                "CONNECTOR_SCHEMA",
+                "ENTITLEMENT",
+                "GOVERNANCE_GROUP",
+                "IDENTITY",
+                "IDENTITY_PROFILE",
+                "IDENTITY_REQUEST",
+                "LIFECYCLE_STATE",
+                "PASSWORD_POLICY",
+                "ROLE",
+                "RULE",
+                "SOD_POLICY",
+                "SOURCE",
+                "TAG_CATEGORY",
+                "TASK_RESULT",
+                "REPORT_RESULT",
+                "SOD_VIOLATION",
+                "ACCOUNT_ACTIVITY",
+              ],
+              description:
+                "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+              example: "IDENTITY",
+            },
+            id: {
+              type: "string",
+              description: "ID of the author",
+              example: "2c91808568c529c60168cca6f90c1313",
+            },
+            name: {
+              type: "string",
+              description:
+                "Human-readable display name of the identity making the comment",
+              example: "Adam Kennedy",
+            },
+          },
+        },
+        created: {
+          type: "string",
+          format: "date-time",
+          description: "Date and time comment was created",
+          example: "2017-07-11T18:45:37.098Z",
+        },
+      },
+    },
+    sodViolationContext: {
+      description: "An object referencing a completed SOD violation check",
+      type: "object",
+      properties: {
+        state: {
+          type: "string",
+          enum: ["SUCCESS", "ERROR"],
+          description: "The status of SOD violation check",
+          example: "SUCCESS",
+        },
+        uuid: {
+          description: "The id of the Violation check event",
+          type: "string",
+          example: "f73d16e9-a038-46c5-b217-1246e15fdbdd",
+        },
+        violationCheckResult: {
+          description:
+            "The inner object representing the completed SOD Violation check",
+          type: "object",
+          properties: {
+            message: {
+              type: "object",
+              properties: {
+                locale: {
+                  type: "string",
+                  description:
+                    "The locale for the message text, a BCP 47 language tag.",
+                  example: "en-US",
+                },
+                localeOrigin: {
+                  type: "string",
+                  enum: ["DEFAULT", "REQUEST"],
+                  description:
+                    "An indicator of how the locale was selected. *DEFAULT* means the locale is the system default. *REQUEST* means the locale was selected from the request context (i.e., best match based on the *Accept-Language* header). Additional values may be added in the future without notice.",
+                  example: "DEFAULT",
+                },
+                text: {
+                  type: "string",
+                  description:
+                    "Actual text of the error message in the indicated locale.",
+                  example:
+                    "The request was syntactically correct but its content is semantically invalid.",
+                },
+              },
+            },
+            clientMetadata: {
+              type: "object",
+              additionalProperties: { type: "string" },
+              description:
+                "Arbitrary key-value pairs. They will never be processed by the IdentityNow system but will be returned on completion of the violation check.",
+              example: {
+                requestedAppName: "test-app",
+                requestedAppId: "2c91808f7892918f0178b78da4a305a1",
+              },
+            },
+            violationContexts: {
+              type: "array",
+              items: {
+                description:
+                  "The contextual information of the violated criteria",
+                type: "object",
+                properties: {
+                  policy: {
+                    type: "object",
+                    properties: {
+                      type: {
+                        type: "string",
+                        enum: [
+                          "ACCOUNT_CORRELATION_CONFIG",
+                          "ACCESS_PROFILE",
+                          "ACCESS_REQUEST_APPROVAL",
+                          "ACCOUNT",
+                          "APPLICATION",
+                          "CAMPAIGN",
+                          "CAMPAIGN_FILTER",
+                          "CERTIFICATION",
+                          "CLUSTER",
+                          "CONNECTOR_SCHEMA",
+                          "ENTITLEMENT",
+                          "GOVERNANCE_GROUP",
+                          "IDENTITY",
+                          "IDENTITY_PROFILE",
+                          "IDENTITY_REQUEST",
+                          "LIFECYCLE_STATE",
+                          "PASSWORD_POLICY",
+                          "ROLE",
+                          "RULE",
+                          "SOD_POLICY",
+                          "SOURCE",
+                          "TAG_CATEGORY",
+                          "TASK_RESULT",
+                          "REPORT_RESULT",
+                          "SOD_VIOLATION",
+                          "ACCOUNT_ACTIVITY",
+                        ],
+                        description:
+                          "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                        example: "IDENTITY",
+                      },
+                      id: {
+                        type: "string",
+                        description:
+                          "ID of the object to which this reference applies",
+                        example: "2c91808568c529c60168cca6f90c1313",
+                      },
+                      name: {
+                        type: "string",
+                        description:
+                          "Human-readable display name of the object to which this reference applies",
+                        example: "William Wilson",
+                      },
+                    },
+                  },
+                  conflictingAccessCriteria: {
+                    type: "object",
+                    description:
+                      "The object which contains the left and right hand side of the entitlements that got violated according to the policy.",
+                    properties: {
+                      leftCriteria: {
+                        type: "object",
+                        properties: {
+                          criteriaList: {
+                            type: "array",
+                            items: {
+                              description:
+                                "Details of the Entitlement criteria",
+                              type: "object",
+                              properties: {
+                                existing: {
+                                  type: "boolean",
+                                  example: true,
+                                  description:
+                                    "If the entitlement already belonged to the user or not.",
+                                },
+                                type: {
+                                  type: "string",
+                                  enum: [
+                                    "ACCOUNT_CORRELATION_CONFIG",
+                                    "ACCESS_PROFILE",
+                                    "ACCESS_REQUEST_APPROVAL",
+                                    "ACCOUNT",
+                                    "APPLICATION",
+                                    "CAMPAIGN",
+                                    "CAMPAIGN_FILTER",
+                                    "CERTIFICATION",
+                                    "CLUSTER",
+                                    "CONNECTOR_SCHEMA",
+                                    "ENTITLEMENT",
+                                    "GOVERNANCE_GROUP",
+                                    "IDENTITY",
+                                    "IDENTITY_PROFILE",
+                                    "IDENTITY_REQUEST",
+                                    "LIFECYCLE_STATE",
+                                    "PASSWORD_POLICY",
+                                    "ROLE",
+                                    "RULE",
+                                    "SOD_POLICY",
+                                    "SOURCE",
+                                    "TAG_CATEGORY",
+                                    "TASK_RESULT",
+                                    "REPORT_RESULT",
+                                    "SOD_VIOLATION",
+                                    "ACCOUNT_ACTIVITY",
+                                  ],
+                                  description:
+                                    "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                                  example: "IDENTITY",
+                                },
+                                id: {
+                                  type: "string",
+                                  description: "Entitlement ID",
+                                  example: "2c918085771e9d3301773b3cb66f6398",
+                                },
+                                name: {
+                                  type: "string",
+                                  description: "Entitlement name",
+                                  example: "My HR Entitlement",
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                      rightCriteria: {
+                        type: "object",
+                        properties: {
+                          criteriaList: {
+                            type: "array",
+                            items: {
+                              description:
+                                "Details of the Entitlement criteria",
+                              type: "object",
+                              properties: {
+                                existing: {
+                                  type: "boolean",
+                                  example: true,
+                                  description:
+                                    "If the entitlement already belonged to the user or not.",
+                                },
+                                type: {
+                                  type: "string",
+                                  enum: [
+                                    "ACCOUNT_CORRELATION_CONFIG",
+                                    "ACCESS_PROFILE",
+                                    "ACCESS_REQUEST_APPROVAL",
+                                    "ACCOUNT",
+                                    "APPLICATION",
+                                    "CAMPAIGN",
+                                    "CAMPAIGN_FILTER",
+                                    "CERTIFICATION",
+                                    "CLUSTER",
+                                    "CONNECTOR_SCHEMA",
+                                    "ENTITLEMENT",
+                                    "GOVERNANCE_GROUP",
+                                    "IDENTITY",
+                                    "IDENTITY_PROFILE",
+                                    "IDENTITY_REQUEST",
+                                    "LIFECYCLE_STATE",
+                                    "PASSWORD_POLICY",
+                                    "ROLE",
+                                    "RULE",
+                                    "SOD_POLICY",
+                                    "SOURCE",
+                                    "TAG_CATEGORY",
+                                    "TASK_RESULT",
+                                    "REPORT_RESULT",
+                                    "SOD_VIOLATION",
+                                    "ACCOUNT_ACTIVITY",
+                                  ],
+                                  description:
+                                    "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                                  example: "IDENTITY",
+                                },
+                                id: {
+                                  type: "string",
+                                  description: "Entitlement ID",
+                                  example: "2c918085771e9d3301773b3cb66f6398",
+                                },
+                                name: {
+                                  type: "string",
+                                  description: "Entitlement name",
+                                  example: "My HR Entitlement",
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            violatedPolicies: {
+              type: "array",
+              description: "A list of the Policies that were violated",
+              items: {
+                type: "object",
+                properties: {
+                  type: {
+                    type: "string",
+                    enum: [
+                      "ACCOUNT_CORRELATION_CONFIG",
+                      "ACCESS_PROFILE",
+                      "ACCESS_REQUEST_APPROVAL",
+                      "ACCOUNT",
+                      "APPLICATION",
+                      "CAMPAIGN",
+                      "CAMPAIGN_FILTER",
+                      "CERTIFICATION",
+                      "CLUSTER",
+                      "CONNECTOR_SCHEMA",
+                      "ENTITLEMENT",
+                      "GOVERNANCE_GROUP",
+                      "IDENTITY",
+                      "IDENTITY_PROFILE",
+                      "IDENTITY_REQUEST",
+                      "LIFECYCLE_STATE",
+                      "PASSWORD_POLICY",
+                      "ROLE",
+                      "RULE",
+                      "SOD_POLICY",
+                      "SOURCE",
+                      "TAG_CATEGORY",
+                      "TASK_RESULT",
+                      "REPORT_RESULT",
+                      "SOD_VIOLATION",
+                      "ACCOUNT_ACTIVITY",
+                    ],
+                    description:
+                      "An enumeration of the types of DTOs supported within the IdentityNow infrastructure.",
+                    example: "IDENTITY",
+                  },
+                  id: {
+                    type: "string",
+                    description:
+                      "ID of the object to which this reference applies",
+                    example: "2c91808568c529c60168cca6f90c1313",
+                  },
+                  name: {
+                    type: "string",
+                    description:
+                      "Human-readable display name of the object to which this reference applies",
+                    example: "William Wilson",
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    provisioningDetails: {
+      type: "object",
+      properties: {
+        orderedSubPhaseReferences: {
+          type: "string",
+          description:
+            'Ordered CSV of sub phase references to objects that contain more information about provisioning. For example, this can contain "manualWorkItemDetails" which indicate that there is further information in that object for this phase.',
+          example: "manualWorkItemDetails",
+        },
+      },
+      description:
+        "Provides additional details about provisioning for this request.",
+    },
+    preApprovalTriggerDetails: {
+      type: "object",
+      properties: {
+        comment: {
+          type: "string",
+          description: "Comment left for the pre-approval decision",
+          example: "Access is Approved",
+        },
+        reviewer: {
+          type: "string",
+          description: "The reviewer of the pre-approval decision",
+          example: "John Doe",
+        },
+        decision: {
+          type: "string",
+          enum: ["APPROVED", "REJECTED"],
+          description: "The decision of the pre-approval trigger",
+          example: "APPROVED",
+        },
+      },
+      description:
+        "Provides additional details about the pre-approval trigger for this request.",
+    },
+    accessRequestPhases: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          started: {
+            type: "string",
+            description: "The time that this phase started.",
+            format: "date-time",
+            example: "2020-07-11T00:00:00Z",
+          },
+          finished: {
+            type: "string",
+            description: "The time that this phase finished.",
+            format: "date-time",
+            example: "2020-07-12T00:00:00Z",
+          },
+          name: {
+            type: "string",
+            description: "The name of this phase.",
+            example: "APPROVAL_PHASE",
+          },
+          state: {
+            type: "string",
+            enum: ["PENDING", "EXECUTING", "COMPLETED", "CANCELLED"],
+            description: "The state of this phase.",
+            example: "COMPLETED",
+          },
+          result: {
+            type: "string",
+            enum: ["SUCCESSFUL", "FAILED"],
+            description: "The state of this phase.",
+            example: "SUCCESSFUL",
+          },
+          phaseReference: {
+            type: "string",
+            description:
+              "A reference to another object on the RequestedItemStatus that contains more details about the phase. Note that for the Provisioning phase, this will be empty if there are no manual work items.",
+            example: "approvalDetails",
+          },
+        },
+        description:
+          "Provides additional details about this access request phase.",
+      },
+      description:
+        "A list of Phases that the Access Request has gone through in order, to help determine the status of the request.",
+    },
+    description: {
+      type: "string",
+      description: "Description associated to the requested object.",
+      example: "This is the Engineering role that engineers are granted.",
+    },
+    removeDate: {
+      type: "string",
+      format: "date-time",
+      description: "When the role access is scheduled for removal.",
+      example: "2019-10-23T00:00:00.000Z",
+    },
+    cancelable: {
+      type: "boolean",
+      description: "True if the request can be canceled.",
+      example: true,
+    },
+    accessRequestId: {
+      type: "string",
+      format: "uuid",
+      description: "This is the account activity id.",
+      example: "ef38f94347e94562b5bb8424a56397d8",
+    },
+  },
+};
+
+
+let nullableExampleUsecase = {
+  type: "object",
+  properties: {
+    oldApproverName: {
+      type: "string",
+      nullable: true
+    },
+    newApproverName: {
+      type: "string",
+      description:
+        "Display name of approver to whom the approval was forwarded.",
+      nullable: true
+    },
+    comment: {
+      type: "string",
+      description: "Comment made by old approver when forwarding.",
+      example: "Fusce id orci vel consectetur amet ipsum quam.",
+    },
+    modified: {
+      type: "string",
+      format: "date-time",
+      description: "Time at which approval was forwarded.",
+      example: "2019-08-23T18:52:57.398Z",
+    },
+  },
+};
+
 describe("Parameter example check", function () {
   it("Should not return any error messages when all parameters have an example", function () {
     assert.deepEqual(
@@ -808,113 +1955,91 @@ describe("Parameter example check", function () {
     assert.deepEqual(
       [
         {
-          message: `Rule ${ruleNumber}: The property completionStatus must have a example`,
-          path: ["properties", "completionStatus", "example"],
-        },
-        {
-          message: `Rule ${ruleNumber}: The property completed must have a example`,
+          message: 'Rule 304: The property completed must have a example',
           path: [
-            "properties",
-            "requesterIdentitySummary",
-            "properties",
-            "completed",
-            "example",
-          ],
+            'properties',
+            'requesterIdentitySummary',
+            'properties',
+            'completed',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property completed must have a example`,
+          message: 'Rule 304: The property completed must have a example',
           path: [
-            "properties",
-            "targetIdentitySummary",
-            "properties",
-            "completed",
-            "example",
-          ],
+            'properties',
+            'targetIdentitySummary',
+            'properties',
+            'completed',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property warnings must have a example that is not null`,
-          path: ["properties", "warnings", "example"],
+          message: 'Rule 304: The property warnings must have a example that is not null',
+          path: [ 'properties', 'warnings', 'example' ]
         },
         {
-          message: `Rule ${ruleNumber}: The property name must have a example`,
+          message: 'Rule 304: The property name must have a example',
+          path: [ 'properties', 'items', 'items', 'properties', 'name', 'example' ]
+        },
+        {
+          message: 'Rule 304: The property approvalStatus must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "name",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'approvalStatus',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property approvalStatus must have a example`,
+          message: 'Rule 304: The property provisioningStatus must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "approvalStatus",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'provisioningStatus',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property provisioningStatus must have a example`,
+          message: 'Rule 304: The property completed must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "provisioningStatus",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'reviewerIdentitySummary',
+            'properties',
+            'completed',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property completed must have a example`,
+          message: 'Rule 304: The property operation must have a example',
           path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "reviewerIdentitySummary",
-            "properties",
-            "completed",
-            "example",
-          ],
+            'properties',
+            'items',
+            'items',
+            'properties',
+            'operation',
+            'example'
+          ]
         },
         {
-          message: `Rule ${ruleNumber}: The property operation must have a example`,
-          path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "operation",
-            "example",
-          ],
+          message: 'Rule 304: The property executionStatus must have a example',
+          path: [ 'properties', 'executionStatus', 'example' ]
         },
         {
-          message: `Rule ${ruleNumber}: The property clientMetadata must have a example`,
-          path: [
-            "properties",
-            "items",
-            "items",
-            "properties",
-            "clientMetadata",
-            "example",
-          ],
+          message: 'Rule 304: The property clientMetadata must have a example',
+          path: [ 'properties', 'clientMetadata', 'example' ]
         },
         {
-          message: `Rule ${ruleNumber}: The property executionStatus must have a example`,
-          path: ["properties", "executionStatus", "example"],
-        },
-        {
-          message: `Rule ${ruleNumber}: The property clientMetadata must have a example`,
-          path: ["properties", "clientMetadata", "example"],
-        },
-        {
-          message: `Rule ${ruleNumber}: The property cancelable must have a example`,
-          path: ["properties", "cancelable", "example"],
-        },
+          message: 'Rule 304: The property cancelable must have a example',
+          path: [ 'properties', 'cancelable', 'example' ]
+        }
       ],
       schemaPropertiesFieldCheck(superMultilevelSchemaObject, {
         rule: ruleNumber,
@@ -923,13 +2048,85 @@ describe("Parameter example check", function () {
     );
   });
 
-
   it("Should return no errors with item array example", function () {
     assert.deepEqual(
       [],
       schemaPropertiesFieldCheck(itemArrayExample, {
         rule: ruleNumber,
         field: "example",
+      })
+    );
+  });
+
+  it("Should return errors with multi item->array type example", function () {
+    assert.deepEqual(
+      [
+        {
+          message: `Rule ${ruleNumber}: The property forwarded must have a example`,
+          path: [
+            "properties",
+            "approvalDetails",
+            "items",
+            "properties",
+            "forwarded",
+            "example",
+          ],
+        },
+        {
+          message: `Rule ${ruleNumber}: The property scheme must have a example`,
+          path: [
+            "properties",
+            "approvalDetails",
+            "items",
+            "properties",
+            "scheme",
+            "example",
+          ],
+        },
+        {
+          message: `Rule ${ruleNumber}: The property comment must have a example`,
+          path: [
+            "properties",
+            "approvalDetails",
+            "items",
+            "properties",
+            "comment",
+            "example",
+          ],
+        },
+      ],
+      schemaPropertiesFieldCheck(multiItemArrayUsecase, {
+        rule: ruleNumber,
+        field: "example",
+      })
+    );
+  });
+
+  it("Should return no errors with nullable true fields missing examples", function () {
+    assert.deepEqual(
+      [],
+      schemaPropertiesFieldCheck(nullableExampleUsecase, {
+        rule: ruleNumber,
+        field: "example",
+      })
+    );
+  });
+
+  it("Should return errors with nullable true fields with missing description", function () {
+    assert.deepEqual(
+      [
+          {
+            message: "Rule 304: The property oldApproverName must have a description",
+            path: [
+              "properties",
+              "oldApproverName",
+              "description"
+            ]
+          }
+        ],
+      schemaPropertiesFieldCheck(nullableExampleUsecase, {
+        rule: ruleNumber,
+        field: "description",
       })
     );
   });
