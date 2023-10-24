@@ -1,9 +1,9 @@
 module.exports = (targetVal, _opts) => {
+  console.log(`Target: ${JSON.stringify(targetVal)}`)
   const { rule } = _opts;
 
   const oneNewLine = new RegExp('([^\n]\n[^\n])+')
-  const twoNewLines = new RegExp('([^\n]\n\n[^\n])+')
-  if (oneNewLine.test(targetVal) || twoNewLines.test(targetVal)) {
+  if (oneNewLine.test(targetVal)) {
     return [
       {
         message: `Rule ${rule}: Each line in the description for filters must always be separated by two lines.`,
@@ -11,7 +11,7 @@ module.exports = (targetVal, _opts) => {
     ];
   }
 
-  let parts = targetVal.split('\n\n\n')
+  let parts = targetVal.split('\n\n')
 
   if (parts[0] !== "Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)") {
     return [
@@ -35,7 +35,7 @@ module.exports = (targetVal, _opts) => {
     const property = filters[0]
     const operations = filters[1].trim()
 
-    const prop = property.replaceAll('*','')
+    const prop = property.replaceAll('*', '')
 
     // Check that the property is bolded
     let regex = new RegExp('^\\*\\*[a-z].*[a-z]\\*\\*$')
@@ -88,7 +88,7 @@ module.exports = (targetVal, _opts) => {
         ];
       }
     }
-    
+
 
     i++
   }

@@ -1,6 +1,7 @@
 functions:
   [
     parameter-example-check,
+    parameter-filter-description-check,
     word-count,
     deprecation,
     path-parameter-integer-number-formats,
@@ -32,7 +33,7 @@ rules:
         min: 8
   path-filter-parameter-must-follow-format:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#324"
-    given: $.[*].parameters[?(@.in == "query" && @.name == "filters")]
+    given: $.[*].parameters[?(@.in == "query" && @.name == "filters")].description
     severity: error
     then:
       function: parameter-filter-description-check
@@ -79,6 +80,7 @@ rules:
       function: path-oauth-scope-check
       functionOptions:
         rule: 104
+
   # path-deprecated-apis-should-have-deprecation-and-sunset-dates:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
   #   given: $[*]
@@ -87,6 +89,7 @@ rules:
   #     function: deprecation
   #     functionOptions:
   #       rule: 189
+
   path-must-have-required-key-on-all-parameters:
     description: "Rule 317: Operations must have required key on all parameters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
     given: $.[*].parameters[?(@.$ref == null)]
@@ -125,6 +128,7 @@ rules:
       function: ascii
       functionOptions:
         rule: 401
+        
   # path-parameters-must-not-use-reserved-keywords:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
   #   given: $.[*].parameters[?(@.$ref == null)]

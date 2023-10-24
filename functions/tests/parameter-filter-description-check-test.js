@@ -4,79 +4,58 @@ let ruleNumber = 324;
 
 let validFilterDescription = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
 
-
 Filtering is supported for the following fields and operators:
-
 
 **id**: *eq, in*
 
-
 **name**: *eq, sw*
-
 
 **created**: *gt, lt, ge, le*`;
 
 let multiplePropertiesOnSameLine = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
 
-
 Filtering is supported for the following fields and operators:
-
 
 **created, modified**: *gt, lt, ge, le*`;
 
 let unsupportedOperator = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
 
-
 Filtering is supported for the following fields and operators:
-
 
 **id**: *eq, un*`
 
 let singleNewLine = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
-
 Filtering is supported for the following fields and operators:
-
 **id**: *eq, un*
-
 **created**: *gt, lt, ge, le*`
 
 let badIntro = `This is a bad intro
 
-
 Filtering is supported for the following fields and operators:
-
 
 **id**: *eq, co*`
 
 let propertyNotBolded = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
 
-
 Filtering is supported for the following fields and operators:
-
 
 id: *eq, co*`
 
 let operatorNotItalicized = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
 
-
 Filtering is supported for the following fields and operators:
-
 
 **id**: **eq, co**`
 
 let operatorsNotSeparated = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
 
-
 Filtering is supported for the following fields and operators:
-
 
 **id**: *eq co*`
 
 let additionalInfoInOperator = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
 
-
 Filtering is supported for the following fields and operators:
-
 
 **id**: *eq, in (not valid), co*`
 

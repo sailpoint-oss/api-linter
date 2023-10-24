@@ -5,6 +5,10 @@ The SailPoint API Linter extends [spectral](https://meta.stoplight.io/docs/spect
 ## Installation
 For installation instructions see the spectral installation document: [How to install spectral](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation)
 
+Please use version 6.0.0, as the latest version will not work with how SailPoint API specifications are built.
+
+`npm install -g @stoplight/spectral-cli@6.0.0`
+
 
 ## Rulesets
 
