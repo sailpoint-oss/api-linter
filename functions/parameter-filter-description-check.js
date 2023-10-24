@@ -1,5 +1,4 @@
 module.exports = (targetVal, _opts) => {
-  console.log(`Target: ${JSON.stringify(targetVal)}`)
   const { rule } = _opts;
 
   const oneNewLine = new RegExp('([^\n]\n[^\n])+')
