@@ -78,7 +78,7 @@ module.exports = (targetVal, _opts) => {
 
     // Check if the an unsupported operator is used
     const supportedOps = ['ca', 'co', 'eq', 'ge', 'gt', 'in', 'le', 'lt', 'ne', 'pr', 'isnull', 'sw']
-    for (op of operations.replaceAll('*', '').split(', ')) {
+    for (const op of operations.replaceAll('*', '').split(', ')) {
       if (!supportedOps.includes(op)) {
         return [
           {
