@@ -2,6 +2,7 @@ functions:
   [
     parameter-example-check,
     parameter-filter-description-check,
+    parameter-sorter-description-check,
     word-count,
     deprecation,
     path-parameter-integer-number-formats,
@@ -39,6 +40,14 @@ rules:
       function: parameter-filter-description-check
       functionOptions:
         rule: 324
+  path-sorter-parameter-must-follow-format:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#325"
+    given: $.[*].parameters[?(@.in == "query" && @.name == "sorters")].description
+    severity: error
+    then:
+      function: parameter-sorter-description-check
+      functionOptions:
+        rule: 325
   path-parameters-must-have-example:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
     given: $.[*].parameters[?(@.$ref == null)]
