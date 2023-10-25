@@ -9,6 +9,10 @@ Please use version 6.0.0, as the latest version will not work with how SailPoint
 
 `npm install -g @stoplight/spectral-cli@6.0.0`
 
+You will also need to use Node version `16.16.0``.  Later version of Node will not work with spectral.  You can [install and use nvm](https://github.com/nvm-sh/nvm#install--update-script) to manage your Node versions.
+
+`nvm install 16.16.0`
+
 
 ## Rulesets
 
