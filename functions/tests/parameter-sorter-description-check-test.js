@@ -4,7 +4,7 @@ let ruleNumber = 325;
 
 let validSorterDescription = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
 
-Sorting is supported for the following fields: **name, identity.manager, modified**`;
+Sorting is supported for the following fields: **owner.name, name, identity.manager, modified, identityId**`;
 
 let badKeyForFields = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
 

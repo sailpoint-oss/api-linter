@@ -50,7 +50,7 @@ module.exports = (targetVal, _opts) => {
   }
 
   // Check if the properties are comma separated
-  regex = new RegExp('^\\*\\*[a-z]+(,\\s[a-z]+)*\\*\\*$')
+  regex = new RegExp('^\\*\\*[a-zA-Z.]+(,\\s[a-zA-Z.]+)*\\*\\*$')
   if (!regex.test(properties)) {
     return [
       {
