@@ -12,7 +12,8 @@ functions:
     path-oauth-scope-check,
     path-operation-check,
     ascii,
-    path-reserved-keywords-check
+    path-reserved-keywords-check,
+    summary-check
   ]
 rules:
   path-parameters-must-have-description:
@@ -137,7 +138,14 @@ rules:
       function: ascii
       functionOptions:
         rule: 401
-        
+  path-summary-check:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#305"
+    given: $
+    severity: error
+    then:
+      function: summary-check
+      functionOptions:
+        rule: 305
   # path-parameters-must-not-use-reserved-keywords:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
   #   given: $.[*].parameters[?(@.$ref == null)]
