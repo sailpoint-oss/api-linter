@@ -7,10 +7,10 @@
 //   functionOptions:
 //     rule: 402
 
-import { existsSync, readFileSync } from "fs";
-import { parse } from "yaml";
+module.exports = (targetVal, _opts, context) => { 
+  const fs = require("fs");
+  const yaml = require("yaml");
 
-export default (targetVal, _opts, context) => {
   const { rule } = _opts;
   let results = [];
   let filePath = "";
@@ -29,11 +29,11 @@ export default (targetVal, _opts, context) => {
     }
   }
 
-  if (existsSync(filePath)) {
+  if (fs.existsSync(filePath)) {
     try {
       // Read and parse the YAML file synchronously
-      const data = readFileSync(filePath, 'utf8');
-      const parsedData = parse(data);
+      const data = fs.readFileSync(filePath, 'utf8');
+      const parsedData = yaml.parse(data);
       parsedData.tags.forEach((tag) => {
         tagArray.push(tag.name);
       });
