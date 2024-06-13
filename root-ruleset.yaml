@@ -1,5 +1,13 @@
-functions: [path-validator]
+functions: [path-validator, tag-alpha-check]
 rules:
+  root-tags-must-be-in-alphabetical-order:
+    description: "Rule 403: Tags must be in alphabetical order: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#403"
+    given: $.tags
+    severity: error
+    then:
+      function: tag-alpha-check
+      functionOptions:
+        rule: 403
   # root-tags-must-have-description:
   #   description: "Rule 302: Tags must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#302"
   #   given: $.tags[*]
