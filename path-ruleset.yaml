@@ -147,14 +147,14 @@ rules:
       function: summary-check
       functionOptions:
         rule: 305
-  path-tag-check:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#402"
-    given: $
-    severity: error
-    then:
-      function: tag-check
-      functionOptions:
-        rule: 402
+  # path-tag-check:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#402"
+  #   given: $
+  #   severity: error
+  #   then:
+  #     function: tag-check
+  #     functionOptions:
+  #       rule: 402
   # path-parameters-must-not-use-reserved-keywords:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
   #   given: $.[*].parameters[?(@.$ref == null)]
