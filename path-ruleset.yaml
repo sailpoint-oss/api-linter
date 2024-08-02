@@ -13,9 +13,8 @@ functions:
     path-operation-check,
     ascii,
     path-reserved-keywords-check,
-    summary-check,
-    tag-check
-  ]
+    summary-check
+    ]
 rules:
   path-parameters-must-have-description:
     description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303" 
