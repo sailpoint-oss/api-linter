@@ -47,7 +47,7 @@ module.exports = (targetVal, _opts) => {
     }
 
     // Check if there is more than one property on the same line
-    regex = new RegExp('[^.a-zA-Z]')
+    regex = new RegExp('[^.a-zA-Z_]')
     if (regex.test(prop)) {
       return [
         {
