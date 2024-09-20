@@ -37,7 +37,7 @@ module.exports = (targetVal, _opts) => {
     const prop = property.replaceAll('*', '')
 
     // Check that the property is bolded
-    let regex = new RegExp('^\\*\\*[a-z].*[a-z]\\*\\*$')
+    let regex = new RegExp('^\\*\\*[a-z_].*[a-z_]\\*\\*$')
     if (!regex.test(property)) {
       return [
         {
@@ -47,7 +47,7 @@ module.exports = (targetVal, _opts) => {
     }
 
     // Check if there is more than one property on the same line
-    regex = new RegExp('[^.a-zA-Z]')
+    regex = new RegExp('[^.a-zA-Z_]')
     if (regex.test(prop)) {
       return [
         {
@@ -57,7 +57,7 @@ module.exports = (targetVal, _opts) => {
     }
 
     // Check if the operations are wrapped in italics
-    regex = new RegExp('^\\*[a-z].*[a-z]\\*$')
+    regex = new RegExp('^\\*[a-z_].*[a-z_]\\*$')
     if (!regex.test(operations)) {
       return [
         {
@@ -67,7 +67,7 @@ module.exports = (targetVal, _opts) => {
     }
 
     // Check if the operations are comma separated
-    regex = new RegExp('^\\*[a-z]+(,\\s[a-z]+)*\\*$')
+    regex = new RegExp('^\\*[a-z_]+(,\\s[a-z_]+)*\\*$')
     if (!regex.test(operations)) {
       return [
         {
