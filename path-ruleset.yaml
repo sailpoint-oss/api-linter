@@ -10,6 +10,7 @@ functions:
     path-query-parameter-check,
     path-descriptions-check,
     path-oauth-scope-check,
+    path-user-levels-check,
     path-operation-check,
     ascii,
     path-reserved-keywords-check,
