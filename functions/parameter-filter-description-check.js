@@ -29,7 +29,7 @@ module.exports = (targetVal, _opts) => {
   }
 
   let i = 2
-  while (i < parts.length && parts[i].includes('**: *')) {
+  while (i < parts.length && parts[i].includes(': ')) {
     const filters = parts[i].split(':')
     const property = filters[0]
     const operations = filters[1].trim()

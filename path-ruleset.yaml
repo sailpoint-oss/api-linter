@@ -90,6 +90,14 @@ rules:
       function: path-oauth-scope-check
       functionOptions:
         rule: 104
+  path-must-have-user-levels-defined:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#321"
+    given: $.*
+    severity: error
+    then:
+      function: path-user-levels-check
+      functionOptions:
+        rule: 321
 
   # # path-deprecated-apis-should-have-deprecation-and-sunset-dates:
   # #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
