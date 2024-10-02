@@ -1916,11 +1916,11 @@ describe("Path Operation Check Function", function () {
     assert.deepEqual(
       [
         {
-          message: `Rule ${ruleNumber}: a brief summary must be provided, must be no longer than 5 words.`,
+          message: `Rule ${ruleNumber}: a brief summary must be provided and be no longer than 5 words`,
           path: ["get", "summary"],
         },
         {
-            message: `Rule ${ruleNumber}: a brief summary must be provided, must be no longer than 5 words.`,
+            message: `Rule ${ruleNumber}: a brief summary must be provided and be no longer than 5 words`,
             path: ["post", "summary"],
           },
       ],

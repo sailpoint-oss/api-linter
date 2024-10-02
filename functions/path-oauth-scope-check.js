@@ -14,19 +14,19 @@ module.exports = (targetVal, _opts) => {
     let oauth2exists = false;
     let oauth2key = ""
     for (const [key, value] of Object.entries(targetVal.security)) {
-      if (value.UserContextAuth != undefined) {
+      if (value.userAuth != undefined) {
         oauth2exists = true;
-        oauth2key = "UserContextAuth"
+        oauth2key = "userAuth"
       }
-      if (value.ApplicationOnlyAuth != undefined) {
+      if (value.applicationAuth != undefined) {
         oauth2exists = true;
-        oauth2key = "ApplicationOnlyAuth"
+        oauth2key = "applicationAuth"
       }
     }
     if (!oauth2exists) {
       return [
         {
-          message: `Rule ${rule}: Operations must have security.oauth2 with at least one scope defined to access the endpoint`,
+          message: `Rule ${rule}: Operations must have security.userAuth and/or security.applicationAuth defined with at least one scope to access the endpoint`,
         },
       ];
     } else {
@@ -34,7 +34,7 @@ module.exports = (targetVal, _opts) => {
         if (typeof(value[oauth2key]) !== "object") {
           return [
             {
-              message: `Rule ${rule}: Operations must have security.oauth2 defined as an object with at least one scope defined to access the endpoint`,
+              message: `Rule ${rule}: Operations must have security.userAuth and/or security.applicationAuth defined as an object with at least one scope defined to access the endpoint`,
             },
           ]
         } else {
@@ -54,7 +54,7 @@ module.exports = (targetVal, _opts) => {
   } else if (targetVal.security == null) {
     return [
       {
-        message: `Rule ${rule}: Operations must have security.oauth2 with at least one scope defined to access the endpoint`,
+        message: `Rule ${rule}: Operations must have at least one scope defined to access the endpoint`,
       },
     ];
   } else {
