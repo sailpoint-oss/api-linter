@@ -6,6 +6,11 @@
 //   function: tag-check
 //   functionOptions:
 //     rule: 402
+
+const fs = require("fs");
+const path = require("path");
+const yaml = require("yaml");
+
 module.exports = (targetVal, _opts, context) => { 
 
   function findAndReadFile(startDir, targetFile) {
@@ -30,11 +35,6 @@ module.exports = (targetVal, _opts, context) => {
     console.error(`File ${targetFile} not found in any parent directories.`);
     return null;
   }
-
-
-  const fs = require("fs");
-  const path = require("path");
-  const yaml = require("yaml");
 
   const { rule } = _opts;
   let results = [];
