@@ -6,16 +6,41 @@
 //   function: tag-check
 //   functionOptions:
 //     rule: 402
-
 module.exports = (targetVal, _opts, context) => { 
+
+  function findAndReadFile(startDir, targetFile) {
+    let currentDir = startDir;
+  
+    while (currentDir !== path.parse(currentDir).root) {
+      const filePath = path.join(currentDir, targetFile);
+  
+      // Check if the file exists at this level
+      if (fs.existsSync(filePath)) {
+        console.log(`File found at: ${filePath}`);
+        
+        // Read and return file contents
+        const fileContents = fs.readFileSync(filePath, "utf8");
+        return fileContents;
+      }
+  
+      // Move up one directory level
+      currentDir = path.dirname(currentDir);
+    }
+  
+    console.error(`File ${targetFile} not found in any parent directories.`);
+    return null;
+  }
+
+
   const fs = require("fs");
+  const path = require("path");
   const yaml = require("yaml");
 
   const { rule } = _opts;
   let results = [];
-  let filePath = "";
   let tagArray = [];
-
+  let rootFileContents = "";
+  
   if (
     context.document.source === undefined ||
     context.document.source === null
@@ -23,25 +48,19 @@ module.exports = (targetVal, _opts, context) => {
     console.error("No source file found.");
   } else {
     if (context.document.source.includes("v3")) {
-      filePath = "../../sailpoint-api.v3.yaml";
+      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.v3.yaml");
+    } else if (context.document.source.includes("v2024")) {
+      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.v2024.yaml");
     } else if (context.document.source.includes("beta")) {
-      filePath = "../../sailpoint-api.beta.yaml";
+      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.beta.yaml");
     }
   }
 
-  if (fs.existsSync(filePath)) {
-    try {
-      // Read and parse the YAML file synchronously
-      const data = fs.readFileSync(filePath, 'utf8');
-      const parsedData = yaml.parse(data);
+  if (rootFileContents !== null) {
+      const parsedData = yaml.parse(rootFileContents);
       parsedData.tags.forEach((tag) => {
         tagArray.push(tag.name);
       });
-    } catch (err) {
-      console.error(err);
-    }
-  } else {
-    console.error(`File ${filePath} does not exist, unable to gather tags from root API spec`);
   }
 
   for (const [key, value] of Object.entries(targetVal)) {
@@ -71,3 +90,4 @@ module.exports = (targetVal, _opts, context) => {
 
   return results;
 };
+
