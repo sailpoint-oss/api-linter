@@ -7,11 +7,11 @@
 //   functionOptions:
 //     rule: 402
 
-const fs = require("fs");
-const path = require("path");
-const yaml = require("yaml");
+import fs from "fs";
+import path from "path";
+import yaml from "yaml";
 
-module.exports = (targetVal, _opts, context) => { 
+export default (targetVal, _opts, context) => { 
 
   function findAndReadFile(startDir, targetFile) {
     let currentDir = startDir;
