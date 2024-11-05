@@ -14,7 +14,8 @@ functions:
     path-operation-check,
     ascii,
     path-reserved-keywords-check,
-    summary-check
+    summary-check,
+    tag-check
     ]
 rules:
   path-parameters-must-have-description:
@@ -100,14 +101,14 @@ rules:
       functionOptions:
         rule: 321
 
-  # # path-deprecated-apis-should-have-deprecation-and-sunset-dates:
-  # #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
-  # #   given: $[*]
-  # #   severity: warn
-  # #   then:
-  # #     function: deprecation
-  # #     functionOptions:
-  # #       rule: 189
+  # path-deprecated-apis-should-have-deprecation-and-sunset-dates:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
+  #   given: $[*]
+  #   severity: warn
+  #   then:
+  #     function: deprecation
+  #     functionOptions:
+  #       rule: 189
 
   path-must-have-required-key-on-all-parameters:
     description: "Rule 317: Operations must have required key on all parameters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
@@ -155,14 +156,14 @@ rules:
       function: summary-check
       functionOptions:
         rule: 305
-  # path-tag-check:
-  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#402"
-  #   given: $
-  #   severity: error
-  #   then:
-  #     function: tag-check
-  #     functionOptions:
-  #       rule: 402
+  path-tag-check:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#402"
+    given: $
+    severity: error
+    then:
+      function: tag-check
+      functionOptions:
+        rule: 402
   # path-parameters-must-not-use-reserved-keywords:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
   #   given: $.[*].parameters[?(@.$ref == null)]

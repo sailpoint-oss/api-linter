@@ -7,8 +7,24 @@
 //    functionOptions:
 //      maxWordCount: 5
 
-module.exports = (targetVal, _opts) => {
-    const { rule, maxWordCount } = _opts;
+import pkg from '@stoplight/spectral-core';
+const { createRulesetFunction } = pkg;
+
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+        maxWordCount: true,
+      },
+      required: ["rule","maxWordCount"],
+    },
+  },
+  (targetVal, options) => {
+    const { rule, maxWordCount } = options;
     if (targetVal.split(" ").length > maxWordCount) {
         return [
             {
@@ -16,4 +32,4 @@ module.exports = (targetVal, _opts) => {
             }
         ]
     }
-  };
+  });

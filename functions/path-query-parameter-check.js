@@ -1,5 +1,21 @@
-module.exports = (targetVal, _opts) => {
-    const { rule, field } = _opts;
+import pkg from '@stoplight/spectral-core';
+const { createRulesetFunction } = pkg;
+
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+        field: true
+      },
+      required: ["rule", "field"],
+    },
+  },
+  (targetVal, options) => {
+    const { rule, field } = options;
 
     if (targetVal.parameters == undefined || targetVal.parameters == null) {
         return [
@@ -10,7 +26,7 @@ module.exports = (targetVal, _opts) => {
     }
 
 
-    keyFound = false;
+    let keyFound = false;
     for (const [key, value] of Object.entries(targetVal.parameters)) {
          if (JSON.stringify(value).indexOf(`"in":"query","name":"${field}"`) == 1) {
             keyFound = true
@@ -26,4 +42,4 @@ module.exports = (targetVal, _opts) => {
       }
 
 
-}
+})

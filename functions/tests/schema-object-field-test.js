@@ -1,9 +1,10 @@
-var assert = require("assert");
-let schemaObjectFieldCheck = require("../schema-object-field-check");
-let ruleNumber = 317;
-let field = "required";
+import { expect } from "chai";
+import schemaObjectFieldCheck from "../schema-object-field-check.js";
 
-let schemaObjectWithRequiredField = {
+const ruleNumber = 317;
+const field = "required";
+
+const schemaObjectWithRequiredField = {
   type: "object",
   properties: {
     oldApproverName: {
@@ -13,8 +14,7 @@ let schemaObjectWithRequiredField = {
     },
     newApproverName: {
       type: "string",
-      description:
-        "Display name of approver to whom the approval was forwarded.",
+      description: "Display name of approver to whom the approval was forwarded.",
       example: "al.volta",
     },
     comment: {
@@ -32,7 +32,7 @@ let schemaObjectWithRequiredField = {
   required: ["oldApproverName", "newApproverName"],
 };
 
-let schemaObjectMissingRequiredField = {
+const schemaObjectMissingRequiredField = {
   type: "object",
   properties: {
     oldApproverName: {
@@ -42,8 +42,7 @@ let schemaObjectMissingRequiredField = {
     },
     newApproverName: {
       type: "string",
-      description:
-        "Display name of approver to whom the approval was forwarded.",
+      description: "Display name of approver to whom the approval was forwarded.",
       example: "al.volta",
     },
     comment: {
@@ -60,7 +59,7 @@ let schemaObjectMissingRequiredField = {
   },
 };
 
-let schemaObjectWithNullRequiredField = {
+const schemaObjectWithNullRequiredField = {
   type: "object",
   properties: {
     oldApproverName: {
@@ -70,8 +69,7 @@ let schemaObjectWithNullRequiredField = {
     },
     newApproverName: {
       type: "string",
-      description:
-        "Display name of approver to whom the approval was forwarded.",
+      description: "Display name of approver to whom the approval was forwarded.",
       example: "al.volta",
     },
     comment: {
@@ -89,7 +87,7 @@ let schemaObjectWithNullRequiredField = {
   required: null,
 };
 
-let schemaAllOfObjectWithMissingRequiredField = {
+const schemaAllOfObjectWithMissingRequiredField = {
   allOf: [
     {
       type: "object",
@@ -101,8 +99,7 @@ let schemaAllOfObjectWithMissingRequiredField = {
         },
         newApproverName: {
           type: "string",
-          description:
-            "Display name of approver to whom the approval was forwarded.",
+          description: "Display name of approver to whom the approval was forwarded.",
           example: "al.volta",
         },
         comment: {
@@ -128,8 +125,7 @@ let schemaAllOfObjectWithMissingRequiredField = {
         },
         newApproverName: {
           type: "string",
-          description:
-            "Display name of approver to whom the approval was forwarded.",
+          description: "Display name of approver to whom the approval was forwarded.",
           example: "al.volta",
         },
         comment: {
@@ -148,7 +144,7 @@ let schemaAllOfObjectWithMissingRequiredField = {
   ],
 };
 
-let schemaAllOfObjectWithNullRequiredField = {
+const schemaAllOfObjectWithNullRequiredField = {
   allOf: [
     {
       type: "object",
@@ -160,8 +156,7 @@ let schemaAllOfObjectWithNullRequiredField = {
         },
         newApproverName: {
           type: "string",
-          description:
-            "Display name of approver to whom the approval was forwarded.",
+          description: "Display name of approver to whom the approval was forwarded.",
           example: "al.volta",
         },
         comment: {
@@ -188,8 +183,7 @@ let schemaAllOfObjectWithNullRequiredField = {
         },
         newApproverName: {
           type: "string",
-          description:
-            "Display name of approver to whom the approval was forwarded.",
+          description: "Display name of approver to whom the approval was forwarded.",
           example: "al.volta",
         },
         comment: {
@@ -210,64 +204,32 @@ let schemaAllOfObjectWithNullRequiredField = {
 
 describe("Schema Object Field Check", function () {
   it("Should not return any errors when the given field is present", function () {
-    assert.deepEqual(
-      [],
-      schemaObjectFieldCheck(schemaObjectWithRequiredField, {
-        rule: ruleNumber,
-        field: field,
-      })
-    );
+    expect(schemaObjectFieldCheck(schemaObjectWithRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([]);
   });
 
   it("Should not return any errors when the given field is missing", function () {
-    assert.deepEqual(
-      [],
-      schemaObjectFieldCheck(schemaObjectMissingRequiredField, {
-        rule: ruleNumber,
-        field: field,
-      })
-    );
+    expect(schemaObjectFieldCheck(schemaObjectMissingRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([]);
   });
 
   it("Should return errors when the given field is present but is empty or null", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: If a ${field} key is defined for a schema object, it must not be null or empty`,
-          path: ["required"],
-        }
-      ],
-      schemaObjectFieldCheck(schemaObjectWithNullRequiredField, {
-        rule: ruleNumber,
-        field: field,
-      })
-    );
+    expect(schemaObjectFieldCheck(schemaObjectWithNullRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: If a ${field} key is defined for a schema object, it must not be null or empty`,
+        path: ["required"],
+      },
+    ]);
   });
 
-
-  it("Should not return any errors when the given field is not present in the allOf format" , function () {
-    assert.deepEqual(
-      [],
-      schemaObjectFieldCheck(schemaAllOfObjectWithMissingRequiredField, {
-        rule: ruleNumber,
-        field: field,
-      })
-    );
+  it("Should not return any errors when the given field is not present in the allOf format", function () {
+    expect(schemaObjectFieldCheck(schemaAllOfObjectWithMissingRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([]);
   });
 
-
-  it("Should return errors when the given field is present but null in the allOf format" , function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: If a ${field} key is defined for a schema object, it must not be null or empty`,
-          path: ["allOf", 0 ,"required"],
-        }
-      ],
-      schemaObjectFieldCheck(schemaAllOfObjectWithNullRequiredField, {
-        rule: ruleNumber,
-        field: field,
-      })
-    );
+  it("Should return errors when the given field is present but null in the allOf format", function () {
+    expect(schemaObjectFieldCheck(schemaAllOfObjectWithNullRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: If a ${field} key is defined for a schema object, it must not be null or empty`,
+        path: ["allOf", 0, "required"],
+      },
+    ]);
   });
 });

@@ -249,8 +249,24 @@ const toNumbers = arr => arr.map(function(item) {
     }
   }
   
-  module.exports = (targetYaml, _opts) => {
-    const { field, rule } = _opts;
+  import pkg from '@stoplight/spectral-core';
+  const { createRulesetFunction } = pkg;
+  
+  export default createRulesetFunction(
+    {
+      input: null,
+      options: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          rule: true,
+          field: true,
+        },
+        required: ["rule", "field"],
+      },
+    },
+    (targetYaml, options) => {
+    const { field, rule } = options;
     //console.log(JSON.stringify(targetYaml));
   
     let results = [];
@@ -290,5 +306,5 @@ const toNumbers = arr => arr.map(function(item) {
     console.log(results);
         
     return results;
-  };
+  });
   

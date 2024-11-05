@@ -5,11 +5,26 @@
 // then:
 //   function: path-validator
 
-module.exports = (targetVal, _opts) => {
-  const { rule } = _opts;
-  path = targetVal.substring(1).split("/");
+import pkg from '@stoplight/spectral-core';
+const { createRulesetFunction } = pkg;
 
-  count = 0;
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+      },
+      required: ["rule"],
+    },
+  },
+  (targetVal, options) => {
+  const { rule } = options;
+  let path = targetVal.substring(1).split("/");
+
+  let count = 0;
   path.forEach((element) => {
     if (element.indexOf("{") == -1) {
       count += 1;
@@ -23,4 +38,4 @@ module.exports = (targetVal, _opts) => {
       },
     ];
   }
-};
+});

@@ -284,8 +284,24 @@ function parseYamlProperties(
   }
 }
 
-module.exports = (targetYaml, _opts) => {
-  const { field, rule } = _opts;
+import pkg from '@stoplight/spectral-core';
+const { createRulesetFunction } = pkg;
+
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+        field: true,
+      },
+      required: ["rule", "field"],
+    },
+  },
+  (targetYaml, options) => {
+  const { field, rule } = options;
   //console.log(JSON.stringify(targetYaml));
 
   let results = [];
@@ -325,4 +341,4 @@ module.exports = (targetYaml, _opts) => {
   //console.log(results)
   
   return results;
-};
+});

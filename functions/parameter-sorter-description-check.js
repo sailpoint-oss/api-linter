@@ -1,5 +1,20 @@
-module.exports = (targetVal, _opts) => {
-  const { rule } = _opts;
+import pkg from '@stoplight/spectral-core';
+const { createRulesetFunction } = pkg;
+
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+      },
+      required: ["rule"],
+    },
+  },
+  (targetVal, options) => {
+  const { rule } = options;
 
   const oneNewLine = new RegExp('([^\n]\n[^\n])+')
   if (oneNewLine.test(targetVal)) {
@@ -58,4 +73,4 @@ module.exports = (targetVal, _opts) => {
       },
     ];
   }
-};
+});

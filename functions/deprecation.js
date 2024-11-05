@@ -1,8 +1,25 @@
-module.exports = (targetVal, _opts, paths) => {
-  const { rule } = _opts;
-  let results = [];
+import pkg from '@stoplight/spectral-core';
+const { createRulesetFunction } = pkg;
 
-  const rootPath = paths.target !== void 0 ? paths.target : paths.given;
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+      },
+      required: ["rule"],
+    },
+  },
+  function deprecationCheck (targetVal, options, { path }) {
+  const { rule } = options;
+  let results = [];
+  let deprecatedKeyFound = false;
+  let sunsetKeyFound = false;
+
+  const rootPath = path;
 
   if (targetVal.deprecated != undefined && targetVal.deprecated == true) {
     if (targetVal.parameters != undefined && targetVal.parameters != null) {
@@ -41,4 +58,4 @@ module.exports = (targetVal, _opts, paths) => {
   }
   
   return results;
-};
+});

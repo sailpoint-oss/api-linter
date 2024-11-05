@@ -1,8 +1,9 @@
-var assert = require("assert");
-let pathParameterIntegerNumberFormats = require("../path-parameter-integer-number-formats");
-let ruleNumber = 171;
+import { expect } from "chai";
+import pathParameterIntegerNumberFormats from "../path-parameter-integer-number-formats.js";
 
-let jsonParameterWithValidNumberFormat = {
+const ruleNumber = 171;
+
+const jsonParameterWithValidNumberFormat = {
   in: "query",
   name: "numberTest",
   example: 10,
@@ -12,7 +13,7 @@ let jsonParameterWithValidNumberFormat = {
   },
 };
 
-let jsonParameterWithInvalidNumberFormat = {
+const jsonParameterWithInvalidNumberFormat = {
   in: "query",
   name: "numberTest",
   schema: {
@@ -22,7 +23,7 @@ let jsonParameterWithInvalidNumberFormat = {
   },
 };
 
-let jsonParameterWithFormatKeyMissingForNumber = {
+const jsonParameterWithFormatKeyMissingForNumber = {
   in: "query",
   name: "numberTest",
   schema: {
@@ -31,7 +32,7 @@ let jsonParameterWithFormatKeyMissingForNumber = {
   },
 };
 
-let jsonParameterWithValidIntegerFormat = {
+const jsonParameterWithValidIntegerFormat = {
   in: "query",
   name: "integerTest",
   schema: {
@@ -41,7 +42,7 @@ let jsonParameterWithValidIntegerFormat = {
   examples: [10, 50],
 };
 
-let jsonParameterWithInvalidIntegerFormat = {
+const jsonParameterWithInvalidIntegerFormat = {
   in: "query",
   name: "integerTest",
   schema: {
@@ -51,7 +52,7 @@ let jsonParameterWithInvalidIntegerFormat = {
   examples: [10, 50],
 };
 
-let jsonParameterWithMissingFormatKeyForInteger = {
+const jsonParameterWithMissingFormatKeyForInteger = {
   in: "query",
   name: "integerTest",
   schema: {
@@ -63,78 +64,48 @@ let jsonParameterWithMissingFormatKeyForInteger = {
 
 describe("Path Parameter Number/Integer Format", function () {
   it("Should not return any errors with a valid number type and number format", function () {
-    assert.deepEqual(
-      undefined,
-      pathParameterIntegerNumberFormats(jsonParameterWithValidNumberFormat, {
-        rule: ruleNumber,
-      })
-    );
+    const result = pathParameterIntegerNumberFormats(jsonParameterWithValidNumberFormat, { rule: ruleNumber });
+    expect(result).to.be.undefined;
   });
 
   it("Should return error with a valid number type but missing format key", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: ${jsonParameterWithFormatKeyMissingForNumber.name} is type ${jsonParameterWithFormatKeyMissingForNumber.schema.type} and must be one of the following values: float, double, decimal`,
-        },
-      ],
-      pathParameterIntegerNumberFormats(
-        jsonParameterWithFormatKeyMissingForNumber,
-        {
-          rule: ruleNumber,
-        }
-      )
-    );
+    const result = pathParameterIntegerNumberFormats(jsonParameterWithFormatKeyMissingForNumber, { rule: ruleNumber });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: ${jsonParameterWithFormatKeyMissingForNumber.name} is type ${jsonParameterWithFormatKeyMissingForNumber.schema.type} and must be one of the following values: float, double, decimal`,
+      },
+    ]);
   });
 
   it("Should return error with a valid number type but invalid number format specified", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidNumberFormat.name} is type ${jsonParameterWithInvalidNumberFormat.schema.type} and must be one of the following values: float, double, decimal`,
-        },
-      ],
-      pathParameterIntegerNumberFormats(jsonParameterWithInvalidNumberFormat, {
-        rule: ruleNumber,
-      })
-    );
+    const result = pathParameterIntegerNumberFormats(jsonParameterWithInvalidNumberFormat, { rule: ruleNumber });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidNumberFormat.name} is type ${jsonParameterWithInvalidNumberFormat.schema.type} and must be one of the following values: float, double, decimal`,
+      },
+    ]);
   });
 
   it("Should not return any errors with a valid integer type and integer format specified", function () {
-    assert.deepEqual(
-      undefined,
-      pathParameterIntegerNumberFormats(jsonParameterWithValidIntegerFormat, {
-        rule: ruleNumber,
-      })
-    );
+    const result = pathParameterIntegerNumberFormats(jsonParameterWithValidIntegerFormat, { rule: ruleNumber });
+    expect(result).to.be.undefined;
   });
 
   it("Should return error with a valid integer type but missing format key", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: ${jsonParameterWithMissingFormatKeyForInteger.name} is type ${jsonParameterWithMissingFormatKeyForInteger.schema.type} and must be one of the following values: int32, int64, bigint`,
-        },
-      ],
-      pathParameterIntegerNumberFormats(
-        jsonParameterWithMissingFormatKeyForInteger,
-        {
-          rule: ruleNumber,
-        }
-      )
-    );
+    const result = pathParameterIntegerNumberFormats(jsonParameterWithMissingFormatKeyForInteger, { rule: ruleNumber });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: ${jsonParameterWithMissingFormatKeyForInteger.name} is type ${jsonParameterWithMissingFormatKeyForInteger.schema.type} and must be one of the following values: int32, int64, bigint`,
+      },
+    ]);
   });
 
   it("Should return error with a valid integer type but invalid integer format specified", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: ${jsonParameterWithMissingFormatKeyForInteger.name} is type ${jsonParameterWithMissingFormatKeyForInteger.schema.type} and must be one of the following values: int32, int64, bigint`,
-        },
-      ],
-      pathParameterIntegerNumberFormats(jsonParameterWithInvalidIntegerFormat, {
-        rule: ruleNumber,
-      })
-    );
+    const result = pathParameterIntegerNumberFormats(jsonParameterWithInvalidIntegerFormat, { rule: ruleNumber });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: ${jsonParameterWithMissingFormatKeyForInteger.name} is type ${jsonParameterWithMissingFormatKeyForInteger.schema.type} and must be one of the following values: int32, int64, bigint`,
+      },
+    ]);
   });
 });

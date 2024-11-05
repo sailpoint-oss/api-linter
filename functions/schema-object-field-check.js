@@ -9,8 +9,24 @@
 //   functionOptions:
 //     field: required
 
-module.exports = (targetYaml, _opts) => {
-  const { rule, field } = _opts;
+import pkg from '@stoplight/spectral-core';
+const { createRulesetFunction } = pkg;
+
+export default createRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+        field: true,
+      },
+      required: ["rule", "field"],
+    },
+  },
+  (targetYaml, options) => {
+  const { rule, field } = options;
 
   //console.dir(targetYaml);
   let results = [];
@@ -50,4 +66,4 @@ module.exports = (targetYaml, _opts) => {
   }
 
   return results;
-};
+});
