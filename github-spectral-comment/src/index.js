@@ -21,7 +21,7 @@ async function run() {
       githubToken: core.getInput("github-token"),
       fileGlob:
         core.getInput("file-glob") ||
-        "migrate.js",
+        "../api-specs/src/main/yaml/v3/paths/access-profiles.yaml",
       spectralRootRuleset:
         core.getInput("spectral-root-ruleset") || "../../root-ruleset.yaml",
       spectralPathRuleset:

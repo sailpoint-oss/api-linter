@@ -27,8 +27,6 @@ export default createRulesetFunction(
   let results = [];
   let tagArray = [];
   
-  console.log(targetVal)
-
   if (
     context.document.source === undefined ||
     context.document.source === null
