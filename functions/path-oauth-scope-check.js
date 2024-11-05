@@ -12,6 +12,12 @@ module.exports = (targetVal, _opts) => {
 
   let results = [];
   if (targetVal.security != undefined) {
+    if (targetVal.security.length === 0) {
+      results.push({
+        message: `Rule ${rule}: Operations must define the security array with one or more of the following values: userAuth, applicationAuth, or {} (empty object means no auth required).`,
+      });
+      return results;
+    }
     let invalidKeys = [];
     const validKeys = ["userAuth", "applicationAuth"];
 
