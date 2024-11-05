@@ -108,11 +108,11 @@ async function run() {
       if (md === "") {
         core.info("No lint error found! Congratulation!");
       } else {
-        const octokit = new github.getOctokit(inputs.githubToken);
+        const octokit = github.getOctokit(inputs.githubToken);
         const repoName = context.repo.repo;
         const repoOwner = context.repo.owner;
         const prNumber = context.payload.pull_request.number;
-        await octokit.issues.createComment({
+        await octokit.rest.issues.createComment({
           repo: repoName,
           owner: repoOwner,
           body: md,
