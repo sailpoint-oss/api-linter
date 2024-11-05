@@ -21,7 +21,7 @@ async function findAndReadFile(startDir, targetFile) {
   while (currentDir.pathname !== "/") {
     const filePath = path.join(fileURLToPath(currentDir), targetFile);
 
-    console.log(`Checking for file: ${filePath}`);
+    console.error(`Checking for file: ${filePath}`);
 
     if (fs.existsSync(filePath)) {
       const fileContents = await fs.promises.readFile(filePath, "utf8");
