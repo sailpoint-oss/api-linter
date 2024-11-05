@@ -5,7 +5,7 @@ export const readFilesToAnalyze = async (githubWorkspace, fileGlob) => {
   const fileContents = [];
 
   for (let i = 0, len = files.length; i < len; i++) {
-    console.log(`FILE ${i} ${githubWorkspace}${files[i]}`);
+    console.log(`FILE ${i} ${githubWorkspace}/${files[i]}`);
     let filePath = `${githubWorkspace}/${files[i]}`
     try {
       if (fs.existsSync(filePath)) {

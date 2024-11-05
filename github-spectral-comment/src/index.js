@@ -21,7 +21,7 @@ async function run() {
       githubToken: core.getInput("github-token"),
       fileGlob:
         core.getInput("file-glob") ||
-        "sample/api-specs/src/main/yaml/v3/paths/access-profiles.yaml",
+        "migrate.js",
       spectralRootRuleset:
         core.getInput("spectral-root-ruleset") || "../../root-ruleset.yaml",
       spectralPathRuleset:
@@ -97,7 +97,9 @@ async function run() {
 
       console.log(`Current Working Directory: ` + process.cwd());
 
-      processedPbs = processPbs(fileContents[i].file, processedPbs, pbs);
+      if (pbs !== '') {
+        processedPbs = processPbs(fileContents[i].file, processedPbs, pbs);
+      }
     }
 
     const md = await toMarkdown(processedPbs, project);
