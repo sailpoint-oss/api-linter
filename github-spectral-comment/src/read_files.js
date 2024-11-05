@@ -6,7 +6,7 @@ export const readFilesToAnalyze = async (githubWorkspace, fileGlob) => {
 
   for (let i = 0, len = files.length; i < len; i++) {
     console.log(`FILE ${i} ${githubWorkspace}${files[i]}`);
-    let filePath = `${githubWorkspace}${files[i]}`
+    let filePath = `${githubWorkspace}/${files[i]}`
     try {
       if (fs.existsSync(filePath)) {
         console.log("File Exists, adding it to be linted");

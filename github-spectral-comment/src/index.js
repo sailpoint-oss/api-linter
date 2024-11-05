@@ -37,7 +37,7 @@ async function run() {
       headRef: process.env.GITHUB_HEAD_REF,
       workspace:
         process.env.GITHUB_WORKSPACE ||
-        "/Users/tyler.mairose/development/api-linter/github-spectral-comment/",
+        "/Users/tyler.mairose/development/api-linter/github-spectral-comment",
     };
 
     console.log("Workspace:" + project.workspace);
@@ -102,24 +102,28 @@ async function run() {
 
     const md = await toMarkdown(processedPbs, project);
 
-    if (md === "") {
-      core.info("No lint error found! Congratulation!");
-    } else {
-      const octokit = new github.GitHub(inputs.githubToken);
-      const repoName = context.repo.repo;
-      const repoOwner = context.repo.owner;
-      const prNumber = context.payload.pull_request.number;
-      await octokit.issues.createComment({
-        repo: repoName,
-        owner: repoOwner,
-        body: md,
-        issue_number: prNumber,
-      });
-      if (processedPbs.severitiesCount[0] > 0) {
-        core.setFailed(
-          "There are " + processedPbs.severitiesCount[0] + " lint errors!"
-        );
+    if (Object.keys(context.payload).length != 0) {
+      if (md === "") {
+        core.info("No lint error found! Congratulation!");
+      } else {
+        const octokit = new github.GitHub(inputs.githubToken);
+        const repoName = context.repo.repo;
+        const repoOwner = context.repo.owner;
+        const prNumber = context.payload.pull_request.number;
+        await octokit.issues.createComment({
+          repo: repoName,
+          owner: repoOwner,
+          body: md,
+          issue_number: prNumber,
+        });
+        if (processedPbs.severitiesCount[0] > 0) {
+          core.setFailed(
+            "There are " + processedPbs.severitiesCount[0] + " lint errors!"
+          );
+        }
       }
+    } else {
+      console.log(md);
     }
   } catch (error) {
     core.setFailed(error.message);

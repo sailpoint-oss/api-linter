@@ -23,7 +23,7 @@ export const createSpectral = async (rulesetFilePath) => {
 
 export const runSpectral = async (spectral, document, workspace, ignoreUnknownFormatFlag) => {
 
-    const documentToLint = new Document(document.content, Parsers.Yaml, path.join(workspace, document.file));
+    const documentToLint = new Document(document.content, Parsers.Yaml, path.join(workspace + "/", document.file));
     
     return spectral.runWithResolved(documentToLint, {
         resolver: httpAndFileResolver,
