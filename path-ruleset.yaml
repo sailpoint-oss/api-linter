@@ -15,7 +15,7 @@ functions:
     ascii,
     path-reserved-keywords-check,
     summary-check,
-    tags-check
+    tag-check
     ]
 rules:
   path-parameters-must-have-description:
