@@ -24,7 +24,7 @@ export default (targetVal, options, context) => {
         tagArray = JSON.parse(preloadedTags);
       } else {
         console.error(
-          "Preloaded Beta tags data not found in environment, this will not run the tags check."
+          "Preloaded V3 tags data not found in environment, this will not run the tags check."
         );
       }
     } else if (context.document.source.includes("v2024")) {
@@ -33,7 +33,7 @@ export default (targetVal, options, context) => {
         tagArray = JSON.parse(preloadedTags);
       } else {
         console.error(
-          "Preloaded Beta tags data not found in environment, this will not run the tags check."
+          "Preloaded V2024 tags data not found in environment, this will not run the tags check."
         );
       }
     } else if (context.document.source.includes("beta")) {
@@ -48,10 +48,7 @@ export default (targetVal, options, context) => {
     }
   }
 
-  console.error(`tagArray: ${tagArray}`);
-
   for (const [key, value] of Object.entries(targetVal)) {
-    console.log(`key: ${key}, value: ${value.tags}`);
     if (value.tags === undefined || value.tags == null) {
       results.push({
         message: `Rule ${rule}: You must include one tag to group an endpoint under`,
