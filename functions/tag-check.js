@@ -89,11 +89,14 @@ export default createRulesetFunction(
         path: [key, "tags"],
       });
     } else if (value.tags.length > 1) {
+      console.error(`Multiple tags for one endpoint: ${key}`);
       results.push({
         message: `Rule ${rule}: You must include only one tag to group an endpoint under`,
         path: [key, "tags"],
       });
     }
+
+  console.error(`I got here: ${tagArray.length}`);
 
     if (tagArray.length > 0) {
       value.tags.forEach((tag) => {
