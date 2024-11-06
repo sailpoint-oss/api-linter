@@ -84,6 +84,7 @@ export default createRulesetFunction(
   for (const [key, value] of Object.entries(targetVal)) {
     console.log(`key: ${key}, value: ${value.tags}`);
     if (value.tags === undefined || value.tags == null) {
+      console.error(`No tags for endpoint: ${key}`);
       results.push({
         message: `Rule ${rule}: You must include one tag to group an endpoint under`,
         path: [key, "tags"],
@@ -98,7 +99,7 @@ export default createRulesetFunction(
 
   console.error(`I got here: ${tagArray.length}`);
 
-    if (tagArray.length > 0) {
+    if (tagArray.length > 0 && value.tags !== undefined) {
       value.tags.forEach((tag) => {
         if (!tagArray.includes(tag)) {
           results.push({
