@@ -10,6 +10,33 @@
 import pkg from '@stoplight/spectral-core';
 const { createRulesetFunction } = pkg;
 
+import fs from "fs";
+import path from "path";
+import yaml from "yaml";
+
+function findAndReadFile(startDir, targetFile) {
+  let currentDir = startDir;
+
+  while (currentDir !== path.parse(currentDir).root) {
+    const filePath = path.join(currentDir, targetFile);
+
+    // Check if the file exists at this level
+    if (fs.existsSync(filePath)) {
+      console.error(`File found at: ${filePath}`);
+      
+      // Read and return file contents
+      const fileContents = fs.readFileSync(filePath, "utf8");
+      return fileContents;
+    }
+
+    // Move up one directory level
+    currentDir = path.dirname(currentDir);
+  }
+
+  console.error(`File ${targetFile} not found in any parent directories.`);
+  return null;
+}
+
 export default createRulesetFunction(
   {
     input: null,
@@ -26,6 +53,8 @@ export default createRulesetFunction(
   const { rule } = options;
   let results = [];
   let tagArray = [];
+  let rootFileContents = "";
+
   
   if (
     context.document.source === undefined ||
@@ -34,34 +63,21 @@ export default createRulesetFunction(
     console.error("No source file found.");
   } else {
     if (context.document.source.includes("v3")) {
-      const preloadedTags = process.env.V3_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded Beta tags data not found in environment, this will not run the tags check."
-        );
-      }
+      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.v3.yaml");
     } else if (context.document.source.includes("v2024")) {
-      const preloadedTags = process.env.V2024_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded Beta tags data not found in environment, this will not run the tags check."
-        );
-      }
+      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.v2024.yaml");
     } else if (context.document.source.includes("beta")) {
-      const preloadedTags = process.env.BETA_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded Beta tags data not found in environment, this will not run the tags check."
-        );
-      }
+      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.beta.yaml");
     }
   }
+
+  if (rootFileContents !== null) {
+      const parsedData = yaml.parse(rootFileContents);
+      parsedData.tags.forEach((tag) => {
+        tagArray.push(tag.name);
+      });
+  }
+
 
   console.error(`tagArray: ${tagArray}`);
 
