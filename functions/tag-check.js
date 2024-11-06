@@ -63,9 +63,6 @@ export default (targetVal, options, context) => {
       });
   }
 
-
-  console.error(`tagArray: ${tagArray}`);
-
   for (const [key, value] of Object.entries(targetVal)) {
     console.log(`key: ${key}, value: ${value.tags}`);
     if (value.tags === undefined || value.tags == null) {
@@ -81,8 +78,6 @@ export default (targetVal, options, context) => {
         path: [key, "tags"],
       });
     }
-
-  console.error(`I got here: ${tagArray.length}`);
 
     if (tagArray.length > 0 && value.tags !== undefined) {
       value.tags.forEach((tag) => {
