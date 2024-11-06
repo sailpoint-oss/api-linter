@@ -1,18 +1,4 @@
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
-export default createRulesetFunction(
-  {
-    input: null,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  function deprecationCheck (targetVal, options, { path }) {
+export default (targetVal, options, { path }) => {
   const { rule } = options;
   let results = [];
   let deprecatedKeyFound = false;
@@ -57,4 +43,4 @@ export default createRulesetFunction(
   }
   
   return results;
-});
+};

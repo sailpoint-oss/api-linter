@@ -1,18 +1,4 @@
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
-export default createRulesetFunction(
-  {
-    input: null,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  (targetVal, options) => {
+export default (targetVal, options) => {
   const { rule } = options;
   var ascii = /[^\x00-\x7F]/mg;
 
@@ -42,4 +28,4 @@ export default createRulesetFunction(
       }
     ];
   }
-});
+};

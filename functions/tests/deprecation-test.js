@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import deprecationFunction from "../deprecation.js";
+import deprecationCheck from "../deprecation.js";
 
 describe("Deprecation Check", function () {
   const rule = "test-rule";
@@ -7,7 +7,7 @@ describe("Deprecation Check", function () {
   it("should not return any errors if `deprecated` is not true", function () {
     const targetVal = { deprecated: false };
     const options = { rule };
-    const results = deprecationFunction(targetVal, options, { path: "get" });
+    const results = deprecationCheck(targetVal, options, { path: "get" });
 
     expect(results).to.be.an("array").that.is.empty;
   });
@@ -15,7 +15,7 @@ describe("Deprecation Check", function () {
   it("should return an error if `deprecated` is true and no headers are defined", function () {
     const targetVal = { deprecated: true, parameters: [] };
     const options = { rule };
-    const results = deprecationFunction(targetVal, options, { path: "get" });
+    const results = deprecationCheck(targetVal, options, { path: "get" });
 
     expect(results).to.have.lengthOf(1);
     expect(results[0].message).to.include("should define deprecation and sunset dates in the header");
@@ -27,7 +27,7 @@ describe("Deprecation Check", function () {
       parameters: [{ in: "header", name: "deprecation" }],
     };
     const options = { rule };
-    const results = deprecationFunction(targetVal, options, { path: "get" });
+    const results = deprecationCheck(targetVal, options, { path: "get" });
 
     expect(results).to.have.lengthOf(1);
     expect(results[0].message).to.include("should define sunset date in the header");
@@ -39,7 +39,7 @@ describe("Deprecation Check", function () {
       parameters: [{ in: "header", name: "sunset" }],
     };
     const options = { rule };
-    const results = deprecationFunction(targetVal, options, { path: "get" });
+    const results = deprecationCheck(targetVal, options, { path: "get" });
 
     expect(results).to.have.lengthOf(1);
     expect(results[0].message).to.include("should define deprecation date in the header");
@@ -54,7 +54,7 @@ describe("Deprecation Check", function () {
       ],
     };
     const options = { rule };
-    const results = deprecationFunction(targetVal, options, { path: "get" });
+    const results = deprecationCheck(targetVal, options, { path: "get" });
 
     expect(results).to.be.an("array").that.is.empty;
   });

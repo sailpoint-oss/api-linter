@@ -101,21 +101,7 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
   }
 }
 
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
-export default createRulesetFunction(
-  {
-    input: null,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  (targetYaml, options) => {
+export default (targetYaml, options) => {
   //console.log(JSON.stringify(targetYaml));
   const { rule } = options;
 
@@ -185,4 +171,4 @@ export default createRulesetFunction(
   });
 
   return results;
-});
+};

@@ -1,18 +1,4 @@
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
-export default createRulesetFunction(
-  {
-    input: null,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  (targetVal, options) => {
+export default (targetVal, options) => {
   const { rule } = options;
   if (
     targetVal.schema != undefined &&
@@ -53,4 +39,4 @@ export default createRulesetFunction(
       }
     }
   }
-});
+};

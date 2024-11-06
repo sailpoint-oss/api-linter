@@ -7,23 +7,7 @@
 //   functionOptions:
 //     rule: 305
 
-
-
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
-export default createRulesetFunction(
-  {
-    input: true,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  (targetVal, options) => {
+export default (targetVal, options) => {
     const { rule } = options;
 
     let results = [];
@@ -38,4 +22,4 @@ export default createRulesetFunction(
     }
 
     return results;
-  });
+  };

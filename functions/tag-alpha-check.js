@@ -1,18 +1,4 @@
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
-export default createRulesetFunction(
-  {
-    input: null,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  (targetVal, options) => {
+export default (targetVal, options) => {
     const { rule } = options;
     
     if (!isAlphabeticalOrder(targetVal)) {
@@ -25,8 +11,7 @@ export default createRulesetFunction(
     } else {
         console.log("Tags are in alphabetical order");
     }
-  },
-);
+  };
 
 function isAlphabeticalOrder(arr) {
     // Extract the names from the array of objects

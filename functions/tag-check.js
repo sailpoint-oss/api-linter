@@ -7,8 +7,6 @@
 //   functionOptions:
 //     rule: 402
 
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
 import * as fs from "node:fs";
 import * as path from "node:path";
 import yaml from "yaml";
@@ -36,19 +34,7 @@ function findAndReadFile(startDir, targetFile) {
   return null;
 }
 
-export default createRulesetFunction(
-  {
-    input: null,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  (targetVal, options, context) => {
+export default (targetVal, options, context) => {
   const { rule } = options;
   let results = [];
   let tagArray = [];
@@ -111,4 +97,4 @@ export default createRulesetFunction(
   }
 
   return results;
-});
+};

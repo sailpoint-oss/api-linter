@@ -14,21 +14,7 @@ function removeErrorCode(arr, value) {
   return arr;
 }
 
-import { createRulesetFunction } from '@stoplight/spectral-core';
-
-export default createRulesetFunction(
-  {
-    input: null,
-    options: {
-      type: "object",
-      additionalProperties: false,
-      properties: {
-        rule: true,
-      },
-      required: ["rule"],
-    },
-  },
-  (targetVal, options) => {
+export default (targetVal, options) => {
   const { rule } = options;
   let error_response_codes = ["400", "401", "403", "429", "500"]; // Error Codes to check
   let contains_2xx_code = false;
@@ -83,4 +69,4 @@ export default createRulesetFunction(
       }
     ];
   }
-});
+};
