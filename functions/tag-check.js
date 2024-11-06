@@ -7,39 +7,10 @@
 //   functionOptions:
 //     rule: 402
 
-import * as fs from "node:fs";
-import * as path from "node:path";
-import yaml from "yaml";
-
-function findAndReadFile(startDir, targetFile) {
-  let currentDir = startDir;
-
-  while (currentDir !== path.parse(currentDir).root) {
-    const filePath = path.join(currentDir, targetFile);
-
-    // Check if the file exists at this level
-    if (fs.existsSync(filePath)) {
-      console.error(`File found at: ${filePath}`);
-      
-      // Read and return file contents
-      const fileContents = fs.readFileSync(filePath, "utf8");
-      return fileContents;
-    }
-
-    // Move up one directory level
-    currentDir = path.dirname(currentDir);
-  }
-
-  console.error(`File ${targetFile} not found in any parent directories.`);
-  return null;
-}
-
 export default (targetVal, options, context) => {
   const { rule } = options;
   let results = [];
   let tagArray = [];
-  let rootFileContents = "";
-
   
   if (
     context.document.source === undefined ||
@@ -48,38 +19,52 @@ export default (targetVal, options, context) => {
     console.error("No source file found.");
   } else {
     if (context.document.source.includes("v3")) {
-      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.v3.yaml");
+      const preloadedTags = process.env.V3_TAGS_JSON;
+      if (preloadedTags) {
+        tagArray = JSON.parse(preloadedTags);
+      } else {
+        console.error(
+          "Preloaded Beta tags data not found in environment, this will not run the tags check."
+        );
+      }
     } else if (context.document.source.includes("v2024")) {
-      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.v2024.yaml");
+      const preloadedTags = process.env.V2024_TAGS_JSON;
+      if (preloadedTags) {
+        tagArray = JSON.parse(preloadedTags);
+      } else {
+        console.error(
+          "Preloaded Beta tags data not found in environment, this will not run the tags check."
+        );
+      }
     } else if (context.document.source.includes("beta")) {
-      rootFileContents = findAndReadFile(process.cwd(), "sailpoint-api.beta.yaml");
+      const preloadedTags = process.env.BETA_TAGS_JSON;
+      if (preloadedTags) {
+        tagArray = JSON.parse(preloadedTags);
+      } else {
+        console.error(
+          "Preloaded Beta tags data not found in environment, this will not run the tags check."
+        );
+      }
     }
   }
 
-  if (rootFileContents !== null) {
-      const parsedData = yaml.parse(rootFileContents);
-      parsedData.tags.forEach((tag) => {
-        tagArray.push(tag.name);
-      });
-  }
+  console.error(`tagArray: ${tagArray}`);
 
   for (const [key, value] of Object.entries(targetVal)) {
     console.log(`key: ${key}, value: ${value.tags}`);
     if (value.tags === undefined || value.tags == null) {
-      console.error(`No tags for endpoint: ${key}`);
       results.push({
         message: `Rule ${rule}: You must include one tag to group an endpoint under`,
         path: [key, "tags"],
       });
     } else if (value.tags.length > 1) {
-      console.error(`Multiple tags for one endpoint: ${key}`);
       results.push({
         message: `Rule ${rule}: You must include only one tag to group an endpoint under`,
         path: [key, "tags"],
       });
     }
 
-    if (tagArray.length > 0 && value.tags !== undefined) {
+    if (tagArray.length > 0 && value.tags != undefined) {
       value.tags.forEach((tag) => {
         if (!tagArray.includes(tag)) {
           results.push({
