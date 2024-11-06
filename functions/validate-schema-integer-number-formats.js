@@ -101,8 +101,7 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
   }
 }
 
-import pkg from '@stoplight/spectral-core';
-const { createRulesetFunction } = pkg;
+import { createRulesetFunction } from '@stoplight/spectral-core';
 
 export default createRulesetFunction(
   {

@@ -1,5 +1,5 @@
-import pkg from '@stoplight/spectral-core';
-const { createRulesetFunction } = pkg;
+import { createRulesetFunction } from '@stoplight/spectral-core';
+
 
 export default createRulesetFunction(
   {

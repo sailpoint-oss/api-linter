@@ -7,11 +7,10 @@
 //   functionOptions:
 //     rule: 402
 
-import pkg from '@stoplight/spectral-core';
-const { createRulesetFunction } = pkg;
+import { createRulesetFunction } from '@stoplight/spectral-core';
 
-import fs from "fs";
-import path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import yaml from "yaml";
 
 function findAndReadFile(startDir, targetFile) {
