@@ -5,11 +5,12 @@
 // then:
 //   function: path-validator
 
-module.exports = (targetVal, _opts) => {
-  const { rule } = _opts;
-  path = targetVal.substring(1).split("/");
 
-  count = 0;
+export default (targetVal, options) => {
+  const { rule } = options;
+  let path = targetVal.substring(1).split("/");
+
+  let count = 0;
   path.forEach((element) => {
     if (element.indexOf("{") == -1) {
       count += 1;

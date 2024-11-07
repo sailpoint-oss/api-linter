@@ -1,6 +1,7 @@
-var assert = require("assert");
-let operationCheck = require("../path-operation-check.js");
-let ruleNumber = 400;
+import { expect } from "chai";
+import operationCheck from "../path-operation-check.js";
+
+const ruleNumber = 400;
 
 let jsonPaths = {
   get: {
@@ -1955,43 +1956,31 @@ let invalidDeleteAndPatchAccessProfileOperationIds = {
 
 describe("Path Operation Check Function", function () {
   it("Should not return any errors for valid operationIds", function () {
-    assert.deepEqual(
-      [],
-      operationCheck(jsonPaths, {
-        rule: ruleNumber,
-      })
-    );
+    const result = operationCheck(jsonPaths, { rule: ruleNumber });
+    expect(result).to.deep.equal([]);
   });
 
   it("Should return errors for invalid operationId", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: path is invalid, the operationId must start with one of the allowed values [compare,export,get,list,search] for get endpoints that return an array of results`,
-          path: ["get", "operationId"],
-        },
-      ],
-      operationCheck(invalidAccessProfileOperationId, {
-        rule: ruleNumber,
-      })
-    );
+    const result = operationCheck(invalidAccessProfileOperationId, { rule: ruleNumber });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: path is invalid, the operationId must start with one of the allowed values [compare,export,get,list,search] for get endpoints that return an array of results`,
+        path: ["get", "operationId"],
+      },
+    ]);
   });
 
   it("Should return errors for invalid operationIds for delete and patch endpoints", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: rid is invalid, the operationId must start with one of the allowed values [delete,remove] for delete endpoints`,
-          path: ["delete", "operationId"],
-        },
-        {
-            message: `Rule ${ruleNumber}: check is invalid, the operationId must start with one of the allowed values [patch,update] for patch endpoints`,
-            path: ["patch", "operationId"],
-          },
-      ],
-      operationCheck(invalidDeleteAndPatchAccessProfileOperationIds, {
-        rule: ruleNumber,
-      })
-    );
+    const result = operationCheck(invalidDeleteAndPatchAccessProfileOperationIds, { rule: ruleNumber });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: rid is invalid, the operationId must start with one of the allowed values [delete,remove] for delete endpoints`,
+        path: ["delete", "operationId"],
+      },
+      {
+        message: `Rule ${ruleNumber}: check is invalid, the operationId must start with one of the allowed values [patch,update] for patch endpoints`,
+        path: ["patch", "operationId"],
+      },
+    ]);
   });
 });

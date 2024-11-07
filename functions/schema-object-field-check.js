@@ -9,8 +9,8 @@
 //   functionOptions:
 //     field: required
 
-module.exports = (targetYaml, _opts) => {
-  const { rule, field } = _opts;
+export default (targetYaml, options) => {
+  const { rule, field } = options;
 
   //console.dir(targetYaml);
   let results = [];

@@ -1,8 +1,8 @@
-var assert = require("assert");
-let parameterExampleCheck = require("../parameter-example-check");
-let ruleNumber = 304;
+import { expect } from "chai";
+import parameterExampleCheck from "../parameter-example-check.js";
+const ruleNumber = 304;
 
-let jsonParameterWithValidExample = {
+const jsonParameterWithValidExample = {
   in: "query",
   name: "numberTest",
   example: 10,
@@ -12,7 +12,7 @@ let jsonParameterWithValidExample = {
   },
 };
 
-let jsonParameterWithValidSchemaExample = {
+const jsonParameterWithValidSchemaExample = {
   in: "query",
   name: "numberTest",
   schema: {
@@ -22,7 +22,7 @@ let jsonParameterWithValidSchemaExample = {
   },
 };
 
-let jsonParameterWithValidSchemaExamples = {
+const jsonParameterWithValidSchemaExamples = {
   in: "query",
   name: "numberTest",
   schema: {
@@ -32,7 +32,7 @@ let jsonParameterWithValidSchemaExamples = {
   examples: [10.0, 50.0],
 };
 
-let jsonParameterWithMissingExample = {
+const jsonParameterWithMissingExample = {
   in: "query",
   name: "numberTest",
   schema: {
@@ -42,41 +42,27 @@ let jsonParameterWithMissingExample = {
 };
 
 describe("Path Parameter Example Check Test", function () {
-  it("Should not return any error messages if path parameter has a root level key example", function () {
-    assert.deepEqual(
-      undefined,
-      parameterExampleCheck(jsonParameterWithValidExample, { rule: ruleNumber })
-    );
+  it("should not return any error messages if path parameter has a root level key example", function () {
+    const result = parameterExampleCheck(jsonParameterWithValidExample, { rule: ruleNumber });
+    expect(result).to.be.undefined;
   });
 
-  it("Should not return any error messages if path parameter has a schema level key example", function () {
-    assert.deepEqual(
-      undefined,
-      parameterExampleCheck(jsonParameterWithValidSchemaExample, {
-        rule: ruleNumber,
-      })
-    );
+  it("should not return any error messages if path parameter has a schema level key example", function () {
+    const result = parameterExampleCheck(jsonParameterWithValidSchemaExample, { rule: ruleNumber });
+    expect(result).to.be.undefined;
   });
 
-  it("Should not return any error messages if path parameter has root level key examples", function () {
-    assert.deepEqual(
-      undefined,
-      parameterExampleCheck(jsonParameterWithValidSchemaExamples, {
-        rule: ruleNumber,
-      })
-    );
+  it("should not return any error messages if path parameter has root level key examples", function () {
+    const result = parameterExampleCheck(jsonParameterWithValidSchemaExamples, { rule: ruleNumber });
+    expect(result).to.be.undefined;
   });
 
-  it("Should return error message for missing example", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: An example for ${jsonParameterWithMissingExample.name} must be provided under one of the following keys: example, schema.example, examples`,
-        },
-      ],
-      parameterExampleCheck(jsonParameterWithMissingExample, {
-        rule: ruleNumber,
-      })
-    );
+  it("should return an error message for missing example", function () {
+    const result = parameterExampleCheck(jsonParameterWithMissingExample, { rule: ruleNumber });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: An example for ${jsonParameterWithMissingExample.name} must be provided under one of the following keys: example, schema.example, examples`,
+      },
+    ]);
   });
 });

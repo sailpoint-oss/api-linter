@@ -1,8 +1,9 @@
-var assert = require("assert");
-let responseValidator = require("../response-validator.js");
-let ruleNumber = 151;
+import { expect } from "chai";
+import responseValidator from "../response-validator.js";
 
-let jsonResponseWithAllResponsesDefined = {
+const ruleNumber = 151;
+
+const jsonResponseWithAllResponsesDefined = {
   200: {
     description: "List of account objects",
     content: {
@@ -33,7 +34,7 @@ let jsonResponseWithAllResponsesDefined = {
   },
 };
 
-let jsonWithMissingErrorResponses = {
+const jsonWithMissingErrorResponses = {
   200: {
     description: "List of account objects",
     content: {
@@ -58,7 +59,7 @@ let jsonWithMissingErrorResponses = {
   },
 };
 
-let jsonWithMissing2xxLevelResponseAndMissingErrorResponse = {
+const jsonWithMissing2xxLevelResponseAndMissingErrorResponse = {
   400: {
     $ref: "../responses/400.yaml",
   },
@@ -73,7 +74,7 @@ let jsonWithMissing2xxLevelResponseAndMissingErrorResponse = {
   },
 };
 
-let jsonWith2xxLevelResponseMissing = {
+const jsonWith2xxLevelResponseMissing = {
   400: {
     $ref: "../responses/400.yaml",
   },
@@ -93,47 +94,30 @@ let jsonWith2xxLevelResponseMissing = {
 
 describe("Response Validator", function () {
   it("Should not return any error messages when all responses defined in the provided json", function () {
-    assert.equal(
-      undefined,
-      responseValidator(jsonResponseWithAllResponsesDefined, {
-        rule: ruleNumber,
-      })
-    );
+    expect(responseValidator(jsonResponseWithAllResponsesDefined, { rule: ruleNumber })).to.be.undefined;
   });
 
   it("Should return error message when error responses missing from the provided json", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: Operation must have the following error codes defined: 429,500`,
-        },
-      ],
-      responseValidator(jsonWithMissingErrorResponses, { rule: ruleNumber })
-    );
+    expect(responseValidator(jsonWithMissingErrorResponses, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: Operation must have the following error codes defined: 429,500`,
+      },
+    ]);
   });
 
   it("Should return error message about 200 level response missing and missing error codes when missing from the provided json", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: Operation must have at least one 200 level response code defined and the following error codes defined: 500`,
-        },
-      ],
-      responseValidator(
-        jsonWithMissing2xxLevelResponseAndMissingErrorResponse,
-        { rule: ruleNumber }
-      )
-    );
+    expect(responseValidator(jsonWithMissing2xxLevelResponseAndMissingErrorResponse, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: Operation must have at least one 200 level response code defined and the following error codes defined: 500`,
+      },
+    ]);
   });
 
   it("Should return error message about 200 level response missing from the provided json", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: Operation must have at least one 200 level response code defined`,
-        },
-      ],
-      responseValidator(jsonWith2xxLevelResponseMissing, { rule: ruleNumber })
-    );
+    expect(responseValidator(jsonWith2xxLevelResponseMissing, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: Operation must have at least one 200 level response code defined`,
+      },
+    ]);
   });
 });

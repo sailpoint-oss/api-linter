@@ -1,4 +1,4 @@
-module.exports = (targetVal, _opts) => {
+export default (targetVal, options) => {
   const reservedKeywords = [
     "type",
     "format",
@@ -13,7 +13,7 @@ module.exports = (targetVal, _opts) => {
     "not",
   ];
 
-  const { rule } = _opts;
+  const { rule } = options;
 
   if (
     targetVal.name != undefined &&

@@ -1,9 +1,10 @@
-var assert = require("assert");
-let pathQueryParameterCheck = require("../path-query-parameter-check");
-let ruleNumber = 157;
-let requiredField = "fields";
+import { expect } from "chai";
+import pathQueryParameterCheck from "../path-query-parameter-check.js";
 
-let jsonParametersWithFieldsField = {
+const ruleNumber = 157;
+const requiredField = "fields";
+
+const jsonParametersWithFieldsField = {
   operationId: "listAccounts",
   tags: ["Accounts"],
   summary: "Accounts List This is a test",
@@ -40,7 +41,7 @@ let jsonParametersWithFieldsField = {
   ],
 };
 
-let jsonParametersWithoutRequiredField = {
+const jsonParametersWithoutRequiredField = {
   operationId: "listAccounts",
   tags: ["Accounts"],
   summary: "Accounts List This is a test",
@@ -73,8 +74,7 @@ let jsonParametersWithoutRequiredField = {
   ],
 };
 
-
-let jsonParametersEmpty = {
+const jsonParametersEmpty = {
   operationId: "listAccounts",
   tags: ["Accounts"],
   summary: "Accounts List This is a test",
@@ -88,43 +88,35 @@ let jsonParametersEmpty = {
 };
 
 describe("Path Query Parameter Check", function () {
-  it("Should not return any error message if the field exits in query parameters", function () {
-    assert.deepEqual(
-      undefined,
-      pathQueryParameterCheck(jsonParametersWithFieldsField, {
-        rule: ruleNumber,
-        field: requiredField,
-      })
-    );
+  it("Should not return any error message if the field exists in query parameters", function () {
+    const result = pathQueryParameterCheck(jsonParametersWithFieldsField, {
+      rule: ruleNumber,
+      field: requiredField,
+    });
+    expect(result).to.be.undefined;
   });
 
-  it("Should not return any error message if the field exits in query parameters", function () {
-    assert.deepEqual(
-      [
-        {
-          message:
-            `Rule ${ruleNumber}: All GET operations should have ${requiredField} as a query parameter`,
-        },
-      ],
-      pathQueryParameterCheck(jsonParametersWithoutRequiredField, {
-        rule: ruleNumber,
-        field: requiredField,
-      })
-    );
+  it("Should return an error message if the required field is missing from query parameters", function () {
+    const result = pathQueryParameterCheck(jsonParametersWithoutRequiredField, {
+      rule: ruleNumber,
+      field: requiredField,
+    });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: All GET operations should have ${requiredField} as a query parameter`,
+      },
+    ]);
   });
 
-  it("Should return error message when the parameters object is missing or empty", function () {
-    assert.deepEqual(
-      [
-        {
-          message:
-            `Rule ${ruleNumber}: All GET operations should have ${requiredField} as a query parameter`,
-        },
-      ],
-      pathQueryParameterCheck(jsonParametersEmpty, {
-        rule: ruleNumber,
-        field: requiredField,
-      })
-    );
+  it("Should return an error message when the parameters object is missing or empty", function () {
+    const result = pathQueryParameterCheck(jsonParametersEmpty, {
+      rule: ruleNumber,
+      field: requiredField,
+    });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: All GET operations should have ${requiredField} as a query parameter`,
+      },
+    ]);
   });
 });

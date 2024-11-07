@@ -7,10 +7,8 @@
 //   functionOptions:
 //     rule: 400
 
-
-
-module.exports = (targetVal, _opts) => {
-    const { rule } = _opts;
+export default (targetVal, options) => {
+    const { rule } = options;
 
     let results = [];
 

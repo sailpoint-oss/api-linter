@@ -1,8 +1,9 @@
-var assert = require("assert");
-let pathUserLevelsCheck = require("../path-user-levels-check");
-let ruleNumber = 321;
+import { expect } from "chai";
+import pathUserLevelsCheck from "../path-user-levels-check.js";
 
-let jsonUserAuthNoUserLevels = {
+const ruleNumber = 321;
+
+const jsonUserAuthNoUserLevels = {
   security: [
     {
       userAuth: ["idn:account-list:read"],
@@ -10,7 +11,7 @@ let jsonUserAuthNoUserLevels = {
   ],
 };
 
-let jsonApplicationAuthNoUserLevels = {
+const jsonApplicationAuthNoUserLevels = {
   security: [
     {
       applicationAuth: ["idn:account-list:read"],
@@ -18,7 +19,7 @@ let jsonApplicationAuthNoUserLevels = {
   ],
 };
 
-let jsonApplicationAndUserAuthNoUserLevels = {
+const jsonApplicationAndUserAuthNoUserLevels = {
   security: [
     {
       applicationAuth: ["idn:account-list:read"],
@@ -29,7 +30,7 @@ let jsonApplicationAndUserAuthNoUserLevels = {
   ],
 };
 
-let jsonUserAuthAndUserLevelEmpty = {
+const jsonUserAuthAndUserLevelEmpty = {
   security: [
     {
       userAuth: ["idn:account-list:read"],
@@ -38,7 +39,7 @@ let jsonUserAuthAndUserLevelEmpty = {
   'x-sailpoint-userLevels': [] 
 };
 
-let jsonUserAuthAndUserLevelsMispelled = {
+const jsonUserAuthAndUserLevelsMispelled = {
   security: [
     {
       userAuth: ["idn:account-list:read"],
@@ -47,7 +48,7 @@ let jsonUserAuthAndUserLevelsMispelled = {
   'x-sailpoint-userlevels': ["ORG_ADMIN"] 
 };
 
-let jsonUserAuthAndUserLevels = {
+const jsonUserAuthAndUserLevels = {
   security: [
     {
       userAuth: ["idn:account-list:read"],
@@ -56,7 +57,7 @@ let jsonUserAuthAndUserLevels = {
   'x-sailpoint-userLevels': ["ORG_ADMIN"] 
 };
 
-let jsonApplicationAndUserAuthAndUserLevels = {
+const jsonApplicationAndUserAuthAndUserLevels = {
   security: [
     {
       applicationAuth: ["idn:account-list:read"],
@@ -70,81 +71,46 @@ let jsonApplicationAndUserAuthAndUserLevels = {
 
 describe("Path User Levels Check", function () {
   it("Should not return any error message if userAuth and at least one user level", function () {
-    assert.deepEqual(
-      undefined,
-      pathUserLevelsCheck(jsonUserAuthAndUserLevels, {
-        rule: ruleNumber
-      })
-    );
+    expect(pathUserLevelsCheck(jsonUserAuthAndUserLevels, { rule: ruleNumber })).to.be.undefined;
   });
 
   it("Should return error message if x-sailpoint-userLevels mispelled", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: Improper spelling of x-sailpoint-userLevels. Please check your spelling, including capital letters.`,
-        },
-      ],
-      pathUserLevelsCheck(jsonUserAuthAndUserLevelsMispelled, {
-        rule: ruleNumber
-      })
-    );
+    expect(pathUserLevelsCheck(jsonUserAuthAndUserLevelsMispelled, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: Improper spelling of x-sailpoint-userLevels. Please check your spelling, including capital letters.`,
+      },
+    ]);
   });
 
   it("Should return error message if x-sailpoint-userLevels has no items", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: Operations that specify security.userAuth must define the necessary user levels`,
-        },
-      ],
-      pathUserLevelsCheck(jsonUserAuthAndUserLevelEmpty, {
-        rule: ruleNumber
-      })
-    );
+    expect(pathUserLevelsCheck(jsonUserAuthAndUserLevelEmpty, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: Operations that specify security.userAuth must define the necessary user levels`,
+      },
+    ]);
   });
 
   it("Should return error message if user and application auth defined but no user levels", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: Operations that specify security.userAuth must define the necessary user levels`,
-        },
-      ],
-      pathUserLevelsCheck(jsonApplicationAndUserAuthNoUserLevels, {
-        rule: ruleNumber
-      })
-    );
+    expect(pathUserLevelsCheck(jsonApplicationAndUserAuthNoUserLevels, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: Operations that specify security.userAuth must define the necessary user levels`,
+      },
+    ]);
   });
 
   it("Should not return any error message if application auth defined but no user levels", function () {
-    assert.deepEqual(
-      undefined,
-      pathUserLevelsCheck(jsonApplicationAuthNoUserLevels, {
-        rule: ruleNumber
-      })
-    );
+    expect(pathUserLevelsCheck(jsonApplicationAuthNoUserLevels, { rule: ruleNumber })).to.be.undefined;
   });
 
   it("Should return error message if user auth defined but no user levels", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: Operations that specify security.userAuth must define the necessary user levels`,
-        },
-      ],
-      pathUserLevelsCheck(jsonUserAuthNoUserLevels, {
-        rule: ruleNumber
-      })
-    );
+    expect(pathUserLevelsCheck(jsonUserAuthNoUserLevels, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: Operations that specify security.userAuth must define the necessary user levels`,
+      },
+    ]);
   });
 
   it("Should not return any error message if application auth defined but no user levels", function () {
-    assert.deepEqual(
-      undefined,
-      pathUserLevelsCheck(jsonApplicationAndUserAuthAndUserLevels, {
-        rule: ruleNumber
-      })
-    );
+    expect(pathUserLevelsCheck(jsonApplicationAndUserAuthAndUserLevels, { rule: ruleNumber })).to.be.undefined;
   });
 });

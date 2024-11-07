@@ -1,5 +1,5 @@
-module.exports = (targetVal, _opts) => {
-    const { rule, field } = _opts;
+export default (targetVal, options) => {
+    const { rule, field } = options;
 
     if (targetVal.parameters == undefined || targetVal.parameters == null) {
         return [
@@ -10,7 +10,7 @@ module.exports = (targetVal, _opts) => {
     }
 
 
-    keyFound = false;
+    let keyFound = false;
     for (const [key, value] of Object.entries(targetVal.parameters)) {
          if (JSON.stringify(value).indexOf(`"in":"query","name":"${field}"`) == 1) {
             keyFound = true
@@ -26,4 +26,4 @@ module.exports = (targetVal, _opts) => {
       }
 
 
-}
+};

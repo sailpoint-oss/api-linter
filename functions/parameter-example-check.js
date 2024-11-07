@@ -1,5 +1,5 @@
-module.exports = (targetVal, _opts) => {
-  const { rule } = _opts;
+export default (targetVal, options) => {
+  const { rule } = options;
   if (
     (targetVal.example != undefined && targetVal.example != null) ||
     (targetVal.schema != undefined &&

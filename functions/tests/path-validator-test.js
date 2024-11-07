@@ -1,33 +1,22 @@
-var assert = require("assert");
-let pathValidator = require("../path-validator");
-let ruleNumber = 151;
+import { expect } from "chai";
+import pathValidator from "../path-validator.js";
 
-let validPath =
-  "/identity-profiles/{identity-profile-id}/default-identity-attribute-config";
+const ruleNumber = 151;
 
-let invalidPath =
-  "/identity-profiles/{identity-profile-id}/default-identity-attribute-config/sub-resource/sub-resource2";
+const validPath = "/identity-profiles/{identity-profile-id}/default-identity-attribute-config";
+
+const invalidPath = "/identity-profiles/{identity-profile-id}/default-identity-attribute-config/sub-resource/sub-resource2";
 
 describe("Path Validator Function", function () {
   it("Should not return any errors for valid paths", function () {
-    assert.equal(
-      undefined,
-      pathValidator(validPath, {
-        rule: ruleNumber,
-      })
-    );
+    expect(pathValidator(validPath, { rule: ruleNumber })).to.be.undefined;
   });
 
   it("Should return errors for invalid paths", function () {
-    assert.deepEqual(
-      [
-        {
-          message: `Rule ${ruleNumber}: The path must not exceed 3 sub-resources`,
-        },
-      ],
-      pathValidator(invalidPath, {
-        rule: ruleNumber,
-      })
-    );
+    expect(pathValidator(invalidPath, { rule: ruleNumber })).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: The path must not exceed 3 sub-resources`,
+      },
+    ]);
   });
 });

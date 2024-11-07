@@ -1,5 +1,5 @@
-module.exports = (targetVal, _opts) => {
-  const { rule } = _opts;
+export default (targetVal, options) => {
+  const { rule } = options;
 
   const oneNewLine = new RegExp('([^\n]\n[^\n])+')
   if (oneNewLine.test(targetVal)) {

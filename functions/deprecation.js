@@ -1,8 +1,10 @@
-module.exports = (targetVal, _opts, paths) => {
-  const { rule } = _opts;
+export default (targetVal, options, { path }) => {
+  const { rule } = options;
   let results = [];
+  let deprecatedKeyFound = false;
+  let sunsetKeyFound = false;
 
-  const rootPath = paths.target !== void 0 ? paths.target : paths.given;
+  const rootPath = path;
 
   if (targetVal.deprecated != undefined && targetVal.deprecated == true) {
     if (targetVal.parameters != undefined && targetVal.parameters != null) {

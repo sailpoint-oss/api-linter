@@ -7,8 +7,8 @@
 //    functionOptions:
 //      maxWordCount: 5
 
-module.exports = (targetVal, _opts) => {
-    const { rule, maxWordCount } = _opts;
+export default (targetVal, options) => {
+    const { rule, maxWordCount } = options;
     if (targetVal.split(" ").length > maxWordCount) {
         return [
             {

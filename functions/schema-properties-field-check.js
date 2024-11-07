@@ -284,8 +284,8 @@ function parseYamlProperties(
   }
 }
 
-module.exports = (targetYaml, _opts) => {
-  const { field, rule } = _opts;
+export default (targetYaml, options) => {
+  const { field, rule } = options;
   //console.log(JSON.stringify(targetYaml));
 
   let results = [];

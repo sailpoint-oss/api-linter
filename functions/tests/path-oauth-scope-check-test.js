@@ -1,18 +1,17 @@
-var assert = require("assert");
-let pathOauthScopeCheck = require("../path-oauth-scope-check");
-let ruleNumber = 104;
+import assert from "assert";
+import pathOauthScopeCheck from "../path-oauth-scope-check.js";
 
-let jsonNoAuthExplicit = {
-  security: [
-    {},
-  ],
+const ruleNumber = 104;
+
+const jsonNoAuthExplicit = {
+  security: [{}],
 };
 
-let jsonNoAuthImplicit = {
+const jsonNoAuthImplicit = {
   security: [],
 };
 
-let jsonApplicationAuthNoUserLevels = {
+const jsonApplicationAuthNoUserLevels = {
   security: [
     {
       applicationAuth: ["idn:account-list:read"],
@@ -20,22 +19,22 @@ let jsonApplicationAuthNoUserLevels = {
   ],
 };
 
-let jsonApplicationAndUserAuthNoUserLevels = {
+const jsonApplicationAndUserAuthNoUserLevels = {
   security: [
     {
       applicationAuth: ["idn:account-list:read"],
     },
     {
       userAuth: ["idn:account-list:read"],
-    }
+    },
   ],
 };
 
-let jsonInvalidKey = {
+const jsonInvalidKey = {
   security: [
     {
       userAuthentication: ["idn:account-list:read"],
-    }
+    },
   ],
 };
 
@@ -44,16 +43,16 @@ describe("Path Oauth Scope Check", function () {
     assert.deepEqual(
       [],
       pathOauthScopeCheck(jsonNoAuthExplicit, {
-        rule: ruleNumber
+        rule: ruleNumber,
       })
     );
   });
 
-  it("Should not return any error message when security array contains an one valid key", function () {
+  it("Should not return any error message when security array contains one valid key", function () {
     assert.deepEqual(
       [],
       pathOauthScopeCheck(jsonApplicationAuthNoUserLevels, {
-        rule: ruleNumber
+        rule: ruleNumber,
       })
     );
   });
@@ -62,7 +61,7 @@ describe("Path Oauth Scope Check", function () {
     assert.deepEqual(
       [],
       pathOauthScopeCheck(jsonApplicationAndUserAuthNoUserLevels, {
-        rule: ruleNumber
+        rule: ruleNumber,
       })
     );
   });
@@ -75,7 +74,7 @@ describe("Path Oauth Scope Check", function () {
         },
       ],
       pathOauthScopeCheck(jsonNoAuthImplicit, {
-        rule: ruleNumber
+        rule: ruleNumber,
       })
     );
   });
@@ -88,7 +87,7 @@ describe("Path Oauth Scope Check", function () {
         },
       ],
       pathOauthScopeCheck(jsonInvalidKey, {
-        rule: ruleNumber
+        rule: ruleNumber,
       })
     );
   });

@@ -101,9 +101,9 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
   }
 }
 
-module.exports = (targetYaml, _opts, context, paths) => {
+export default (targetYaml, options) => {
   //console.log(JSON.stringify(targetYaml));
-  const { rule } = _opts;
+  const { rule } = options;
 
   let results = [];
 
