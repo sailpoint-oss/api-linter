@@ -10,7 +10,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@stoplight/spectral-core": "^1.19.1",
+        "@stoplight/spectral-core": "^1.19.2",
         "@stoplight/spectral-ruleset-bundler": "^1.6.0",
         "chai": "^5.1.2",
         "yaml": "^2.6.0"
