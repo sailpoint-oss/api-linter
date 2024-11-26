@@ -91,7 +91,9 @@ spectral lint ../cloud-api-client-common/api-specs/src/main/yaml/v3/paths/identi
 
 Absolute path
 
+```
 spectral lint C:/users/username/documents/git/cloud-api-client-common/api-specs/src/main/yaml/v3/paths/identity-profiles.yaml --ruleset path-ruleset.yaml --ignore-unknown-format
+```
 
 ## Testing for Local Development
 
