@@ -5,10 +5,7 @@ The SailPoint API Linter extends [spectral](https://meta.stoplight.io/docs/spect
 ## Installation
 For installation instructions see the spectral installation document: [How to install spectral](https://meta.stoplight.io/docs/spectral/ZG9jOjYyMDc0Mw-installation)
 
-Please use version 6.0.0, as the latest version will not work with how SailPoint API specifications are built.
-
-`npm install -g @stoplight/spectral-cli@6.0.0`
-
+`npm install -g @stoplight/spectral-cli`
 
 ## Rulesets
 
@@ -74,7 +71,30 @@ The linter will print the path to the file that it linted, one or more problems,
 
 If the linter reports no problems, then the spec has passed the linter.
 
-## Testing for local development
+## Local Development
 
-1. install mocha testing framework: ```npm install --global mocha```
-2. run the tests on any of the files in the functions/tests folder: ```mocha functions/tests/deprecation-test.js```
+You will need to clone an api-specs repo for local development.
+
+An example command for running with a local version of the path ruleset:
+
+```
+spectral lint ~/path-to-spec/path.yaml --ruleset path-ruleset.yaml --ignore-unknown-format
+```
+
+Forward slashes must be used in the filepath to the yaml file on Windows systems:
+
+Relative path:
+
+```
+spectral lint ../cloud-api-client-common/api-specs/src/main/yaml/v3/paths/identity-profiles.yaml --ruleset path-ruleset.yaml --ignore-unknown-format
+```
+
+Absolute path
+
+spectral lint C:/users/username/documents/git/cloud-api-client-common/api-specs/src/main/yaml/v3/paths/identity-profiles.yaml --ruleset path-ruleset.yaml --ignore-unknown-format
+
+## Testing for Local Development
+
+1. Install mocha testing framework: ```npm install --global mocha```
+2. Tests must be written for custom functions and placed in the functions/tests folder.  Tests are not required to be written for rules utlizing spectral core functions.
+3. Run the tests on any of the files in the functions/tests folder: ```mocha functions/tests/deprecation-test.js```
