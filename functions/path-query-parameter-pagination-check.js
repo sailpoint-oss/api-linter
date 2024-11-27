@@ -11,7 +11,7 @@ export default (targetVal, options) => {
     const { rule } = options;
     let results = [];
 
-    if (targetVal.responses?.[200].content?.['application/json'].schema.type == 'array') {
+    if (targetVal.responses?.[200].content?.['application/json']?.schema.type == 'array') {
 
         let offsetFound = false;
         let limitFound = false;
