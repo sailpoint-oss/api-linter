@@ -16,6 +16,7 @@ export default (targetVal, options) => {
         let offsetFound = false;
         let limitFound = false;
 
+    if (targetVal.parameters != undefined) {
         for (const [key, value] of Object.entries(targetVal.parameters)) {
             if (value.in == "query" && value.name == "limit") {
 
@@ -37,6 +38,7 @@ export default (targetVal, options) => {
                 offsetFound = true;
             }
         }
+    }
 
         if (!offsetFound) {
             results.push({
