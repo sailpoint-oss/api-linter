@@ -29,7 +29,7 @@ export default (targetVal, options) => {
       ];
 
     const allowedOperationsForPutMethods = [
-        'put', 'set'
+        'put', 'set', 'overwrite'
     ];
 
     const allowedOperationsForPatchMethods = [
