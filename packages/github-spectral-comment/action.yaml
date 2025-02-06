@@ -25,7 +25,11 @@ inputs:
     default: 'https://github.com'
 runs:
   using: 'node20'
+<<<<<<< HEAD
   main: './dist/index.js'
+=======
+  main: 'dist/index.js'
+>>>>>>> 56af2cc (Refactor with pnpm workspaces, TS, and adjusted formatting and promise structure)
 branding:
   icon: check-square
   color: purple
