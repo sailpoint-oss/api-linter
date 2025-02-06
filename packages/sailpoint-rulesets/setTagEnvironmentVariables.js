@@ -3,7 +3,7 @@ import path from "path";
 import yaml from "yaml";
 import { fileURLToPath } from "url";
 
-const startDir = new URL("../api-specs/src/main/yaml", import.meta.url);
+const startDir = new URL("../../api-specs/src/main/yaml", import.meta.url);
 const fileName = process.argv[2];
 const fileContents = await findAndReadFile(startDir, fileName);
 
