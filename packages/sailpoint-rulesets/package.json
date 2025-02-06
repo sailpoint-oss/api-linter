@@ -1,0 +1,23 @@
+{
+    "name": "sailpoint-rulesets",
+    "version": "1.0.0",
+    "description": "SailPoint Maintained Spectral Rulesets",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "test": "tsc && mocha dist/tests/*test.js"
+
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@stoplight/spectral-core": "^1.19.1",
+        "@stoplight/spectral-ruleset-bundler": "^1.6.0",
+        "chai": "^5.1.2",
+        "yaml": "^2.6.0"
+    },
+    "devDependencies": {
+        "typescript": "^4.9.5"
+    }
+}

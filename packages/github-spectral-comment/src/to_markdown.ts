@@ -1,6 +1,6 @@
 import { buildNotes } from './note_builder.js';
 
-const toMarkdown = async (processedPbs, project) => {
+const toMarkdown = async (processedPbs: any, project: any) => {
   const pbsMap = processedPbs.filteredPbs;
   
   // no pb => no message

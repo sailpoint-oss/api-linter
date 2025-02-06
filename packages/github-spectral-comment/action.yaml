@@ -25,7 +25,7 @@ inputs:
     default: 'https://github.com'
 runs:
   using: 'node20'
-  main: 'src/index.js'
+  main: 'dist/index.js'
 branding:
   icon: check-square
   color: purple

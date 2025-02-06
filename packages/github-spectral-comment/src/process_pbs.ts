@@ -1,4 +1,4 @@
-const initProcessedPbs = () => {
+export const initProcessedPbs = () => {
     return {
       filteredPbs: {},
       severitiesCount: {
@@ -10,7 +10,7 @@ const initProcessedPbs = () => {
     };
   };
   
-  const processPbs = (source, processedPbs, pbs) => {
+  export const processPbs = (source: any, processedPbs: any, pbs: any) => {
     for (let i = 0; i < pbs.results.length; i++) {
       const pb = pbs.results[i];
       if (hasPb(source, processedPbs.filteredPbs, pb)) {
@@ -25,7 +25,7 @@ const initProcessedPbs = () => {
     return processedPbs;
   };
   
-  const hasPb = (source, filteredPbs, pb) => {
+  export const hasPb = (source: any, filteredPbs: any, pb: any) => {
     for (let i = 0; i < filteredPbs.length; i++) {
       if (
         source === filteredPbs[i].source &&
@@ -41,6 +41,4 @@ const initProcessedPbs = () => {
     }
     return false;
   };
-  
-  export { initProcessedPbs, processPbs };
   

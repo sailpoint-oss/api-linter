@@ -116,6 +116,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+yarn.lock
 
 github-spectral-comment/node_modules
 github-spectral-comment/sample
