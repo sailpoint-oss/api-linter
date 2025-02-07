@@ -69,7 +69,7 @@ try {
   devLog(inputs)
 
   const project = {
-    githubURL: inputs.githubURL,
+    "github-url": inputs["github-url"],
     repository: process.env.GITHUB_REPOSITORY,
     headRef: process.env.GITHUB_HEAD_REF,
     workspace:
@@ -81,20 +81,20 @@ try {
   devLog(project);
 
   devLog("Workspace: " + project.workspace);
-  devLog("FileGlob: " + inputs.fileGlob);
-  devLog("File Path: " + path.join(project.workspace, inputs.fileGlob!));
+  devLog("FileGlob: " + inputs["file-glob"]);
+  devLog("File Path: " + path.join(project.workspace, inputs["file-glob"]!));
 
   const fileContents = await core.group('Reading files to analyze', async () => {
     return await readFilesToAnalyze(
       project.workspace,
-      inputs.fileGlob!
+      inputs["file-glob"]!
     );
   });
 
   const { rootSpectral, pathSpectral, schemaSpectral } = await core.group('Creating spectral instances', async () => {
-    const rootSpectral = await createSpectral(inputs.spectralRootRuleset!);
-    const pathSpectral = await createSpectral(inputs.spectralPathRuleset!);
-    const schemaSpectral = await createSpectral(inputs.spectralSchemaRuleset!);
+    const rootSpectral = await createSpectral(inputs["spectral-root-ruleset"]!);
+    const pathSpectral = await createSpectral(inputs["spectral-path-ruleset"]!);
+    const schemaSpectral = await createSpectral(inputs["spectral-schema-ruleset"]!);
     return { rootSpectral, pathSpectral, schemaSpectral };
   });
 
@@ -146,7 +146,7 @@ try {
       } else if (github.context.payload.pull_request == null) {
         core.setFailed("No pull request found! Please create a pull request to use this action.");
       } else {
-        const octokit = github.getOctokit(inputs.githubToken!);
+        const octokit = github.getOctokit(inputs["github-token"]!);
         const repoName = github.context.repo.repo;
         const repoOwner = github.context.repo.owner;
         const prNumber = github.context.payload.pull_request.number;
