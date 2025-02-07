@@ -18,8 +18,8 @@ export default (targetVal, options) => {
     const rawString = process.env.VALID_OPERATION_IDS;
     
     if (rawString) {
-      const preloadedOperationIds = rawString.replace(/\[/, '["')
-      .replace(/\]/, '"]')
+      const preloadedOperationIds = rawString.replace(/\[/g, '["')
+      .replace(/\]/g, '"]')
       .replace(/,/g, '","');
       operationIdArray = JSON.parse(preloadedOperationIds);
     } else {
@@ -27,7 +27,7 @@ export default (targetVal, options) => {
         "Preloaded OperationIds data not found in environment, this will not run the valid operation id check."
       );
     }
-        
+
     if (operationIdArray.length !== 0) {
       if (!operationIdArray.includes(targetVal["x-sailpoint-resource-operation-id"])) {
         results.push({
