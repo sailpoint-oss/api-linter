@@ -12,7 +12,7 @@ const { Spectral, Document } = spectralCore;
 
 const dev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
 
-const __dirname = dev ? path.dirname(fileURLToPath(import.meta.url)) : path.join(path.dirname(fileURLToPath(import.meta.url)), "../");
+const __dirname = dev ? path.dirname(fileURLToPath(import.meta.url)) : path.join(path.dirname(fileURLToPath(import.meta.url)), "../packages/sailpoint-rulesets");
 
 const { fetch } = spectralRuntime;
 
