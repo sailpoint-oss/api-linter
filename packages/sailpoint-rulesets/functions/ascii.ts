@@ -1,20 +1,20 @@
-export default (targetVal, options) => {
+export default (targetVal: any, options: any) => {
   const { rule } = options;
 
   // ASCII Character Regex
   const ascii = /[^\x00-\x7F]/mg;
 
   // Array of ASCII Characters
-  let asciiCharacters = [];
+  let asciiCharacters: string[] = [];
 
-  function eachRecursive(obj) {
+  function eachRecursive(obj: any) {
     for (var k in obj) {
       if (typeof obj[k] == "object" && obj[k] !== null) {
         eachRecursive(obj[k]);
       } else {
         if (ascii.test(obj[k])) {
           let matches = obj[k].match(/[^\x00-\x7F]/g)
-          matches.forEach((element) => {
+          matches.forEach((element: string) => {
             asciiCharacters.push(element)
           });
         }
