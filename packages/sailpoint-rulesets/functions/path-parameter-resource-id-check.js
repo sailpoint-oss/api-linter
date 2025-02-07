@@ -18,10 +18,7 @@ export default (targetVal, options) => {
     const rawString = process.env.VALID_OPERATION_IDS;
     
     if (rawString) {
-      const preloadedOperationIds = rawString.replace(/\[/g, '["')
-      .replace(/\]/g, '"]')
-      .replace(/,/g, '","');
-      operationIdArray = JSON.parse(preloadedOperationIds);
+      operationIdArray = JSON.parse(rawString);
     } else {
       console.error(
         "Preloaded OperationIds data not found in environment, this will not run the valid operation id check."
