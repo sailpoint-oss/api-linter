@@ -22,30 +22,30 @@ function devLog(message?: any) {
 }
 
 type Inputs = {
-  githubToken?: string,
-  fileGlob?: string,
-  spectralRootRuleset?: string,
-  spectralPathRuleset?: string,
-  spectralSchemaRuleset?: string,
-  githubURL?: string,
+  "github-token"?: string,
+  "file-glob"?: string,
+  "spectral-root-ruleset"?: string,
+  "spectral-path-ruleset"?: string,
+  "spectral-schema-ruleset"?: string,
+  "github-url"?: string,
 };
 
 const inputs: Inputs = {
-  githubToken: undefined,
-  fileGlob: undefined,
-  spectralRootRuleset: undefined,
-  spectralPathRuleset: undefined,
-  spectralSchemaRuleset: undefined,
-  githubURL: undefined,
+  "github-token": undefined,
+  "file-glob": undefined,
+  "spectral-root-ruleset": undefined,
+  "spectral-path-ruleset": undefined,
+  "spectral-schema-ruleset": undefined,
+  "github-url": undefined,
 };
 
 const devInputs: Inputs = {
-  githubToken: "",
-  fileGlob: "../api-specs/idn/v3/paths/access-profiles.yaml",
-  spectralRootRuleset:  "../../sailpoint-rulesets/root-ruleset.yaml",
-  spectralPathRuleset:  "../../sailpoint-rulesets/path-ruleset.yaml",
-  spectralSchemaRuleset:  "../../sailpoint-rulesets/schema-ruleset.yaml",
-  githubURL: "",
+  "github-token": "",
+  "file-glob": "../api-specs/idn/v3/paths/access-profiles.yaml",
+  "spectral-root-ruleset":  "../../sailpoint-rulesets/root-ruleset.yaml",
+  "spectral-path-ruleset":  "../../sailpoint-rulesets/path-ruleset.yaml",
+  "spectral-schema-ruleset":  "../../sailpoint-rulesets/schema-ruleset.yaml",
+  "github-url": "",
 };
 
 try {
