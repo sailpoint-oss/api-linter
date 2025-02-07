@@ -2,7 +2,7 @@ import { expect } from "chai";
 import parameterOperationIdCheck from "../path-parameter-resource-id-check.js";
 const ruleNumber = 404;
 
-process.env.VALID_OPERATION_IDS = "[listAccounts]";
+process.env.VALID_OPERATION_IDS = '["listAccounts"]';
 
 const jsonParameterWithValidOperationId = {
   in: "path",
