@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import pathQueryParameterPaginationCheck from "../path-query-parameter-pagination-check.js";
 
 const ruleNumber = 159;
@@ -292,41 +291,33 @@ const jsonLimitMissingMinimumAndMaximum =
     }
 };
 
-describe("Path pagination offset and limit check", function () {
-    it("Should not return an error message if offset and limit exist and limit has minimum and maximum defined", function () {
-        const result = pathQueryParameterPaginationCheck(jsonValidPagination, {
-            rule: ruleNumber
-        });
-        expect(result).to.be.an("array").that.is.empty;
+describe("Path pagination offset and limit check", () => {
+    test("Should not return an error message if offset and limit exist and limit has minimum and maximum defined", () => {
+        const result = pathQueryParameterPaginationCheck(jsonValidPagination, { rule: ruleNumber });
+        expect(result).toEqual([]);
     });
 
-    it("Should return an error message if limit is missing from query parameters", function () {
-        const result = pathQueryParameterPaginationCheck(jsonMissingLimit, {
-            rule: ruleNumber
-        });
-        expect(result).to.deep.equal([
+    test("Should return an error message if limit is missing from query parameters", () => {
+        const result = pathQueryParameterPaginationCheck(jsonMissingLimit, { rule: ruleNumber });
+        expect(result).toEqual([
             {
                 message: `Rule ${ruleNumber}: All GET list operations must have limit as a query parameter`,
             },
         ]);
     });
 
-    it("Should return an error message if offset is missing from query parameters", function () {
-        const result = pathQueryParameterPaginationCheck(jsonMissingOffset, {
-            rule: ruleNumber
-        });
-        expect(result).to.deep.equal([
+    test("Should return an error message if offset is missing from query parameters", () => {
+        const result = pathQueryParameterPaginationCheck(jsonMissingOffset, { rule: ruleNumber });
+        expect(result).toEqual([
             {
                 message: `Rule ${ruleNumber}: All GET list operations must have offset as a query parameter`,
             },
         ]);
     });
 
-    it("Should return an error message if limit and offset are missing from query parameters", function () {
-        const result = pathQueryParameterPaginationCheck(jsonMissingLimitAndOffset, {
-            rule: ruleNumber
-        });
-        expect(result).to.deep.equal([
+    test("Should return an error message if limit and offset are missing from query parameters", () => {
+        const result = pathQueryParameterPaginationCheck(jsonMissingLimitAndOffset, { rule: ruleNumber });
+        expect(result).toEqual([
             {
                 message: `Rule ${ruleNumber}: All GET list operations must have offset as a query parameter`,
             },
@@ -336,42 +327,32 @@ describe("Path pagination offset and limit check", function () {
         ]);
     });
 
-    it("Should return an error message if maximum is not defined for the limit query parameter", function () {
-        const result = pathQueryParameterPaginationCheck(jsonLimitMissingMaximum, {
-            rule: ruleNumber
-        });
-        expect(result).to.deep.equal([
+    test("Should return an error message if maximum is not defined for the limit query parameter", () => {
+        const result = pathQueryParameterPaginationCheck(jsonLimitMissingMaximum, { rule: ruleNumber });
+        expect(result).toEqual([
             {
                 message: `Rule ${ruleNumber}: All GET list operations must have maximum defined for limit query parameter`,
-
             },
         ]);
     });
 
-    it("Should return an error message if minimum is not defined for the limit query parameter", function () {
-        const result = pathQueryParameterPaginationCheck(jsonLimitMissingMinimum, {
-            rule: ruleNumber,
-        });
-        expect(result).to.deep.equal([
+    test("Should return an error message if minimum is not defined for the limit query parameter", () => {
+        const result = pathQueryParameterPaginationCheck(jsonLimitMissingMinimum, { rule: ruleNumber });
+        expect(result).toEqual([
             {
                 message: `Rule ${ruleNumber}: All GET list operations must have minimum defined for limit query parameter`,
-
             },
         ]);
     });
 
-    it("Should return an error message if maximum and minimum are not defined for the limit query parameter", function () {
-        const result = pathQueryParameterPaginationCheck(jsonLimitMissingMinimumAndMaximum, {
-            rule: ruleNumber
-        });
-        expect(result).to.deep.equal([
+    test("Should return an error message if maximum and minimum are not defined for the limit query parameter", () => {
+        const result = pathQueryParameterPaginationCheck(jsonLimitMissingMinimumAndMaximum, { rule: ruleNumber });
+        expect(result).toEqual([
             {
                 message: `Rule ${ruleNumber}: All GET list operations must have minimum defined for limit query parameter`,
-
             },
             {
                 message: `Rule ${ruleNumber}: All GET list operations must have maximum defined for limit query parameter`,
-
             },
         ]);
     });

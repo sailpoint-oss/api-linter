@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import parameterFilterDescriptionCheck from "../parameter-filter-description-check.js";
 
 const ruleNumber = 324;
@@ -60,78 +59,78 @@ Filtering is supported for the following fields and operators:
 
 **id**: *eq, in (not valid), co*`;
 
-describe("Filter param description", function () {
-  it("Should not return any errors for valid input", function () {
+describe("Filter param description", () => {
+  test("Should not return any errors for valid input", () => {
     const result = parameterFilterDescriptionCheck(validFilterDescription, { rule: ruleNumber });
-    expect(result).to.be.undefined;
+    expect(result).toBeUndefined();
   });
 
-  it("Should return an error for multiple properties on same line", function () {
+  test("Should return an error for multiple properties on same line", () => {
     const result = parameterFilterDescriptionCheck(multiplePropertiesOnSameLine, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: The properties created, modified must be on separate lines.`,
       },
     ]);
   });
 
-  it("Should return an error for unsupported operator", function () {
+  test("Should return an error for unsupported operator", () => {
     const result = parameterFilterDescriptionCheck(unsupportedOperator, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: The property id contains an unsupported filter operator (un).`,
       },
     ]);
   });
 
-  it("Should return an error for not enough new lines", function () {
+  test("Should return an error for not enough new lines", () => {
     const result = parameterFilterDescriptionCheck(singleNewLine, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: Each line in the description for filters must always be separated by two lines.`,
       },
     ]);
   });
 
-  it("Should return an error for bad intro", function () {
+  test("Should return an error for bad intro", () => {
     const result = parameterFilterDescriptionCheck(badIntro, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: The first two lines in the description for filters must follow the example provided in the guide for rule ${ruleNumber}.`,
       },
     ]);
   });
 
-  it("Should return an error for property not bolded", function () {
+  test("Should return an error for property not bolded", () => {
     const result = parameterFilterDescriptionCheck(propertyNotBolded, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: The property id must be bolded (ex **id**).`,
       },
     ]);
   });
 
-  it("Should return an error for operator not italicized", function () {
+  test("Should return an error for operator not italicized", () => {
     const result = parameterFilterDescriptionCheck(operatorNotItalicized, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: The operators for id must be italicized (ex *eq, co, le*).`,
       },
     ]);
   });
 
-  it("Should return an error for operators not separated", function () {
+  test("Should return an error for operators not separated", () => {
     const result = parameterFilterDescriptionCheck(operatorsNotSeparated, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: The operators for id must be separated with commas and spaces (ex. *eq, co, le*).`,
       },
     ]);
   });
 
-  it("Should return an error for additional info in operator", function () {
+  test("Should return an error for additional info in operator", () => {
     const result = parameterFilterDescriptionCheck(additionalInfoInOperator, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: The operators for id must be separated with commas and spaces (ex. *eq, co, le*).`,
       },

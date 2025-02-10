@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import pathParameterIntegerNumberFormats from "../path-parameter-integer-number-formats.js";
 
 const ruleNumber = 171;
@@ -62,15 +61,15 @@ const jsonParameterWithMissingFormatKeyForInteger = {
   examples: [10, 50],
 };
 
-describe("Path Parameter Number/Integer Format", function () {
-  it("Should not return any errors with a valid number type and number format", function () {
+describe("Path Parameter Number/Integer Format", () => {
+  test("Should not return any errors with a valid number type and number format", () => {
     const result = pathParameterIntegerNumberFormats(jsonParameterWithValidNumberFormat, { rule: ruleNumber });
-    expect(result).to.be.undefined;
+    expect(result).toBeUndefined();
   });
 
   it("Should return error with a valid number type but missing format key", function () {
     const result = pathParameterIntegerNumberFormats(jsonParameterWithFormatKeyMissingForNumber, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: ${jsonParameterWithFormatKeyMissingForNumber.name} is type ${jsonParameterWithFormatKeyMissingForNumber.schema.type} and must be one of the following values: float, double, decimal`,
       },
@@ -79,7 +78,7 @@ describe("Path Parameter Number/Integer Format", function () {
 
   it("Should return error with a valid number type but invalid number format specified", function () {
     const result = pathParameterIntegerNumberFormats(jsonParameterWithInvalidNumberFormat, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidNumberFormat.name} is type ${jsonParameterWithInvalidNumberFormat.schema.type} and must be one of the following values: float, double, decimal`,
       },
@@ -88,12 +87,12 @@ describe("Path Parameter Number/Integer Format", function () {
 
   it("Should not return any errors with a valid integer type and integer format specified", function () {
     const result = pathParameterIntegerNumberFormats(jsonParameterWithValidIntegerFormat, { rule: ruleNumber });
-    expect(result).to.be.undefined;
+    expect(result).toBeUndefined();
   });
 
   it("Should return error with a valid integer type but missing format key", function () {
     const result = pathParameterIntegerNumberFormats(jsonParameterWithMissingFormatKeyForInteger, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: ${jsonParameterWithMissingFormatKeyForInteger.name} is type ${jsonParameterWithMissingFormatKeyForInteger.schema.type} and must be one of the following values: int32, int64, bigint`,
       },
@@ -102,7 +101,7 @@ describe("Path Parameter Number/Integer Format", function () {
 
   it("Should return error with a valid integer type but invalid integer format specified", function () {
     const result = pathParameterIntegerNumberFormats(jsonParameterWithInvalidIntegerFormat, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: ${jsonParameterWithMissingFormatKeyForInteger.name} is type ${jsonParameterWithMissingFormatKeyForInteger.schema.type} and must be one of the following values: int32, int64, bigint`,
       },

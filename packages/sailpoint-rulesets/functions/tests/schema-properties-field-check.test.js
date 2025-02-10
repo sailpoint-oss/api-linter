@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import schemaPropertiesFieldCheck from "../schema-properties-field-check.js";
 
 const ruleNumber = 304;
@@ -553,6 +552,7 @@ let superMultilevelSchemaObject = {
             example: "2020-07-11T00:00:00Z",
           },
         },
+        required: ["id", "type"],
       },
     },
     executionStatus: {
@@ -1840,19 +1840,13 @@ let nullableExampleUsecase = {
   },
 };
 
-describe("Parameter example check", function () {
-  it("Should not return any error messages when all parameters have an example", function () {
-    expect(schemaPropertiesFieldCheck(allOfParametersCheck, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([]);
+describe("Schema Properties Field Check", () => {
+  test("Should not return any error messages when all parameters have an example", () => {
+    expect(schemaPropertiesFieldCheck(allOfParametersCheck, { rule: ruleNumber, field: "example" })).toEqual([]);
   });
 
-  it("Should return all properties that do not have an example", function () {
-    expect(schemaPropertiesFieldCheck(allOfParametersCheckWithMissingExamples, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([
+  test("Should return all properties that do not have an example", () => {
+    expect(schemaPropertiesFieldCheck(allOfParametersCheckWithMissingExamples, { rule: ruleNumber, field: "example" })).toEqual([
       {
         message: `Rule ${ruleNumber}: The property modified must have a example`,
         path: ["allOf", 0, "properties", "modified", "example"],
@@ -1868,14 +1862,8 @@ describe("Parameter example check", function () {
     ]);
   });
 
-  it("Should return all properties that do not have an example for a single object", function () {
-    expect(schemaPropertiesFieldCheck(
-      singleObjectParameterCheckWithMissingExamples,
-      {
-        rule: ruleNumber,
-        field: "example",
-      }
-    )).to.deep.equal([
+  test("Should return all properties that do not have an example for a single object", () => {
+    expect(schemaPropertiesFieldCheck(singleObjectParameterCheckWithMissingExamples, { rule: ruleNumber, field: "example" })).toEqual([
       {
         message: `Rule ${ruleNumber}: The property oldApproverName must have a example`,
         path: ["properties", "oldApproverName", "example"],
@@ -1887,18 +1875,12 @@ describe("Parameter example check", function () {
     ]);
   });
 
-  it("Should not return any error messages for a single object when all parameters have an example", function () {
-    expect(schemaPropertiesFieldCheck(singleObjectParameterCheckWithValidExamples, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([]);
+  test("Should not return any error messages for a single object when all parameters have an example", () => {
+    expect(schemaPropertiesFieldCheck(singleObjectParameterCheckWithValidExamples, { rule: ruleNumber, field: "example" })).toEqual([]);
   });
 
-  it("Should return error message for a single property without an example", function () {
-    expect(schemaPropertiesFieldCheck(singleParameterWithMissingExample, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([
+  test("Should return error message for a single property without an example", () => {
+    expect(schemaPropertiesFieldCheck(singleParameterWithMissingExample, { rule: ruleNumber, field: "example" })).toEqual([
       {
         message: `Rule ${ruleNumber}: This field must have a example`,
         path: ["example"],
@@ -1906,18 +1888,12 @@ describe("Parameter example check", function () {
     ]);
   });
 
-  it("Should return no errors for a single property with a valid example", function () {
-    expect(schemaPropertiesFieldCheck(singleParameterWithValidExample, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([]);
+  test("Should return no errors for a single property with a valid example", () => {
+    expect(schemaPropertiesFieldCheck(singleParameterWithValidExample, { rule: ruleNumber, field: "example" })).toEqual([]);
   });
 
-  it("Should return errors for multi-level property objects", function () {
-    expect(schemaPropertiesFieldCheck(multilevelSchemaObjectWithMissingExamples, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([
+  test("Should return errors for multi-level property objects", () => {
+    expect(schemaPropertiesFieldCheck(multilevelSchemaObjectWithMissingExamples, { rule: ruleNumber, field: "example" })).toEqual([
       {
         message: `Rule ${ruleNumber}: The property thirdLevelProperty must have a example`,
         path: [
@@ -1933,11 +1909,8 @@ describe("Parameter example check", function () {
     ]);
   });
 
-  it("Should return errors for super multi-level schema object", function () {
-    expect(schemaPropertiesFieldCheck(superMultilevelSchemaObject, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([
+  test("Should return errors for super multi-level schema object", () => {
+    expect(schemaPropertiesFieldCheck(superMultilevelSchemaObject, { rule: ruleNumber, field: "example" })).toEqual([
       {
         message: 'Rule 304: The property completed must have a example',
         path: [
@@ -1960,140 +1933,73 @@ describe("Parameter example check", function () {
       },
       {
         message: 'Rule 304: The property warnings must have a example that is not null',
-        path: [ 'properties', 'warnings', 'example' ]
+        path: ['properties', 'warnings', 'example']
       },
       {
         message: 'Rule 304: The property name must have a example',
-        path: [ 'properties', 'items', 'items', 'properties', 'name', 'example' ]
+        path: ['properties', 'items', 'items', 'properties', 'name', 'example']
       },
       {
         message: 'Rule 304: The property approvalStatus must have a example',
-        path: [
-          'properties',
-          'items',
-          'items',
-          'properties',
-          'approvalStatus',
-          'example'
-        ]
+        path: ['properties', 'items', 'items', 'properties', 'approvalStatus', 'example']
       },
       {
         message: 'Rule 304: The property provisioningStatus must have a example',
-        path: [
-          'properties',
-          'items',
-          'items',
-          'properties',
-          'provisioningStatus',
-          'example'
-        ]
+        path: ['properties', 'items', 'items', 'properties', 'provisioningStatus', 'example']
       },
       {
         message: 'Rule 304: The property completed must have a example',
-        path: [
-          'properties',
-          'items',
-          'items',
-          'properties',
-          'reviewerIdentitySummary',
-          'properties',
-          'completed',
-          'example'
-        ]
+        path: ['properties', 'items', 'items', 'properties', 'reviewerIdentitySummary', 'properties', 'completed', 'example']
       },
       {
         message: 'Rule 304: The property operation must have a example',
-        path: [
-          'properties',
-          'items',
-          'items',
-          'properties',
-          'operation',
-          'example'
-        ]
+        path: ['properties', 'items', 'items', 'properties', 'operation', 'example']
       },
       {
         message: 'Rule 304: The property executionStatus must have a example',
-        path: [ 'properties', 'executionStatus', 'example' ]
+        path: ['properties', 'executionStatus', 'example']
       },
       {
         message: 'Rule 304: The property clientMetadata must have a example',
-        path: [ 'properties', 'clientMetadata', 'example' ]
+        path: ['properties', 'clientMetadata', 'example']
       },
       {
         message: 'Rule 304: The property cancelable must have a example',
-        path: [ 'properties', 'cancelable', 'example' ]
+        path: ['properties', 'cancelable', 'example']
       }
     ]);
   });
 
-  it("Should return no errors with item array example", function () {
-    expect(schemaPropertiesFieldCheck(itemArrayExample, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([]);
+  test("Should return no errors with item array example", () => {
+    expect(schemaPropertiesFieldCheck(itemArrayExample, { rule: ruleNumber, field: "example" })).toEqual([]);
   });
 
-  it("Should return errors with multi item->array type example", function () {
-    expect(schemaPropertiesFieldCheck(multiItemArrayUsecase, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([
+  test("Should return errors with multi item->array type example", () => {
+    expect(schemaPropertiesFieldCheck(multiItemArrayUsecase, { rule: ruleNumber, field: "example" })).toEqual([
       {
         message: `Rule ${ruleNumber}: The property forwarded must have a example`,
-        path: [
-          "properties",
-          "approvalDetails",
-          "items",
-          "properties",
-          "forwarded",
-          "example",
-        ],
+        path: ['properties', 'approvalDetails', 'items', 'properties', 'forwarded', 'example']
       },
       {
         message: `Rule ${ruleNumber}: The property scheme must have a example`,
-        path: [
-          "properties",
-          "approvalDetails",
-          "items",
-          "properties",
-          "scheme",
-          "example",
-        ],
+        path: ['properties', 'approvalDetails', 'items', 'properties', 'scheme', 'example']
       },
       {
         message: `Rule ${ruleNumber}: The property comment must have a example`,
-        path: [
-          "properties",
-          "approvalDetails",
-          "items",
-          "properties",
-          "comment",
-          "example",
-        ],
+        path: ['properties', 'approvalDetails', 'items', 'properties', 'comment', 'example']
       },
     ]);
   });
 
-  it("Should return no errors with nullable true fields missing examples", function () {
-    expect(schemaPropertiesFieldCheck(nullableExampleUsecase, {
-      rule: ruleNumber,
-      field: "example",
-    })).to.deep.equal([]);
+  test("Should return no errors with nullable true fields missing examples", () => {
+    expect(schemaPropertiesFieldCheck(nullableExampleUsecase, { rule: ruleNumber, field: "example" })).toEqual([]);
   });
 
-  it("Should return errors with nullable true fields with missing description", function () {
-    expect(schemaPropertiesFieldCheck(nullableExampleUsecase, {
-      rule: ruleNumber,
-      field: "description",
-    })).to.deep.equal([
+  test("Should return errors with nullable true fields with missing description", () => {
+    expect(schemaPropertiesFieldCheck(nullableExampleUsecase, { rule: ruleNumber, field: "description" })).toEqual([
       {
         message: "Rule 304: The property oldApproverName must have a description",
-        path: [
-          "properties",
-          "oldApproverName",
-          "description"
-        ]
+        path: ['properties', 'oldApproverName', 'description']
       }
     ]);
   });

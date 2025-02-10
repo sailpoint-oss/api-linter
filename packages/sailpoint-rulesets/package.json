@@ -5,29 +5,19 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
-<<<<<<< HEAD
         "build": "tsc"
-=======
-        "build": "tsc",
-        "test": "tsc && mocha dist/tests/*test.js"
-
->>>>>>> 56af2cc (Refactor with pnpm workspaces, TS, and adjusted formatting and promise structure)
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@stoplight/spectral-core": "^1.19.1",
         "@stoplight/spectral-ruleset-bundler": "^1.6.0",
-        "chai": "^5.1.2",
+        "js-yaml": "^4.1.0",
         "yaml": "^2.6.0"
     },
     "devDependencies": {
-<<<<<<< HEAD
-        "@types/chai": "^5.0.1",
-        "@types/mocha": "^10.0.10",
         "@types/node": "^22.13.1",
-=======
->>>>>>> 56af2cc (Refactor with pnpm workspaces, TS, and adjusted formatting and promise structure)
-        "typescript": "^4.9.5"
+        "typescript": "^4.9.5",
+        "vitest": "^3.0.5"
     }
 }

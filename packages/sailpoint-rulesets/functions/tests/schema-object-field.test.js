@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import schemaObjectFieldCheck from "../schema-object-field-check.js";
 
 const ruleNumber = 317;
@@ -202,17 +201,17 @@ const schemaAllOfObjectWithNullRequiredField = {
   ],
 };
 
-describe("Schema Object Field Check", function () {
-  it("Should not return any errors when the given field is present", function () {
-    expect(schemaObjectFieldCheck(schemaObjectWithRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([]);
+describe("Schema Object Field Check", () => {
+  test("Should not return any errors when the given field is present", () => {
+    expect(schemaObjectFieldCheck(schemaObjectWithRequiredField, { rule: ruleNumber, field })).toEqual([]);
   });
 
-  it("Should not return any errors when the given field is missing", function () {
-    expect(schemaObjectFieldCheck(schemaObjectMissingRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([]);
+  test("Should not return any errors when the given field is missing", () => {
+    expect(schemaObjectFieldCheck(schemaObjectMissingRequiredField, { rule: ruleNumber, field })).toEqual([]);
   });
 
-  it("Should return errors when the given field is present but is empty or null", function () {
-    expect(schemaObjectFieldCheck(schemaObjectWithNullRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([
+  test("Should return errors when the given field is present but is empty or null", () => {
+    expect(schemaObjectFieldCheck(schemaObjectWithNullRequiredField, { rule: ruleNumber, field })).toEqual([
       {
         message: `Rule ${ruleNumber}: If a ${field} key is defined for a schema object, it must not be null or empty`,
         path: ["required"],
@@ -220,12 +219,12 @@ describe("Schema Object Field Check", function () {
     ]);
   });
 
-  it("Should not return any errors when the given field is not present in the allOf format", function () {
-    expect(schemaObjectFieldCheck(schemaAllOfObjectWithMissingRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([]);
+  test("Should not return any errors when the given field is not present in the allOf format", () => {
+    expect(schemaObjectFieldCheck(schemaAllOfObjectWithMissingRequiredField, { rule: ruleNumber, field })).toEqual([]);
   });
 
-  it("Should return errors when the given field is present but null in the allOf format", function () {
-    expect(schemaObjectFieldCheck(schemaAllOfObjectWithNullRequiredField, { rule: ruleNumber, field: field })).to.deep.equal([
+  test("Should return errors when the given field is present but null in the allOf format", () => {
+    expect(schemaObjectFieldCheck(schemaAllOfObjectWithNullRequiredField, { rule: ruleNumber, field })).toEqual([
       {
         message: `Rule ${ruleNumber}: If a ${field} key is defined for a schema object, it must not be null or empty`,
         path: ["allOf", 0, "required"],

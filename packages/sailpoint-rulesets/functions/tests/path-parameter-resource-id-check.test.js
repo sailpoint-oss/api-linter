@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import parameterOperationIdCheck from "../path-parameter-resource-id-check.js";
 const ruleNumber = 404;
 
@@ -33,32 +32,31 @@ const jsonParameterWithInvalidOperationId = {
     "x-sailpoint-resource-operation-id": "getAccounts",
   };
 
-describe("Path Parameter Operation Id Check Test", function () {
-  it("should not return any error messages if path parameter has a valid operation id defined under x-sailpoint-resource-operation-id", function () {
+describe("Path Parameter Operation Id Check Test", () => {
+  test("should not return any error messages if path parameter has a valid operation id defined under x-sailpoint-resource-operation-id", () => {
     const result = parameterOperationIdCheck(
       jsonParameterWithValidOperationId,
       { rule: ruleNumber }
     );
-    expect(result).to.be.an("array").that.is.empty;
+    expect(result).toEqual([]);
   });
 
-  it("should return an error message if path parameter is missing x-sailpoint-resource-operation-id", function () {
+  test("should return an error message if path parameter is missing x-sailpoint-resource-operation-id", () => {
     const result = parameterOperationIdCheck(jsonParameterWithNoOperationId, {
       rule: ruleNumber,
     });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
-        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: \{${jsonParameterWithNoOperationId.name}\}. Please provide an operation ID for where the resource ID can be found`,
+        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: {${jsonParameterWithNoOperationId.name}}. Please provide an operation ID for where the resource ID can be found`,
       },
     ]);
   });
 
-
-  it("should return an error message if path parameter is missing a valid operation id defined under x-sailpoint-resource-operation-id", function () {
+  test("should return an error message if path parameter has an invalid operation id", () => {
     const result = parameterOperationIdCheck(jsonParameterWithInvalidOperationId, {
       rule: ruleNumber,
     });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidOperationId["x-sailpoint-resource-operation-id"]} is invalid, the operationId must match an existing operationId in the API specs.`,
       },

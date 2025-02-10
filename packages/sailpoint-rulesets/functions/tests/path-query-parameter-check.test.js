@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import pathQueryParameterCheck from "../path-query-parameter-check.js";
 
 const ruleNumber = 157;
@@ -87,33 +86,33 @@ const jsonParametersEmpty = {
   ],
 };
 
-describe("Path Query Parameter Check", function () {
-  it("Should not return any error message if the field exists in query parameters", function () {
+describe("Path Query Parameter Check", () => {
+  test("Should not return any error message if the field exists in query parameters", () => {
     const result = pathQueryParameterCheck(jsonParametersWithFieldsField, {
       rule: ruleNumber,
       field: requiredField,
     });
-    expect(result).to.be.undefined;
+    expect(result).toBeUndefined();
   });
 
-  it("Should return an error message if the required field is missing from query parameters", function () {
+  test("Should return an error message if the required field is missing from query parameters", () => {
     const result = pathQueryParameterCheck(jsonParametersWithoutRequiredField, {
       rule: ruleNumber,
       field: requiredField,
     });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: All GET operations should have ${requiredField} as a query parameter`,
       },
     ]);
   });
 
-  it("Should return an error message when the parameters object is missing or empty", function () {
+  test("Should return an error message when the parameters object is missing or empty", () => {
     const result = pathQueryParameterCheck(jsonParametersEmpty, {
       rule: ruleNumber,
       field: requiredField,
     });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: All GET operations should have ${requiredField} as a query parameter`,
       },

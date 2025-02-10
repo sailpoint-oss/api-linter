@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import operationCheck from "../path-operation-check.js";
 
 const ruleNumber = 400;
@@ -1475,7 +1474,7 @@ let jsonPaths = {
                             nullable: true,
                             description:
                               "String value to test the Account attribute w/r/t the specified operation. If the operation is one of EQUALS, NOT_EQUALS, or CONTAINS, this field is required. Otherwise, specifying it is an error. If the Attribute is not String-typed, it will be converted to the appropriate type.",
-                            example: "carlee.cert1c9f9b6fd@mailinator.com",
+                              example: "carlee.cert1c9f9b6fd@mailinator.com",
                           },
                           children: {
                             type: "array",
@@ -1524,7 +1523,7 @@ let jsonPaths = {
                       nullable: true,
                       description:
                         "Array of child criteria. Required if the operation is AND or OR, otherwise it must be left null. A maximum of three levels of criteria are supported, including leaf nodes.",
-                      example: null,
+                        example: null,
                     },
                   },
                 },
@@ -1954,15 +1953,15 @@ let invalidDeleteAndPatchAccessProfileOperationIds = {
   },
 };
 
-describe("Path Operation Check Function", function () {
-  it("Should not return any errors for valid operationIds", function () {
+describe("Path Operation Check Function", () => {
+  test("Should not return any errors for valid operationIds", () => {
     const result = operationCheck(jsonPaths, { rule: ruleNumber });
-    expect(result).to.deep.equal([]);
+    expect(result).toEqual([]);
   });
 
-  it("Should return errors for invalid operationId", function () {
+  test("Should return errors for invalid operationId", () => {
     const result = operationCheck(invalidAccessProfileOperationId, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: path is invalid, the operationId must start with one of the allowed values [compare,export,get,list,search] for get endpoints that return an array of results`,
         path: ["get", "operationId"],
@@ -1970,9 +1969,9 @@ describe("Path Operation Check Function", function () {
     ]);
   });
 
-  it("Should return errors for invalid operationIds for delete and patch endpoints", function () {
+  test("Should return errors for invalid operationIds for delete and patch endpoints", () => {
     const result = operationCheck(invalidDeleteAndPatchAccessProfileOperationIds, { rule: ruleNumber });
-    expect(result).to.deep.equal([
+    expect(result).toEqual([
       {
         message: `Rule ${ruleNumber}: rid is invalid, the operationId must start with one of the allowed values [delete,remove] for delete endpoints`,
         path: ["delete", "operationId"],

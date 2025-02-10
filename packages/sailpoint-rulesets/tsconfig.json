@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "types": ["node", "mocha"]
+    "types": ["node", "vitest/globals", "vitest/importMeta"]
   },
   "include": [
     "functions/**/*"

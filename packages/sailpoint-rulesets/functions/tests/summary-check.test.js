@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import summaryCheck from "../summary-check.js";
 const ruleNumber = 305;
 

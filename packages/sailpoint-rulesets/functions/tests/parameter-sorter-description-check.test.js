@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import parameterSorterDescriptionCheck from "../parameter-sorter-description-check.js";
 
 const ruleNumber = 325;
@@ -38,10 +37,10 @@ Sorting is supported for the following fields:
 - created
 - modified`;
 
-describe("Sorter param description", function () {
-  it("Should not return any errors for valid input", function () {
+describe("Sorter param description", () => {
+  test("Should not return any errors for valid input", () => {
     const result = parameterSorterDescriptionCheck(validSorterDescription, { rule: ruleNumber });
-    expect(result).to.be.undefined;
+    expect(result).toBeUndefined();
   });
 
   it("Should return an error for bad key for fields", function () {
