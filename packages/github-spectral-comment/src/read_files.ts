@@ -3,7 +3,10 @@ import path from "node:path";
 import { devLog } from "./utils.js";
 import core from "@actions/core";
 
-export const readFilesToAnalyze = async (githubWorkspace: string, fileGlob: string) => {
+export const readFilesToAnalyze = async (
+  githubWorkspace: string,
+  fileGlob: string,
+) => {
   const files = fileGlob.split(",");
   const fileContents = [];
 

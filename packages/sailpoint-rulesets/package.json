@@ -1,23 +1,24 @@
 {
-    "name": "sailpoint-rulesets",
-    "version": "1.0.0",
-    "description": "SailPoint Maintained Spectral Rulesets",
-    "main": "dist/index.js",
-    "type": "module",
-    "scripts": {
-        "build": "tsc"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@stoplight/spectral-core": "^1.19.1",
-        "@stoplight/spectral-ruleset-bundler": "^1.6.0",
-        "js-yaml": "^4.1.0",
-        "yaml": "^2.6.0"
-    },
-    "devDependencies": {
-        "@types/node": "^22.13.1",
-        "typescript": "^4.9.5",
-        "vitest": "^3.0.5"
-    }
+  "name": "sailpoint-rulesets",
+  "version": "1.0.0",
+  "description": "SailPoint Maintained Spectral Rulesets",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@stoplight/spectral-core": "^1.19.1",
+    "@stoplight/spectral-ruleset-bundler": "^1.6.0",
+    "js-yaml": "^4.1.0",
+    "yaml": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "openapi-types": "^12.1.3",
+    "typescript": "^4.9.5",
+    "vitest": "^3.0.5"
+  }
 }
