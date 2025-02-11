@@ -1,18 +1,21 @@
 export const emojisMap: Record<string, string> = {
-  '0': ':x:',
-  '1': ':warning:',
-  '2': ':information_source:',
-  '3': ':eyes:'
+  "0": ":x:",
+  "1": ":warning:",
+  "2": ":information_source:",
+  "3": ":eyes:",
 };
 
-export const buildRelativeFilePath = (absFilePath: string, projectDir: string) => {
-  return absFilePath.replace(`${projectDir}/`, '');
+export const buildRelativeFilePath = (
+  absFilePath: string,
+  projectDir: string,
+) => {
+  return absFilePath.replace(`${projectDir}/`, "");
 };
 
 export const buildNote = (pb: any, project: any, relativeFilePath: string) => {
   const line = pb.range.start.line + 1;
   const column = pb.range.start.character + 1;
-  let link = '';
+  let link = "";
 
   if (project.githubURL === undefined || project.githubURL === "") {
     link = `/Users/tyler.mairose/development/api-linter/github-spectral-comment/${relativeFilePath}#L${line}`;
@@ -23,7 +26,10 @@ export const buildNote = (pb: any, project: any, relativeFilePath: string) => {
 };
 
 export const buildNotes = (pbs: any, project: any, absFilePath: string) => {
-  const relativeFilePath = buildRelativeFilePath(absFilePath, project.workspace);
+  const relativeFilePath = buildRelativeFilePath(
+    absFilePath,
+    project.workspace,
+  );
   let md = `> ${relativeFilePath}
   
   |File Location|Severity|Rule Name|Message|
@@ -31,7 +37,7 @@ export const buildNotes = (pbs: any, project: any, absFilePath: string) => {
   `;
 
   for (let i = 0; i < pbs.length; i++) {
-    md += buildNote(pbs[i], project, relativeFilePath) + '\n';
+    md += buildNote(pbs[i], project, relativeFilePath) + "\n";
   }
   return md;
 };

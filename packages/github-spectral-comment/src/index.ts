@@ -12,7 +12,8 @@ const __dirname = path.dirname(__filename);
 
 core.info("Starting API Linter");
 core.debug("Debug mode is enabled");
-const dev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
+const dev =
+  process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
 core.debug(`Node Environment: ${process.env.NODE_ENV}, dev: ${dev}`);
 
 function devLog(message?: any) {
@@ -22,12 +23,12 @@ function devLog(message?: any) {
 }
 
 type Inputs = {
-  "github-token"?: string,
-  "file-glob"?: string,
-  "spectral-root-ruleset"?: string,
-  "spectral-path-ruleset"?: string,
-  "spectral-schema-ruleset"?: string,
-  "github-url"?: string,
+  "github-token"?: string;
+  "file-glob"?: string;
+  "spectral-root-ruleset"?: string;
+  "spectral-path-ruleset"?: string;
+  "spectral-schema-ruleset"?: string;
+  "github-url"?: string;
 };
 
 const inputs: Inputs = {
@@ -42,14 +43,13 @@ const inputs: Inputs = {
 const devInputs: Inputs = {
   "github-token": "",
   "file-glob": "../api-specs/idn/v3/paths/access-profiles.yaml",
-  "spectral-root-ruleset":  "../../sailpoint-rulesets/root-ruleset.yaml",
-  "spectral-path-ruleset":  "../../sailpoint-rulesets/path-ruleset.yaml",
-  "spectral-schema-ruleset":  "../../sailpoint-rulesets/schema-ruleset.yaml",
+  "spectral-root-ruleset": "../../sailpoint-rulesets/root-ruleset.yaml",
+  "spectral-path-ruleset": "../../sailpoint-rulesets/path-ruleset.yaml",
+  "spectral-schema-ruleset": "../../sailpoint-rulesets/schema-ruleset.yaml",
   "github-url": "",
 };
 
 try {
-
   // Startup Checks
   if (Object.keys(github.context.payload).length != 0) {
     if (!github.context.payload.pull_request) {
@@ -65,42 +65,50 @@ try {
     }
   }
 
-  devLog("Inputs:")
-  devLog(inputs)
+  devLog("Inputs:");
+  devLog(inputs);
 
   const project = {
     "github-url": inputs["github-url"],
     repository: process.env.GITHUB_REPOSITORY,
     headRef: process.env.GITHUB_HEAD_REF,
     workspace:
-      process.env.GITHUB_WORKSPACE ||
-      path.join(__dirname, "../../../"),
+      process.env.GITHUB_WORKSPACE || path.join(__dirname, "../../../"),
   };
 
-  devLog("Project:")
+  devLog("Project:");
   devLog(project);
 
   devLog("Workspace: " + project.workspace);
   devLog("FileGlob: " + inputs["file-glob"]);
   devLog("File Path: " + path.join(project.workspace, inputs["file-glob"]!));
 
-  const fileContents = await core.group('Reading files to analyze', async () => {
-    return await readFilesToAnalyze(
-      project.workspace,
-      inputs["file-glob"]!
-    );
-  });
+  const fileContents = await core.group(
+    "Reading files to analyze",
+    async () => {
+      return await readFilesToAnalyze(project.workspace, inputs["file-glob"]!);
+    },
+  );
 
-  const { rootSpectral, pathSpectral, schemaSpectral } = await core.group('Creating spectral instances', async () => {
-    const rootSpectral = await createSpectral(inputs["spectral-root-ruleset"]!);
-    const pathSpectral = await createSpectral(inputs["spectral-path-ruleset"]!);
-    const schemaSpectral = await createSpectral(inputs["spectral-schema-ruleset"]!);
-    return { rootSpectral, pathSpectral, schemaSpectral };
-  });
+  const { rootSpectral, pathSpectral, schemaSpectral } = await core.group(
+    "Creating spectral instances",
+    async () => {
+      const rootSpectral = await createSpectral(
+        inputs["spectral-root-ruleset"]!,
+      );
+      const pathSpectral = await createSpectral(
+        inputs["spectral-path-ruleset"]!,
+      );
+      const schemaSpectral = await createSpectral(
+        inputs["spectral-schema-ruleset"]!,
+      );
+      return { rootSpectral, pathSpectral, schemaSpectral };
+    },
+  );
 
   let processedPbs = initProcessedPbs();
-  
-  processedPbs = await core.group('Running spectral analysis', async () => {
+
+  processedPbs = await core.group("Running spectral analysis", async () => {
     const spectralTasks = fileContents.map(async (fileContent) => {
       const file = fileContent.file;
       const fileDir = file.substring(0, file.lastIndexOf("/"));
@@ -108,26 +116,41 @@ try {
       // Instead of changing the global working directory, compute the absolute directory
       const absoluteDir = path.join(project.workspace, fileDir);
       console.log("File directory: " + absoluteDir);
-    
+
       let pbs = "";
       if (file.includes("sailpoint-api.")) {
         console.log(`Running root ruleset on ${file}`);
-        pbs = await runSpectral(rootSpectral, fileContent, project.workspace, false);
+        pbs = await runSpectral(
+          rootSpectral,
+          fileContent,
+          project.workspace,
+          false,
+        );
       } else if (file.includes("paths")) {
         console.log(`Running path ruleset on ${file}`);
-        pbs = await runSpectral(pathSpectral, fileContent, project.workspace, true);
+        pbs = await runSpectral(
+          pathSpectral,
+          fileContent,
+          project.workspace,
+          true,
+        );
       } else if (file.includes("schema")) {
         console.log(`Running schema ruleset on ${file}`);
-        pbs = await runSpectral(schemaSpectral, fileContent, project.workspace, true);
+        pbs = await runSpectral(
+          schemaSpectral,
+          fileContent,
+          project.workspace,
+          true,
+        );
       }
       return { file, pbs };
     });
-    
+
     const results = await Promise.allSettled(spectralTasks);
-    results.forEach(result => {
+    results.forEach((result) => {
       if (result.status === "fulfilled") {
         const { file, pbs } = result.value;
-        if (pbs !== '') {
+        if (pbs !== "") {
           processedPbs = processPbs(file, processedPbs, pbs);
         }
       } else {
@@ -137,14 +160,16 @@ try {
     return processedPbs;
   });
 
-  await core.group('Posting GitHub comment', async () => {
+  await core.group("Posting GitHub comment", async () => {
     const md = await toMarkdown(processedPbs, project);
-  
+
     if (Object.keys(github.context.payload).length != 0) {
       if (md === "") {
         core.info("No lint errors found! Congratulations!");
       } else if (github.context.payload.pull_request == null) {
-        core.setFailed("No pull request found! Please create a pull request to use this action.");
+        core.setFailed(
+          "No pull request found! Please create a pull request to use this action.",
+        );
       } else {
         const octokit = github.getOctokit(inputs["github-token"]!);
         const repoName = github.context.repo.repo;
@@ -157,7 +182,9 @@ try {
           issue_number: prNumber,
         });
         if (processedPbs.severitiesCount[0] > 0) {
-          core.setFailed("There are " + processedPbs.severitiesCount[0] + " lint errors!");
+          core.setFailed(
+            "There are " + processedPbs.severitiesCount[0] + " lint errors!",
+          );
         }
       }
     } else {
@@ -172,4 +199,3 @@ try {
     core.setFailed(`An unknown error occurred: ${JSON.stringify(error)}`);
   }
 }
-

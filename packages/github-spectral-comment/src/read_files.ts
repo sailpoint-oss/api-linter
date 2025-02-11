@@ -2,7 +2,10 @@ import { toPosixPath } from "@actions/core";
 import * as fs from "node:fs";
 import path from "node:path";
 
-export const readFilesToAnalyze = async (githubWorkspace: string, fileGlob: string) => {
+export const readFilesToAnalyze = async (
+  githubWorkspace: string,
+  fileGlob: string,
+) => {
   const files = fileGlob.split(",");
   const fileContents = [];
 
@@ -22,7 +25,9 @@ export const readFilesToAnalyze = async (githubWorkspace: string, fileGlob: stri
           content: fs.readFileSync(filePath, "utf-8"),
         });
       } else {
-        console.log("File does not exist, if the file was intentionally deleted during the PR ignore this comment");
+        console.log(
+          "File does not exist, if the file was intentionally deleted during the PR ignore this comment",
+        );
       }
     } catch (err) {
       console.error(err);
