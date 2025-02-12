@@ -35,6 +35,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file-glob: packages/test-files/OpenAPI.yaml
-          spectral-root-ruleset: packages/sailpoint-rulesets/root-ruleset.yaml
-          spectral-path-ruleset: packages/sailpoint-rulesets/path-ruleset.yaml
-          spectral-schema-ruleset: packages/sailpoint-rulesets/schema-ruleset.yaml
+          spectral-root-ruleset: ../../root-ruleset.yaml
+          spectral-path-ruleset: ../../path-ruleset.yaml
+          spectral-schema-ruleset: ../../schema-ruleset.yaml
