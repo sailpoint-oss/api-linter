@@ -1,9 +1,6 @@
-name: CI Build and Test
+name: Action Preview
 
 on:
-  push:
-    branches:
-        - main
   pull_request:
     branches:
         - main
