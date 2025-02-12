@@ -6,7 +6,7 @@ on:
         - main
 
 jobs:
-  build-and-test:
+  preview:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,7 @@ jobs:
         run: pnpm test
 
       - name: Preview Action
-        uses: ./packages/github-spectral-comment/action.yaml
+        uses: ./packages/github-spectral-comment
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file-glob: packages/test-files/OpenAPI.yaml
