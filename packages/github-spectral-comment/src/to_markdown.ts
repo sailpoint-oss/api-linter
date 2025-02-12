@@ -1,11 +1,11 @@
-import { buildNotes } from './note_builder.js';
+import { buildNotes } from "./note_builder.js";
 
 const toMarkdown = async (processedPbs: any, project: any) => {
   const pbsMap = processedPbs.filteredPbs;
-  
+
   // no pb => no message
   if (Object.keys(pbsMap).length === 0) {
-    return '';
+    return "";
   }
 
   const { severitiesCount } = processedPbs;
@@ -24,7 +24,7 @@ const toMarkdown = async (processedPbs: any, project: any) => {
     if (Object.prototype.hasOwnProperty.call(pbsMap, absFilePath)) {
       const pbs = pbsMap[absFilePath];
       md += buildNotes(pbs, project, absFilePath);
-      md += '\n';
+      md += "\n";
     }
   }
 

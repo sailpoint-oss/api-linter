@@ -5,13 +5,13 @@ import {
   getProjectConfig,
   runSpectralAnalysis,
   createGithubComment,
-} from "./action.js";
-import { ActionInputs } from "./types.js";
-import { createSpectral } from "./spectral.js";
-import { readFilesToAnalyze } from "./read_files.js";
-import { initProcessedPbs, processPbs } from "./process_pbs.js";
-import { toMarkdown } from "./to_markdown.js";
-import { getDevInputs } from "./config.js";
+} from "../action.js";
+import { ActionInputs } from "../types.js";
+import { createSpectral } from "../spectral.js";
+import { readFilesToAnalyze } from "../read_files.js";
+import { initProcessedPbs, processPbs } from "../process_pbs.js";
+import { toMarkdown } from "../to_markdown.js";
+import { getDevInputs } from "../config.js";
 
 async function run(): Promise<void> {
   try {
