@@ -79,7 +79,7 @@ export const createSpectral = async (rulesetFilePath: string) => {
 };
 
 export const runSpectral = async (
-  spectral: Spectral,
+  spectral: typeof Spectral,
   document: any,
   workspace: string,
   ignoreUnknownFormatFlag: boolean
@@ -97,7 +97,7 @@ export const runSpectral = async (
   );
 
   return spectral.runWithResolved(documentToLint, {
-    // resolver: httpAndFileResolver,
+    resolver: httpAndFileResolver,
     ignoreUnknownFormat: ignoreUnknownFormatFlag,
   });
 };
