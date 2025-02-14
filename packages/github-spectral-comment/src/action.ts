@@ -27,9 +27,9 @@ export function getProjectConfig(workspace?: string): Project {
 export async function runSpectralAnalysis(
   fileContents: Array<{ file: string; content: string }>,
   spectralInstances: {
-    rootSpectral: typeof Spectral;
-    pathSpectral: typeof Spectral;
-    schemaSpectral: typeof Spectral;
+    rootSpectral: any;
+    pathSpectral: any;
+    schemaSpectral: any;
   },
   workspace: string
 ): Promise<SpectralAnalysisResult[]> {

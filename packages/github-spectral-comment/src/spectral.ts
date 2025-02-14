@@ -33,7 +33,7 @@ export const createSpectral = async (rulesetFilePath: string) => {
 };
 
 export const runSpectral = async (
-  spectral: typeof Spectral,
+  spectral: any,
   document: any,
   workspace: string,
   ignoreUnknownFormatFlag: boolean
