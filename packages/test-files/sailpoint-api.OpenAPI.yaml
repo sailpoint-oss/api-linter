@@ -28,6 +28,8 @@ tags:
   externalDocs:
     description: Find out more
     url: http://swagger.io
+- name: user
+  description: Operations about user
 - name: store
   externalDocs:
     description: Find out more about our store
