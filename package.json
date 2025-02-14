@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "build": "pnpm -r build",
-        "test": "vitest"
+        "test": "pnpm -r test"
     },
     "author": "",
     "license": "ISC",

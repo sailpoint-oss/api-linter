@@ -35,7 +35,7 @@ export async function runSpectralAnalysis(
 ): Promise<SpectralAnalysisResult[]> {
   const spectralTasks = fileContents.map(async (fileContent) => {
     const file = fileContent.file;
-    let pbs;
+    let pbs
 
     if (file.includes("sailpoint-api.")) {
       pbs = await runSpectral(spectralInstances.rootSpectral, fileContent, workspace, false);

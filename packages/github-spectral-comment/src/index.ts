@@ -29,6 +29,8 @@ async function run(): Promise<void> {
 
     await validateInputs(inputs, isDev);
 
+    core.debug("Loading project config");
+
     // Setup project configuration
     const project = getProjectConfig();
 
@@ -38,11 +40,15 @@ async function run(): Promise<void> {
       inputs["file-glob"]!
     );
 
+    core.debug("Creating spectral instances");
+
     const spectralInstances = {
       rootSpectral: await createSpectral(inputs["spectral-root-ruleset"]!),
       pathSpectral: await createSpectral(inputs["spectral-path-ruleset"]!),
       schemaSpectral: await createSpectral(inputs["spectral-schema-ruleset"]!),
     };
+
+    core.debug("Running spectral analysis");
 
     // Run analysis
     const results = await runSpectralAnalysis(
@@ -50,6 +56,10 @@ async function run(): Promise<void> {
       spectralInstances,
       project.workspace
     );
+
+    console.log(results);
+
+    core.debug("Processing results");
 
     // Process results
     let processedPbs = initProcessedPbs();
@@ -59,8 +69,12 @@ async function run(): Promise<void> {
       }
     });
 
+    core.debug("Generating markdown");
+
     // Generate markdown and post comment
     const markdown = await toMarkdown(processedPbs, project);
+
+    core.debug("Posting comment");
 
     if (markdown && !isDev) {
       const octokit = github.getOctokit(inputs["github-token"]!);
