@@ -31,6 +31,8 @@ async function run(): Promise<void> {
 
     core.debug("Loading project config");
 
+    core.debug("Loading project config");
+
     // Setup project configuration
     const project = getProjectConfig();
 
@@ -104,6 +106,8 @@ async function run(): Promise<void> {
     const markdown = await toMarkdown(processedPbs);
 
     core.debug("Checking comments");
+
+    core.debug("Posting comment");
 
     if (markdown && !isDev) {
       const octokit = github.getOctokit(inputs["github-token"]!);
