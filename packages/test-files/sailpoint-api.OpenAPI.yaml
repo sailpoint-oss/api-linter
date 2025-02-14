@@ -28,13 +28,14 @@ tags:
   externalDocs:
     description: Find out more
     url: http://swagger.io
+- name: user
+  description: Operations about user
 - name: store
   description: Access to Petstore orders
   externalDocs:
     description: Find out more about our store
     url: http://swagger.io
-- name: user
-  description: Operations about user
+
 paths:
   "/pet":
     put:
