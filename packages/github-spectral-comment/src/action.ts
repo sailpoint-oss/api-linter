@@ -1,8 +1,10 @@
+import core from "@actions/core";
 import { ActionInputs, Project, SpectralAnalysisResult } from "./types.js";
 import { Spectral } from "@stoplight/spectral-core";
 import path from "path";
 import github from "@actions/github";
 import { runSpectral } from "./spectral.js";
+import { countReset } from "console";
 
 export async function validateInputs(inputs: ActionInputs, isDev: boolean): Promise<void> {
   if (!isDev) {
@@ -69,7 +71,11 @@ export async function getGithubComment(
     issue_number: context.payload.pull_request.number,
   });
 
+  core.debug(`Found ${data.length} comments`);
+
   const comment = data.find((comment) => comment?.user?.login === "github-actions" && comment?.body?.includes("Spectral Analysis"));
+
+  core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
 
   if (!comment) {
     return undefined
