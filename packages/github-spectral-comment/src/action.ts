@@ -75,7 +75,16 @@ export async function getGithubComment(
 
   core.debug(JSON.stringify(data, null, 2));
 
-  const comment = data.find((comment) => comment?.user?.login === "github-actions" && comment?.body?.includes("Spectral Analysis"));
+  const comments = data.filter((comment) => comment?.user?.login === "github-actions[bot]" && comment?.body?.includes("Spectral Analysis"))
+  core.debug(`Found ${comments.length} matchingcomments`);
+
+  let comment
+
+  if (comments.length > 1) {
+    comment = comments[comments.length - 1];
+  } else {
+    comment = comments[0];
+  }
 
   core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
 
