@@ -79,6 +79,7 @@ export async function getGithubComment(
 }
 
 export async function updateGithubComment(
+  commentId: number,
   markdown: string,
   octokit: ReturnType<typeof github.getOctokit>,
   context: typeof github.context
@@ -90,7 +91,7 @@ export async function updateGithubComment(
   await octokit.rest.issues.updateComment({
     repo: context.repo.repo,
     owner: context.repo.owner,
-    comment_id: context.payload.pull_request.comments[0].id,
+    comment_id: commentId,
     body: markdown,
   });
 }

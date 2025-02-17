@@ -82,7 +82,7 @@ async function run(): Promise<void> {
       const octokit = github.getOctokit(inputs["github-token"]!);
       const comment = await getGithubComment(octokit, github.context);
       if (comment) {
-        await updateGithubComment(markdown, octokit, github.context);
+        await updateGithubComment(comment.id, markdown, octokit, github.context);
       } else {
         await createGithubComment(markdown, octokit, github.context);
       }
