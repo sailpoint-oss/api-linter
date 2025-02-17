@@ -15,12 +15,11 @@ const toMarkdown = async (processedPbs: any, project: any) => {
   const nbHints = severitiesCount[3];
   const nbPbs = nbErrors + nbWarnings + nbInfos + nbHints;
 
-  let md = `OpenAPI linting report 
+  let md = `# OpenAPI linting report 
 Last updated: ${new Date().toLocaleDateString()}
 
+## Summary
 ${nbPbs === 0 ? "No issues found" : `Found ${nbPbs} issues`}
-
-${nbPbs > 0 ? `Summary:` : ""}
 ${nbErrors > 0 ? `- Errors: ${nbErrors}` : ""}
 ${nbWarnings > 0 ? `- Warnings: ${nbWarnings}` : ""}
 ${nbInfos > 0 ? `- Infos: ${nbInfos}` : ""}
