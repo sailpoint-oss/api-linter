@@ -18,11 +18,13 @@ const toMarkdown = async (processedPbs: any, project: any) => {
   let md = `OpenAPI linting report 
 Last updated: ${new Date().toLocaleDateString()}
 
-Summary:
-- Errors: ${nbErrors}
-- Warnings: ${nbWarnings}
-- Infos: ${nbInfos}
-- Hints: ${nbHints}
+${nbPbs === 0 ? "No issues found" : `Found ${nbPbs} issues`}
+
+${nbPbs > 0 ? `Summary:` : ""}
+${nbErrors > 0 ? `- Errors: ${nbErrors}` : ""}
+${nbWarnings > 0 ? `- Warnings: ${nbWarnings}` : ""}
+${nbInfos > 0 ? `- Infos: ${nbInfos}` : ""}
+${nbHints > 0 ? `- Hints: ${nbHints}` : ""}
 
 <details open>
 <summary>OpenAPI linting report</summary>
