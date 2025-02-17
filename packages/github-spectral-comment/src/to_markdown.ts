@@ -79,7 +79,6 @@ ${[0, 1, 2, 3]
 
 ---
 
-## Summary
 ${nbPbs === 0 ? "No issues found" : `Found ${nbPbs} issues`}
 ${nbErrors > 0 ? `- Errors: ${nbErrors}` : ""}
 ${nbWarnings > 0 ? `- Warnings: ${nbWarnings}` : ""}
