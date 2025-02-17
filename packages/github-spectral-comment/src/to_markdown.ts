@@ -79,6 +79,14 @@ ${[0, 1, 2, 3]
 
 ---
 
+Summary:
+- Errors: ${nbErrors}
+- Warnings: ${nbWarnings}
+- Infos: ${nbInfos}
+- Hints: ${nbHints}
+
+<details open>
+<summary>OpenAPI linting report</summary>
 `;
 
   // Sort rules by severity (errors first) and then by name
