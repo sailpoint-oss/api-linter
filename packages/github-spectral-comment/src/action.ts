@@ -114,6 +114,8 @@ export async function getGithubComment(
 
   core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
 
+  core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
+
   if (!comment) {
     return undefined
   }
