@@ -15,7 +15,8 @@ const toMarkdown = async (processedPbs: any, project: any) => {
   const nbHints = severitiesCount[3];
   const nbPbs = nbErrors + nbWarnings + nbInfos + nbHints;
 
-  let md = `Spectral Analysis
+  let md = `Spectral Analysis 
+Last updated: ${new Date().toISOString()}
 <details open>
 <summary>OpenAPI lint errors: ${nbPbs} problems (${nbErrors} errors, ${nbWarnings} warnings, ${nbInfos} infos, ${nbHints} hints)</summary>
 
