@@ -55,6 +55,46 @@ export async function runSpectralAnalysis(
     .map(result => result.value);
 }
 
+export async function getGithubComment(
+  octokit: ReturnType<typeof github.getOctokit>,
+  context: typeof github.context
+) {
+  if (!context.payload.pull_request) {
+    throw new Error("No pull request found! Please create a pull request to use this action.");
+  }
+
+  const { data } = await octokit.rest.issues.listComments({
+    repo: context.repo.repo,
+    owner: context.repo.owner,
+    issue_number: context.payload.pull_request.number,
+  });
+
+  const comment = data.find((comment) => comment?.user?.login === "github-actions" && comment?.body?.includes("Spectral Analysis"));
+
+  if (!comment) {
+    return undefined
+  }
+
+  return comment;
+}
+
+export async function updateGithubComment(
+  markdown: string,
+  octokit: ReturnType<typeof github.getOctokit>,
+  context: typeof github.context
+): Promise<void> {
+  if (!context.payload.pull_request) {
+    throw new Error("No pull request found! Please create a pull request to use this action.");
+  }
+
+  await octokit.rest.issues.updateComment({
+    repo: context.repo.repo,
+    owner: context.repo.owner,
+    comment_id: context.payload.pull_request.comments[0].id,
+    body: markdown,
+  });
+}
+
 export async function createGithubComment(
   markdown: string,
   octokit: ReturnType<typeof github.getOctokit>,

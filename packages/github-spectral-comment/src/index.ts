@@ -5,6 +5,8 @@ import {
   getProjectConfig,
   runSpectralAnalysis,
   createGithubComment,
+  getGithubComment,
+  updateGithubComment,
 } from "./action.js";
 import { ActionInputs } from "./types.js";
 import { createSpectral } from "./spectral.js";
@@ -78,7 +80,12 @@ async function run(): Promise<void> {
 
     if (markdown && !isDev) {
       const octokit = github.getOctokit(inputs["github-token"]!);
-      await createGithubComment(markdown, octokit, github.context);
+      const comment = await getGithubComment(octokit, github.context);
+      if (comment) {
+        await updateGithubComment(markdown, octokit, github.context);
+      } else {
+        await createGithubComment(markdown, octokit, github.context);
+      }
 
       if (processedPbs.severitiesCount[0] > 0) {
         core.setFailed(
