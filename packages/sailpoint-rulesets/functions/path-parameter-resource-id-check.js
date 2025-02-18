@@ -26,7 +26,15 @@ export default (targetVal, options) => {
     }
 
     if (operationIdArray.length !== 0) {
-      if (!operationIdArray.includes(targetVal["x-sailpoint-resource-operation-id"])) {
+      if (targetVal["x-sailpoint-resource-operation-id"] instanceof Array) {
+        for (let i = 0; i < targetVal["x-sailpoint-resource-operation-id"].length; i++) {
+          if (!operationIdArray.includes(targetVal["x-sailpoint-resource-operation-id"][i])) {
+            results.push({
+              message: `Rule ${rule}: ${targetVal["x-sailpoint-resource-operation-id"][i]} is invalid, the operationId must match an existing operationId in the API specs.`,
+            });
+          }
+        }
+      } else if (!operationIdArray.includes(targetVal["x-sailpoint-resource-operation-id"])) {
         results.push({
           message: `Rule ${rule}: ${targetVal["x-sailpoint-resource-operation-id"]} is invalid, the operationId must match an existing operationId in the API specs.`,
         });

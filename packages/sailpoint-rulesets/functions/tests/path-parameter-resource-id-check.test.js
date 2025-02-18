@@ -1,7 +1,8 @@
+import { expect } from "chai";
 import parameterOperationIdCheck from "../path-parameter-resource-id-check.js";
 const ruleNumber = 404;
 
-process.env.VALID_OPERATION_IDS = '["listAccounts"]';
+process.env.VALID_OPERATION_IDS = '["listAccounts","listEntitlements","listAccessProfiles"]';
 
 const jsonParameterWithValidOperationId = {
   in: "path",
@@ -32,34 +33,52 @@ const jsonParameterWithInvalidOperationId = {
     "x-sailpoint-resource-operation-id": "getAccounts",
   };
 
-describe("Path Parameter Operation Id Check Test", () => {
-  test("should not return any error messages if path parameter has a valid operation id defined under x-sailpoint-resource-operation-id", () => {
+const jsonParameterWithValidOperationIds = {
+    in: "path",
+    name: "id",
+    example: "1234",
+    schema: {
+      type: "string",
+    },
+    "x-sailpoint-resource-operation-id": ["listEntitlements", "listAccessProfiles"]
+  };
+
+describe("Path Parameter Operation Id Check Test", function () {
+  it("should not return any error messages if path parameter has a valid operation id defined under x-sailpoint-resource-operation-id", function () {
     const result = parameterOperationIdCheck(
       jsonParameterWithValidOperationId,
       { rule: ruleNumber }
     );
-    expect(result).toEqual([]);
+    expect(result).to.be.an("array").that.is.empty;
   });
 
-  test("should return an error message if path parameter is missing x-sailpoint-resource-operation-id", () => {
+  it("should return an error message if path parameter is missing x-sailpoint-resource-operation-id", function () {
     const result = parameterOperationIdCheck(jsonParameterWithNoOperationId, {
       rule: ruleNumber,
     });
-    expect(result).toEqual([
+    expect(result).to.deep.equal([
       {
-        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: {${jsonParameterWithNoOperationId.name}}. Please provide an operation ID for where the resource ID can be found`,
+        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: \{${jsonParameterWithNoOperationId.name}\}. Please provide an operation ID for where the resource ID can be found`,
       },
     ]);
   });
 
-  test("should return an error message if path parameter has an invalid operation id", () => {
+
+  it("should return an error message if path parameter is missing a valid operation id defined under x-sailpoint-resource-operation-id", function () {
     const result = parameterOperationIdCheck(jsonParameterWithInvalidOperationId, {
       rule: ruleNumber,
     });
-    expect(result).toEqual([
+    expect(result).to.deep.equal([
       {
         message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidOperationId["x-sailpoint-resource-operation-id"]} is invalid, the operationId must match an existing operationId in the API specs.`,
       },
     ]);
+  });
+
+  it("should not return an error message if path parameter has valid operation ids defined under x-sailpoint-resource-operation-id", function () {
+    const result = parameterOperationIdCheck(jsonParameterWithValidOperationIds, {
+      rule: ruleNumber,
+    });
+    expect(result).to.deep.equal([]);
   });
 });
