@@ -17,12 +17,22 @@ export async function validateInputs(inputs: ActionInputs): Promise<void> {
 }
 
 export function getProjectConfig(workspace?: string): Project {
-  const projectConfig = {
-    "github-url": process.env.GITHUB_URL,
-    repository: process.env.GITHUB_REPOSITORY,
-    headRef: process.env.GITHUB_HEAD_REF,
-    workspace: workspace || process.env.GITHUB_WORKSPACE || path.resolve(),
-  } 
+  let projectConfig: Project;
+  if (isDev) {
+   projectConfig = {
+      "github-url": undefined,
+      repository: undefined,
+      headRef: undefined,
+      workspace: workspace ||  path.resolve()
+   }
+  } else {
+    projectConfig = {
+      "github-url": process.env.GITHUB_URL,
+      repository: process.env.GITHUB_REPOSITORY,
+      headRef: process.env.GITHUB_HEAD_REF,
+      workspace: workspace || process.env.GITHUB_WORKSPACE || path.resolve(),
+    }
+  }
   core.debug(`Project config: ${JSON.stringify(projectConfig)}`);
   return projectConfig;
 }
