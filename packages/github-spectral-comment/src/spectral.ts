@@ -34,22 +34,18 @@ export const processPbs = (
   pbs: { results: ISpectralDiagnostic[] }
 ): ProcessedPbs => {
   pbs.results.forEach(pb => {
-    
-    const key = `${pb.code}_${source}_${pb.range.start.line}_${pb.range.start.character}`;
-    const ruleCode = pb.code;
-
     // Initialize rule array if it doesn't exist
-    if (!processedPbs.filteredPbs[ruleCode]) {
-      processedPbs.filteredPbs[ruleCode] = [];
+    if (!processedPbs.filteredPbs[pb.code]) {
+      processedPbs.filteredPbs[pb.code] = [];
     }
 
     // Only add if we haven't seen this exact issue before
-    if (!processedPbs.filteredPbs[ruleCode].some(existing => 
+    if (!processedPbs.filteredPbs[pb.code].some(existing => 
       existing.source === source &&
       existing.range.start.line === pb.range.start.line &&
       existing.range.start.character === pb.range.start.character
     )) {
-      processedPbs.filteredPbs[ruleCode].push({
+      processedPbs.filteredPbs[pb.code].push({
         ...pb,
         source: pb.source || source,
       });
