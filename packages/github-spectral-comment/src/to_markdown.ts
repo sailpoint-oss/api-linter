@@ -42,13 +42,13 @@ const getSeverityLabel = (severity: number): string => {
 };
 
 export function createGitHubFileLink(file: string, line: number, column: number): string {
-  return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file}#L${line}`;
+  return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file.replace(process.env.GITHUB_WORKSPACE!, '')}#L${line}`;
 }
 
 export function createFileLink(file: string, line: number, column: number): string {
   if (isDev) {
     devLog(ProjectRoot)
-    return `${file.replace(ProjectRoot, '.').replace("/packages/test-files", "")}#L${line}C${column}`;
+    return `${file.replace(ProjectRoot, '.').replace("/packages/test-files", "")}`;
   }
   return createGitHubFileLink(file, line, column);
 }
