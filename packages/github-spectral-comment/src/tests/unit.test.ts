@@ -10,7 +10,7 @@ describe('validateInputs', () => {
       'file-glob': 'test.yaml',
     };
     
-    await expect(validateInputs(inputs, false))
+    await expect(validateInputs(inputs))
       .rejects
       .toThrow('Missing required inputs');
   });
@@ -21,7 +21,7 @@ describe('validateInputs', () => {
       'file-glob': 'test.yaml',
     };
     
-    await expect(validateInputs(inputs, true))
+    await expect(validateInputs(inputs))
       .resolves
       .not.toThrow();
   });
