@@ -42,7 +42,7 @@ const getSeverityLabel = (severity: number): string => {
 };
 
 export function createGitHubFileLink(file: string, line: number, column: number): string {
-  return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_REF}/${file}#L${line}C${column}`;
+  return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file}#L${line}`;
 }
 
 export function createFileLink(file: string, line: number, column: number): string {
