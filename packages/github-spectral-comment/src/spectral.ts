@@ -8,11 +8,62 @@ import spectralRuntime from "@stoplight/spectral-runtime";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+import { ISpectralDiagnostic } from '@stoplight/spectral-core';
+import { devLog, isDev } from "./utils.js";
 
-const dev =
-  process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
+interface ProcessedPbs {
+  filteredPbs: {
+    [ruleCode: string]: Array<ISpectralDiagnostic & { source: string }>;
+  };
+  severitiesCount: Record<number, number>;
+}
 
-const __dirname = dev
+export const initProcessedPbs = (): ProcessedPbs => ({
+  filteredPbs: {},
+  severitiesCount: {
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+  },
+});
+
+export const processPbs = (
+  source: string,
+  processedPbs: ProcessedPbs,
+  pbs: { results: ISpectralDiagnostic[] }
+): ProcessedPbs => {
+  pbs.results.forEach(pb => {
+    
+    const key = `${pb.code}_${source}_${pb.range.start.line}_${pb.range.start.character}`;
+    const ruleCode = pb.code;
+
+    // Initialize rule array if it doesn't exist
+    if (!processedPbs.filteredPbs[ruleCode]) {
+      processedPbs.filteredPbs[ruleCode] = [];
+    }
+
+    // Only add if we haven't seen this exact issue before
+    if (!processedPbs.filteredPbs[ruleCode].some(existing => 
+      existing.source === source &&
+      existing.range.start.line === pb.range.start.line &&
+      existing.range.start.character === pb.range.start.character
+    )) {
+      processedPbs.filteredPbs[ruleCode].push({
+        ...pb,
+        source: pb.source || source,
+      });
+      processedPbs.severitiesCount[pb.severity]++;
+    }
+  });
+
+  devLog(processedPbs.filteredPbs);
+
+  return processedPbs;
+};
+
+
+const __dirname = isDev
   ? path.dirname(fileURLToPath(import.meta.url))
   : path.join(
       path.dirname(fileURLToPath(import.meta.url)),
@@ -38,7 +89,9 @@ export const runSpectral = async (
   workspace: string,
   ignoreUnknownFormatFlag: boolean
 ) => {
-  core.debug("Linting Document: " + document);
+  
+  core.debug("Linting Document");
+
   const documentToLint = new Document(
     document.content,
     Parsers.Yaml,

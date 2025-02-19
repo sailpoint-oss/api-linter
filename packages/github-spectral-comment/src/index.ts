@@ -1,5 +1,6 @@
 import core from "@actions/core";
 import github from "@actions/github";
+import { writeFileSync } from "fs";
 import {
   validateInputs,
   getProjectConfig,
@@ -9,17 +10,14 @@ import {
   updateGithubComment,
 } from "./action.js";
 import { ActionInputs } from "./types.js";
-import { createSpectral } from "./spectral.js";
+import { createSpectral, initProcessedPbs, processPbs } from "./spectral.js";
 import { readFilesToAnalyze } from "./read_files.js";
-import { initProcessedPbs, processPbs } from "./process_pbs.js";
 import { toMarkdown } from "./to_markdown.js";
 import { getDevInputs } from "./config.js";
+import { devLog, isDev } from "./utils.js";
 
 async function run(): Promise<void> {
   try {
-    const isDev =
-      process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
-
     // Get and validate inputs
     const inputs: ActionInputs = Object.fromEntries(
       Object.keys(getDevInputs()).map((key) => [
@@ -29,7 +27,7 @@ async function run(): Promise<void> {
       ])
     );
 
-    await validateInputs(inputs, isDev);
+    await validateInputs(inputs);
 
     core.debug("Loading project config");
 
@@ -59,7 +57,7 @@ async function run(): Promise<void> {
       project.workspace
     );
 
-    console.log(results);
+    devLog(results[0].pbs);
 
     core.debug("Processing results");
 
@@ -93,7 +91,7 @@ async function run(): Promise<void> {
         );
       }
     } else if (isDev) {
-      console.log(markdown);
+      writeFileSync("../../packages/test-files/output.md", markdown);
     }
   } catch (error) {
     core.error(error as string | Error);

@@ -1,12 +1,11 @@
 import core from "@actions/core";
 import { ActionInputs, Project, SpectralAnalysisResult } from "./types.js";
-import { Spectral } from "@stoplight/spectral-core";
 import path from "path";
 import github from "@actions/github";
 import { runSpectral } from "./spectral.js";
-import { countReset } from "console";
+import { isDev } from "./utils.js";
 
-export async function validateInputs(inputs: ActionInputs, isDev: boolean): Promise<void> {
+export async function validateInputs(inputs: ActionInputs): Promise<void> {
   if (!isDev) {
     const missingInputs = Object.entries(inputs)
       .filter(([_, value]) => !value)

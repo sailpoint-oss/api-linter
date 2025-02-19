@@ -1,43 +1,117 @@
-import { buildNotes } from "./note_builder.js";
+import { ISpectralDiagnostic } from '@stoplight/spectral-core';
+import github from "@actions/github";
+import { Project } from './types.js';
+import { devLog, isDev, ProjectRoot } from './utils.js';
+import path from 'node:path';
 
-const toMarkdown = async (processedPbs: any, project: any) => {
-  const pbsMap = processedPbs.filteredPbs;
+interface ProcessedPbs {
+  filteredPbs: {
+    [ruleCode: string]: Array<ISpectralDiagnostic & { source: string }>;
+  };
+  severitiesCount: Record<number, number>;
+}
 
-  // no pb => no message
-  if (Object.keys(pbsMap).length === 0) {
-    return "";
+const getSeverityEmoji = (severity: number): string => {
+  switch (severity) {
+    case 0:
+      return ":x:"; // Error
+    case 1:
+      return ":warning:"; // Warning
+    case 2:
+      return ":information_source:"; // Info
+    case 3:
+      return ":eyes:"; // Hint
+    default:
+      return ":question:";
   }
-
-  const { severitiesCount } = processedPbs;
-  const nbErrors = severitiesCount[0];
-  const nbWarnings = severitiesCount[1];
-  const nbInfos = severitiesCount[2];
-  const nbHints = severitiesCount[3];
-  const nbPbs = nbErrors + nbWarnings + nbInfos + nbHints;
-
-  let md = `# OpenAPI linting report 
-Last updated: ${new Date().toLocaleDateString()}
-
-${nbPbs === 0 ? "No issues found" : `Found ${nbPbs} issues`}
-${nbErrors > 0 ? `- Errors: ${nbErrors}` : ""}
-${nbWarnings > 0 ? `- Warnings: ${nbWarnings}` : ""}
-${nbInfos > 0 ? `- Infos: ${nbInfos}` : ""}
-${nbHints > 0 ? `- Hints: ${nbHints}` : ""}
-
-<details open>
-<summary>OpenAPI linting report</summary>
-`;
-
-  for (const absFilePath in pbsMap) {
-    if (Object.prototype.hasOwnProperty.call(pbsMap, absFilePath)) {
-      const pbs = pbsMap[absFilePath];
-      md += buildNotes(pbs, project, absFilePath);
-      md += "\n";
-    }
-  }
-
-  md += `</details>`;
-  return md;
 };
 
-export { toMarkdown };
+const getSeverityLabel = (severity: number): string => {
+  switch (severity) {
+    case 0:
+      return "Error";
+    case 1:
+      return "Warning";
+    case 2:
+      return "Info";
+    case 3:
+      return "Hint";
+    default:
+      return "Unknown";
+  }
+};
+
+export function createGitHubFileLink(file: string, line: number, column: number): string {
+  return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${github.context.sha}/${file}#L${line}C${column}`;
+}
+
+export function createFileLink(file: string, line: number, column: number): string {
+  if (isDev) {
+    devLog(ProjectRoot)
+    return `${file.replace(ProjectRoot, '.').replace("/packages/test-files", "")}#L${line}C${column}`;
+  }
+  return createGitHubFileLink(file, line, column);
+}
+
+export function fromKebabCaseToTitleCase(str: string): string {
+  return str.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+}
+
+export const toMarkdown = async (processedPbs: ProcessedPbs, project: Project): Promise<string> => {
+  const { filteredPbs, severitiesCount } = processedPbs;
+
+  // No issues found
+  if (Object.keys(filteredPbs).length === 0) {
+    return "# ✅ OpenAPI Linting Report\n\nNo issues found. Great job! 🎉";
+  }
+
+  const totalIssues = Object.values(severitiesCount).reduce((a, b) => a + b, 0);
+  
+  // Build the header
+  let md = `# OpenAPI Linting Report
+
+Last updated: ${new Date().toLocaleString()}
+
+Found **${totalIssues}** total issues:
+${[0, 1, 2, 3]
+  .filter(severity => severitiesCount[severity] > 0)
+  .map(severity => `- ${getSeverityEmoji(severity)} ${getSeverityLabel(severity)}: ${severitiesCount[severity]}`)
+  .join('\n')}
+
+---
+
+`;
+
+  // Sort rules by severity (errors first) and then by name
+  const sortedRules = Object.entries(filteredPbs).sort(([ruleA, issuesA], [ruleB, issuesB]) => {
+    const severityA = issuesA[0]?.severity ?? 999;
+    const severityB = issuesB[0]?.severity ?? 999;
+    if (severityA !== severityB) return severityA - severityB;
+    return ruleA.localeCompare(ruleB);
+  });
+
+  // Build the issues section
+  sortedRules.forEach(([ruleName, issues]) => {
+    const severity = issues[0]?.severity ?? 0;
+    
+    md += `### ${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)}\n\n`;
+    
+    // Group issues by file
+    const issuesByFile = issues.reduce((acc, issue) => {
+      const file = issue.source;
+      if (!acc[file]) acc[file] = [];
+      acc[file].push(issue);
+      return acc;
+    }, {} as Record<string, typeof issues>);
+
+    Object.entries(issuesByFile).forEach(([file, fileIssues]) => {      
+      fileIssues.forEach(issue => {
+        md += `- **[Line ${issue.range.start.line + 1}](${createFileLink(issue.source, issue.range.start.line + 1, issue.range.start.character)})**: ${issue.message}\n`;
+      });
+      
+      md += `\n\n\n`;
+    });
+  });
+
+  return md;
+};
