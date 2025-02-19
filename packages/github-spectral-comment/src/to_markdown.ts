@@ -57,7 +57,7 @@ export function fromKebabCaseToTitleCase(str: string): string {
   return str.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
 }
 
-export const toMarkdown = async (processedPbs: ProcessedPbs, project: Project): Promise<string> => {
+export const toMarkdown = async (processedPbs: ProcessedPbs): Promise<string> => {
   const { filteredPbs, severitiesCount } = processedPbs;
 
   // No issues found

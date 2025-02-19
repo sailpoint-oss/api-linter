@@ -72,7 +72,7 @@ async function run(): Promise<void> {
     core.debug("Generating markdown");
 
     // Generate markdown and post comment
-    const markdown = await toMarkdown(processedPbs, project);
+    const markdown = await toMarkdown(processedPbs);
 
     core.debug("Posting comment");
 

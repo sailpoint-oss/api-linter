@@ -1,6 +1,6 @@
 # OpenAPI Linting Report
 
-Last updated: 2/19/2025, 10:54:38 AM
+Last updated: 2/19/2025, 11:04:08 AM
 
 Found **8** total issues:
 - :x: Error: 8
