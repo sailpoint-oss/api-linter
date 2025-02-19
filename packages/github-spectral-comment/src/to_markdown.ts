@@ -40,17 +40,12 @@ const getSeverityLabel = (severity: number): string => {
       return "Unknown";
   }
 };
-
-export function createGitHubFileLink(file: string, line: number, column: number): string {
-  return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file.replace(process.env.GITHUB_WORKSPACE!, '')}#L${line}`;
-}
-
 export function createFileLink(file: string, line: number, column: number): string {
   if (isDev) {
-    devLog(ProjectRoot)
     return `${file.replace(ProjectRoot, '.').replace("/packages/test-files", "")}`;
+  } else {
+    return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file.replace(process.env.GITHUB_WORKSPACE!, '')}#L${line}`
   }
-  return createGitHubFileLink(file, line, column);
 }
 
 export function fromKebabCaseToTitleCase(str: string): string {
@@ -104,7 +99,8 @@ ${[0, 1, 2, 3]
       return acc;
     }, {} as Record<string, typeof issues>);
 
-    Object.entries(issuesByFile).forEach(([file, fileIssues]) => {      
+    Object.entries(issuesByFile).forEach(([file, fileIssues]) => {   
+      md += `\n\nFile: \`${file.replace(process.env.GITHUB_WORKSPACE! || ProjectRoot, '')}\`\n`;
       fileIssues.forEach(issue => {
         md += `- **[Line ${issue.range.start.line + 1}](${createFileLink(issue.source, issue.range.start.line + 1, issue.range.start.character)})**: ${issue.message}\n`;
       });
