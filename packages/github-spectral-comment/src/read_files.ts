@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import path from "node:path";
+import { devLog } from "./utils.js";
 
 export const readFilesToAnalyze = async (
   githubWorkspace: string,
@@ -9,6 +10,8 @@ export const readFilesToAnalyze = async (
   const fileContents = [];
 
   for (let i = 0, len = files.length; i < len; i++) {
+    devLog(githubWorkspace);
+    devLog(files[i]);
     console.log(`FILE ${i} ${path.join(githubWorkspace, files[i])}`);
     let filePath = path.join(githubWorkspace, files[i]);
 
