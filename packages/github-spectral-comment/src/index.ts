@@ -60,7 +60,17 @@ async function run(): Promise<void> {
     core.debug("Processing results");
 
     core.startGroup("Results");
-    core.debug(JSON.stringify(results, null, 2));
+    results.forEach(({ file, pbs }) => {
+      if (pbs) {
+        core.debug(`${file}`);
+        pbs.results.forEach((result) => {
+          core.debug(`  ${result.code}`);
+          core.debug(`    ${result.message}`);
+          core.debug(`    ${result.severity}`);
+          core.debug(`    ${result.path}`);
+        });
+      }
+    });
     core.endGroup();
 
     // Process results
@@ -72,7 +82,18 @@ async function run(): Promise<void> {
     });
 
     core.startGroup("Processed PBs");
-    core.debug(JSON.stringify(processedPbs, null, 2));
+    Object.entries(processedPbs.severitiesCount).forEach(([severity, count]) => {
+      core.debug(`${severity}: ${count}`);
+    });
+    Object.entries(processedPbs.filteredPbs).forEach(([file, pbs]) => {
+      core.debug(`${file}`);
+      pbs.forEach((pb) => {
+        core.debug(`  ${pb.code}`);
+        core.debug(`    ${pb.message}`);
+        core.debug(`    ${pb.severity}`);
+        core.debug(`    ${pb.path}`);
+      });
+    });
     core.endGroup();
 
     core.debug(`Processed ${Object.keys(processedPbs.filteredPbs).length} PBs`);
