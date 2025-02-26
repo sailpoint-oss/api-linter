@@ -57,7 +57,11 @@ export const toMarkdown = async (processedPbs: ProcessedPbs): Promise<string> =>
 
   // No issues found
   if (Object.keys(filteredPbs).length === 0) {
-    return "# ✅ OpenAPI Linting Report\n\nNo issues found. Great job! 🎉";
+    return `# OpenAPI Linting Report
+
+Last updated: ${new Date().toLocaleString()}
+
+✅ No issues found. Great job! 🎉`;
   }
 
   const totalIssues = Object.values(severitiesCount).reduce((a, b) => a + b, 0);
