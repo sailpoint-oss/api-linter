@@ -57,7 +57,7 @@ async function run(): Promise<void> {
       project.workspace
     );
 
-    core.debug(JSON.stringify(results, null, 2));
+    core.debug(JSON.stringify(results.map((r) => r.pbs), null, 2));
 
     core.debug("Processing results");
 
