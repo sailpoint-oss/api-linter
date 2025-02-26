@@ -69,8 +69,7 @@ async function run(): Promise<void> {
       }
     });
 
-    core.debug(`Processed ${processedPbs.filteredPbs.length} PBs`);
-    core.debug(JSON.stringify(processedPbs.filteredPbs, null, 2));
+    core.debug(`Processed ${Object.keys(processedPbs.filteredPbs).length} PBs`);
 
     core.debug("Generating markdown");
 
