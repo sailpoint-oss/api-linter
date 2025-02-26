@@ -36,6 +36,7 @@ export const processPbs = (
   pbs.results.forEach(pb => {
     // Initialize rule array if it doesn't exist
     if (!processedPbs.filteredPbs[pb.code]) {
+      core.debug(`Adding rule ${pb.code}`);
       processedPbs.filteredPbs[pb.code] = [];
     }
 
@@ -52,8 +53,6 @@ export const processPbs = (
       processedPbs.severitiesCount[pb.severity]++;
     }
   });
-
-  devLog(processedPbs.filteredPbs);
 
   return processedPbs;
 };
@@ -88,10 +87,13 @@ export const runSpectral = async (
   
   core.debug("Linting Document");
 
+  const documentPath = path.join(workspace + "/", document.file);
+  core.debug("Document Path: " + documentPath);
+
   const documentToLint = new Document(
     document.content,
     Parsers.Yaml,
-    path.join(workspace + "/", document.file)
+    documentPath
   );
 
   return spectral.runWithResolved(documentToLint, {
