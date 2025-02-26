@@ -91,10 +91,12 @@ export async function getGithubComment(
 
   let comment
 
-  if (comments.length > 1) {
-    comment = comments[comments.length - 1];
-  } else {
+  if (comments.length < 1) {
+    return undefined;
+  } else if (comments.length === 1) {
     comment = comments[0];
+  } else {
+    comment = comments[comments.length - 1];
   }
 
   core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
