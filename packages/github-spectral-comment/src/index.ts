@@ -57,7 +57,7 @@ async function run(): Promise<void> {
       project.workspace
     );
 
-    devLog(results[0].pbs);
+    core.debug(JSON.stringify(results, null, 2));
 
     core.debug("Processing results");
 
@@ -77,14 +77,16 @@ async function run(): Promise<void> {
     // Generate markdown and post comment
     const markdown = await toMarkdown(processedPbs);
 
-    core.debug("Posting comment");
+    core.debug("Checking comments");
 
     if (markdown && !isDev) {
       const octokit = github.getOctokit(inputs["github-token"]!);
       const comment = await getGithubComment(octokit, github.context);
       if (comment) {
+        core.debug("Updating comment");
         await updateGithubComment(comment.id, markdown, octokit, github.context);
       } else {
+        core.debug("Creating comment");
         await createGithubComment(markdown, octokit, github.context);
       }
 
