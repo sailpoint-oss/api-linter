@@ -59,6 +59,10 @@ async function run(): Promise<void> {
 
     core.debug("Processing results");
 
+    core.startGroup("Results");
+    core.debug(JSON.stringify(results, null, 2));
+    core.endGroup();
+
     // Process results
     let processedPbs = initProcessedPbs();
     results.forEach(({ file, pbs }) => {
@@ -66,6 +70,10 @@ async function run(): Promise<void> {
         processedPbs = processPbs(file, processedPbs, pbs);
       }
     });
+
+    core.startGroup("Processed PBs");
+    core.debug(JSON.stringify(processedPbs, null, 2));
+    core.endGroup();
 
     core.debug(`Processed ${Object.keys(processedPbs.filteredPbs).length} PBs`);
 
