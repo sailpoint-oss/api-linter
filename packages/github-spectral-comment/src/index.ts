@@ -24,7 +24,7 @@ async function run(): Promise<void> {
         key,
         core.getInput(key, { required: !isDev }) ||
           (isDev ? getDevInputs()[key as keyof ActionInputs] : undefined),
-      ])
+      ]),
     );
 
     await validateInputs(inputs);
@@ -39,7 +39,7 @@ async function run(): Promise<void> {
     // Read files and create Spectral instances
     const fileContents = await readFilesToAnalyze(
       project.workspace,
-      inputs["file-glob"]!
+      inputs["file-glob"]!,
     );
 
     core.debug("Creating spectral instances");
@@ -56,7 +56,7 @@ async function run(): Promise<void> {
     const results = await runSpectralAnalysis(
       fileContents,
       spectralInstances,
-      project.workspace
+      project.workspace,
     );
 
     core.debug("Processing results");
@@ -84,9 +84,11 @@ async function run(): Promise<void> {
     });
 
     core.startGroup("Processed PBs");
-    Object.entries(processedPbs.severitiesCount).forEach(([severity, count]) => {
-      core.debug(`${severity}: ${count}`);
-    });
+    Object.entries(processedPbs.severitiesCount).forEach(
+      ([severity, count]) => {
+        core.debug(`${severity}: ${count}`);
+      },
+    );
     Object.entries(processedPbs.filteredPbs).forEach(([file, pbs]) => {
       core.debug(`${file}`);
       pbs.forEach((pb) => {
@@ -114,7 +116,12 @@ async function run(): Promise<void> {
       const comment = await getGithubComment(octokit, github.context);
       if (comment) {
         core.debug("Updating comment");
-        await updateGithubComment(comment.id, markdown, octokit, github.context);
+        await updateGithubComment(
+          comment.id,
+          markdown,
+          octokit,
+          github.context,
+        );
       } else {
         core.debug("Creating comment");
         await createGithubComment(markdown, octokit, github.context);
@@ -122,7 +129,7 @@ async function run(): Promise<void> {
 
       if (processedPbs.severitiesCount[0] > 0) {
         core.setFailed(
-          `There are ${processedPbs.severitiesCount[0]} lint errors!`
+          `There are ${processedPbs.severitiesCount[0]} lint errors!`,
         );
       }
     } else if (isDev) {
@@ -133,7 +140,7 @@ async function run(): Promise<void> {
     core.setFailed(
       error instanceof Error
         ? error.message
-        : `An unknown error occurred: ${error}`
+        : `An unknown error occurred: ${error}`,
     );
   }
 }

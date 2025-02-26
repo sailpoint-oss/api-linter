@@ -26,7 +26,9 @@ export const readFilesToAnalyze = async (
           content: readFileSync(filePath, "utf-8"),
         });
       } else {
-        core.warning("File does not exist, if the file was intentionally deleted during the PR ignore this comment");
+        core.warning(
+          "File does not exist, if the file was intentionally deleted during the PR ignore this comment",
+        );
       }
     } catch (err) {
       console.error(err);

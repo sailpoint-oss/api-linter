@@ -19,19 +19,19 @@ export async function validateInputs(inputs: ActionInputs): Promise<void> {
 export function getProjectConfig(workspace?: string): Project {
   let projectConfig: Project;
   if (isDev) {
-   projectConfig = {
+    projectConfig = {
       "github-url": undefined,
       repository: undefined,
       headRef: undefined,
-      workspace: workspace ||  path.resolve()
-   }
+      workspace: workspace || path.resolve(),
+    };
   } else {
     projectConfig = {
       "github-url": process.env.GITHUB_URL,
       repository: process.env.GITHUB_REPOSITORY,
       headRef: process.env.GITHUB_HEAD_REF,
       workspace: workspace || process.env.GITHUB_WORKSPACE || path.resolve(),
-    }
+    };
   }
   core.debug(`Project config: ${JSON.stringify(projectConfig)}`);
   return projectConfig;
@@ -44,11 +44,11 @@ export async function runSpectralAnalysis(
     pathSpectral: any;
     schemaSpectral: any;
   },
-  workspace: string
+  workspace: string,
 ): Promise<SpectralAnalysisResult[]> {
   const spectralTasks = fileContents.map(async (fileContent) => {
     const file = fileContent.file;
-    let pbs
+    let pbs;
 
     try{
 
@@ -76,17 +76,21 @@ export async function runSpectralAnalysis(
 
   const results = await Promise.allSettled(spectralTasks);
   return results
-    .filter((result): result is PromiseFulfilledResult<SpectralAnalysisResult> => 
-      result.status === "fulfilled")
-    .map(result => result.value);
+    .filter(
+      (result): result is PromiseFulfilledResult<SpectralAnalysisResult> =>
+        result.status === "fulfilled",
+    )
+    .map((result) => result.value);
 }
 
 export async function getGithubComment(
   octokit: ReturnType<typeof github.getOctokit>,
-  context: typeof github.context
+  context: typeof github.context,
 ) {
   if (!context.payload.pull_request) {
-    throw new Error("No pull request found! Please create a pull request to use this action.");
+    throw new Error(
+      "No pull request found! Please create a pull request to use this action.",
+    );
   }
 
   const { data } = await octokit.rest.issues.listComments({
@@ -102,7 +106,7 @@ export async function getGithubComment(
   const comments = data.filter((comment) => comment?.user?.login === "github-actions[bot]" && comment?.body?.includes("OpenAPI Linting Report"))
   core.debug(`Found ${comments.length} matching comments`);
 
-  let comment
+  let comment;
 
   if (comments.length < 1) {
     return undefined;
@@ -112,12 +116,14 @@ export async function getGithubComment(
     comment = comments[comments.length - 1];
   }
 
-  core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
+  core.debug(
+    `Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`,
+  );
 
   core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
 
   if (!comment) {
-    return undefined
+    return undefined;
   }
 
   return comment;
@@ -127,10 +133,12 @@ export async function updateGithubComment(
   commentId: number,
   markdown: string,
   octokit: ReturnType<typeof github.getOctokit>,
-  context: typeof github.context
+  context: typeof github.context,
 ): Promise<void> {
   if (!context.payload.pull_request) {
-    throw new Error("No pull request found! Please create a pull request to use this action.");
+    throw new Error(
+      "No pull request found! Please create a pull request to use this action.",
+    );
   }
 
   await octokit.rest.issues.updateComment({
@@ -144,10 +152,12 @@ export async function updateGithubComment(
 export async function createGithubComment(
   markdown: string,
   octokit: ReturnType<typeof github.getOctokit>,
-  context: typeof github.context
+  context: typeof github.context,
 ): Promise<void> {
   if (!context.payload.pull_request) {
-    throw new Error("No pull request found! Please create a pull request to use this action.");
+    throw new Error(
+      "No pull request found! Please create a pull request to use this action.",
+    );
   }
 
   await octokit.rest.issues.createComment({
@@ -156,4 +166,4 @@ export async function createGithubComment(
     body: markdown,
     issue_number: context.payload.pull_request.number,
   });
-} 
+}

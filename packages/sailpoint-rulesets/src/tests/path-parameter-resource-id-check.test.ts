@@ -3,7 +3,8 @@ import { OpenAPIV3 } from "openapi-types";
 import parameterOperationIdCheck from "../path-parameter-resource-id-check.js";
 const ruleNumber = "404";
 
-process.env.VALID_OPERATION_IDS = '["listAccounts","listEntitlements","listAccessProfiles"]';
+process.env.VALID_OPERATION_IDS =
+  '["listAccounts","listEntitlements","listAccessProfiles"]';
 
 const jsonParameterWithValidOperationId: OpenAPIV3.ParameterObject = {
   in: "path",
@@ -37,15 +38,18 @@ const jsonParameterWithInvalidOperationId: OpenAPIV3.ParameterObject = {
 };
 
 const jsonParameterWithValidOperationIds: OpenAPIV3.ParameterObject = {
-    in: "path",
-    name: "id",
-    example: "1234",
-    schema: {
-      type: "string",
-    },
-    // @ts-expect-error OpenAPI Extenstions are valid
-    "x-sailpoint-resource-operation-id": ["listEntitlements", "listAccessProfiles"]
-  };
+  in: "path",
+  name: "id",
+  example: "1234",
+  schema: {
+    type: "string",
+  },
+  // @ts-expect-error OpenAPI Extenstions are valid
+  "x-sailpoint-resource-operation-id": [
+    "listEntitlements",
+    "listAccessProfiles",
+  ],
+};
 
 describe("Path Parameter Operation Id Check Test", function () {
   it("should not return any error messages if path parameter has a valid operation id defined under x-sailpoint-resource-operation-id", function () {
@@ -83,9 +87,12 @@ describe("Path Parameter Operation Id Check Test", function () {
   });
 
   it("should not return an error message if path parameter has valid operation ids defined under x-sailpoint-resource-operation-id", function () {
-    const result = parameterOperationIdCheck(jsonParameterWithValidOperationIds, {
-      rule: ruleNumber,
-    });
+    const result = parameterOperationIdCheck(
+      jsonParameterWithValidOperationIds,
+      {
+        rule: ruleNumber,
+      },
+    );
     expect(result).to.deep.equal([]);
   });
 });
