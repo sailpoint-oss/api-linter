@@ -7,4 +7,4 @@ export const getDevInputs = (): ActionInputs => ({
   "spectral-path-ruleset": "../../sailpoint-rulesets/path-ruleset.yaml",
   "spectral-schema-ruleset": "../../sailpoint-rulesets/schema-ruleset.yaml",
   "github-url": "",
-}); 
+});

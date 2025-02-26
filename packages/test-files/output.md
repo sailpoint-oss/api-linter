@@ -3,6 +3,7 @@
 Last updated: 2/19/2025, 4:33:57 PM
 
 Found **8** total issues:
+
 - :x: Error: 8
 
 ---
@@ -17,11 +18,6 @@ Found **8** total issues:
 - **[Line 351](./sailpoint-api.OpenAPI.yaml#L351C22)**: '#/components/Test/Order' does not exist
 - **[Line 354](./sailpoint-api.OpenAPI.yaml#L354C22)**: '#/components/schemas/Test' does not exist
 
-
-
 ### :x: Root Tags Must Be In Alphabetical Order
 
 - **[Line 23](./sailpoint-api.OpenAPI.yaml#L23C5)**: Rule 403: Tags must be in alphabetical order: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#403
-
-
-

@@ -8,11 +8,11 @@ functions:
     path-query-parameter-check,
     path-descriptions-check,
     path-oauth-scope-check,
-    path-operation-check
+    path-operation-check,
   ]
 rules:
   path-parameters-must-have-description:
-    description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303" 
+    description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     given: $.*.parameters.*
     severity: error
     then:

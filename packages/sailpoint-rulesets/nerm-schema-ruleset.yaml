@@ -1,4 +1,9 @@
-functions: [schema-properties-field-check, schema-object-field-check, validate-schema-integer-number-formats]
+functions:
+  [
+    schema-properties-field-check,
+    schema-object-field-check,
+    validate-schema-integer-number-formats,
+  ]
 rules:
   schema-properties-must-have-example:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
