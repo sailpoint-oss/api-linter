@@ -1,6 +1,8 @@
 const path = require('path');
 
 export default (targetVal, options, context) => {
+
+    console.log(`Context: ${JSON.stringify(context)}`);
     const { rule } = options;
     let results = [];
     const apiVersionsToValidate = ['v2024', 'v2025'];
