@@ -1,12 +1,17 @@
 export default (targetVal, options) => {
   const { rule} = options;
 
+  let results = [];
+  let operationIdArray = [];
+
+  if (targetVal.parameters === undefined) {
+    return results;
+  }
+  
   const operationId = targetVal.operationId;
   const pathParameters = targetVal.parameters
   .filter(param => param.in === 'path');
 
-  let results = [];
-  let operationIdArray = [];
 
   pathParameters.forEach(pathParameter => {
 
