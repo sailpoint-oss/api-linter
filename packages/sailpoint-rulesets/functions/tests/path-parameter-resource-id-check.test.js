@@ -12,18 +12,7 @@ const jsonParameterWithNoParameters = {
     {
       bearerAuth: ["idn:account-list:read"],
     },
-  ],
-  parameters: [
-    {
-      in: "path",
-      name: "id",
-      example: "1234",
-      schema: {
-        type: "string",
-      },
-      "x-sailpoint-resource-operation-id": "listAccounts",
-    }
-  ],
+  ]
 };
 
 const jsonParameterWithValidOperationId = {
