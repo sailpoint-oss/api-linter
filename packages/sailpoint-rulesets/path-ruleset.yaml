@@ -176,7 +176,7 @@ rules:
         rule: 402
   path-parameters-must-have-valid-resource-operation-id:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#404"
-    given: $.*.parameters[?(@.in == "path")]
+    given: $
     severity: error
     then:
       function: path-parameter-resource-id-check
