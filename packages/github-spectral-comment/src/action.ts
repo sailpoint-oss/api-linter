@@ -50,15 +50,20 @@ export async function runSpectralAnalysis(
     const file = fileContent.file;
     let pbs
 
-    if (file.includes("sailpoint-api.")) {
-      core.debug(`Running root spectral ruleset on ${file}`);
-      pbs = await runSpectral(spectralInstances.rootSpectral, fileContent, workspace, false);
-    } else if (file.includes("paths")) {
-      core.debug(`Running path spectral ruleset on ${file}`);
-      pbs = await runSpectral(spectralInstances.pathSpectral, fileContent, workspace, true);
-    } else if (file.includes("schema")) {
-      core.debug(`Running schema spectral ruleset on ${file}`);
-      pbs = await runSpectral(spectralInstances.schemaSpectral, fileContent, workspace, true);
+    try{
+
+      if (file.includes("sailpoint-api.")) {
+        core.debug(`Running root spectral ruleset on ${file}`);
+        pbs = await runSpectral(spectralInstances.rootSpectral, fileContent, workspace, false);
+      } else if (file.includes("paths")) {
+        core.debug(`Running path spectral ruleset on ${file}`);
+        pbs = await runSpectral(spectralInstances.pathSpectral, fileContent, workspace, true);
+      } else if (file.includes("schema")) {
+        core.debug(`Running schema spectral ruleset on ${file}`);
+        pbs = await runSpectral(spectralInstances.schemaSpectral, fileContent, workspace, true);
+      }
+    } catch (error) {
+      core.error(`Error running spectral on ${file}: ${error}`);
     }
 
     return { file, pbs };
