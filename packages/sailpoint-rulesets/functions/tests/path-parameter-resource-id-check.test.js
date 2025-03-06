@@ -5,42 +5,112 @@ const ruleNumber = 404;
 process.env.VALID_OPERATION_IDS = '["listAccounts","listEntitlements","listAccessProfiles"]';
 
 const jsonParameterWithValidOperationId = {
-  in: "path",
-  name: "id",
-  example: "1234",
-  schema: {
-    type: "string",
-  },
-  "x-sailpoint-resource-operation-id": "listAccounts",
+  operationId: "getAccount",
+  tags: ["Accounts"],
+  summary: "Get an Account",
+  security: [
+    {
+      bearerAuth: ["idn:account-list:read"],
+    },
+  ],
+  parameters: [
+    {
+      in: "path",
+      name: "id",
+      example: "1234",
+      schema: {
+        type: "string",
+      },
+      "x-sailpoint-resource-operation-id": "listAccounts",
+    }
+  ],
 };
 
 const jsonParameterWithNoOperationId = {
-  in: "path",
-  name: "id",
-  example: "1234",
-  schema: {
-    type: "string",
-  },
+  operationId: "getAccount",
+  tags: ["Accounts"],
+  summary: "Get an Account",
+  security: [
+    {
+      bearerAuth: ["idn:account-list:read"],
+    },
+  ],
+  parameters: [
+    {
+      in: "path",
+      name: "id",
+      example: "1234",
+      schema: {
+        type: "string",
+      }
+    }
+  ],
+};
+
+const jsonParameterWithIdentitcalOperationId = {
+  operationId: "getAccount",
+  tags: ["Accounts"],
+  summary: "Get an Account",
+  security: [
+    {
+      bearerAuth: ["idn:account-list:read"],
+    },
+  ],
+  parameters: [
+    {
+      in: "path",
+      name: "id",
+      example: "1234",
+      schema: {
+        type: "string",
+      },
+      "x-sailpoint-resource-operation-id": "getAccount",
+    }
+  ],
 };
 
 const jsonParameterWithInvalidOperationId = {
-    in: "path",
-    name: "id",
-    example: "1234",
-    schema: {
-      type: "string",
+  operationId: "getAccount",
+  tags: ["Accounts"],
+  summary: "Get an Account",
+  security: [
+    {
+      bearerAuth: ["idn:account-list:read"],
     },
-    "x-sailpoint-resource-operation-id": "getAccounts",
-  };
+  ],
+  parameters: [
+    {
+      in: "path",
+      name: "id",
+      example: "1234",
+      schema: {
+        type: "string",
+      },
+      "x-sailpoint-resource-operation-id": "listRecords",
+    }
+  ],
+};
 
 const jsonParameterWithValidOperationIds = {
-    in: "path",
-    name: "id",
-    example: "1234",
-    schema: {
-      type: "string",
-    },
-    "x-sailpoint-resource-operation-id": ["listEntitlements", "listAccessProfiles"]
+    operationId: "getAccount",
+    tags: ["Accounts"],
+    summary: "Get an Account",
+    security: [
+      {
+        bearerAuth: ["idn:account-list:read"],
+      },
+    ],
+    parameters: [
+      {
+        in: "path",
+        name: "id",
+        example: "1234",
+        schema: {
+          type: "string",
+        },
+        "x-sailpoint-resource-operation-id": ["listEntitlements", "listAccessProfiles"]
+      }
+    ],
   };
 
 describe("Path Parameter Operation Id Check Test", function () {
@@ -58,10 +128,22 @@ describe("Path Parameter Operation Id Check Test", function () {
     });
     expect(result).to.deep.equal([
       {
-        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: \{${jsonParameterWithNoOperationId.name}\}. Please provide an operation ID for where the resource ID can be found`,
+        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: \{${jsonParameterWithNoOperationId.parameters[0].name}\}. Please provide an operation ID for where the resource ID can be found. For example, if the path parameter is an accountId, the x-sailpoint-resource-operation-id should be listAccounts.`,
       },
     ]);
   });
+
+  it("should return an error message if x-sailpoint-resource-operation-id is the same value as the operationId for the method", function () {
+    const result = parameterOperationIdCheck(jsonParameterWithIdentitcalOperationId, {
+      rule: ruleNumber,
+    });
+    expect(result).to.deep.equal([
+      {
+        message: `Rule ${ruleNumber}: ${jsonParameterWithIdentitcalOperationId.parameters[0]["x-sailpoint-resource-operation-id"]} is invalid. The x-sailpoint-resource-operation-id cannot reference itself, please provide an operation Id for where ${jsonParameterWithIdentitcalOperationId.parameters[0].name} can be found in the response.`,
+      },
+    ]);
+  });
+
 
 
   it("should return an error message if path parameter is missing a valid operation id defined under x-sailpoint-resource-operation-id", function () {
@@ -70,7 +152,7 @@ describe("Path Parameter Operation Id Check Test", function () {
     });
     expect(result).to.deep.equal([
       {
-        message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidOperationId["x-sailpoint-resource-operation-id"]} is invalid, the operationId must match an existing operationId in the API specs.`,
+        message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidOperationId.parameters[0]["x-sailpoint-resource-operation-id"]} is invalid, the operationId must match an existing operationId in the API specs.`,
       },
     ]);
   });
