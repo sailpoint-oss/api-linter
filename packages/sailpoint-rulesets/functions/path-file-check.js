@@ -1,5 +1,3 @@
-import path from "path";
-
 export default (targetVal, options, context) => {
   const { rule } = options;
   let results = [];
