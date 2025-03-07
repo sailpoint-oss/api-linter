@@ -14,7 +14,7 @@ import { createSpectral, initProcessedPbs, processPbs } from "./spectral.js";
 import { readFilesToAnalyze } from "./read_files.js";
 import { toMarkdown } from "./to_markdown.js";
 import { getDevInputs } from "./config.js";
-import { devLog, isDev } from "./utils.js";
+import { isDev } from "./utils.js";
 
 async function run(): Promise<void> {
   try {
