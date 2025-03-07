@@ -93,7 +93,7 @@ ${[0, 1, 2, 3]
   sortedRules.forEach(([ruleName, issues]) => {
     const severity = issues[0]?.severity ?? 0;
     
-    md += `<details open><summary><h3>${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)}</h3></summary>\n\n`;
+    md += `<details open><summary>${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)}</summary>\n\n`;
     
     // Group issues by file
     const issuesByFile = issues.reduce((acc, issue) => {
@@ -105,7 +105,7 @@ ${[0, 1, 2, 3]
 
     Object.entries(issuesByFile).forEach(([file, fileIssues]) => {   
       md += `\n\nFile: \`${file.replace(process.env.GITHUB_WORKSPACE! || ProjectRoot, '')}\`
-      <details open>\n\n<summary>Offending lines</summary>\n\n`;
+      <details open>\n\n<summary>Lines</summary>\n\n`;
       fileIssues.forEach(issue => {
         md += `- **[Line ${issue.range.start.line + 1}](${createFileLink(issue.source, issue.range.start.line + 1, issue.range.start.character)})**: ${issue.message.replaceAll("'", "`")}\n`;
       });
