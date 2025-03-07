@@ -3,6 +3,7 @@ export default (targetVal, options) => {
   let results = [];
 
   console.log("PATH FILE CHECK");
+  
   // if (
   //   context.document.source === undefined ||
   //   context.document.source === null

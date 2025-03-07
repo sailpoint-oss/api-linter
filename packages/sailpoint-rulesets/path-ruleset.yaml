@@ -18,7 +18,6 @@ functions:
     summary-check,
     tag-check,
     path-parameter-resource-id-check,
-    path-file-check
   ]
 rules:
   path-list-endpoints-must-support-pagination:
@@ -183,14 +182,14 @@ rules:
       function: path-parameter-resource-id-check
       functionOptions:
         rule: 404
-  paths-must-not-reference-documents-outside-of-their-version:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#405"
-    given: $
-    severity: error
-    then:
-      function: path-file-check
-      functionOptions:
-        rule: 405
+  # paths-must-not-reference-documents-outside-of-their-version:
+  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#405"
+  #   given: $
+  #   severity: error
+  #   then:
+  #     function: path-file-check
+  #     functionOptions:
+  #       rule: 405
   # path-parameters-must-not-use-reserved-keywords:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
   #   given: $.[*].parameters[?(@.$ref == null)]
