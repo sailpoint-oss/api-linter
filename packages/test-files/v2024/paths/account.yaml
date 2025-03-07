@@ -29,7 +29,7 @@ get:
           schema:
             $ref: "../../beta/schemas/Account.yaml"
     "400":
-      $ref: "../responses/400.yaml"
+      $ref: "../responses/InvalidReference.yaml"
     "401":
       $ref: "../responses/401.yaml"
     "403":
