@@ -1,5 +1,9 @@
 name: Action Preview
 
+concurrency:
+  group: 'preview-${{ github.ref }}'
+  cancel-in-progress: false
+
 on:
   pull_request:
     branches:
