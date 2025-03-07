@@ -93,7 +93,7 @@ ${[0, 1, 2, 3]
   sortedRules.forEach(([ruleName, issues]) => {
     const severity = issues[0]?.severity ?? 0;
     
-    md += `<details open><summary>### ${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)}</summary>\n\n`;
+    md += `<details open><summary><h3>${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)}</h3></summary>\n\n`;
     
     // Group issues by file
     const issuesByFile = issues.reduce((acc, issue) => {
