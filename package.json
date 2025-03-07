@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm -r test",
-    "run": "pnpm -r run",
+    "test": "pnpm build && pnpm -r test",
+    "run": "pnpm build && pnpm -r run",
     "format": "prettier . --write"
   },
   "author": "",
