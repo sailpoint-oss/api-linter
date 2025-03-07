@@ -63,7 +63,12 @@ export async function runSpectralAnalysis(
         pbs = await runSpectral(spectralInstances.schemaSpectral, fileContent, workspace, true);
       }
     } catch (error) {
-      core.error(`Error running spectral on ${file}: ${error}`);
+      if (error instanceof AggregateError) {
+        core.error(`Error running spectral on ${file}: ${error.errors}`);
+      } else {
+        core.error(`Error running spectral on ${file}: ${error}`);
+
+      }
     }
 
     return { file, pbs };
