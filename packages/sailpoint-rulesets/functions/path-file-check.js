@@ -1,15 +1,16 @@
-export default (targetVal, options, context) => {
+export default (targetVal, options) => {
   const { rule } = options;
   let results = [];
 
-  if (
-    context.document.source === undefined ||
-    context.document.source === null
-  ) {
-    console.error("No source file found.");
-  } else {
-    console.log("CONTEXT FOUND");
-  }
+  console.log("PATH FILE CHECK");
+  // if (
+  //   context.document.source === undefined ||
+  //   context.document.source === null
+  // ) {
+  //   console.error("No source file found.");
+  // } else {
+  //   console.log("CONTEXT FOUND");
+  // }
 
   // if (context == undefined) {
   //   console.log("NO CONTEXT");
