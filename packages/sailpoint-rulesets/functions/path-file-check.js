@@ -28,15 +28,13 @@ export default (targetVal, options, context) => {
         ) &&
         refVersionFolder !== sourceVersionFolder
       ) {
-        console.log(reference.path)
-        
         results.push({
           message: `Rule ${rule}: Referenced document ${getRelativePathFromVersion(
             reference.ref
           )} is outside the allowed version folder ${getRelativePathFromVersion(
             sourceVersionFolder
           )}`,
-          path: [reference.path, "$ref"],
+          path: [...toNumbers(removeLastTwo(reference.path).split("."))],
         });
       }
     }
@@ -44,6 +42,23 @@ export default (targetVal, options, context) => {
 
   return results;
 };
+
+const toNumbers = arr => arr.map(function(item) {
+  if(isNaN(parseInt(item, 10))) {
+      return item
+  } else {
+      return parseInt(item, 10);  
+  }
+});
+
+function removeLastTwo(path) {
+  const parts = path.split(".");
+  if (parts.length > 1) {
+    parts.pop(); // Remove last item
+    parts.pop(); // Remove second last item
+  }
+  return parts.join(".");
+}
 
 function getVersionFolder(filePath) {
   const parts = filePath.split("/");
