@@ -2,11 +2,13 @@ export default (targetVal, options, context) => {
   const { rule } = options;
   let results = [];
 
-  console.log("TESTING");
-  if (context == undefined) {
-    console.log("NO CONTEXT");
+  if (
+    context.document.source === undefined ||
+    context.document.source === null
+  ) {
+    console.error("No source file found.");
   } else {
-    console.log("CONTEXT PRESENT");
+    console.log("CONTEXT FOUND");
   }
 
   // if (context == undefined) {
