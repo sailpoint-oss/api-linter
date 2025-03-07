@@ -1,12 +1,12 @@
+import path from "path";
+
 export default (targetVal, options, context) => {
   const { rule } = options;
   let results = [];
 
   if (context == undefined) {
-    console.log("NO CONTEXT");
+    console.log("NO CONTEXT, SKIPPING RULE 405");
   } else {
-    console.log("TESTING");
-    console.log(context);
     const apiVersionsToValidate = ["v2024", "v2025"];
     const documentData = context.document.parserResult.data;
     const validReferences = Object.keys(
@@ -28,12 +28,15 @@ export default (targetVal, options, context) => {
         ) &&
         refVersionFolder !== sourceVersionFolder
       ) {
+        console.log(reference.path)
+        
         results.push({
           message: `Rule ${rule}: Referenced document ${getRelativePathFromVersion(
             reference.ref
           )} is outside the allowed version folder ${getRelativePathFromVersion(
             sourceVersionFolder
           )}`,
+          path: [reference.path, "$ref"],
         });
       }
     }
