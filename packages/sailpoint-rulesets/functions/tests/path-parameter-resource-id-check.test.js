@@ -4,6 +4,17 @@ const ruleNumber = 404;
 
 process.env.VALID_OPERATION_IDS = '["listAccounts","listEntitlements","listAccessProfiles"]';
 
+const jsonParameterWithNoParameters = {
+  operationId: "getAccount",
+  tags: ["Accounts"],
+  summary: "Get an Account",
+  security: [
+    {
+      bearerAuth: ["idn:account-list:read"],
+    },
+  ]
+};
+
 const jsonParameterWithValidOperationId = {
   operationId: "getAccount",
   tags: ["Accounts"],
@@ -114,6 +125,14 @@ const jsonParameterWithValidOperationIds = {
   };
 
 describe("Path Parameter Operation Id Check Test", function () {
+  it("should not return any error messages if no path parameters exist", function () {
+    const result = parameterOperationIdCheck(
+      jsonParameterWithNoParameters,
+      { rule: ruleNumber }
+    );
+    expect(result).to.be.an("array").that.is.empty;
+  });
+
   it("should not return any error messages if path parameter has a valid operation id defined under x-sailpoint-resource-operation-id", function () {
     const result = parameterOperationIdCheck(
       jsonParameterWithValidOperationId,
