@@ -1,36 +1,41 @@
 export default (targetVal, options, context) => {
-  console.log("TESTING");
-  console.log(context);
   const { rule } = options;
   let results = [];
-  const apiVersionsToValidate = ["v2024", "v2025"];
-  const documentData = context.document.parserResult.data;
-  const validReferences = Object.keys(
-    context.documentInventory.referencedDocuments
-  );
-  const matchingReferences = extractValidReferencedPaths(
-    documentData,
-    validReferences,
-    context.document.source
-  );
 
-  const sourceVersionFolder = getVersionFolder(context.document.source);
+  if (context == undefined) {
+    console.log("NO CONTEXT");
+  } else {
+    console.log("TESTING");
+    console.log(context);
+    const apiVersionsToValidate = ["v2024", "v2025"];
+    const documentData = context.document.parserResult.data;
+    const validReferences = Object.keys(
+      context.documentInventory.referencedDocuments
+    );
+    const matchingReferences = extractValidReferencedPaths(
+      documentData,
+      validReferences,
+      context.document.source
+    );
 
-  for (const reference of matchingReferences) {
-    const refVersionFolder = getVersionFolder(reference.ref);
-    if (
-      apiVersionsToValidate.includes(
-        getRelativePathFromVersion(sourceVersionFolder)
-      ) &&
-      refVersionFolder !== sourceVersionFolder
-    ) {
-      results.push({
-        message: `Rule ${rule}: Referenced document ${getRelativePathFromVersion(
-          reference.ref
-        )} is outside the allowed version folder ${getRelativePathFromVersion(
-          sourceVersionFolder
-        )}`,
-      });
+    const sourceVersionFolder = getVersionFolder(context.document.source);
+
+    for (const reference of matchingReferences) {
+      const refVersionFolder = getVersionFolder(reference.ref);
+      if (
+        apiVersionsToValidate.includes(
+          getRelativePathFromVersion(sourceVersionFolder)
+        ) &&
+        refVersionFolder !== sourceVersionFolder
+      ) {
+        results.push({
+          message: `Rule ${rule}: Referenced document ${getRelativePathFromVersion(
+            reference.ref
+          )} is outside the allowed version folder ${getRelativePathFromVersion(
+            sourceVersionFolder
+          )}`,
+        });
+      }
     }
   }
 
