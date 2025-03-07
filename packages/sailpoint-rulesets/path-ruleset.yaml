@@ -18,8 +18,8 @@ functions:
     summary-check,
     tag-check,
     path-parameter-resource-id-check,
-    context-check
-    ]
+    path-file-check
+  ]
 rules:
   path-list-endpoints-must-support-pagination:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#159" 
@@ -188,7 +188,7 @@ rules:
     given: $
     severity: error
     then:
-      function: context-check
+      function: path-file-check
       functionOptions:
         rule: 405
   # path-parameters-must-not-use-reserved-keywords:
