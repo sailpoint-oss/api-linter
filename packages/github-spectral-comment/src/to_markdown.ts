@@ -104,13 +104,12 @@ ${[0, 1, 2, 3]
     }, {} as Record<string, typeof issues>);
 
     Object.entries(issuesByFile).forEach(([file, fileIssues]) => {   
-      md += `\n\n   File: \`${file.replace(process.env.GITHUB_WORKSPACE! || ProjectRoot, '')}\`
-      <details open>\n\n<summary>Lines</summary>\n\n`;
+      md += `\n\n   File: \`${file.replace(process.env.GITHUB_WORKSPACE! || ProjectRoot, '')}\``;
       fileIssues.forEach(issue => {
         md += `- **[Line ${issue.range.start.line + 1}](${createFileLink(issue.source, issue.range.start.line + 1, issue.range.start.character)})**: ${issue.message.replaceAll("'", "`")}\n`;
       });
       
-      md += `\n\n</details>\n\n`;
+      md += `\n\n`;
     });
 
     md += `</details>\n\n`;
