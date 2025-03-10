@@ -5,32 +5,7 @@
     "types": ["vitest/globals", "vitest/importMeta"]
   },
   "include": [
-    "src/functions/**/*",
-    "src/deprecation.js",
-    "src/ascii.ts",
-    "src/parameter-example-check.ts",
-    "src/parameter-filter-description-check.js",
-    "src/parameter-sorter-description-check.js",
-    "src/path-descriptions-check.js",
-    "src/path-oauth-scope-check.js",
-    "src/path-operation-check.js",
-    "src/path-parameter-integer-number-formats.js",
-    "src/path-parameter-resource-id-check.js",
-    "src/path-query-parameter-check.js",
-    "src/path-query-parameter-pagination-check.js",
-    "src/path-reserved-keywords-check.js",
-    "src/path-user-levels-check.js",
-    "src/path-validator.js",
-    "src/response-validator.js",
-    "src/schema-boolean-field-check.js",
-    "src/schema-object-field-check.js",
-    "src/schema-properties-field-check.js",
-    "src/schema-reserved-keywords-check.js",
-    "src/summary-check.js",
-    "src/tag-alpha-check.js",
-    "src/tag-check.js",
-    "src/validate-schema-integer-number-formats.js",
-    "src/word-count.js"
+    "src/**/*",
   ],
   "exclude": ["node_modules"]
 }
