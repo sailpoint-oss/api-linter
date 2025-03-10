@@ -1,8 +1,8 @@
-import { ISpectralDiagnostic } from "@stoplight/spectral-core";
+import { ISpectralDiagnostic } from '@stoplight/spectral-core';
 import github from "@actions/github";
-import { Project } from "./types.js";
-import { devLog, isDev, ProjectRoot } from "./utils.js";
-import path from "node:path";
+import { Project } from './types.js';
+import { devLog, isDev, ProjectRoot } from './utils.js';
+import path from 'node:path';
 
 interface ProcessedPbs {
   filteredPbs: {
@@ -40,25 +40,19 @@ const getSeverityLabel = (severity: number): string => {
       return "Unknown";
   }
 };
-export function createFileLink(
-  file: string,
-  line: number,
-  column: number,
-): string {
+export function createFileLink(file: string, line: number, column: number): string {
   if (isDev) {
-    return `${file.replace(ProjectRoot, ".").replace("/packages/test-files", "")}`;
+    return `${file.replace(ProjectRoot, '.').replace("/packages/test-files", "")}`;
   } else {
-    return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file.replace(process.env.GITHUB_WORKSPACE!, "")}#L${line}`;
+    return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file.replace(process.env.GITHUB_WORKSPACE!, '')}#L${line}`
   }
 }
 
 export function fromKebabCaseToTitleCase(str: string): string {
-  return str.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  return str.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
 }
 
-export const toMarkdown = async (
-  processedPbs: ProcessedPbs,
-): Promise<string> => {
+export const toMarkdown = async (processedPbs: ProcessedPbs): Promise<string> => {
   const { filteredPbs, severitiesCount } = processedPbs;
 
   // No issues found
@@ -71,7 +65,7 @@ Last updated: ${new Date().toLocaleString()}
   }
 
   const totalIssues = Object.values(severitiesCount).reduce((a, b) => a + b, 0);
-
+  
   // Build the header
   let md = `# OpenAPI Linting Report
 
@@ -79,34 +73,21 @@ Last updated: ${new Date().toLocaleString()}
 
 Found **${totalIssues}** total issues:
 ${[0, 1, 2, 3]
-  .filter((severity) => severitiesCount[severity] > 0)
-  .map(
-    (severity) =>
-      `- ${getSeverityEmoji(severity)} ${getSeverityLabel(severity)}: ${severitiesCount[severity]}`,
-  )
-  .join("\n")}
+  .filter(severity => severitiesCount[severity] > 0)
+  .map(severity => `- ${getSeverityEmoji(severity)} ${getSeverityLabel(severity)}: ${severitiesCount[severity]}`)
+  .join('\n')}
 
 ---
 
-${nbPbs === 0 ? "No issues found" : `Found ${nbPbs} issues`}
-${nbErrors > 0 ? `- Errors: ${nbErrors}` : ""}
-${nbWarnings > 0 ? `- Warnings: ${nbWarnings}` : ""}
-${nbInfos > 0 ? `- Infos: ${nbInfos}` : ""}
-${nbHints > 0 ? `- Hints: ${nbHints}` : ""}
-
-<details open>
-<summary>OpenAPI linting report</summary>
 `;
 
   // Sort rules by severity (errors first) and then by name
-  const sortedRules = Object.entries(filteredPbs).sort(
-    ([ruleA, issuesA], [ruleB, issuesB]) => {
-      const severityA = issuesA[0]?.severity ?? 999;
-      const severityB = issuesB[0]?.severity ?? 999;
-      if (severityA !== severityB) return severityA - severityB;
-      return ruleA.localeCompare(ruleB);
-    },
-  );
+  const sortedRules = Object.entries(filteredPbs).sort(([ruleA, issuesA], [ruleB, issuesB]) => {
+    const severityA = issuesA[0]?.severity ?? 999;
+    const severityB = issuesB[0]?.severity ?? 999;
+    if (severityA !== severityB) return severityA - severityB;
+    return ruleA.localeCompare(ruleB);
+  });
 
   // Build the issues section
   sortedRules.forEach(([ruleName, issues]) => {
