@@ -99,7 +99,7 @@ export async function getGithubComment(
 
   core.debug(JSON.stringify(data, null, 2));
 
-  const comments = data.filter((comment) => comment?.user?.login === "github-actions[bot]" && comment?.body?.includes("Last updated"))
+  const comments = data.filter((comment) => comment?.user?.login === "github-actions[bot]" && comment?.body?.includes("OpenAPI Linting Report"))
   core.debug(`Found ${comments.length} matching comments`);
 
   let comment
