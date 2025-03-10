@@ -51,7 +51,7 @@ rules:
       function: ascii
       functionOptions:
         rule: 401
-  paths-must-not-reference-documents-outside-of-their-version:
+  schemas-must-not-reference-documents-outside-of-their-version:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#405"
     given: $
     severity: error
