@@ -22,7 +22,7 @@ functions:
   ]
 rules:
   path-list-endpoints-must-support-pagination:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#159" 
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#159"
     given: $.get
     severity: error
     then:
@@ -30,7 +30,7 @@ rules:
       functionOptions:
         rule: 159
   path-parameters-must-have-description:
-    description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303" 
+    description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     given: $.*.parameters.*
     severity: error
     then:

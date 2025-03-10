@@ -1,31 +1,31 @@
-name: 'Spectral comment'
-description: 'Comments pull requests with Spectral linter outputs'
+name: "Spectral comment"
+description: "Comments pull requests with Spectral linter outputs"
 inputs:
   github-token:
     required: true
-    description: 'Github token'
+    description: "Github token"
   file-glob:
     required: true
     description: The file path to lint with Spectral
-    default: '*.oas.{json,yml,yaml}'
+    default: "*.oas.{json,yml,yaml}"
   spectral-root-ruleset:
     required: true
     description: Ruleset file to load in Spectral
-    default: 'spectral:oas'
+    default: "spectral:oas"
   spectral-path-ruleset:
     required: true
     description: Ruleset file to load in Spectral
-    default: 'spectral:oas'
+    default: "spectral:oas"
   spectral-schema-ruleset:
     required: true
     description: Ruleset file to load in Spectral
-    default: 'spectral:oas'
+    default: "spectral:oas"
   github-url:
-    description: 'Github URL'
-    default: 'https://github.com'
+    description: "Github URL"
+    default: "https://github.com"
 runs:
-  using: 'node20'
-  main: './dist/index.js'
+  using: "node20"
+  main: "./dist/index.js"
 branding:
   icon: check-square
   color: purple

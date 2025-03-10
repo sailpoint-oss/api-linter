@@ -8,7 +8,7 @@ import spectralRuntime from "@stoplight/spectral-runtime";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
-import { ISpectralDiagnostic } from '@stoplight/spectral-core';
+import { ISpectralDiagnostic } from "@stoplight/spectral-core";
 import { devLog, isDev } from "./utils.js";
 
 interface ProcessedPbs {
@@ -31,9 +31,9 @@ export const initProcessedPbs = (): ProcessedPbs => ({
 export const processPbs = (
   source: string,
   processedPbs: ProcessedPbs,
-  pbs: { results: ISpectralDiagnostic[] }
+  pbs: { results: ISpectralDiagnostic[] },
 ): ProcessedPbs => {
-  pbs.results.forEach(pb => {
+  pbs.results.forEach((pb) => {
     // Initialize rule array if it doesn't exist
     if (!processedPbs.filteredPbs[pb.code]) {
       core.debug(`Adding rule ${pb.code}`);
@@ -41,11 +41,14 @@ export const processPbs = (
     }
 
     // Only add if we haven't seen this exact issue before
-    if (!processedPbs.filteredPbs[pb.code].some(existing => 
-      existing.source === source &&
-      existing.range.start.line === pb.range.start.line &&
-      existing.range.start.character === pb.range.start.character
-    )) {
+    if (
+      !processedPbs.filteredPbs[pb.code].some(
+        (existing) =>
+          existing.source === source &&
+          existing.range.start.line === pb.range.start.line &&
+          existing.range.start.character === pb.range.start.character,
+      )
+    ) {
       processedPbs.filteredPbs[pb.code].push({
         ...pb,
         source: pb.source || source,
@@ -57,12 +60,11 @@ export const processPbs = (
   return processedPbs;
 };
 
-
 const __dirname = isDev
   ? path.dirname(fileURLToPath(import.meta.url))
   : path.join(
       path.dirname(fileURLToPath(import.meta.url)),
-      "../packages/sailpoint-rulesets"
+      "../packages/sailpoint-rulesets",
     );
 
 const { fetch } = spectralRuntime;
@@ -82,9 +84,8 @@ export const runSpectral = async (
   spectral: any,
   document: any,
   workspace: string,
-  ignoreUnknownFormatFlag: boolean
+  ignoreUnknownFormatFlag: boolean,
 ) => {
-  
   core.debug("Linting Document");
 
   const documentPath = path.join(workspace + "/", document.file);
@@ -93,7 +94,7 @@ export const runSpectral = async (
   const documentToLint = new Document(
     document.content,
     Parsers.Yaml,
-    documentPath
+    documentPath,
   );
 
   return spectral.runWithResolved(documentToLint, {

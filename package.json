@@ -1,20 +1,22 @@
 {
-    "name": "api-linter",
-    "version": "1.0.0",
-    "description": "SailPoint Maintained API Linter toolchain",
-    "type": "module",
-    "scripts": {
-        "build": "pnpm -r build",
-        "test": "pnpm -r test",
-        "run": "pnpm -r run"
-    },
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "typescript": "^4.9.5",
-        "vitest": "^0.34.0"
-    },
-    "dependencies": {
-        "js-yaml": "^4.1.0"
-    }
+  "name": "api-linter",
+  "version": "1.0.0",
+  "description": "SailPoint Maintained API Linter toolchain",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm build && pnpm -r test",
+    "run": "pnpm build && pnpm -r run",
+    "format": "prettier . --write"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "vitest": "^0.34.0",
+    "prettier": "^3.5.2"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
 }

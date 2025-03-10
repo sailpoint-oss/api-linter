@@ -3,10 +3,10 @@ name: CI Build and Test
 on:
   push:
     branches:
-        - main
+      - main
   pull_request:
     branches:
-        - main
+      - main
 
 jobs:
   build-and-test:
@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install pnpm
         run: npm install -g pnpm

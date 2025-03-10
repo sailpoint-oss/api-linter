@@ -10,4 +10,9 @@ export function devLog(data: any) {
   }
 }
 
-export const ProjectRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+export const ProjectRoot = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+);

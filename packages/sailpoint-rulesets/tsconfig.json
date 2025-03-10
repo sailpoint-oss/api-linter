@@ -1,13 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    "types": ["node", "vitest/globals", "vitest/importMeta"]
+    "outDir": "./functions",
+    "types": ["vitest/globals", "vitest/importMeta"]
   },
   "include": [
-    "functions/**/*"
+    "src/**/*",
   ],
-  "exclude": [
-    "node_modules"
-  ]
-} 
+  "exclude": ["node_modules"]
+}
