@@ -1,11 +1,29 @@
-export default (targetVal, options, context) => {
-  const { rule } = options;
+import { OpenAPIV3 } from "openapi-types";
+import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
+import { RulesetFunctionContext } from "@stoplight/spectral-core";
+
+// Create the original function using Spectral's helper.
+export default createOptionalContextRulesetFunction(
+  {
+    input: null,
+    options: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        rule: true,
+      },
+      required: ["rule"],
+    },
+  },
+  (targetVal: OpenAPIV3.OperationObject, options: { rule: string }, context: RulesetFunctionContext) => {
+    const { rule } = options;
   let results = [];
 
-  if (context == undefined) {
+  if (!context || !context.document || !context.document.source) {
     console.log("NO CONTEXT, SKIPPING RULE 405");
   } else {
     const apiVersionsToValidate = ["v2024", "v2025"];
+    // @ts-expect-error parserResult is valid, but not typed
     const documentData = context.document.parserResult.data;
     const validReferences = Object.keys(
       context.documentInventory.referencedDocuments
@@ -38,10 +56,11 @@ export default (targetVal, options, context) => {
     }
   }
 
-  return results;
-};
+    return results;
+  }
+);
 
-const toNumbers = arr => arr.map(function(item) {
+const toNumbers = (arr: string[]) => arr.map((item) => {
   if(isNaN(parseInt(item, 10))) {
       return item
   } else {
@@ -49,7 +68,7 @@ const toNumbers = arr => arr.map(function(item) {
   }
 });
 
-function removeLastTwo(path) {
+function removeLastTwo(path: string) {
   const parts = path.split(".");
   if (parts.length > 1) {
     parts.pop(); // Remove last item
@@ -58,7 +77,7 @@ function removeLastTwo(path) {
   return parts.join(".");
 }
 
-function getVersionFolder(filePath) {
+function getVersionFolder(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
     ["v3", "beta", "v2024"].includes(part)
@@ -69,7 +88,7 @@ function getVersionFolder(filePath) {
   return parts.slice(0, versionIndex + 1).join("/");
 }
 
-function getRelativePathFromVersion(filePath) {
+function getRelativePathFromVersion(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
     ["v3", "beta", "v2024"].includes(part)
@@ -81,12 +100,12 @@ function getRelativePathFromVersion(filePath) {
 }
 
 function extractValidReferencedPaths(
-  documentData,
-  validReferences,
-  sourcePath
+  documentData: any,
+  validReferences: string[],
+  sourcePath: string
 ) {
-  function findReferences(obj, path = "") {
-    let references = [];
+  function findReferences(obj: any, path = ""): { path: string; ref: string }[] {
+    let references: { path: string; ref: string }[] = [];
     if (typeof obj === "object" && obj !== null) {
       for (const key in obj) {
         const newPath = path ? `${path}.${key}` : key;
