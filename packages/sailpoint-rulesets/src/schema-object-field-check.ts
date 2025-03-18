@@ -9,25 +9,33 @@
 //   functionOptions:
 //     field: required
 
-export default (targetYaml, options) => {
-  const { rule, field } = options;
+import { IRuleResult } from "@stoplight/spectral-core";
+import { OpenAPIV3 } from "openapi-types";
+
+export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { field: string; rule: string }) => {
+  const { field, rule } = options;
+
+  if ("$ref" in targetYaml) return;
 
   //console.dir(targetYaml);
-  let results = [];
+  let results: IRuleResult[] = [];
 
   // All Of - If the root level yaml contains the key allOf
-  if (Object.keys(targetYaml)[0] == "allOf") {
-    targetYaml.allOf.forEach((element, index) => {
+  if ("allOf" in targetYaml && targetYaml.allOf != undefined) {
+    targetYaml.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
       if (
-        (element.type != undefined &&
+        ("type" in element && element.type != undefined &&
           element.type == "object" &&
-          element.hasOwnProperty(field) &&
+          field in element &&
+          // @ts-ignore
           element[field] == null) ||
+        // @ts-ignore
         (element[field] != null && element[field].length == 0)
       ) {
+        // @ts-ignore
         results.push({
           message: `Rule ${rule}: If a ${field} key is defined for a schema object, it must not be null or empty`,
-          path: [`allOf`, parseInt(index), field],
+          path: [`allOf`, index.toString(), field],
         });
       }
     });
@@ -39,10 +47,13 @@ export default (targetYaml, options) => {
   if (
     (Object.keys(targetYaml).includes("type") &&
       targetYaml.type == "object" &&
-      targetYaml.hasOwnProperty(field) &&
+      field in targetYaml &&
+      // @ts-ignore
       targetYaml[field] == null) ||
+    // @ts-ignore
     (targetYaml[field] != null && targetYaml[field].length == 0)
   ) {
+    // @ts-ignore
     results.push({
       message: `Rule ${rule}: If a ${field} key is defined for a schema object, it must not be null or empty`,
       path: [field],
