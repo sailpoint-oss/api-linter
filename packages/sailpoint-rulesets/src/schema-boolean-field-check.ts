@@ -23,13 +23,13 @@ const toNumbers = (arr: string[]) =>
 let output = "";
 
 function parseYamlProperties(
-  targetYaml: OpenAPIV3.SchemaObject,
-  field,
-  pathPrefix,
-  errorResults,
-  rule
+  targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  field: string,
+  pathPrefix: string,
+  errorResults: IRuleResult[],
+  rule: string
 ) {
-  if (!targetYaml.properties) return;
+  if ("$ref" in targetYaml || !targetYaml.properties) return;
 
   // Loop through each key under properties
   for (const [key, value] of Object.entries(targetYaml.properties)) {
@@ -165,7 +165,7 @@ function parseYamlProperties(
       // go into the oneOf array and check its properties
       if ("oneOf" in value && value.oneOf != undefined) {
         value.oneOf.forEach((element, index) => {
-          if (pathPrefix == null) {
+          if (pathPrefix == null && "items" in value) {
             parseYamlProperties(value.items, field, key, errorResults, rule);
           } else if (pathPrefix == "properties") {
             parseYamlProperties(
@@ -189,7 +189,7 @@ function parseYamlProperties(
         // If the property you are checking for a description or example has anyOf as its key,
         // go into the anyOf array and check its properties
         value.anyOf.forEach((element, index) => {
-          if (pathPrefix == null) {
+          if (pathPrefix == null && "items" in value) {
             parseYamlProperties(value.items, field, key, errorResults, rule);
           } else if (pathPrefix == "properties") {
             parseYamlProperties(
@@ -213,7 +213,7 @@ function parseYamlProperties(
         // If the property you are checking for a description or example has allOf as its key,
         // go into the allOf array and check its properties
         value.allOf.forEach((element, index) => {
-          if (pathPrefix == null) {
+          if (pathPrefix == null && "items" in value) {
             parseYamlProperties(value.items, field, key, errorResults, rule);
           } else if (pathPrefix == "properties") {
             parseYamlProperties(
@@ -272,11 +272,13 @@ function parseYamlProperties(
                 pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
                 "properties"
               ) {
+                // @ts-ignore
                 errorResults.push({
                   message: `Rule ${rule}: The boolean property ${key} must have a default value`,
                   path: [...toNumbers(pathPrefix.split(".")), key, "default"],
                 });
               } else {
+                // @ts-ignore
                 errorResults.push({
                   message: `Rule ${rule}: The boolean property ${key} must have a default value`,
                   path: [
@@ -295,11 +297,13 @@ function parseYamlProperties(
               pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
               "properties"
             ) {
+              // @ts-ignore
               errorResults.push({
                 message: `Rule ${rule}: The boolean property ${key} must have a default value`,
                 path: [...toNumbers(pathPrefix.split(".")), key, "default"],
               });
             } else {
+              // @ts-ignore
               errorResults.push({
                 message: `Rule ${rule}: The boolean property ${key} must have a default value`,
                 path: [
@@ -331,7 +335,7 @@ export default createOptionalContextRulesetFunction(
     },
   },
   (
-    targetYaml: OpenAPIV3.OperationObject,
+    targetYaml: OpenAPIV3.SchemaObject,
     options: { rule: string; field: string }
   ) => {
     const { rule, field } = options;
@@ -340,7 +344,7 @@ export default createOptionalContextRulesetFunction(
     let results: IRuleResult[] = [];
 
     // All Of - If the root level yaml contains the key allOf
-    if (Object.keys(targetYaml)[0] == "allOf") {
+    if ("allOf" in targetYaml && targetYaml.allOf != undefined) {
       targetYaml.allOf.forEach((element, index) => {
         if (
           "type" in element &&
@@ -371,6 +375,7 @@ export default createOptionalContextRulesetFunction(
         targetYaml.type == "boolean" &&
         !targetYaml.hasOwnProperty("default")
       ) {
+        // @ts-ignore
         results.push({
           message: `Rule ${rule}: This field must have a default value.`,
           path: [field],
