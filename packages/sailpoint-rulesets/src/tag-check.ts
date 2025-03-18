@@ -7,12 +7,13 @@
 //   functionOptions:
 //     rule: 402
 
+import { IRuleResult } from "@stoplight/spectral-core";
 import { OpenAPIV3 } from "openapi-types";
 
 export default (targetVal: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { rule: string }, context: any) => {
   const { rule } = options;
-  let results = [];
-  let tagArray = [];
+  let results: IRuleResult[] = [];
+  let tagArray: string[] = [];
 
   if (
     context.document.source === undefined ||
@@ -52,11 +53,13 @@ export default (targetVal: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, o
 
   for (const [key, value] of Object.entries(targetVal)) {
     if (value.tags === undefined || value.tags == null) {
+      // @ts-ignore
       results.push({
         message: `Rule ${rule}: You must include one tag to group an endpoint under`,
         path: [key, "tags"],
       });
     } else if (value.tags.length > 1) {
+      // @ts-ignore
       results.push({
         message: `Rule ${rule}: You must include only one tag to group an endpoint under`,
         path: [key, "tags"],
@@ -66,6 +69,7 @@ export default (targetVal: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, o
     if (tagArray.length > 0 && value.tags != undefined) {
       value.tags.forEach((tag: string) => {
         if (!tagArray.includes(tag)) {
+          // @ts-ignore
           results.push({
             message: `Rule ${rule}: Tag "${tag}" is not defined in the root API spec`,
             path: [key, "tags"],
