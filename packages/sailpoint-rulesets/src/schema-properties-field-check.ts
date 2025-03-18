@@ -25,7 +25,7 @@ function parseYamlProperties(
   field: keyof OpenAPIV3.SchemaObject,
   pathPrefix: string,
   errorResults: IRuleResult[],
-  rule: string
+  rule: string,
 ) {
   if ("$ref" in targetYaml || !targetYaml.properties) return;
 
@@ -50,7 +50,7 @@ function parseYamlProperties(
 
     // Loop through each key under properties
     for (const [key, value] of Object.entries(targetYaml.properties)) {
-      if ("$ref" in value) return
+      if ("$ref" in value) return;
       // If you run into a key that is an object that has more properties call the function again passing in the lower level object to parse
       if (
         value.properties != undefined &&
@@ -176,11 +176,7 @@ function parseYamlProperties(
             rule,
           );
         }
-      } else if (
-        "anyOf" in value ||
-        "oneOf" in value ||
-        "allOf" in value
-      ) {
+      } else if ("anyOf" in value || "oneOf" in value || "allOf" in value) {
         // If the property you are checking for a description or example has oneOf as its key,
         // go into the oneOf array and check its properties
         if ("oneOf" in value && value.oneOf != undefined) {
@@ -339,7 +335,10 @@ function parseYamlProperties(
   }
 }
 
-export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { field: string; rule: string }) => {
+export default (
+  targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  options: { field: string; rule: string },
+) => {
   const { field, rule } = options;
   //console.log(JSON.stringify(targetYaml));
 
@@ -354,7 +353,13 @@ export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, 
         "properties" in element &&
         element.properties != undefined
       ) {
-        parseYamlProperties(element, field as keyof OpenAPIV3.SchemaObject, `allOf.${index}`, results, rule);
+        parseYamlProperties(
+          element,
+          field as keyof OpenAPIV3.SchemaObject,
+          `allOf.${index}`,
+          results,
+          rule,
+        );
       }
     });
   }
@@ -366,15 +371,21 @@ export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, 
     "properties" in targetYaml &&
     targetYaml.properties != undefined
   ) {
-    parseYamlProperties(targetYaml, field as keyof OpenAPIV3.SchemaObject, "properties", results, rule);
+    parseYamlProperties(
+      targetYaml,
+      field as keyof OpenAPIV3.SchemaObject,
+      "properties",
+      results,
+      rule,
+    );
   }
 
   // Type String
-  if (
-    "type" in targetYaml &&
-    targetYaml.type != "object"
-  ) {
-    if (!(field in targetYaml) || targetYaml[field as keyof OpenAPIV3.SchemaObject] == null) {
+  if ("type" in targetYaml && targetYaml.type != "object") {
+    if (
+      !(field in targetYaml) ||
+      targetYaml[field as keyof OpenAPIV3.SchemaObject] == null
+    ) {
       // @ts-ignore
       results.push({
         message: `Rule ${rule}: This field must have a ${field}`,

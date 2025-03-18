@@ -4,7 +4,7 @@ get:
     - Accounts
   summary: Account Details
   description: >-
-    Use this API to return the details for a single account by its ID.  
+    Use this API to return the details for a single account by its ID.
   security:
     - userAuth: [idn:accounts:read]
   x-sailpoint-userLevels:
@@ -55,7 +55,7 @@ patch:
     this causes the previous identity to become uncorrelated and can even result in its deletion.
     All accounts that are reassigned will be set to `manuallyCorrelated: true` unless you specify otherwise.
 
-    >**Note:** The `attributes` field can only be modified for flat file accounts. 
+    >**Note:** The `attributes` field can only be modified for flat file accounts.
   security:
     - userAuth: [idn:accounts:manage]
   x-sailpoint-userLevels:

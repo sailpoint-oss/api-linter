@@ -1,4 +1,4 @@
-type : object
+type: object
 properties:
   detailCode:
     type: string

@@ -15,58 +15,63 @@ export default createOptionalContextRulesetFunction(
       required: ["rule"],
     },
   },
-  (targetVal: OpenAPIV3.OperationObject, options: { rule: string }, context: RulesetFunctionContext) => {
+  (
+    targetVal: OpenAPIV3.OperationObject,
+    options: { rule: string },
+    context: RulesetFunctionContext,
+  ) => {
     const { rule } = options;
-  let results = [];
+    let results = [];
 
-  if (!context || !context.document || !context.document.source) {
-    console.log("NO CONTEXT, SKIPPING RULE 405");
-  } else {
-    const apiVersionsToValidate = ["v2024", "v2025"];
-    // @ts-expect-error parserResult is valid, but not typed
-    const documentData = context.document.parserResult.data;
-    const validReferences = Object.keys(
-      context.documentInventory.referencedDocuments
-    );
-    const matchingReferences = extractValidReferencedPaths(
-      documentData,
-      validReferences,
-      context.document.source
-    );
+    if (!context || !context.document || !context.document.source) {
+      console.log("NO CONTEXT, SKIPPING RULE 405");
+    } else {
+      const apiVersionsToValidate = ["v2024", "v2025"];
+      // @ts-expect-error parserResult is valid, but not typed
+      const documentData = context.document.parserResult.data;
+      const validReferences = Object.keys(
+        context.documentInventory.referencedDocuments,
+      );
+      const matchingReferences = extractValidReferencedPaths(
+        documentData,
+        validReferences,
+        context.document.source,
+      );
 
-    const sourceVersionFolder = getVersionFolder(context.document.source);
+      const sourceVersionFolder = getVersionFolder(context.document.source);
 
-    for (const reference of matchingReferences) {
-      const refVersionFolder = getVersionFolder(reference.ref);
-      if (
-        apiVersionsToValidate.includes(
-          getRelativePathFromVersion(sourceVersionFolder)
-        ) &&
-        refVersionFolder !== sourceVersionFolder
-      ) {
-        results.push({
-          message: `Rule ${rule}: Referenced document ${getRelativePathFromVersion(
-            reference.ref
-          )} is outside the allowed version folder ${getRelativePathFromVersion(
-            sourceVersionFolder
-          )}`,
-          path: [...toNumbers(removeLastTwo(reference.path).split("."))],
-        });
+      for (const reference of matchingReferences) {
+        const refVersionFolder = getVersionFolder(reference.ref);
+        if (
+          apiVersionsToValidate.includes(
+            getRelativePathFromVersion(sourceVersionFolder),
+          ) &&
+          refVersionFolder !== sourceVersionFolder
+        ) {
+          results.push({
+            message: `Rule ${rule}: Referenced document ${getRelativePathFromVersion(
+              reference.ref,
+            )} is outside the allowed version folder ${getRelativePathFromVersion(
+              sourceVersionFolder,
+            )}`,
+            path: [...toNumbers(removeLastTwo(reference.path).split("."))],
+          });
+        }
       }
     }
-  }
 
     return results;
-  }
+  },
 );
 
-const toNumbers = (arr: string[]) => arr.map((item) => {
-  if(isNaN(parseInt(item, 10))) {
-      return item
-  } else {
-      return parseInt(item, 10);  
-  }
-});
+const toNumbers = (arr: string[]) =>
+  arr.map((item) => {
+    if (isNaN(parseInt(item, 10))) {
+      return item;
+    } else {
+      return parseInt(item, 10);
+    }
+  });
 
 function removeLastTwo(path: string) {
   const parts = path.split(".");
@@ -80,7 +85,7 @@ function removeLastTwo(path: string) {
 function getVersionFolder(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
-    ["v3", "beta", "v2024"].includes(part)
+    ["v3", "beta", "v2024"].includes(part),
   );
   if (versionIndex === -1) {
     throw new Error(`Unable to determine version folder for path: ${filePath}`);
@@ -91,7 +96,7 @@ function getVersionFolder(filePath: string) {
 function getRelativePathFromVersion(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
-    ["v3", "beta", "v2024"].includes(part)
+    ["v3", "beta", "v2024"].includes(part),
   );
   if (versionIndex === -1) {
     throw new Error(`Unable to determine version folder for path: ${filePath}`);
@@ -102,9 +107,12 @@ function getRelativePathFromVersion(filePath: string) {
 function extractValidReferencedPaths(
   documentData: any,
   validReferences: string[],
-  sourcePath: string
+  sourcePath: string,
 ) {
-  function findReferences(obj: any, path = ""): { path: string; ref: string }[] {
+  function findReferences(
+    obj: any,
+    path = "",
+  ): { path: string; ref: string }[] {
     let references: { path: string; ref: string }[] = [];
     if (typeof obj === "object" && obj !== null) {
       for (const key in obj) {

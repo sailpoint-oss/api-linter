@@ -12,7 +12,10 @@
 import { IRuleResult } from "@stoplight/spectral-core";
 import { OpenAPIV3 } from "openapi-types";
 
-export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { field: string; rule: string }) => {
+export default (
+  targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  options: { field: string; rule: string },
+) => {
   const { field, rule } = options;
 
   if ("$ref" in targetYaml) return;
@@ -22,23 +25,29 @@ export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, 
 
   // All Of - If the root level yaml contains the key allOf
   if ("allOf" in targetYaml && targetYaml.allOf != undefined) {
-    targetYaml.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
-      if (
-        ("type" in element && element.type != undefined &&
-          element.type == "object" &&
-          field in element &&
+    targetYaml.allOf.forEach(
+      (
+        element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+        index: number,
+      ) => {
+        if (
+          ("type" in element &&
+            element.type != undefined &&
+            element.type == "object" &&
+            field in element &&
+            // @ts-ignore
+            element[field] == null) ||
           // @ts-ignore
-          element[field] == null) ||
-        // @ts-ignore
-        (element[field] != null && element[field].length == 0)
-      ) {
-        // @ts-ignore
-        results.push({
-          message: `Rule ${rule}: If a ${field} key is defined for a schema object, it must not be null or empty`,
-          path: [`allOf`, index.toString(), field],
-        });
-      }
-    });
+          (element[field] != null && element[field].length == 0)
+        ) {
+          // @ts-ignore
+          results.push({
+            message: `Rule ${rule}: If a ${field} key is defined for a schema object, it must not be null or empty`,
+            path: [`allOf`, index.toString(), field],
+          });
+        }
+      },
+    );
   }
 
   //console.log(targetYaml[field].length == 0)

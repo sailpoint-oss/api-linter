@@ -10,7 +10,11 @@
 import { IRuleResult } from "@stoplight/spectral-core";
 import { OpenAPIV3 } from "openapi-types";
 
-export default (targetVal: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { rule: string }, context: any) => {
+export default (
+  targetVal: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  options: { rule: string },
+  context: any,
+) => {
   const { rule } = options;
   let results: IRuleResult[] = [];
   let tagArray: string[] = [];

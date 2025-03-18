@@ -2,4 +2,4 @@ description: Client Error - Returned if the request body is invalid.
 content:
   application/json:
     schema:
-      $ref: '../schemas/ErrorResponseDto.yaml'
+      $ref: "../schemas/ErrorResponseDto.yaml"

@@ -4,14 +4,19 @@ import { OpenAPIV3 } from "openapi-types";
 function parseYamlProperties(
   targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
   pathPrefix: string,
-  errorResults: IRuleResult[]
+  errorResults: IRuleResult[],
 ) {
-  if (!("properties" in targetYaml) || targetYaml.properties == undefined) return;
+  if (!("properties" in targetYaml) || targetYaml.properties == undefined)
+    return;
   if ("$ref" in targetYaml) return;
 
   for (const [field, value] of Object.entries(targetYaml.properties)) {
     //console.dir(`The property ${field} value: ${typeof(value.properties)}`)
-    if ("properties" in value && value.properties != undefined && typeof value.properties == "object") {
+    if (
+      "properties" in value &&
+      value.properties != undefined &&
+      typeof value.properties == "object"
+    ) {
       //console.log(`${field} has type object to parse further`)
       if (pathPrefix == null) {
         parseYamlProperties(value, field, errorResults);
@@ -21,7 +26,7 @@ function parseYamlProperties(
         parseYamlProperties(
           value,
           pathPrefix + ".properties." + field,
-          errorResults
+          errorResults,
         );
       }
     } else {
@@ -72,10 +77,7 @@ function parseYamlProperties(
             });
           }
         }
-      } else if (
-        "type" in value &&
-        value["type"] == "integer"
-      ) {
+      } else if ("type" in value && value["type"] == "integer") {
         if (
           pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
           "properties"
@@ -121,7 +123,11 @@ function parseYamlProperties(
   }
 }
 
-export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { rule: string }, context: any) => {
+export default (
+  targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  options: { rule: string },
+  context: any,
+) => {
   //console.log(JSON.stringify(targetYaml));
   const { rule } = options;
 
@@ -129,17 +135,22 @@ export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, 
 
   // All Of - If the root level yaml contains the field allOf
   if ("allOf" in targetYaml && targetYaml.allOf != undefined) {
-    targetYaml.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
-      if (
-        "type" in element &&
-        element.type != undefined &&
-        element.type == "object" &&
-        "properties" in element &&
-        element.properties != undefined
-      ) {
-        parseYamlProperties(element, "properties", results);
-      }
-    });
+    targetYaml.allOf.forEach(
+      (
+        element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+        index: number,
+      ) => {
+        if (
+          "type" in element &&
+          element.type != undefined &&
+          element.type == "object" &&
+          "properties" in element &&
+          element.properties != undefined
+        ) {
+          parseYamlProperties(element, "properties", results);
+        }
+      },
+    );
   }
 
   // Type Object - If the root level yaml is of type object
@@ -153,10 +164,7 @@ export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, 
   }
 
   // Single varaible files
-  if (
-    "type" in targetYaml &&
-    targetYaml.type == "number"
-  ) {
+  if ("type" in targetYaml && targetYaml.type == "number") {
     if (!("format" in targetYaml) || targetYaml.format == undefined) {
       // @ts-ignore
       results.push({
@@ -174,10 +182,7 @@ export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, 
         path: ["format"],
       });
     }
-  } else if (
-    "type" in targetYaml &&
-    targetYaml.type == "integer"
-  ) { 
+  } else if ("type" in targetYaml && targetYaml.type == "integer") {
     if (!("format" in targetYaml) || targetYaml.format == undefined) {
       // @ts-ignore
       results.push({

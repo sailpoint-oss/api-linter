@@ -156,83 +156,112 @@ function parseYamlProperties(
             rule,
           );
         }
-      } else if (
-        "anyOf" in value ||
-        "oneOf" in value ||
-        "allOf" in value
-      ) {
+      } else if ("anyOf" in value || "oneOf" in value || "allOf" in value) {
         // If the property you are checking for a description or example has oneOf as its key,
         // go into the oneOf array and check its properties
         if ("oneOf" in value && value.oneOf != undefined) {
-          value.oneOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
-            if (pathPrefix == null && "items" in value) {
-              parseYamlProperties(value.items, field, key, errorResults, rule);
-            } else if (pathPrefix == "properties") {
-              parseYamlProperties(
-                element,
-                field,
-                pathPrefix + "." + key + ".oneOf." + index,
-                errorResults,
-                rule,
-              );
-            } else {
-              parseYamlProperties(
-                element,
-                field,
-                pathPrefix + ".properties." + key + ".oneOf." + index,
-                errorResults,
-                rule,
-              );
-            }
-          });
+          value.oneOf.forEach(
+            (
+              element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+              index: number,
+            ) => {
+              if (pathPrefix == null && "items" in value) {
+                parseYamlProperties(
+                  value.items,
+                  field,
+                  key,
+                  errorResults,
+                  rule,
+                );
+              } else if (pathPrefix == "properties") {
+                parseYamlProperties(
+                  element,
+                  field,
+                  pathPrefix + "." + key + ".oneOf." + index,
+                  errorResults,
+                  rule,
+                );
+              } else {
+                parseYamlProperties(
+                  element,
+                  field,
+                  pathPrefix + ".properties." + key + ".oneOf." + index,
+                  errorResults,
+                  rule,
+                );
+              }
+            },
+          );
         } else if ("anyOf" in value && value.anyOf != undefined) {
           // If the property you are checking for a description or example has anyOf as its key,
           // go into the anyOf array and check its properties
-          value.anyOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
-            if (pathPrefix == null && "items" in value) {
-              parseYamlProperties(value.items, field, key, errorResults, rule);
-            } else if (pathPrefix == "properties") {
-              parseYamlProperties(
-                element,
-                field,
-                pathPrefix + "." + key + ".anyOf." + index,
-                errorResults,
-                rule,
-              );
-            } else {
-              parseYamlProperties(
-                element,
-                field,
-                pathPrefix + ".properties." + key + ".anyOf." + index,
-                errorResults,
-                rule,
-              );
-            }
-          });
+          value.anyOf.forEach(
+            (
+              element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+              index: number,
+            ) => {
+              if (pathPrefix == null && "items" in value) {
+                parseYamlProperties(
+                  value.items,
+                  field,
+                  key,
+                  errorResults,
+                  rule,
+                );
+              } else if (pathPrefix == "properties") {
+                parseYamlProperties(
+                  element,
+                  field,
+                  pathPrefix + "." + key + ".anyOf." + index,
+                  errorResults,
+                  rule,
+                );
+              } else {
+                parseYamlProperties(
+                  element,
+                  field,
+                  pathPrefix + ".properties." + key + ".anyOf." + index,
+                  errorResults,
+                  rule,
+                );
+              }
+            },
+          );
         } else if ("allOf" in value && value.allOf != undefined) {
           // If the property you are checking for a description or example has allOf as its key,
           // go into the allOf array and check its properties
-          value.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
-            if (pathPrefix == null && "items" in value) {
-              parseYamlProperties(value.items, field, key, errorResults, rule);
-            } else if (pathPrefix == "properties") {
-              parseYamlProperties(
-                element,
-                field,
-                pathPrefix + "." + key + ".allOf." + index,
-                errorResults,
-                rule,
-              );
-            } else {
-              parseYamlProperties(
-                element,
-                field,
-                pathPrefix + ".properties." + key + ".allOf." + index,
-                errorResults,
-                rule,
-              );
-            }
-          });
+          value.allOf.forEach(
+            (
+              element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+              index: number,
+            ) => {
+              if (pathPrefix == null && "items" in value) {
+                parseYamlProperties(
+                  value.items,
+                  field,
+                  key,
+                  errorResults,
+                  rule,
+                );
+              } else if (pathPrefix == "properties") {
+                parseYamlProperties(
+                  element,
+                  field,
+                  pathPrefix + "." + key + ".allOf." + index,
+                  errorResults,
+                  rule,
+                );
+              } else {
+                parseYamlProperties(
+                  element,
+                  field,
+                  pathPrefix + ".properties." + key + ".allOf." + index,
+                  errorResults,
+                  rule,
+                );
+              }
+            },
+          );
         }
       } else {
         const reservedKeywords = [
@@ -279,7 +308,10 @@ function parseYamlProperties(
   }
 }
 
-export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { field: keyof OpenAPIV3.SchemaObject; rule: string }) => {
+export default (
+  targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  options: { field: keyof OpenAPIV3.SchemaObject; rule: string },
+) => {
   const { field, rule } = options;
   //console.log(JSON.stringify(targetYaml));
 
@@ -287,16 +319,21 @@ export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, 
 
   // All Of - If the root level yaml contains the key allOf
   if ("allOf" in targetYaml && targetYaml.allOf != undefined) {
-    targetYaml.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
-      if (
-        "type" in element &&
-        element.type == "object" &&
-        "properties" in element &&
-        element.properties != undefined
-      ) {
-        parseYamlProperties(element, field, `allOf.${index}`, results, rule);
-      }
-    });
+    targetYaml.allOf.forEach(
+      (
+        element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+        index: number,
+      ) => {
+        if (
+          "type" in element &&
+          element.type == "object" &&
+          "properties" in element &&
+          element.properties != undefined
+        ) {
+          parseYamlProperties(element, field, `allOf.${index}`, results, rule);
+        }
+      },
+    );
   }
 
   // Type Object - If the root level yaml is of type object

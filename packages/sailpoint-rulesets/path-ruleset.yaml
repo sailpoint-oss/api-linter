@@ -18,7 +18,7 @@ functions:
     summary-check,
     tag-check,
     path-parameter-resource-id-check,
-    path-file-check
+    path-file-check,
   ]
 rules:
   path-list-endpoints-must-support-pagination:

@@ -27,7 +27,7 @@ function parseYamlProperties(
   field: string,
   pathPrefix: string,
   errorResults: IRuleResult[],
-  rule: string
+  rule: string,
 ) {
   if ("$ref" in targetYaml || !targetYaml.properties) return;
 
@@ -49,7 +49,7 @@ function parseYamlProperties(
           field,
           pathPrefix + "." + key,
           errorResults,
-          rule
+          rule,
         );
       } else {
         // if you come into the function again and the pathPrefix is a key name, then you are in a multi-level object add the current pathPrefix + .properties. + the current key name
@@ -58,7 +58,7 @@ function parseYamlProperties(
           field,
           pathPrefix + ".properties." + key,
           errorResults,
-          rule
+          rule,
         );
       }
     } else if (
@@ -93,7 +93,7 @@ function parseYamlProperties(
           field,
           pathPrefix + "." + key + ".items",
           errorResults,
-          rule
+          rule,
         );
       } else {
         parseYamlProperties(
@@ -101,7 +101,7 @@ function parseYamlProperties(
           field,
           pathPrefix + ".properties." + key + ".items",
           errorResults,
-          rule
+          rule,
         );
       }
     } else if (
@@ -145,7 +145,7 @@ function parseYamlProperties(
           field,
           pathPrefix + "." + key + ".items.items",
           errorResults,
-          rule
+          rule,
         );
       } else {
         parseYamlProperties(
@@ -153,7 +153,7 @@ function parseYamlProperties(
           field,
           pathPrefix + ".properties." + key + ".items.items",
           errorResults,
-          rule
+          rule,
         );
       }
     } else if (
@@ -173,7 +173,7 @@ function parseYamlProperties(
               field,
               pathPrefix + "." + key + ".oneOf." + index,
               errorResults,
-              rule
+              rule,
             );
           } else {
             parseYamlProperties(
@@ -181,7 +181,7 @@ function parseYamlProperties(
               field,
               pathPrefix + ".properties." + key + ".oneOf." + index,
               errorResults,
-              rule
+              rule,
             );
           }
         });
@@ -197,7 +197,7 @@ function parseYamlProperties(
               field,
               pathPrefix + "." + key + ".anyOf." + index,
               errorResults,
-              rule
+              rule,
             );
           } else {
             parseYamlProperties(
@@ -205,7 +205,7 @@ function parseYamlProperties(
               field,
               pathPrefix + ".properties." + key + ".anyOf." + index,
               errorResults,
-              rule
+              rule,
             );
           }
         });
@@ -221,7 +221,7 @@ function parseYamlProperties(
               field,
               pathPrefix + "." + key + ".allOf." + index,
               errorResults,
-              rule
+              rule,
             );
           } else {
             parseYamlProperties(
@@ -229,7 +229,7 @@ function parseYamlProperties(
               field,
               pathPrefix + ".properties." + key + ".allOf." + index,
               errorResults,
-              rule
+              rule,
             );
           }
         });
@@ -240,11 +240,7 @@ function parseYamlProperties(
       //     pathPrefix + ".properties." + key
       //   }`
       //);
-      if (
-        "nullable" in value &&
-        value.nullable == true &&
-        field == "example"
-      ) {
+      if ("nullable" in value && value.nullable == true && field == "example") {
         // If the property has a nullable:true flag set, allow the example to be null
         //console.log(`${key}: ${JSON.stringify(value)}`)
       } else if (
@@ -336,7 +332,7 @@ export default createOptionalContextRulesetFunction(
   },
   (
     targetYaml: OpenAPIV3.SchemaObject,
-    options: { rule: string; field: string }
+    options: { rule: string; field: string },
   ) => {
     const { rule, field } = options;
     //console.log(JSON.stringify(targetYaml));
@@ -384,5 +380,5 @@ export default createOptionalContextRulesetFunction(
     }
 
     return results;
-  }
+  },
 );

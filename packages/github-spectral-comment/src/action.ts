@@ -50,24 +50,37 @@ export async function runSpectralAnalysis(
     const file = fileContent.file;
     let pbs;
 
-    try{
-
+    try {
       if (file.includes("sailpoint-api.")) {
         core.debug(`Running root spectral ruleset on ${file}`);
-        pbs = await runSpectral(spectralInstances.rootSpectral, fileContent, workspace, false);
+        pbs = await runSpectral(
+          spectralInstances.rootSpectral,
+          fileContent,
+          workspace,
+          false,
+        );
       } else if (file.includes("paths")) {
         core.debug(`Running path spectral ruleset on ${file}`);
-        pbs = await runSpectral(spectralInstances.pathSpectral, fileContent, workspace, true);
+        pbs = await runSpectral(
+          spectralInstances.pathSpectral,
+          fileContent,
+          workspace,
+          true,
+        );
       } else if (file.includes("schema")) {
         core.debug(`Running schema spectral ruleset on ${file}`);
-        pbs = await runSpectral(spectralInstances.schemaSpectral, fileContent, workspace, true);
+        pbs = await runSpectral(
+          spectralInstances.schemaSpectral,
+          fileContent,
+          workspace,
+          true,
+        );
       }
     } catch (error) {
       if (error instanceof AggregateError) {
         core.error(`Error running spectral on ${file}: ${error.errors}`);
       } else {
         core.error(`Error running spectral on ${file}: ${error}`);
-
       }
     }
 
@@ -103,7 +116,11 @@ export async function getGithubComment(
 
   core.debug(JSON.stringify(data, null, 2));
 
-  const comments = data.filter((comment) => comment?.user?.login === "github-actions[bot]" && comment?.body?.includes("OpenAPI Linting Report"))
+  const comments = data.filter(
+    (comment) =>
+      comment?.user?.login === "github-actions[bot]" &&
+      comment?.body?.includes("OpenAPI Linting Report"),
+  );
   core.debug(`Found ${comments.length} matching comments`);
 
   let comment;
@@ -120,7 +137,9 @@ export async function getGithubComment(
     `Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`,
   );
 
-  core.debug(`Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`);
+  core.debug(
+    `Found comment ${comment?.id || "unknown"}, posted by ${comment?.user?.login || "unknown"}`,
+  );
 
   if (!comment) {
     return undefined;

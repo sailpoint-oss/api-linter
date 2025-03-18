@@ -4,8 +4,6 @@
     "outDir": "./functions",
     "types": ["vitest/globals", "vitest/importMeta"]
   },
-  "include": [
-    "src/**/*",
-  ],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
