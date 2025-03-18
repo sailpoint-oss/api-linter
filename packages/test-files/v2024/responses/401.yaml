@@ -7,4 +7,3 @@ content:
         error:
           description: A message describing the error
           example: "JWT validation failed: JWT is expired"
-

@@ -3,7 +3,10 @@ import path from "node:path";
 import { devLog } from "./utils.js";
 import core from "@actions/core";
 
-export const readFilesToAnalyze = async (githubWorkspace: string, fileGlob: string) => {
+export const readFilesToAnalyze = async (
+  githubWorkspace: string,
+  fileGlob: string,
+) => {
   const files = fileGlob.split(",");
   const fileContents = [];
 
@@ -23,7 +26,9 @@ export const readFilesToAnalyze = async (githubWorkspace: string, fileGlob: stri
           content: readFileSync(filePath, "utf-8"),
         });
       } else {
-        core.warning("File does not exist, if the file was intentionally deleted during the PR ignore this comment");
+        core.warning(
+          "File does not exist, if the file was intentionally deleted during the PR ignore this comment",
+        );
       }
     } catch (err) {
       console.error(err);

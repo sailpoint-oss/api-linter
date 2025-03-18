@@ -2,7 +2,7 @@ description: Forbidden - Returned if the user you are running as, doesn't have a
 content:
   application/json:
     schema:
-      $ref: '../schemas/ErrorResponseDto.yaml'
+      $ref: "../schemas/ErrorResponseDto.yaml"
     examples:
       "403":
         summary: An example of a 403 response object

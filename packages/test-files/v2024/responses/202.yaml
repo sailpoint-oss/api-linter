@@ -2,4 +2,4 @@ description: Accepted - Returned if the request was successfully accepted into t
 content:
   application/json:
     schema:
-      type : object
+      type: object
