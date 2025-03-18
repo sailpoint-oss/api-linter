@@ -1,99 +1,119 @@
-function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
-  if (targetYaml.properties != undefined || targetYaml.properties != null) {
-    for (const [key, value] of Object.entries(targetYaml.properties)) {
-      //console.dir(`The property ${key} value: ${typeof(value.properties)}`)
-      if (
-        value.properties != undefined &&
-        typeof value.properties == "object"
-      ) {
-        //console.log(`${key} has type object to parse further`)
-        if (pathPrefix == null) {
-          parseYamlProperties(value, field, key, errorResults);
-        } else if (pathPrefix == "properties") {
-          parseYamlProperties(value, pathPrefix + "." + key, errorResults);
-        } else {
-          parseYamlProperties(
-            value,
-            pathPrefix + ".properties." + key,
-            errorResults,
-          );
-        }
+import { IRuleResult } from "@stoplight/spectral-core";
+import { OpenAPIV3 } from "openapi-types";
+
+function parseYamlProperties(
+  targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  pathPrefix: string,
+  errorResults: IRuleResult[]
+) {
+  if (!("properties" in targetYaml) || targetYaml.properties == undefined) return;
+  if ("$ref" in targetYaml) return;
+
+  for (const [field, value] of Object.entries(targetYaml.properties)) {
+    //console.dir(`The property ${field} value: ${typeof(value.properties)}`)
+    if ("properties" in value && value.properties != undefined && typeof value.properties == "object") {
+      //console.log(`${field} has type object to parse further`)
+      if (pathPrefix == null) {
+        parseYamlProperties(value, field, errorResults);
+      } else if (pathPrefix == "properties") {
+        parseYamlProperties(value, pathPrefix + "." + field, errorResults);
       } else {
-        // console.log(
-        //   `${key} is low level, ready to check for example. ${
-        //     pathPrefix + "." + key
-        //   }`
-        // );
-        // console.dir(value);
-        if (value.hasOwnProperty("type") && value["type"] == "number") {
-          if (
-            pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
-            "properties"
+        parseYamlProperties(
+          value,
+          pathPrefix + ".properties." + field,
+          errorResults
+        );
+      }
+    } else {
+      // console.log(
+      //   `${field} is low level, ready to check for example. ${
+      //     pathPrefix + "." + field
+      //   }`
+      // );
+      // console.dir(value);
+      if ("type" in value && value["type"] == "number") {
+        if (
+          pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+          "properties"
+        ) {
+          if (!("format" in value) || value.format == undefined) {
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:number [float, double, decimal]`,
+              path: [...pathPrefix.split("."), field, "format"],
+            });
+          } else if (
+            "format" in value &&
+            value.format != undefined &&
+            !["float", "double", "decimal"].includes(value["format"])
           ) {
-            if (!value.hasOwnProperty("format")) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
-                path: [...pathPrefix.split("."), key, "format"],
-              });
-            } else if (
-              value.hasOwnProperty("format") &&
-              !["float", "double", "decimal"].includes(value["format"])
-            ) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
-                path: [...pathPrefix.split("."), key, "format"],
-              });
-            }
-          } else {
-            if (!value.hasOwnProperty("format")) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
-                path: [...pathPrefix.split("."), "properties", key, "format"],
-              });
-            } else if (
-              value.hasOwnProperty("format") &&
-              !["float", "double", "decimal"].includes(value["format"])
-            ) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:number [float, double, decimal]`,
-                path: [...pathPrefix.split("."), "properties", key, "format"],
-              });
-            }
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:number [float, double, decimal]`,
+              path: [...pathPrefix.split("."), field, "format"],
+            });
           }
-        } else if (value.hasOwnProperty("type") && value["type"] == "integer") {
-          if (
-            pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
-            "properties"
+        } else {
+          if (!("format" in value) || value.format == undefined) {
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:number [float, double, decimal]`,
+              path: [...pathPrefix.split("."), "properties", field, "format"],
+            });
+          } else if (
+            "format" in value &&
+            value.format != undefined &&
+            !["float", "double", "decimal"].includes(value["format"])
           ) {
-            if (!value.hasOwnProperty("format")) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
-                path: [...pathPrefix.split("."), key, "format"],
-              });
-            } else if (
-              value.hasOwnProperty("format") &&
-              !["int32", "int64", "bigint"].includes(value["format"])
-            ) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
-                path: [...pathPrefix.split("."), key, "format"],
-              });
-            }
-          } else {
-            if (!value.hasOwnProperty("format")) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
-                path: [...pathPrefix.split("."), "properties", key, "format"],
-              });
-            } else if (
-              value.hasOwnProperty("format") &&
-              !["int32", "int64", "bigint"].includes(value["format"])
-            ) {
-              errorResults.push({
-                message: `The property ${key} must have a format defined with type:integer [int32, int64, bigint]`,
-                path: [...pathPrefix.split("."), "properties", key, "format"],
-              });
-            }
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:number [float, double, decimal]`,
+              path: [...pathPrefix.split("."), "properties", field, "format"],
+            });
+          }
+        }
+      } else if (
+        "type" in value &&
+        value["type"] == "integer"
+      ) {
+        if (
+          pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
+          "properties"
+        ) {
+          if (!("format" in value) || value.format == undefined) {
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:integer [int32, int64, bigint]`,
+              path: [...pathPrefix.split("."), field, "format"],
+            });
+          } else if (
+            "format" in value &&
+            value.format != undefined &&
+            !["int32", "int64", "bigint"].includes(value["format"])
+          ) {
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:integer [int32, int64, bigint]`,
+              path: [...pathPrefix.split("."), field, "format"],
+            });
+          }
+        } else {
+          if (!("format" in value) || value.format == undefined) {
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:integer [int32, int64, bigint]`,
+              path: [...pathPrefix.split("."), "properties", field, "format"],
+            });
+          } else if (
+            "format" in value &&
+            value.format != undefined &&
+            !["int32", "int64", "bigint"].includes(value["format"])
+          ) {
+            // @ts-ignore
+            errorResults.push({
+              message: `The property ${field} must have a format defined with type:integer [int32, int64, bigint]`,
+              path: [...pathPrefix.split("."), "properties", field, "format"],
+            });
           }
         }
       }
@@ -101,18 +121,20 @@ function parseYamlProperties(targetYaml, pathPrefix, errorResults) {
   }
 }
 
-export default (targetYaml, options) => {
+export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { rule: string }, context: any) => {
   //console.log(JSON.stringify(targetYaml));
   const { rule } = options;
 
-  let results = [];
+  let results: IRuleResult[] = [];
 
-  // All Of - If the root level yaml contains the key allOf
-  if (Object.keys(targetYaml)[0] == "allOf") {
-    targetYaml.allOf.forEach((element, index) => {
+  // All Of - If the root level yaml contains the field allOf
+  if ("allOf" in targetYaml && targetYaml.allOf != undefined) {
+    targetYaml.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
       if (
+        "type" in element &&
         element.type != undefined &&
         element.type == "object" &&
+        "properties" in element &&
         element.properties != undefined
       ) {
         parseYamlProperties(element, "properties", results);
@@ -122,42 +144,52 @@ export default (targetYaml, options) => {
 
   // Type Object - If the root level yaml is of type object
   if (
-    Object.keys(targetYaml).includes("type") &&
+    "type" in targetYaml &&
     targetYaml.type == "object" &&
+    "properties" in targetYaml &&
     targetYaml.properties != undefined
   ) {
     parseYamlProperties(targetYaml, "properties", results);
   }
 
   // Single varaible files
-  if (targetYaml.hasOwnProperty("type") && targetYaml["type"] == "number") {
-    if (!targetYaml.hasOwnProperty("format")) {
+  if (
+    "type" in targetYaml &&
+    targetYaml.type == "number"
+  ) {
+    if (!("format" in targetYaml) || targetYaml.format == undefined) {
+      // @ts-ignore
       results.push({
         message: `The property must have a format defined with type:number [float, double, decimal]`,
         path: ["format"],
       });
     } else if (
-      targetYaml.hasOwnProperty("format") &&
+      "format" in targetYaml &&
+      targetYaml.format != undefined &&
       !["float", "double", "decimal"].includes(targetYaml["format"])
     ) {
+      // @ts-ignore
       results.push({
         message: `The property must have a format defined with type:number [float, double, decimal]`,
         path: ["format"],
       });
     }
   } else if (
-    targetYaml.hasOwnProperty("type") &&
-    targetYaml["type"] == "integer"
-  ) {
-    if (!targetYaml.hasOwnProperty("format")) {
+    "type" in targetYaml &&
+    targetYaml.type == "integer"
+  ) { 
+    if (!("format" in targetYaml) || targetYaml.format == undefined) {
+      // @ts-ignore
       results.push({
         message: `The property must have a format defined with type:integer [int32, int64, bigint]`,
         path: ["format"],
       });
     } else if (
-      targetYaml.hasOwnProperty("format") &&
+      "format" in targetYaml &&
+      targetYaml.format != undefined &&
       !["int32", "int64", "bigint"].includes(targetYaml["format"])
     ) {
+      // @ts-ignore
       results.push({
         message: `The property must have a format defined with type:integer [int32, int64, bigint]`,
         path: ["format"],
