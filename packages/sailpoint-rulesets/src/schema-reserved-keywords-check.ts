@@ -8,7 +8,10 @@
 //     field: "description"
 //     rule: 303
 
-const toNumbers = (arr) =>
+import { IRuleResult } from "@stoplight/spectral-core";
+import { OpenAPIV3 } from "openapi-types";
+
+const toNumbers = (arr: string[]) =>
   arr.map(function (item) {
     if (isNaN(parseInt(item, 10))) {
       return item;
@@ -18,17 +21,18 @@ const toNumbers = (arr) =>
   });
 
 function parseYamlProperties(
-  targetYaml,
-  field,
-  pathPrefix,
-  errorResults,
-  rule,
+  targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
+  field: string,
+  pathPrefix: string,
+  errorResults: IRuleResult[],
+  rule: string,
 ) {
-  if (targetYaml.properties != undefined || targetYaml.properties != null) {
+  if ("properties" in targetYaml && targetYaml.properties != undefined) {
     // Loop through each key under properties
     for (const [key, value] of Object.entries(targetYaml.properties)) {
       // If you run into a key that is an object that has more properties call the function again passing in the lower level object to parse
       if (
+        "properties" in value &&
         value.properties != undefined &&
         typeof value.properties == "object"
       ) {
@@ -72,9 +76,10 @@ function parseYamlProperties(
           }
         }
         */
-        value.hasOwnProperty("type") &&
+        "type" in value &&
         value.type == "array" &&
-        value.hasOwnProperty("items") &&
+        "items" in value &&
+        "type" in value.items &&
         value.items.type == "object"
       ) {
         if (pathPrefix == null) {
@@ -120,9 +125,10 @@ function parseYamlProperties(
           }
         }
         */
-        value.hasOwnProperty("type") &&
+        "type" in value &&
         value.type == "array" &&
-        value.hasOwnProperty("items") &&
+        "items" in value &&
+        "type" in value.items &&
         value.items.type == "array"
       ) {
         if (pathPrefix == null) {
@@ -151,15 +157,15 @@ function parseYamlProperties(
           );
         }
       } else if (
-        value.hasOwnProperty("anyOf") ||
-        value.hasOwnProperty("oneOf") ||
-        value.hasOwnProperty("allOf")
+        "anyOf" in value ||
+        "oneOf" in value ||
+        "allOf" in value
       ) {
         // If the property you are checking for a description or example has oneOf as its key,
         // go into the oneOf array and check its properties
-        if (value.hasOwnProperty("oneOf")) {
-          value.oneOf.forEach((element, index) => {
-            if (pathPrefix == null) {
+        if ("oneOf" in value && value.oneOf != undefined) {
+          value.oneOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
+            if (pathPrefix == null && "items" in value) {
               parseYamlProperties(value.items, field, key, errorResults, rule);
             } else if (pathPrefix == "properties") {
               parseYamlProperties(
@@ -179,11 +185,11 @@ function parseYamlProperties(
               );
             }
           });
-        } else if (value.hasOwnProperty("anyOf")) {
+        } else if ("anyOf" in value && value.anyOf != undefined) {
           // If the property you are checking for a description or example has anyOf as its key,
           // go into the anyOf array and check its properties
-          value.anyOf.forEach((element, index) => {
-            if (pathPrefix == null) {
+          value.anyOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
+            if (pathPrefix == null && "items" in value) {
               parseYamlProperties(value.items, field, key, errorResults, rule);
             } else if (pathPrefix == "properties") {
               parseYamlProperties(
@@ -203,11 +209,11 @@ function parseYamlProperties(
               );
             }
           });
-        } else if (value.hasOwnProperty("allOf")) {
+        } else if ("allOf" in value && value.allOf != undefined) {
           // If the property you are checking for a description or example has allOf as its key,
           // go into the allOf array and check its properties
-          value.allOf.forEach((element, index) => {
-            if (pathPrefix == null) {
+          value.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
+            if (pathPrefix == null && "items" in value) {
               parseYamlProperties(value.items, field, key, errorResults, rule);
             } else if (pathPrefix == "properties") {
               parseYamlProperties(
@@ -255,11 +261,13 @@ function parseYamlProperties(
             pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
             "properties"
           ) {
+            // @ts-ignore
             errorResults.push({
               message: `Rule ${rule}: The property ${key} is a reserved keyword of OpenAPI Specifications. Please use a different name`,
               path: [...toNumbers(pathPrefix.split(".")), key],
             });
           } else {
+            // @ts-ignore
             errorResults.push({
               message: `Rule ${rule}: The property ${key} is a reserved keyword of OpenAPI Specifications. Please use a different name`,
               path: [...toNumbers(pathPrefix.split(".")), "properties", key],
@@ -271,18 +279,19 @@ function parseYamlProperties(
   }
 }
 
-export default (targetYaml, options) => {
+export default (targetYaml: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { field: keyof OpenAPIV3.SchemaObject; rule: string }) => {
   const { field, rule } = options;
   //console.log(JSON.stringify(targetYaml));
 
-  let results = [];
+  let results: IRuleResult[] = [];
 
   // All Of - If the root level yaml contains the key allOf
-  if (Object.keys(targetYaml)[0] == "allOf") {
-    targetYaml.allOf.forEach((element, index) => {
+  if ("allOf" in targetYaml && targetYaml.allOf != undefined) {
+    targetYaml.allOf.forEach((element: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, index: number) => {
       if (
-        element.type != undefined &&
+        "type" in element &&
         element.type == "object" &&
+        "properties" in element &&
         element.properties != undefined
       ) {
         parseYamlProperties(element, field, `allOf.${index}`, results, rule);
@@ -292,21 +301,26 @@ export default (targetYaml, options) => {
 
   // Type Object - If the root level yaml is of type object
   if (
-    Object.keys(targetYaml).includes("type") &&
+    "type" in targetYaml &&
     targetYaml.type == "object" &&
+    "properties" in targetYaml &&
     targetYaml.properties != undefined
   ) {
     parseYamlProperties(targetYaml, field, "properties", results, rule);
   }
 
   // Type String
-  if (Object.keys(targetYaml).includes("type") && targetYaml.type != "object") {
-    if (!targetYaml.hasOwnProperty(field) || targetYaml[field] == null) {
-      results.push({
-        message: `Rule ${rule}: This field must have a ${field}`,
-        path: [field],
-      });
-    }
+  if (
+    "type" in targetYaml &&
+    targetYaml.type != "object" &&
+    field in targetYaml &&
+    targetYaml[field] != null
+  ) {
+    // @ts-ignore
+    results.push({
+      message: `Rule ${rule}: This field must have a ${field}`,
+      path: [field],
+    });
   }
 
   console.log(results);
