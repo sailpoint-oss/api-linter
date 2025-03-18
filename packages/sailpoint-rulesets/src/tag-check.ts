@@ -7,7 +7,9 @@
 //   functionOptions:
 //     rule: 402
 
-export default (targetVal, options, context) => {
+import { OpenAPIV3 } from "openapi-types";
+
+export default (targetVal: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject, options: { rule: string }, context: any) => {
   const { rule } = options;
   let results = [];
   let tagArray = [];
@@ -62,7 +64,7 @@ export default (targetVal, options, context) => {
     }
 
     if (tagArray.length > 0 && value.tags != undefined) {
-      value.tags.forEach((tag) => {
+      value.tags.forEach((tag: string) => {
         if (!tagArray.includes(tag)) {
           results.push({
             message: `Rule ${rule}: Tag "${tag}" is not defined in the root API spec`,
