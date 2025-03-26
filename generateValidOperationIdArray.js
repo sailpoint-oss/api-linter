@@ -28,8 +28,8 @@ async function getOperationIds(filePaths) {
 
 (async () => {
   const args = process.argv.slice(2);
-  if (args.length !== 3) {
-    console.error("Usage: node script.js <file1> <file2> <file3>");
+  if (args.length === 0) {
+    console.error("Usage: node script.js <file1> <file2> ... <fileN>");
     process.exit(1);
   }
 
