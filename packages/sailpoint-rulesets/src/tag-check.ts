@@ -43,6 +43,15 @@ export default (
           "Preloaded V2024 tags data not found in environment, this will not run the tags check.",
         );
       }
+    } else if (context.document.source.includes("v2025")) {
+      const preloadedTags = process.env.V2025_TAGS_JSON;
+      if (preloadedTags) {
+        tagArray = JSON.parse(preloadedTags);
+      } else {
+        console.error(
+          "Preloaded V2025 tags data not found in environment, this will not run the tags check.",
+        );
+      }
     } else if (context.document.source.includes("beta")) {
       const preloadedTags = process.env.BETA_TAGS_JSON;
       if (preloadedTags) {
