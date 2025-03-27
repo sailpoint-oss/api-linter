@@ -85,7 +85,7 @@ function removeLastTwo(path: string) {
 function getVersionFolder(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
-    ["v3", "beta", "v2024"].includes(part),
+    ["v3", "beta", "v2024", "v2025"].includes(part),
   );
   if (versionIndex === -1) {
     throw new Error(`Unable to determine version folder for path: ${filePath}`);
@@ -96,7 +96,7 @@ function getVersionFolder(filePath: string) {
 function getRelativePathFromVersion(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
-    ["v3", "beta", "v2024"].includes(part),
+    ["v3", "beta", "v2024", "v2025"].includes(part),
   );
   if (versionIndex === -1) {
     throw new Error(`Unable to determine version folder for path: ${filePath}`);
