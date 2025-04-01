@@ -15,7 +15,6 @@ functions:
     path-operation-check,
     ascii,
     path-reserved-keywords-check,
-    summary-check,
     tag-check,
     path-parameter-resource-id-check,
     path-file-check,
