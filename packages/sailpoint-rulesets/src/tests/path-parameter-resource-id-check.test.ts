@@ -6,50 +6,177 @@ const ruleNumber = "404";
 process.env.VALID_OPERATION_IDS =
   '["listAccounts","listEntitlements","listAccessProfiles"]';
 
-const jsonParameterWithValidOperationId: OpenAPIV3.ParameterObject = {
-  in: "path",
-  name: "id",
-  example: "1234",
-  schema: {
-    type: "string",
+const jsonParameterWithValidOperationId: OpenAPIV3.OperationObject = {
+  tags: ["Access Profiles"],
+  summary: "List Access Profiles",
+  operationId: "pathAccessProfiles",
+  description:
+    "This API returns a list of Access Profiles.\n\nA token with API, ORG_ADMIN, ROLE_ADMIN, ROLE_SUBADMIN, SOURCE_ADMIN, or SOURCE_SUBADMIN authority is required to call this API.",
+  parameters: [{
+    in: "path",
+    name: "id",
+    example: "1234",
+    schema: {
+      type: "string",
+    },
+    // @ts-expect-error OpenAPI Extenstions are valid
+    "x-sailpoint-resource-operation-id": "listAccounts",
+  }],
+  responses: {
+    200: {
+      description: "List of Access Profiles",
+      content: {
+        "application/json": {
+          schema: {
+            type: "array",
+            items: {
+              type: "object",
+            },
+          },
+        },
+      },
+    },
   },
-  // @ts-expect-error OpenAPI Extenstions are valid
-  "x-sailpoint-resource-operation-id": "listAccounts",
-};
+  security: [{ oauth2: ["idn:access-profile:read"] }],
+}
 
-const jsonParameterWithNoOperationId: OpenAPIV3.ParameterObject = {
-  in: "path",
-  name: "id",
-  example: "1234",
-  schema: {
-    type: "string",
+const jsonParameterWithNoOperationId: OpenAPIV3.OperationObject = {
+  tags: ["Access Profiles"],
+  summary: "List Access Profiles",
+  operationId: "pathAccessProfiles",
+  description:
+    "This API returns a list of Access Profiles.\n\nA token with API, ORG_ADMIN, ROLE_ADMIN, ROLE_SUBADMIN, SOURCE_ADMIN, or SOURCE_SUBADMIN authority is required to call this API.",
+  parameters: [{
+    in: "path",
+    name: "id",
+    example: "1234",
+    schema: {
+      type: "string",
+    },
+  }],
+  responses: {
+    200: {
+      description: "List of Access Profiles",
+      content: {
+        "application/json": {
+          schema: {
+            type: "array",
+            items: {
+              type: "object",
+            },
+          },
+        },
+      },
+    },
   },
-};
+  security: [{ oauth2: ["idn:access-profile:read"] }],
+}
 
-const jsonParameterWithInvalidOperationId: OpenAPIV3.ParameterObject = {
-  in: "path",
-  name: "id",
-  example: "1234",
-  schema: {
-    type: "string",
+const jsonParameterWithInvalidOperationId: OpenAPIV3.OperationObject = {
+  tags: ["Access Profiles"],
+  summary: "List Access Profiles",
+  operationId: "pathAccessProfiles",
+  description:
+    "This API returns a list of Access Profiles.\n\nA token with API, ORG_ADMIN, ROLE_ADMIN, ROLE_SUBADMIN, SOURCE_ADMIN, or SOURCE_SUBADMIN authority is required to call this API.",
+  parameters: [{
+    in: "path",
+    name: "id",
+    example: "1234",
+    schema: {
+      type: "string",
+    },
+    // @ts-expect-error OpenAPI Extenstions are valid
+    "x-sailpoint-resource-operation-id": "getAccounts",
+  }],
+  responses: {
+    200: {
+      description: "List of Access Profiles",
+      content: {
+        "application/json": {
+          schema: {
+            type: "array",
+            items: {
+              type: "object",
+            },
+          },
+        },
+      },
+    },
   },
-  // @ts-expect-error OpenAPI Extenstions are valid
-  "x-sailpoint-resource-operation-id": "getAccounts",
-};
+  security: [{ oauth2: ["idn:access-profile:read"] }],
+}
 
-const jsonParameterWithValidOperationIds: OpenAPIV3.ParameterObject = {
-  in: "path",
-  name: "id",
-  example: "1234",
-  schema: {
-    type: "string",
+const jsonParameterWithInvalidOperationIdSelfRef: OpenAPIV3.OperationObject = {
+  tags: ["Access Profiles"],
+  summary: "List Access Profiles",
+  operationId: "listAccessProfiles",
+  description:
+    "This API returns a list of Access Profiles.\n\nA token with API, ORG_ADMIN, ROLE_ADMIN, ROLE_SUBADMIN, SOURCE_ADMIN, or SOURCE_SUBADMIN authority is required to call this API.",
+  parameters: [{
+    in: "path",
+    name: "id",
+    example: "1234",
+    schema: {
+      type: "string",
+    },
+    // @ts-expect-error OpenAPI Extenstions are valid
+    "x-sailpoint-resource-operation-id": "listAccessProfiles",
+  }],
+  responses: {
+    200: {
+      description: "List of Access Profiles",
+      content: {
+        "application/json": {
+          schema: {
+            type: "array",
+            items: {
+              type: "object",
+            },
+          },
+        },
+      },
+    },
   },
-  // @ts-expect-error OpenAPI Extenstions are valid
-  "x-sailpoint-resource-operation-id": [
-    "listEntitlements",
-    "listAccessProfiles",
-  ],
-};
+  security: [{ oauth2: ["idn:access-profile:read"] }],
+}
+
+
+const jsonParameterWithValidOperationIds: OpenAPIV3.OperationObject = {
+  tags: ["Access Profiles"],
+  summary: "List Access Profiles",
+  operationId: "pathAccessProfiles",
+  description:
+    "This API returns a list of Access Profiles.\n\nA token with API, ORG_ADMIN, ROLE_ADMIN, ROLE_SUBADMIN, SOURCE_ADMIN, or SOURCE_SUBADMIN authority is required to call this API.",
+  parameters: [{
+    in: "path",
+    name: "id",
+    example: "1234",
+    schema: {
+      type: "string",
+    },
+    // @ts-expect-error OpenAPI Extenstions are valid
+    "x-sailpoint-resource-operation-id": [
+      "listEntitlements",
+      "listAccessProfiles",
+    ],  
+  }],
+  responses: {
+    200: {
+      description: "List of Access Profiles",
+      content: {
+        "application/json": {
+          schema: {
+            type: "array",
+            items: {
+              type: "object",
+            },
+          },
+        },
+      },
+    },
+  },
+  security: [{ oauth2: ["idn:access-profile:read"] }],
+}
 
 describe("Path Parameter Operation Id Check Test", function () {
   it("should not return any error messages if path parameter has a valid operation id defined under x-sailpoint-resource-operation-id", function () {
@@ -66,7 +193,8 @@ describe("Path Parameter Operation Id Check Test", function () {
     });
     expect(result).to.deep.equal([
       {
-        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: \{${jsonParameterWithNoOperationId.name}\}. Please provide an operation ID for where the resource ID can be found`,
+        // @ts-expect-error OpenAPI Extenstions are valid
+        message: `Rule ${ruleNumber}: x-sailpoint-resource-operation-id is required for the path parameter: \{${jsonParameterWithNoOperationId.parameters[0].name}\}. Please provide an operation ID for where the resource ID can be found`,
       },
     ]);
   });
@@ -81,7 +209,22 @@ describe("Path Parameter Operation Id Check Test", function () {
     expect(result).toEqual([
       {
         // @ts-expect-error OpenAPI Extenstions are valid
-        message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidOperationId["x-sailpoint-resource-operation-id"]} is invalid, the operationId must match an existing operationId in the API specs.`,
+        message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidOperationId.parameters[0]["x-sailpoint-resource-operation-id"]} is invalid, the x-sailpoint-resource-operation-id must match an existing operationId in the API specs.`,
+      },
+    ]);
+  });
+
+  test("should return an error message if path parameter operation id references itself.", () => {
+    const result = parameterOperationIdCheck(
+      jsonParameterWithInvalidOperationIdSelfRef,
+      {
+        rule: ruleNumber,
+      },
+    );
+    expect(result).toEqual([
+      {
+        // @ts-expect-error OpenAPI Extenstions are valid
+        message: `Rule ${ruleNumber}: ${jsonParameterWithInvalidOperationIdSelfRef.parameters[0]["x-sailpoint-resource-operation-id"]} is invalid, the x-sailpoint-resource-operation-id must not reference itself.`,
       },
     ]);
   });

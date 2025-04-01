@@ -15,7 +15,6 @@ functions:
     path-operation-check,
     ascii,
     path-reserved-keywords-check,
-    summary-check,
     tag-check,
     path-parameter-resource-id-check,
     path-file-check,
@@ -160,13 +159,12 @@ rules:
       functionOptions:
         rule: 401
   path-summary-check:
-    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#305"
-    given: $
+    description: Rule 305 a brief summary must be provided and be no longer than 5 words https://sailpoint-oss.github.io/sailpoint-api-guidelines/#305
+    given: $.*
     severity: error
     then:
-      function: summary-check
-      functionOptions:
-        rule: 305
+      field: summary
+      function: truthy
   path-tag-check:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#402"
     given: $
@@ -177,7 +175,7 @@ rules:
         rule: 402
   path-parameters-must-have-valid-resource-operation-id:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#404"
-    given: $.*.parameters[?(@.in == "path")]
+    given: $.*
     severity: error
     then:
       function: path-parameter-resource-id-check

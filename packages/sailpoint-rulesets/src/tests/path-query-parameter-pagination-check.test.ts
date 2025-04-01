@@ -348,7 +348,7 @@ describe("Path pagination offset and limit check", () => {
     });
     expect(result).toEqual([
       {
-        message: `Rule ${ruleNumber}: All GET list operations must have maximum defined for limit query parameter`,
+        message: `Rule ${ruleNumber}: All GET list operations must have a maximum defined for the 'limit' query parameter`,
       },
     ]);
   });
@@ -359,7 +359,7 @@ describe("Path pagination offset and limit check", () => {
     });
     expect(result).toEqual([
       {
-        message: `Rule ${ruleNumber}: All GET list operations must have minimum defined for limit query parameter`,
+        message: `Rule ${ruleNumber}: All GET list operations must have a minimum defined for the 'limit' query parameter`,
       },
     ]);
   });
@@ -371,10 +371,10 @@ describe("Path pagination offset and limit check", () => {
     );
     expect(result).toEqual([
       {
-        message: `Rule ${ruleNumber}: All GET list operations must have minimum defined for limit query parameter`,
+        message: `Rule ${ruleNumber}: All GET list operations must have a minimum defined for the 'limit' query parameter`,
       },
       {
-        message: `Rule ${ruleNumber}: All GET list operations must have maximum defined for limit query parameter`,
+        message: `Rule ${ruleNumber}: All GET list operations must have a maximum defined for the 'limit' query parameter`,
       },
     ]);
   });

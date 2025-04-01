@@ -14,26 +14,12 @@ export default createOptionalContextRulesetFunction(
       required: ["rule"],
     },
   },
-  (targetVal: OpenAPIV3.ParameterObject, options: { rule: string }) => {
+  (targetVal: OpenAPIV3.OperationObject, options: { rule: string }) => {
     const { rule } = options;
-    let results = [];
-    let operationIdArray = [];
-
-    // If enum is not present, we need to know where to get an ID from for the resource
-    // @ts-expect-error OpenAPI Extenstions are valid
-    if (targetVal["x-sailpoint-resource-operation-id"] === undefined) {
-      if (
-        targetVal.schema &&
-        // @ts-expect-error This doesnt run on reference objects
-        targetVal.schema.type === "string" &&
-        // @ts-expect-error This doesnt run on reference objects
-        targetVal.schema.enum === undefined
-      ) {
-        results.push({
-          message: `Rule ${rule}: x-sailpoint-resource-operation-id is required for the path parameter: {${targetVal.name}}. Please provide an operation ID for where the resource ID can be found`,
-        });
-      }
-    } else {
+    let results: { message: string }[] = [];
+    let operationIdArray: string[] = [];
+    
+    if (targetVal.parameters !== undefined) {
       const rawString = process.env.VALID_OPERATION_IDS;
 
       if (rawString) {
@@ -44,21 +30,42 @@ export default createOptionalContextRulesetFunction(
         );
       }
 
-      if (operationIdArray.length !== 0) {
-        if (
-          !operationIdArray.includes(
+      targetVal.parameters.forEach((parameter) => {
+        // @ts-expect-error OpenAPI Extenstions are valid
+        if (parameter.in === "path") {
+          // @ts-expect-error OpenAPI Extenstions are valid
+            if (parameter["x-sailpoint-resource-operation-id"] === undefined) {
+              // @ts-expect-error OpenAPI Extenstions are valid
+              if(parameter.schema != undefined && parameter.schema.type === "string" && parameter.schema.enum === undefined) {
+                results.push({
+                  message: `Rule ${rule}: x-sailpoint-resource-operation-id is required for the path parameter: {id}. Please provide an operation ID for where the resource ID can be found`,
+                });
+              }
+          } else {
             // @ts-expect-error OpenAPI Extensions are valid
-            targetVal["x-sailpoint-resource-operation-id"],
-          )
-        ) {
-          results.push({
-            // @ts-expect-error OpenAPI Extenstions are valid
-            message: `Rule ${rule}: ${targetVal["x-sailpoint-resource-operation-id"]} is invalid, the operationId must match an existing operationId in the API specs.`,
-          });
-        }
-      }
-    }
+            const operationIds = Array.isArray(parameter["x-sailpoint-resource-operation-id"]) ? parameter["x-sailpoint-resource-operation-id"] : [parameter["x-sailpoint-resource-operation-id"]];
 
+            operationIds.forEach((operationId) => {
+              if (operationIdArray.length !== 0) {
+                if (!operationIdArray.includes(operationId)) {
+                  results.push({
+                    message: `Rule ${rule}: ${operationId} is invalid, the x-sailpoint-resource-operation-id must match an existing operationId in the API specs.`,
+                  });
+                }
+              }
+          
+              if (operationId === targetVal.operationId) {
+                results.push({
+                  message: `Rule ${rule}: ${operationId} is invalid, the x-sailpoint-resource-operation-id must not reference itself.`,
+                });
+              }
+            });
+
+          }
+        }
+      });
+    }
+    
     return results;
   },
 );

@@ -10,8 +10,9 @@ export default createOptionalContextRulesetFunction(
       additionalProperties: false,
       properties: {
         rule: true,
+        field: true
       },
-      required: ["rule"],
+      required: ["rule", "field"],
     },
   },
   (
