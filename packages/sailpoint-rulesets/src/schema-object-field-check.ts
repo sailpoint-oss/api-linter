@@ -43,7 +43,7 @@ export default (
           // @ts-ignore
           results.push({
             message: `Rule ${rule}: If a ${field} key is defined for a schema object, it must not be null or empty`,
-            path: [`allOf`, index.toString(), field],
+            path: [`allOf`, index, field],
           });
         }
       },
