@@ -1,0 +1,46 @@
+functions: [tag-alpha-check]
+rules:
+  route-must-have-required-properties:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - field: path
+        function: truthy
+      - field: service
+        function: truthy
+  route-additional-versions-must-be-valid:
+    given: $.sp-gateway.routes.*.additionalVersions.*
+    severity: error
+    then: 
+      function: enumeration
+      functionOptions:
+        values:
+          - beta
+          - v3
+          - v2024
+  route-api-state-must-be-valid:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+    - field: apiState
+      function: enumeration
+      functionOptions:
+        values:
+          - private
+          - limited-preview
+          - public-preview
+          - public
+  check-on-prefix-routes-only:
+    given: $.sp-gateway.routes[?(@.apiState == "public")]
+    severity: error
+    then: 
+      function: tag-alpha-check
+      functionOptions:
+        rule: 403
+  # check-on-public-routes-only:
+  #   given: $.sp-gateway.routes[?(@.apiState == "public")]
+  #   severity: error
+  #   then: 
+  #     function: tag-alpha-check
+  #     functionOptions:
+  #       rule: 403
