@@ -43,6 +43,7 @@ export async function runSpectralAnalysis(
     rootSpectral: any;
     pathSpectral: any;
     schemaSpectral: any;
+    gatewaySpectral: any;
   },
   workspace: string,
 ): Promise<SpectralAnalysisResult[]> {
@@ -71,6 +72,14 @@ export async function runSpectralAnalysis(
         core.debug(`Running schema spectral ruleset on ${file}`);
         pbs = await runSpectral(
           spectralInstances.schemaSpectral,
+          fileContent,
+          workspace,
+          true,
+        );
+      } else if (file.includes("sp-gateway-routes")) {
+        core.debug(`Running gateway spectral ruleset on ${file}`);
+        pbs = await runSpectral(
+          spectralInstances.gatewaySpectral,
           fileContent,
           workspace,
           true,

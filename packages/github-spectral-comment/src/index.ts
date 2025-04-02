@@ -31,8 +31,6 @@ async function run(): Promise<void> {
 
     core.debug("Loading project config");
 
-    core.debug("Loading project config");
-
     // Setup project configuration
     const project = getProjectConfig();
 
@@ -48,6 +46,7 @@ async function run(): Promise<void> {
       rootSpectral: await createSpectral(inputs["spectral-root-ruleset"]!),
       pathSpectral: await createSpectral(inputs["spectral-path-ruleset"]!),
       schemaSpectral: await createSpectral(inputs["spectral-schema-ruleset"]!),
+      gatewaySpectral: await createSpectral(inputs["spectral-schema-ruleset"]!),
     };
 
     core.debug("Running spectral analysis");

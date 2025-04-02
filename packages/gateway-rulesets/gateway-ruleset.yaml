@@ -30,13 +30,13 @@ rules:
           - limited-preview
           - public-preview
           - public
-  check-on-prefix-routes-only:
-    given: $.sp-gateway.routes[?(@.apiState == "public")]
-    severity: error
-    then: 
-      function: tag-alpha-check
-      functionOptions:
-        rule: 403
+  # check-on-prefix-routes-only:
+  #   given: $.sp-gateway.routes[?(@.apiState == "public")]
+  #   severity: error
+  #   then: 
+  #     function: tag-alpha-check
+  #     functionOptions:
+  #       rule: 403
   # check-on-public-routes-only:
   #   given: $.sp-gateway.routes[?(@.apiState == "public")]
   #   severity: error

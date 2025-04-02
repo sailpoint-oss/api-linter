@@ -20,6 +20,10 @@ inputs:
     required: true
     description: Ruleset file to load in Spectral
     default: "spectral:oas"
+  spectral-gateway-ruleset:
+    required: true
+    description: Ruleset file to load in Spectral
+    default: "spectral:oas"
   github-url:
     description: "Github URL"
     default: "https://github.com"

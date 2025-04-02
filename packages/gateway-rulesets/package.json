@@ -1,7 +1,7 @@
 {
-  "name": "sailpoint-rulesets",
+  "name": "gateway-rulesets",
   "version": "1.0.0",
-  "description": "SailPoint Maintained Spectral Rulesets",
+  "description": "SailPoint Maintained Gateway Spectral Rulesets",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
