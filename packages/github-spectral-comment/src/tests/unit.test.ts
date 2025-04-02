@@ -50,6 +50,7 @@ describe("runSpectralAnalysis", () => {
         rootSpectral: mockSpectral as unknown as Spectral,
         pathSpectral: mockSpectral as unknown as Spectral,
         schemaSpectral: mockSpectral as unknown as Spectral,
+        gatewaySpectral: mockSpectral as unknown as Spectral,
       },
       "/test/workspace",
     );
