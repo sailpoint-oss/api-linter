@@ -80,7 +80,9 @@ export const toMarkdown = async (
 
   let md = `# Linting Report 
   
-Last updated: ${new Date().toLocaleString()} \n\n`;
+Last updated: ${new Date().toLocaleString("en-US", {
+    timeZone: "America/Austin",
+  })} \n\n`;
 
   // No issues found
   if (Object.keys(filteredPbs).length === 0) {
