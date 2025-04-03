@@ -1,6 +1,6 @@
 functions: [gateway-test]
 rules:
-  route-must-have-required-properties:
+  gateway-route-must-have-required-properties:
     given: $.sp-gateway.routes.*
     severity: error
     then:
@@ -8,7 +8,7 @@ rules:
         function: truthy
       - field: service
         function: truthy
-  route-additional-versions-must-be-valid:
+  gateway-route-additional-versions-must-be-valid:
     given: $.sp-gateway.routes.*.additionalVersions.*
     severity: error
     then: 
@@ -18,7 +18,7 @@ rules:
           - beta
           - v3
           - v2024
-  route-api-state-must-be-valid:
+  gateway-route-api-state-must-be-valid:
     given: $.sp-gateway.routes.*
     severity: error
     then:
