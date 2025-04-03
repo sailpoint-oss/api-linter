@@ -78,7 +78,7 @@ export const toMarkdown = async (
     ruleName.startsWith("gateway")
   );
 
-  let md = `# OpenAPI Linting Report`;
+  let md = `# Linting Report`;
 
   // No issues found
   if (Object.keys(filteredPbs).length === 0) {
@@ -106,6 +106,8 @@ ${[0, 1, 2, 3]
   .join("\n")}
 
 ---
+
+## OpenAPI Linting Report
 
 `;
 
@@ -139,7 +141,7 @@ ${[0, 1, 2, 3]
   });
 
   if (gatewayRules.length > 0) {
-    md += `# Gateway Linting Report
+    md += `## Gateway Linting Report
     
     `;
 
