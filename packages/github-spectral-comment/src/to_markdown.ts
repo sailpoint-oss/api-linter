@@ -107,7 +107,7 @@ ${[0, 1, 2, 3]
 
 ---
 
-## OpenAPI Linting Report
+## OpenAPI Rules
 
 `;
 
@@ -141,9 +141,7 @@ ${[0, 1, 2, 3]
   });
 
   if (gatewayRules.length > 0) {
-    md += `## Gateway Linting Report
-    
-    `;
+    md += `## Gateway Rules \n\n`;
 
     // Build the issues section
     gatewayRules.forEach(([ruleName, issues]) => {
