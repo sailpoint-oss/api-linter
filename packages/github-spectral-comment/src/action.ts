@@ -128,7 +128,7 @@ export async function getGithubComment(
   const comments = data.filter(
     (comment) =>
       comment?.user?.login === "github-actions[bot]" &&
-      comment?.body?.includes("OpenAPI Linting Report"),
+      comment?.body?.includes("Linting Report"),
   );
   core.debug(`Found ${comments.length} matching comments`);
 
