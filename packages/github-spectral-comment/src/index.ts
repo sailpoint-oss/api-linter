@@ -46,7 +46,7 @@ async function run(): Promise<void> {
       rootSpectral: await createSpectral(inputs["spectral-root-ruleset"]!),
       pathSpectral: await createSpectral(inputs["spectral-path-ruleset"]!),
       schemaSpectral: await createSpectral(inputs["spectral-schema-ruleset"]!),
-      gatewaySpectral: await createSpectral(inputs["spectral-schema-ruleset"]!),
+      gatewaySpectral: await createSpectral(inputs["spectral-gateway-ruleset"]!),
     };
 
     core.debug("Running spectral analysis");
