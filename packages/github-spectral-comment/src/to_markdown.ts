@@ -43,7 +43,7 @@ const getSeverityLabel = (severity: number): string => {
 export function createFileLink(
   file: string,
   line: number,
-  column: number,
+  column: number
 ): string {
   if (isDev) {
     return `${file.replace(ProjectRoot, ".").replace("/packages/test-files", "")}`;
@@ -57,38 +57,9 @@ export function fromKebabCaseToTitleCase(str: string): string {
 }
 
 export const toMarkdown = async (
-  processedPbs: ProcessedPbs,
+  processedPbs: ProcessedPbs
 ): Promise<string> => {
   const { filteredPbs, severitiesCount } = processedPbs;
-
-  // No issues found
-  if (Object.keys(filteredPbs).length === 0) {
-    return `# OpenAPI Linting Report
-
-Last updated: ${new Date().toLocaleString()}
-
-✅ No issues found. Great job! 🎉`;
-  }
-
-  const totalIssues = Object.values(severitiesCount).reduce((a, b) => a + b, 0);
-
-  // Build the header
-  let md = `# OpenAPI Linting Report
-
-Last updated: ${new Date().toLocaleString()}
-
-Found **${totalIssues}** total issues:
-${[0, 1, 2, 3]
-  .filter((severity) => severitiesCount[severity] > 0)
-  .map(
-    (severity) =>
-      `- ${getSeverityEmoji(severity)} ${getSeverityLabel(severity)}: ${severitiesCount[severity]}`,
-  )
-  .join("\n")}
-
----
-
-`;
 
   // Sort rules by severity (errors first) and then by name
   const sortedRules = Object.entries(filteredPbs).sort(
@@ -97,11 +68,49 @@ ${[0, 1, 2, 3]
       const severityB = issuesB[0]?.severity ?? 999;
       if (severityA !== severityB) return severityA - severityB;
       return ruleA.localeCompare(ruleB);
-    },
+    }
   );
 
+  const nonGatewayRules = sortedRules.filter(
+    ([ruleName]) => !ruleName.startsWith("gateway")
+  );
+  const gatewayRules = sortedRules.filter(([ruleName]) =>
+    ruleName.startsWith("gateway")
+  );
+
+  let md = `# OpenAPI Linting Report`;
+
+  // No issues found
+  if (Object.keys(filteredPbs).length === 0) {
+    md += `
+
+Last updated: ${new Date().toLocaleString()}
+
+✅ No issues found. Great job! 🎉`;
+
+    return md;
+  }
+
+  const totalIssues = Object.values(severitiesCount).reduce((a, b) => a + b, 0);
+
+  // Build the header
+  md += `
+
+Found **${totalIssues}** total issues:
+${[0, 1, 2, 3]
+  .filter((severity) => severitiesCount[severity] > 0)
+  .map(
+    (severity) =>
+      `- ${getSeverityEmoji(severity)} ${getSeverityLabel(severity)}: ${severitiesCount[severity]}`
+  )
+  .join("\n")}
+
+---
+
+`;
+
   // Build the issues section
-  sortedRules.forEach(([ruleName, issues]) => {
+  nonGatewayRules.forEach(([ruleName, issues]) => {
     const severity = issues[0]?.severity ?? 0;
 
     md += `<details open><summary>${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)} (${issues.length})</summary>\n\n`;
@@ -114,7 +123,7 @@ ${[0, 1, 2, 3]
         acc[file].push(issue);
         return acc;
       },
-      {} as Record<string, typeof issues>,
+      {} as Record<string, typeof issues>
     );
 
     Object.entries(issuesByFile).forEach(([file, fileIssues]) => {
@@ -128,6 +137,41 @@ ${[0, 1, 2, 3]
 
     md += `</details>\n\n`;
   });
+
+  if (gatewayRules.length > 0) {
+    md += `# Gateway Linting Report
+    
+    `;
+
+    // Build the issues section
+    gatewayRules.forEach(([ruleName, issues]) => {
+      const severity = issues[0]?.severity ?? 0;
+
+      md += `<details open><summary>${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)} (${issues.length})</summary>\n\n`;
+
+      // Group issues by file
+      const issuesByFile = issues.reduce(
+        (acc, issue) => {
+          const file = issue.source;
+          if (!acc[file]) acc[file] = [];
+          acc[file].push(issue);
+          return acc;
+        },
+        {} as Record<string, typeof issues>
+      );
+
+      Object.entries(issuesByFile).forEach(([file, fileIssues]) => {
+        md += `\n\n- File: \`${file.replace(process.env.GITHUB_WORKSPACE! || ProjectRoot, "")}\` (${fileIssues.length})\n\n`;
+        fileIssues.forEach((issue) => {
+          md += `   - **[Line ${issue.range.start.line + 1}](${createFileLink(issue.source, issue.range.start.line + 1, issue.range.start.character)})**: ${issue.message.replaceAll("'", "`")}\n`;
+        });
+
+        md += `\n\n`;
+      });
+
+      md += `</details>\n\n`;
+    });
+  }
 
   return md;
 };
