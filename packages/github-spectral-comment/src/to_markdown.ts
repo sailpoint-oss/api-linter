@@ -81,7 +81,7 @@ export const toMarkdown = async (
   let md = `# Linting Report 
   
 Last updated: ${new Date().toLocaleString("en-US", {
-    timeZone: "-06",
+    timeZone: "America/Chicago",
   })} \n\n`;
 
   // No issues found
