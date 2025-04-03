@@ -107,7 +107,7 @@ ${[0, 1, 2, 3]
 `;
 
   if (nonGatewayRules.length > 0) {
-    md += `## OpenAPI Rules \n\n`;
+    md += `## OpenAPI Specs \n\n`;
 
     // Build the issues section
     nonGatewayRules.forEach(([ruleName, issues]) => {
@@ -140,7 +140,7 @@ ${[0, 1, 2, 3]
   }
 
   if (gatewayRules.length > 0) {
-    md += `## Gateway Rules \n\n`;
+    md += `## Gateway \n\n`;
 
     // Build the issues section
     gatewayRules.forEach(([ruleName, issues]) => {
