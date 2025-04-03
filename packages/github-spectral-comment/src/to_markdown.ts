@@ -78,15 +78,13 @@ export const toMarkdown = async (
     ruleName.startsWith("gateway")
   );
 
-  let md = `# Linting Report`;
+  let md = `# Linting Report 
+  
+Last updated: ${new Date().toLocaleString()} \n\n`;
 
   // No issues found
   if (Object.keys(filteredPbs).length === 0) {
-    md += `
-
-Last updated: ${new Date().toLocaleString()}
-
-✅ No issues found. Great job! 🎉`;
+    md += `✅ No issues found. Great job! 🎉`;
 
     return md;
   }
@@ -104,16 +102,14 @@ ${[0, 1, 2, 3]
       `- ${getSeverityEmoji(severity)} ${getSeverityLabel(severity)}: ${severitiesCount[severity]}`
   )
   .join("\n")}
-
----
-
-## OpenAPI Rules
-
 `;
 
-  // Build the issues section
-  nonGatewayRules.forEach(([ruleName, issues]) => {
-    const severity = issues[0]?.severity ?? 0;
+  if (nonGatewayRules.length > 0) {
+    md += `## OpenAPI Rules \n\n`;
+
+    // Build the issues section
+    nonGatewayRules.forEach(([ruleName, issues]) => {
+      const severity = issues[0]?.severity ?? 0;
 
     md += `<details open><summary>${getSeverityEmoji(severity)} ${fromKebabCaseToTitleCase(ruleName)} (${issues.length})</summary>\n\n`;
 
@@ -137,8 +133,9 @@ ${[0, 1, 2, 3]
       md += `\n\n`;
     });
 
-    md += `</details>\n\n`;
-  });
+      md += `</details>\n\n`;
+    });
+  }
 
   if (gatewayRules.length > 0) {
     md += `## Gateway Rules \n\n`;
