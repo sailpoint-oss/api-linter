@@ -1,4 +1,4 @@
-functions: [tag-alpha-check]
+functions: [gateway-test]
 rules:
   route-must-have-required-properties:
     given: $.sp-gateway.routes.*
