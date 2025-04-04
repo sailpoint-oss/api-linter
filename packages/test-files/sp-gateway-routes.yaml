@@ -1,0 +1,17 @@
+sp-gateway:
+  routes:
+    access-request-test:
+      path: "/access-request-test"
+      servicePath: "/test/access-request-administration"
+      additionalVersions:
+      - "beta"
+      - "v2027"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "limited-preview"
+    test-route:
+      service: "identity"
+      versionStart: 0
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

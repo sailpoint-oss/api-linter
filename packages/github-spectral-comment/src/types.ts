@@ -13,6 +13,7 @@ export interface ActionInputs {
   "spectral-root-ruleset"?: string;
   "spectral-path-ruleset"?: string;
   "spectral-schema-ruleset"?: string;
+  "spectral-gateway-ruleset"?: string;
   "github-url"?: string;
 }
 
