@@ -1,4 +1,5 @@
-functions: [gateway-test]
+functions: [gateway-test,
+  check-version-start]
 rules:
   gateway-route-must-have-required-properties:
     given: $.sp-gateway.routes.*
@@ -17,7 +18,6 @@ rules:
         values:
           - beta
           - v3
-          - v2024
   gateway-route-api-state-must-be-valid:
     given: $.sp-gateway.routes.*
     severity: error
@@ -30,6 +30,60 @@ rules:
           - limited-preview
           - public-preview
           - public
+
+  gateway-route-api-state-in-version-details-map-must-be-valid:
+    given: $.sp-gateway.routes.*.versionDetailsMap.*
+    severity: error
+    then:
+      - field: apiState
+        function: enumeration
+        functionOptions:
+          values:
+            - private
+            - limited-preview
+            - public-preview
+            - public
+
+  gateway-route-route-type-must-be-valid:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - field: routeType
+        function: enumeration
+        functionOptions:
+          values:
+            - prefix
+            - path
+
+  gateway-route-must-have-versionStart:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - field: versionStart
+        function: check-version-start
+
+  gateway-route-deprecation-date-format-must-be-valid:
+    given: $.sp-gateway.routes.*.versionDetailsMap.*
+    severity: error
+    then:
+      - field: deprecation
+        function: pattern
+        functionOptions:
+          match: "^\\d{4}-\\d{2}-\\d{2}$"
+
+  gateway-route-rate-limit-config-must-be-valid:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - field: rateLimit
+        function: pattern
+        functionOptions:
+          match: "^[1-9]\d*$"
+      - field: rateLimitIntervalSeconds
+        function: pattern
+        functionOptions:
+          match: "^[1-9]\d*$"
+
   # check-on-prefix-routes-only:
   #   given: $.sp-gateway.routes[?(@.apiState == "public")]
   #   severity: error
