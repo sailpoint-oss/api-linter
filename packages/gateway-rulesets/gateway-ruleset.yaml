@@ -2,6 +2,7 @@ functions: [gateway-test,
   check-version-start]
 rules:
   gateway-route-must-have-required-properties:
+    message: "Mandatory properties id, path and service must be specified"
     given: $.sp-gateway.routes.*
     severity: error
     then:
@@ -9,7 +10,11 @@ rules:
         function: truthy
       - field: service
         function: truthy
+      - field: id
+        function: truthy
+
   gateway-route-additional-versions-must-be-valid:
+    message: "Invalid value specified for additionalVersion. Must be beta or v3."
     given: $.sp-gateway.routes.*.additionalVersions.*
     severity: error
     then: 
@@ -19,6 +24,7 @@ rules:
           - beta
           - v3
   gateway-route-api-state-must-be-valid:
+    message: "Invalid value for apiState. Valid value is one of private, limited-preview, public-preview and public."
     given: $.sp-gateway.routes.*
     severity: error
     then:
@@ -32,6 +38,7 @@ rules:
           - public
 
   gateway-route-api-state-in-version-details-map-must-be-valid:
+    message: "Invalid value for apiState. Valid value is one of private, limited-preview, public-preview and public."
     given: $.sp-gateway.routes.*.versionDetailsMap.*
     severity: error
     then:
@@ -45,6 +52,7 @@ rules:
             - public
 
   gateway-route-route-type-must-be-valid:
+    message: "Invalid value for routeType. Valid value is one of prefix and path."
     given: $.sp-gateway.routes.*
     severity: error
     then:
@@ -55,7 +63,7 @@ rules:
             - prefix
             - path
 
-  gateway-route-must-have-versionStart:
+  gateway-route-must-have-valid-version-start:
     given: $.sp-gateway.routes.*
     severity: error
     then:
@@ -63,15 +71,16 @@ rules:
         function: check-version-start
 
   gateway-route-deprecation-date-format-must-be-valid:
-    given: $.sp-gateway.routes.*.versionDetailsMap.*
+    message: "Invalid value for deprecation. Must be a valid date in yyyy-mm-dd format."
+    given: $.sp-gateway.routes.*.versionDetailsMap.*.deprecation
     severity: error
     then:
-      - field: deprecation
         function: pattern
         functionOptions:
           match: "^\\d{4}-\\d{2}-\\d{2}$"
 
   gateway-route-rate-limit-config-must-be-valid:
+    message: "Invalid value for rateLimit or rateLimitIntervalSeconds. Must be positive integer."
     given: $.sp-gateway.routes.*
     severity: error
     then:
@@ -83,6 +92,35 @@ rules:
         function: pattern
         functionOptions:
           match: "^[1-9]\d*$"
+
+  gateway-route-strip-prefix-must-be-boolean:
+    message: "Invalid value for stripPrefix. Must be a boolean."
+    given: "$.sp-gateway.routes.*.stripPrefix"
+    severity: error
+    then:
+        function: schema
+        functionOptions:
+            schema:
+              type: boolean
+
+  gateway-route-client-ip-header-must-be-boolean:
+    message: "Invalid value for clientIPHeader. Must be either true or false."
+    given: "$.sp-gateway.routes.*.clientIPHeader"
+    severity: error
+    then:
+      - function: pattern
+        functionOptions:
+          "match": "^true$|^false$"
+
+  gateway-route-allowed-fields-in-version-details-map:
+    message: "Invalid field in versionDetailsMap. Must be a valid api version e.g. beta, v3 or v20XX"
+    severity: error
+    given: "$.sp-gateway.routes.*.versionDetailsMap.*~"
+    then:
+      - function: pattern
+        functionOptions:
+          "match" : "^beta$|^v3$|^v(202[4-9]|20[3-9][0-9]|2[1-9][0-9]{2})$"
+
 
   # check-on-prefix-routes-only:
   #   given: $.sp-gateway.routes[?(@.apiState == "public")]
