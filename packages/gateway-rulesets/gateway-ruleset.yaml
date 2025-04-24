@@ -108,9 +108,10 @@ rules:
     given: "$.sp-gateway.routes.*.clientIPHeader"
     severity: error
     then:
-      - function: pattern
-        functionOptions:
-          "match": "^true$|^false$"
+      function: schema
+      functionOptions:
+        schema:
+          type: boolean
 
   gateway-route-allowed-fields-in-version-details-map:
     message: "Invalid field in versionDetailsMap. Must be a valid api version e.g. beta, v3 or v20XX"
