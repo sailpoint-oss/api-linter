@@ -1,5 +1,5 @@
 functions: [gateway-test,
-  check-version-start]
+  check-version-start,check-unique-id,check-version-start-order]
 rules:
   gateway-route-must-have-required-properties:
     message: "Mandatory properties id, path and service must be specified"
@@ -69,6 +69,20 @@ rules:
     then:
       - field: versionStart
         function: check-version-start
+
+  gateway-route-must-have-unique-id:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - field: id
+        function: check-unique-id
+
+  gateway-route-must-have-version-start-in-order:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - field: versionStart
+        function: check-version-start-order
 
   gateway-route-deprecation-date-format-must-be-valid:
     message: "Invalid value for deprecation. Must be a valid date in yyyy-mm-dd format."
