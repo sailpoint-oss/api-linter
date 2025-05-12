@@ -4,7 +4,7 @@ function countDigits(num:number) {
     return String(num).split('').reduce(
         (count) => count + 1, 0);
 }
-let isYear:boolean = false;
+let isNonVersioned:boolean = false;
 // Create the original function using Spectral's helper.
 export default createOptionalContextRulesetFunction(
     {
@@ -16,13 +16,13 @@ export default createOptionalContextRulesetFunction(
         let results = [];
         let digitCount:number = countDigits(targetVal);
 
-        if(isYear && digitCount==1){
+        if(isNonVersioned && digitCount>=4){
             results.push({
-                message: `non-versioned apis must be specified above versioned apis`
+                message: `versioned apis must be specified above non-versioned apis`
             });
         }else{
-            if(digitCount>=4){
-                isYear = true;
+            if(digitCount==1){
+                isNonVersioned = true;
             }
         }
         return results;
