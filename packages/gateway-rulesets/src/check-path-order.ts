@@ -1,6 +1,7 @@
 import {createOptionalContextRulesetFunction} from "./createOptionalContextRulesetFunction.js";
 
 type Route = {
+    id: string;
     path: string;
     versionStart: number;
 };
@@ -14,8 +15,8 @@ export default createOptionalContextRulesetFunction(
     },
     (routes: Route[], options: {}) => {
         const results = [];
-        const versionedPaths = routes.filter(route => route.versionStart!=0).map(route => route.path);
-        const nonVersionedPaths = routes.filter(route => route.versionStart==0).map(route => route.path);
+        const versionedPaths = routes.filter(route => route.versionStart!=0)
+        const nonVersionedPaths = routes.filter(route => route.versionStart==0)
 
 
         // Sort paths based on the rules and concat both paths
@@ -23,27 +24,31 @@ export default createOptionalContextRulesetFunction(
         nonVersionedPaths.sort(compareRoutes);
 
         let combinedPaths = versionedPaths.concat(nonVersionedPaths);
-
+         //console.table(combinedPaths)
         // Validate the order of paths
         for (let i = 0; i < routes.length; i++) {
             const original = routes[i];
             const sorted = combinedPaths[i];
 
-            if (original.path !== sorted) {
+            if (original.path !== sorted.path) {
+
+                const correctPosition = combinedPaths.findIndex(p => p.path === original.path);
                 results.push({
-                    message: `Route with path "${original.path}" is at position ${i} but should be at position ${combinedPaths.findIndex(p => p === original.path)}`
+                    message: `Route with path "${original.path}" and id "${original.id}" is at position ${i} but should be at position "${correctPosition}" where route with id "${routes[correctPosition].id}" and path "${routes[correctPosition].path}" is located"`
                 });
+                return results;
             }
         }
 
-        return results;
+        // return results;
     },
 );
 
-function compareRoutes(path1: string, path2: string): number {
+function compareRoutes(route1: Route, route2: Route): number {
+
     // Split paths and filter out empty segments
-    const segments1: string[] = path1.split('/').filter(s => s.length > 0);
-    const segments2: string[] = path2.split('/').filter(s => s.length > 0);
+    const segments1: string[] = route1.path.split('/').filter(s => s.length > 0);
+    const segments2: string[] = route2.path.split('/').filter(s => s.length > 0);
 
     // Compare by path length
     if (segments1.length !== segments2.length) {
@@ -87,7 +92,7 @@ function compareRoutes(path1: string, path2: string): number {
     }
 
     // If everything else is equal, compare lexicographically
-    return path1.localeCompare(path2);
+    return route1.path.localeCompare(route2.path);
 }
 
 function countStaticSegments(segments: string[]): number {
