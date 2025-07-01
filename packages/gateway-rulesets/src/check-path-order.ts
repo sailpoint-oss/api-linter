@@ -44,7 +44,6 @@ export default createOptionalContextRulesetFunction(
         nonVersionedPaths.sort(compareRoutes);
 
         let combinedPaths = versionedPaths.concat(nonVersionedPaths);
-        //console.table(combinedPaths)
         // Validate the order of paths
         for (let i = 0; i < routes.length; i++) {
             const original = routes[i];
