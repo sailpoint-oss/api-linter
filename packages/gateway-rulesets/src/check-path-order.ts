@@ -15,16 +15,36 @@ export default createOptionalContextRulesetFunction(
     },
     (routes: Route[], options: {}) => {
         const results = [];
-        const versionedPaths = routes.filter(route => route.versionStart!=0)
-        const nonVersionedPaths = routes.filter(route => route.versionStart==0)
+        if (!Array.isArray(routes)) {
+            results.push({
+                message: `Expected routes to be an array`
+            });
+        }
+        for (const route of routes) {
+            if (route.path == null || route.path === "") {
+                results.push({
+                    message: `Route with id "${route.id}" has a null or empty path.`,
+                });
+            }
+        }
+        // return the results since basic validations have failed here for path and routes type.
+        if (results.length > 0) {
+            return results
+        }
 
+        const versionedPaths = routes.filter(
+            route => route.versionStart !== 0 && route.versionStart != null
+        );
+        const nonVersionedPaths = routes.filter(
+            route => route.versionStart === 0 || route.versionStart == null
+        );
 
         // Sort paths based on the rules and concat both paths
         versionedPaths.sort(compareRoutes);
         nonVersionedPaths.sort(compareRoutes);
 
         let combinedPaths = versionedPaths.concat(nonVersionedPaths);
-         //console.table(combinedPaths)
+        //console.table(combinedPaths)
         // Validate the order of paths
         for (let i = 0; i < routes.length; i++) {
             const original = routes[i];
@@ -39,8 +59,6 @@ export default createOptionalContextRulesetFunction(
                 return results;
             }
         }
-
-        // return results;
     },
 );
 
