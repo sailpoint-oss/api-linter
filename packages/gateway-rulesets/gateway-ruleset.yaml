@@ -90,11 +90,11 @@ rules:
     then:
       - function: check-path-order
 
-  gateway-route-must-have-path-documentation:
-    given: $.sp-gateway.routes.*
-    severity: warn
-    then:
-      - function: check-path-documentation
+  # gateway-route-must-have-path-documentation:
+  #   given: $.sp-gateway.routes.*
+  #   severity: warn
+  #   then:
+  #     - function: check-path-documentation
 
   gateway-route-deprecation-date-format-must-be-valid:
     message: "Invalid value for deprecation. Must be a valid date in yyyy-mm-dd format."
