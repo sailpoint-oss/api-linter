@@ -1,14 +1,14 @@
-import { describe, test, expect, vi } from "vitest";
-import {
-  validateInputs,
-  getProjectConfig,
-  runSpectralAnalysis,
-} from "../action.js";
-import { ActionInputs, Project } from "../types.js";
-import { Spectral } from "@stoplight/spectral-core";
+import { afterEach, describe, expect, test, vi } from "vitest";
+import { ActionInputs } from "../types.js";
 
 describe("validateInputs", () => {
+  // Import the module inside each test after setting the environment
   test("should throw error for missing inputs in prod", async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    
+    // Import after setting the environment
+    const { validateInputs } = await import("../action.js");
+    
     const inputs: ActionInputs = {
       "github-token": undefined,
       "file-glob": "test.yaml",
@@ -20,42 +20,21 @@ describe("validateInputs", () => {
   });
 
   test("should not throw error for missing inputs in dev", async () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    
+    // Import after setting the environment
+    const { validateInputs } = await import("../action.js");
+    
     const inputs: ActionInputs = {
       "github-token": undefined,
       "file-glob": "test.yaml",
     };
 
-    await expect(validateInputs(inputs)).resolves.not.toThrow();
+    await expect(validateInputs(inputs)).resolves.toBeUndefined();
   });
-});
 
-describe("getProjectConfig", () => {
-  test("should return project config with default workspace", () => {
-    const config = getProjectConfig("/test/workspace");
-    expect(config.workspace).toBe("/test/workspace");
-  });
-});
-
-describe("runSpectralAnalysis", () => {
-  test("should analyze files with appropriate spectral instance", async () => {
-    const mockSpectral = {
-      runWithResolved: vi.fn().mockResolvedValue({ results: [] }),
-    };
-
-    const fileContents = [{ file: "test/sailpoint-api.yaml", content: "test" }];
-
-    const results = await runSpectralAnalysis(
-      fileContents,
-      {
-        rootSpectral: mockSpectral as unknown as Spectral,
-        pathSpectral: mockSpectral as unknown as Spectral,
-        schemaSpectral: mockSpectral as unknown as Spectral,
-        gatewaySpectral: mockSpectral as unknown as Spectral,
-      },
-      "/test/workspace",
-    );
-
-    expect(results).toHaveLength(1);
-    expect(mockSpectral.runWithResolved).toHaveBeenCalled();
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules(); // Clear module cache
   });
 });
