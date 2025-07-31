@@ -300,6 +300,9 @@ export default createOptionalContextRulesetFunction(
     targetVal: Route,
     options?: { specBasePath?: string; apiStateData?: ApiStateData }
   ) => {
+
+    console.log("\nRunning API state validation for:", targetVal.path);
+
     let results: IFunctionResult[] = [];
 
     // Priority order: functionOptions > context > environment > empty
@@ -328,6 +331,9 @@ export default createOptionalContextRulesetFunction(
       const validationIssue = validateRouteWithData(targetVal, apiStates);
 
       if (validationIssue) {
+        results.push({
+          message: `API state validation failed: ${validationIssue}`,
+        });
         // Extract just the key issue from the message
         let shortMessage = validationIssue;
         if (validationIssue.includes("not found in")) {
