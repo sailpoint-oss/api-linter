@@ -56,7 +56,7 @@ function parseYamlProperties(
         value.properties != undefined &&
         typeof value.properties == "object"
       ) {
-        //console.log(`${key} has type object to parse further`)
+        // console.log(`${key} has type object to parse further`)
         if (pathPrefix == null) {
           parseYamlProperties(value, field, key, errorResults, rule);
         } else if (pathPrefix == "properties") {
@@ -251,11 +251,11 @@ function parseYamlProperties(
           });
         }
       } else {
-        // console.log(
-        //   `${key} is low level, ready to check for ${field}. ${
-        //     pathPrefix + ".properties." + key
-        //   }`
-        //);
+        console.log(
+          `${key} is low level, ready to check for ${field}. ${
+            pathPrefix + ".properties." + key
+          }`
+        );
         if (
           "nullable" in value &&
           value.nullable == true &&
@@ -269,17 +269,17 @@ function parseYamlProperties(
           "items" in value &&
           value.items != undefined &&
           field == "example" &&
-          "items" in value.items &&
+          field in value.items &&
           value.items.hasOwnProperty(field)
         ) {
-          // console.log("Array Type, checking if items exist");
+          console.log("Array Type, checking if items exist");
         } else {
           // If the key does not define the field we are looking for
           if (!value.hasOwnProperty(field) && value[field] == null) {
-            // console.log(`${field} IS MISSING`)
-            // console.log(
-            //   `Rule ${rule}: The property ${key} must have a ${field}: ${pathPrefix}.properties.${key}.${field}`
-            // );
+            console.log(`${field} IS MISSING`)
+            console.log(
+              `Rule ${rule}: The property ${key} must have a ${field}: ${pathPrefix}.properties.${key}.${field}`
+            );
             if (
               pathPrefix.split(".")[pathPrefix.split(".").length - 1] ==
               "properties"

@@ -41,33 +41,34 @@ export default createOptionalContextRulesetFunction(
 
       if (targetVal.parameters != undefined) {
         for (const [key, value] of Object.entries(targetVal.parameters)) {
+
           if (
             "in" in value &&
-            value.in == "query" &&
+            value.in === "query" &&
             "name" in value &&
-            value.name == "limit"
+            value.name === "limit"
           ) {
             limitFound = true;
+          
             if (
               "schema" in value &&
               value.schema &&
-              "minimum" in value.schema &&
-              value.schema.minimum == undefined
+              // @ts-expect-error OpenAPI Extenstions are valid
+              (value.schema.minimum == null || value.schema.maximum == null)
             ) {
-              results.push({
-                message: `Rule ${rule}: All GET list operations must have minimum defined for limit query parameter`,
-              });
-            }
-
-            if (
-              "schema" in value &&
-              value.schema &&
-              "maximum" in value.schema &&
-              value.schema.maximum == undefined
-            ) {
-              results.push({
-                message: `Rule ${rule}: All GET list operations must have maximum defined for limit query parameter`,
-              });
+              // @ts-expect-error OpenAPI Extenstions are valid
+              if (value.schema.minimum == null) {
+                results.push({
+                  message: `Rule ${rule}: All GET list operations must have a minimum defined for the 'limit' query parameter`,
+                });
+              }
+          
+              // @ts-expect-error OpenAPI Extenstions are valid
+              if (value.schema.maximum == null) {
+                results.push({
+                  message: `Rule ${rule}: All GET list operations must have a maximum defined for the 'limit' query parameter`,
+                });
+              }
             }
           }
 
