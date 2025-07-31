@@ -43,6 +43,7 @@ export async function runSpectralAnalysis(
     rootSpectral: any;
     pathSpectral: any;
     schemaSpectral: any;
+    gatewaySpectral: any;
   },
   workspace: string,
 ): Promise<SpectralAnalysisResult[]> {
@@ -71,6 +72,14 @@ export async function runSpectralAnalysis(
         core.debug(`Running schema spectral ruleset on ${file}`);
         pbs = await runSpectral(
           spectralInstances.schemaSpectral,
+          fileContent,
+          workspace,
+          true,
+        );
+      } else if (file.includes("sp-gateway-routes")) {
+        core.debug(`Running gateway spectral ruleset on ${file}`);
+        pbs = await runSpectral(
+          spectralInstances.gatewaySpectral,
           fileContent,
           workspace,
           true,
@@ -119,7 +128,7 @@ export async function getGithubComment(
   const comments = data.filter(
     (comment) =>
       comment?.user?.login === "github-actions[bot]" &&
-      comment?.body?.includes("OpenAPI Linting Report"),
+      comment?.body?.includes("Linting Report"),
   );
   core.debug(`Found ${comments.length} matching comments`);
 

@@ -52,6 +52,7 @@ export default createOptionalContextRulesetFunction(
       "approve",
       "cancel",
       "complete",
+      "close",
       "create",
       "delete",
       "disable",

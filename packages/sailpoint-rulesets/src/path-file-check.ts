@@ -40,20 +40,29 @@ export default createOptionalContextRulesetFunction(
 
       const sourceVersionFolder = getVersionFolder(context.document.source);
 
+      if (!sourceVersionFolder) {
+        console.log(`Skipping validation: Unable to determine version folder for ${context.document.source}`);
+        return [];
+      }
+      
       for (const reference of matchingReferences) {
         const refVersionFolder = getVersionFolder(reference.ref);
-        if (
-          apiVersionsToValidate.includes(
-            getRelativePathFromVersion(sourceVersionFolder),
-          ) &&
-          refVersionFolder !== sourceVersionFolder
-        ) {
+        if (!refVersionFolder) {
+          console.log(`Skipping reference ${reference.ref}: Unable to determine version folder`);
+          continue;
+        }
+      
+        const sourceRelative = getRelativePathFromVersion(sourceVersionFolder);
+        const refRelative = getRelativePathFromVersion(reference.ref);
+      
+        if (!sourceRelative || !refRelative) {
+          console.log(`Skipping validation due to missing relative paths for ${reference.ref}`);
+          continue;
+        }
+      
+        if (apiVersionsToValidate.includes(sourceRelative) && refVersionFolder !== sourceVersionFolder) {
           results.push({
-            message: `Rule ${rule}: Referenced document ${getRelativePathFromVersion(
-              reference.ref,
-            )} is outside the allowed version folder ${getRelativePathFromVersion(
-              sourceVersionFolder,
-            )}`,
+            message: `Rule ${rule}: Referenced document ${refRelative} is outside the allowed version folder ${sourceRelative}`,
             path: [...toNumbers(removeLastTwo(reference.path).split("."))],
           });
         }
@@ -87,10 +96,7 @@ function getVersionFolder(filePath: string) {
   const versionIndex = parts.findIndex((part) =>
     ["v3", "beta", "v2024", "v2025"].includes(part),
   );
-  if (versionIndex === -1) {
-    throw new Error(`Unable to determine version folder for path: ${filePath}`);
-  }
-  return parts.slice(0, versionIndex + 1).join("/");
+  return versionIndex !== -1 ? parts.slice(0, versionIndex + 1).join("/") : null;
 }
 
 function getRelativePathFromVersion(filePath: string) {
@@ -98,10 +104,7 @@ function getRelativePathFromVersion(filePath: string) {
   const versionIndex = parts.findIndex((part) =>
     ["v3", "beta", "v2024", "v2025"].includes(part),
   );
-  if (versionIndex === -1) {
-    throw new Error(`Unable to determine version folder for path: ${filePath}`);
-  }
-  return parts.slice(versionIndex).join("/");
+  return versionIndex !== -1 ? parts.slice(versionIndex).join("/") : null;
 }
 
 function extractValidReferencedPaths(
