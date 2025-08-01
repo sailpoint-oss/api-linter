@@ -44,8 +44,8 @@ jobs:
       - name: Speccy Resolve
         run: |
           npm install -g speccy@0.8.7
-          speccy resolve --quiet ../../api-specs/idn/sailpoint-api.v2024.yaml -o packages/gateway-rulesets/src/v2024.yaml
-          speccy resolve --quiet ../../api-specs/idn/sailpoint-api.v2025.yaml -o packages/gateway-rulesets/src/v2025.yaml
+              speccy resolve --quiet api-specs/idn/sailpoint-api.v2024.yaml -o packages/gateway-rulesets/src/v2024.yaml
+              speccy resolve --quiet api-specs/idn/sailpoint-api.v2025.yaml -o packages/gateway-rulesets/src/v2025.yaml
 
       - name: generate API State Map
         working-directory: packages/gateway-rulesets/src
