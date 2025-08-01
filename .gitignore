@@ -121,3 +121,6 @@ yarn.lock
 github-spectral-comment/node_modules
 github-spectral-comment/sample
 api-specs/
+
+packages/sailpoint-rulesets/functions/*
+packages/gateway-rulesets/functions/*
