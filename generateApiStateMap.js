@@ -178,7 +178,7 @@ class OpenAPIParser {
     
     // Example usage - replace with your actual file paths
     const filePaths = [
-      '/2025.yaml',
+      './2025.yaml',
       './2024.yaml',
       // Add more file paths as needed
     ];
