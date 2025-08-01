@@ -34,6 +34,23 @@ jobs:
       - name: Run Tests
         run: pnpm test
 
+      - name: Checkout Spectral Action
+        uses: actions/checkout@v4
+        with:
+          repository: sailpoint-oss/api-specs
+          path: api-specs
+          ref: main
+      
+      - name: Set Operation ID Environment Variables
+        run: |
+          npm install -g speccy@0.8.7
+          speccy resolve --quiet ../idn/sailpoint-api.v2024.yaml -o packages/gateway-rulesets/src/v2024.yaml
+          speccy resolve --quiet ../idn/sailpoint-api.v2025.yaml -o packages/gateway-rulesets/src/v2025.yaml
+
+      - name: generate API State Map
+        working-directory: packages/gateway-rulesets/src
+        run: node ../../../generateApiStateMap.js
+
       - name: Preview Action
         uses: ./packages/github-spectral-comment
         continue-on-error: true
