@@ -198,102 +198,6 @@ function validateRouteWithData(
   return null;
 }
 
-// Print summary on process exit (only works in Node.js environments)
-if (typeof process !== "undefined" && process.on) {
-  process.on("beforeExit", () => {
-    if (
-      !summaryPrinted &&
-      (mismatches.length > 0 || limitedPreviewRoutes.length > 0)
-    ) {
-      summaryPrinted = true;
-      console.log("\n\n========================================");
-      console.log("API STATE VALIDATION SUMMARY");
-      console.log("========================================");
-      console.log(`Total mismatches found: ${mismatches.length}`);
-      if (limitedPreviewRoutes.length > 0) {
-        console.log(
-          `Limited-preview routes found: ${limitedPreviewRoutes.length}`
-        );
-      }
-
-      // Count by version (including limited-preview routes)
-      const versionCounts = new Map<string, number>();
-      mismatches.forEach(({ version }) => {
-        versionCounts.set(version, (versionCounts.get(version) || 0) + 1);
-      });
-      limitedPreviewRoutes.forEach(({ version }) => {
-        versionCounts.set(version, (versionCounts.get(version) || 0) + 1);
-      });
-
-      console.log("\nIssues by version:");
-      Array.from(versionCounts.entries())
-        .sort(([a], [b]) => a.localeCompare(b))
-        .forEach(([version, count]) => {
-          console.log(`  - Version ${version}: ${count} issues`);
-        });
-
-      // Group by version and issue type
-      const versionGroups = new Map<string, Map<string, string[]>>();
-
-      // Add mismatches to version groups
-      mismatches.forEach(({ path, issue, version }) => {
-        let issueType = "Other";
-        if (issue.includes("not found in")) {
-          issueType = "Path not found in API state data";
-        } else if (issue.includes("all methods are 'public'")) {
-          issueType = "Marked as public-preview but all methods are public";
-        } else if (issue.includes("has 'public-preview' methods")) {
-          issueType = "Marked as public but has public-preview methods";
-        }
-
-        if (!versionGroups.has(version)) {
-          versionGroups.set(version, new Map<string, string[]>());
-        }
-
-        const versionGroup = versionGroups.get(version)!;
-        if (!versionGroup.has(issueType)) {
-          versionGroup.set(issueType, []);
-        }
-        versionGroup.get(issueType)!.push(path);
-      });
-
-      // Add limited-preview routes to version groups
-      limitedPreviewRoutes.forEach(({ path, version }) => {
-        const issueType = "Limited-preview routes (should not be documented)";
-
-        if (!versionGroups.has(version)) {
-          versionGroups.set(version, new Map<string, string[]>());
-        }
-
-        const versionGroup = versionGroups.get(version)!;
-        if (!versionGroup.has(issueType)) {
-          versionGroup.set(issueType, []);
-        }
-        versionGroup.get(issueType)!.push(path);
-      });
-
-      // Print grouped issues by version
-      const versions = Array.from(versionGroups.keys()).sort();
-      versions.forEach((version) => {
-        console.log(`\n📌 Version ${version}:`);
-        console.log("=".repeat(20));
-
-        const issueGroups = versionGroups.get(version)!;
-        issueGroups.forEach((paths, issueType) => {
-          console.log(`\n  ${issueType} (${paths.length} issues):`);
-          console.log("  " + "-".repeat(issueType.length + 15));
-
-          paths.forEach((path) => {
-            console.log(`    - ${path}`);
-          });
-        });
-      });
-
-      console.log("\n========================================\n");
-    }
-  });
-}
-
 export default createOptionalContextRulesetFunction(
   { input: null, options: {} },
   (
@@ -331,9 +235,7 @@ export default createOptionalContextRulesetFunction(
       const validationIssue = validateRouteWithData(targetVal, apiStates);
 
       if (validationIssue) {
-        results.push({
-          message: `API state validation failed: ${validationIssue}`,
-        });
+     
         // Extract just the key issue from the message
         let shortMessage = validationIssue;
         if (validationIssue.includes("not found in")) {
@@ -345,6 +247,10 @@ export default createOptionalContextRulesetFunction(
           const methods = match ? match[1] : "some methods";
           shortMessage = `Marked as 'public' but ${methods} are 'public-preview'`;
         }
+
+           results.push({
+          message: ` ${targetVal.path}: ${shortMessage}`,
+        });
 
         mismatches.push({
           path: targetVal.path,
