@@ -143,32 +143,71 @@ function validateRouteWithData(
 
   const versionKey = String(route.versionStart);
   const versionData = apiStates[versionKey];
+  
+  // If version is 2024, also check 2025
+  const shouldCheckV2025 = versionKey === "2024";
+  const v2025Data = shouldCheckV2025 ? apiStates["2025"] : null;
 
-  if (!versionData) {
-    return `No API state data for version ${versionKey}`;
+  if (!versionData && !v2025Data) {
+    return `No API state data for version ${versionKey}${shouldCheckV2025 ? ' or 2025' : ''}`;
   }
 
   const normalizedRoutePath = normalizePath(route.path);
 
-  // First check exact match
-  let pathData = versionData[normalizedRoutePath];
-  let isPrefix = false;
-
-  // If no exact match, check for prefix matches
-  if (!pathData) {
-    // Check if any paths in the data start with our route path (prefix matching)
-    for (const [dataPath, methods] of Object.entries(versionData)) {
-      const normalizedDataPath = normalizePath(dataPath);
-      if (normalizedDataPath.startsWith(normalizedRoutePath + "/")) {
-        pathData = methods;
-        isPrefix = true;
-        break;
+  // Helper function to find path in version data
+  function findPathInVersion(vData: any) {
+    if (!vData) return null;
+    
+    // First check exact match with the original path
+    let pathData = vData[route.path];
+    
+    // If not found, try with normalized path
+    if (!pathData) {
+      pathData = vData[normalizedRoutePath];
+    }
+    
+    // Handle typo in API state data: "identites" vs "identities" 
+    // The route has the correct spelling "identities" but API data might have "identites"
+    if (!pathData && route.path.includes('/identities/')) {
+      const typoPath = route.path.replace('/identities/', '/identites/');
+      pathData = vData[typoPath];
+    }
+    
+    // If no exact match, check for prefix matches
+    if (!pathData) {
+      for (const [dataPath, methods] of Object.entries(vData)) {
+        const normalizedDataPath = normalizePath(dataPath);
+        if (normalizedDataPath.startsWith(normalizedRoutePath + "/")) {
+          pathData = methods;
+          break;
+        }
       }
     }
+    
+    return pathData;
   }
 
-  if (!pathData) {
-    return `Path not found in ${versionKey} API state data (checked both exact and prefix matches)`;
+  // Check in 2024
+  let pathDataIn2024 = findPathInVersion(versionData);
+  
+  // Check in 2025 if applicable
+  let pathDataIn2025 = null;
+  if (shouldCheckV2025 && v2025Data) {
+    pathDataIn2025 = findPathInVersion(v2025Data);
+  }
+  
+  // Determine which version to use for validation and what to report
+  let pathData = pathDataIn2024 || pathDataIn2025;
+  let foundInVersion = pathDataIn2024 ? "2024" : "2025";
+  
+  // Report based on where the path was found
+  if (!pathDataIn2024 && !pathDataIn2025) {
+    // Not found in either version
+    const versionsChecked = shouldCheckV2025 ? "2024 or 2025" : versionKey;
+    return `Path not found in ${versionsChecked} API state data (checked both exact and prefix matches)`;
+  } else if (!pathDataIn2024 && pathDataIn2025 && shouldCheckV2025) {
+    // Found in 2025 but not in 2024 - report it's missing from 2024 only
+    return `Path not found in 2024 API state data (but exists in 2025)`;
   }
 
   // Check if any method has experimental state
@@ -183,7 +222,7 @@ function validateRouteWithData(
   // Validate based on route's declared state
   if (route.apiState === "public-preview") {
     if (!hasPublicPreview && hasPublic) {
-      return `Path ${route.path} is marked as 'public-preview' in gateway routes but all methods are 'public' in API state data`;
+      return `Path ${route.path} is marked as 'public-preview' in gateway routes but all methods are 'public' in ${foundInVersion} API state data`;
     }
   } else if (route.apiState === "public") {
     if (hasPublicPreview) {
@@ -191,7 +230,7 @@ function validateRouteWithData(
         .filter(([_, state]) => state === "public-preview")
         .map(([method, _]) => method)
         .join(", ");
-      return `Path ${route.path} is marked as 'public' in gateway routes but has 'public-preview' methods (${previewMethods}) in API state data`;
+      return `Path ${route.path} is marked as 'public' in gateway routes but has 'public-preview' methods (${previewMethods}) in ${foundInVersion} API state data`;
     }
   }
 
@@ -239,13 +278,25 @@ export default createOptionalContextRulesetFunction(
         // Extract just the key issue from the message
         let shortMessage = validationIssue;
         if (validationIssue.includes("not found in")) {
-          shortMessage = `Path not found in ${targetVal.versionStart} API state data`;
+          // Check if we looked in both 2024 and 2025
+          if (validationIssue.includes("2024 or 2025")) {
+            shortMessage = `Path not found in 2024 or 2025 API state data`;
+          } else if (validationIssue.includes("but exists in 2025")) {
+            shortMessage = `Path not found in 2024 API state data (but exists in 2025)`;
+          } else {
+            shortMessage = `Path not found in ${targetVal.versionStart} API state data`;
+          }
         } else if (validationIssue.includes("all methods are 'public'")) {
-          shortMessage = `Marked as 'public-preview' but all methods are 'public'`;
+          // Extract version from the message if present
+          const versionMatch = validationIssue.match(/in (\d{4}) API state data/);
+          const version = versionMatch ? versionMatch[1] : "";
+          shortMessage = `Marked as 'public-preview' but all methods are 'public'${version ? ` in ${version}` : ''}`;
         } else if (validationIssue.includes("has 'public-preview' methods")) {
-          const match = validationIssue.match(/\(([^)]+)\)/);
-          const methods = match ? match[1] : "some methods";
-          shortMessage = `Marked as 'public' but ${methods} are 'public-preview'`;
+          const methodMatch = validationIssue.match(/\(([^)]+)\)/);
+          const methods = methodMatch ? methodMatch[1] : "some methods";
+          const versionMatch = validationIssue.match(/in (\d{4}) API state data/);
+          const version = versionMatch ? versionMatch[1] : "";
+          shortMessage = `Marked as 'public' but ${methods} are 'public-preview'${version ? ` in ${version}` : ''}`;
         }
 
            results.push({
