@@ -1,6 +1,15 @@
 functions: [gateway-test,
-  check-version-start,check-unique-id,check-version-start-order,check-path-order,check-path-documentation]
+  check-version-start,check-unique-id,check-version-start-order,check-path-order,check-path-documentation, check-api-state]
 rules:
+  gateway-route-api-state-documented:
+    message: "{{error}}"
+    severity: error
+    given: $.sp-gateway.routes.*
+    then:
+      - function: check-api-state
+        functionOptions:
+          apiStateData: 
+            $ref: "./src/api-state-data.json"
   gateway-route-must-have-required-properties:
     message: "Mandatory properties id, path and service must be specified"
     given: $.sp-gateway.routes.*
