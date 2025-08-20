@@ -1,6 +1,6 @@
 sp-gateway:
   routes:
-    access-request-test:
+    - id: "access-request-test"
       path: "/access-request-test"
       servicePath: "/test/access-request-administration"
       additionalVersions:
@@ -9,9 +9,26 @@ sp-gateway:
       routeType: "prefix"
       stripPrefix: true
       apiState: "limited-preview"
-    test-route:
+    - id: "test-route"
+      path: "/test-route"
       service: "identity"
       versionStart: 0
       routeType: "prefix"
       stripPrefix: true
+      apiState: "public"  
+    - id: "identities"
+      path: "/identities"
+      versionStart: 2024
+      additionalVersions:
+      - "beta"
+      routeType: "prefix"
+      stripPrefix: true
       apiState: "public"
+    - id: "accounts"
+      path: "/accounts"
+      versionStart: 2024
+      additionalVersions:
+      - "beta"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public-preview"
