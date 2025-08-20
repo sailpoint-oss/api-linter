@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import yaml from "js-yaml";
 import path from "path";
+import SwaggerParser from "@apidevtools/swagger-parser";
 
 /**
  * Parses OpenAPI specification files and generates a structured object
@@ -18,14 +19,22 @@ class OpenAPIParser {
     
     for (const filePath of filePaths) {
       try {
-        // Extract filename without extension as the top-level key
+        // Extract version year from filename (e.g., "2024" from "sailpoint-api.v2024.yaml" or "2024.yaml")
         const fileName = path.basename(filePath, path.extname(filePath));
+        let versionKey = fileName;
         
-        // Read and parse the spec file
-        const specData = await this.readSpecFile(filePath);
+        // Extract year from various filename patterns
+        if (fileName.includes('2024')) {
+          versionKey = '2024';
+        } else if (fileName.includes('2025')) {
+          versionKey = '2025';
+        }
+        
+        // Use SwaggerParser to resolve all $ref references
+        const specData = await SwaggerParser.dereference(filePath);
         
         // Process the spec and add to result
-        result[fileName] = this.processSpec(specData);
+        result[versionKey] = this.processSpec(specData);
         
       } catch (error) {
         console.error(`Error processing file ${filePath}:`, error.message);
@@ -176,21 +185,62 @@ class OpenAPIParser {
   try {
     const parser = new OpenAPIParser();
     
-    // Example usage - replace with your actual file paths
-    const filePaths = [
-      './2025.yaml',
-      './2024.yaml',
-      // Add more file paths as needed
-    ];
+    // Check if running in local mode (passed as command line argument)
+    const isLocal = process.argv.includes('--local');
+    
+    let filePaths;
+    
+    if (isLocal) {
+      // Local mode: use api-specs directory
+      console.log('Running in local mode - using api-specs directory');
+      filePaths = [
+        './api-specs/idn/sailpoint-api.v2025.yaml',
+        './api-specs/idn/sailpoint-api.v2024.yaml',
+      ];
+    } else {
+      // GitHub Actions mode: use root directory files
+      console.log('Running in GitHub Actions mode - using root directory');
+      filePaths = [
+        './2025.yaml',
+        './2024.yaml',
+      ];
+      
+      // Check if files exist in GitHub Actions mode
+      const missingFiles = [];
+      for (const filePath of filePaths) {
+        try {
+          await fs.access(filePath);
+        } catch {
+          missingFiles.push(filePath);
+        }
+      }
+      
+      if (missingFiles.length > 0) {
+        console.warn('\nWarning: The following files are not present locally:');
+        missingFiles.forEach(file => console.warn(`  - ${file}`));
+        console.warn('\nThese files are expected to exist in the GitHub Actions environment.');
+        console.warn('Use --local flag to run with local api-specs directory:\n  node generateApiStateMap.js --local\n');
+      }
+    }
     
     const result = await parser.parseSpecFiles(filePaths);
+    
+    // Check if result is empty
+    if (Object.keys(result).length === 0) {
+      console.warn('Warning: No API specifications were successfully processed.');
+      if (!isLocal) {
+        console.warn('Consider using --local flag for local development.');
+      }
+    }
     
     // Output the result
     // console.log(JSON.stringify(result));
     
     // Optionally save to file
-    await fs.writeFile('api-state-data.json', JSON.stringify(result));    
+    await fs.writeFile('api-state-data.json', JSON.stringify(result));
+    console.log('API state map generated successfully: api-state-data.json');
   } catch (error) {
     console.error('Error in main execution:', error);
+    process.exit(1);
   }
 })();
