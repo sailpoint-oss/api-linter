@@ -1,12 +1,8 @@
 import {createOptionalContextRulesetFunction} from "./createOptionalContextRulesetFunction.js";
+import { Route } from "./types.js";
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import * as path from 'path';
-
-type Route = {
-    path: string;
-    apiState?: string;
-};
 
 const consolidatedRouteDocumentation = new Set<string>();
 let IterationOne = true;
