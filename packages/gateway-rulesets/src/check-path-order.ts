@@ -1,10 +1,5 @@
 import {createOptionalContextRulesetFunction} from "./createOptionalContextRulesetFunction.js";
-
-type Route = {
-    id: string;
-    path: string;
-    versionStart: number;
-};
+import { Route } from "./types.js";
 
 
 // Create the function using Spectral's helper
