@@ -4,6 +4,11 @@
   "description": "SailPoint Maintained Spectral Rulesets",
   "main": "dist/index.js",
   "type": "module",
+  "files": [
+    "functions/**/*.js",
+    "*.yaml",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc"
   },

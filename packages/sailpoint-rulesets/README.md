@@ -8,6 +8,22 @@ For installation instructions see the spectral installation document: [How to in
 
 `npm install -g @stoplight/spectral-cli`
 
+## VSCode Real-Time Linting
+
+You can get real-time linting in VSCode as you edit API specification files using the Stoplight Spectral extension. This provides immediate feedback on rule violations directly in your editor.
+
+**Quick Start:**
+1. Build and link this package: `pnpm build && pnpm link --global`
+2. Link in your api-specs repo: `pnpm link --global sailpoint-rulesets`
+3. Install Spectral extension: `code --install-extension stoplight.spectral`
+4. Open your api-specs repository in VSCode
+
+**Documentation:**
+- [Quick Start Guide](./VSCODE_QUICKSTART.md) - Fast setup reference
+- [Detailed Setup Guide](./VSCODE_SETUP.md) - Complete instructions and troubleshooting
+
+The VSCode extension automatically selects the appropriate ruleset (root, path, or schema) based on the file's location, matching the behavior of the CLI linting scripts.
+
 ## Rulesets
 
 We have split up our rules to run on the root level API spec, path operations, and schema objects. We did this in order to provide targeted results to a single file so that our teams could manage the results of the linter instead of receiving an unmanageable set of errors for the entire API spec.

@@ -1,0 +1,38 @@
+{
+  "// NOTE": "This is a template for .vscode/settings.json in the api-specs repository",
+  "// Copy this content to C:/git/cloud-api-client-common/api-specs/.vscode/settings.json": "",
+  
+  "spectral.enable": true,
+  "spectral.run": "onType",
+  "spectral.rulesetFile": ".spectral.yaml",
+  "spectral.validateLanguages": [
+    "yaml",
+    "json",
+    "jsonc"
+  ],
+  "spectral.validateFiles": [
+    "**/*.yaml",
+    "**/*.yml",
+    "**/*.json"
+  ],
+  
+  "// Editor settings for YAML files": "",
+  "yaml.validate": true,
+  "yaml.hover": true,
+  "yaml.completion": true,
+  "yaml.format.enable": true,
+  
+  "// File associations": "",
+  "files.associations": {
+    "*.yaml": "yaml",
+    "*.yml": "yaml"
+  },
+  
+  "// Recommended extensions for API development": "",
+  "recommendations": [
+    "stoplight.spectral",
+    "redhat.vscode-yaml",
+    "42crunch.vscode-openapi"
+  ]
+}
+
