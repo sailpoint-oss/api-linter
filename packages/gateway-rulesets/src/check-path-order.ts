@@ -1,4 +1,4 @@
-import {createOptionalContextRulesetFunction} from "./createOptionalContextRulesetFunction.js";
+import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
 import { Route } from "./types.js";
 
 
@@ -48,7 +48,7 @@ export default createOptionalContextRulesetFunction(
 
                 const correctPosition = combinedPaths.findIndex(p => p.path === original.path);
                 results.push({
-                    message: `Route with path "${original.path}" and id "${original.id}" is at position ${i} but should be at position "${correctPosition}" where route with id "${routes[correctPosition].id}" and path "${routes[correctPosition].path}" is located"`
+                    message: `Route "${original.id}" is out of order. Move it after "${sorted.id}" to maintain correct path precedence (more specific paths must come before generic ones). Current: "${original.path}" at position ${i + 1}, Expected: "${sorted.path}" at this position.`
                 });
                 return results;
             }
