@@ -45,10 +45,43 @@ export default createOptionalContextRulesetFunction(
             const sorted = combinedPaths[i];
 
             if (original.path !== sorted.path) {
-
-                const correctPosition = combinedPaths.findIndex(p => p.path === original.path);
+                // Build index maps for O(1) lookup instead of O(n) findIndex
+                const currentIdxMap = new Map<string, number>();
+                const expectedIdxMap = new Map<string, number>();
+                
+                for (let j = 0; j < routes.length; j++) {
+                    currentIdxMap.set(routes[j].id, j);
+                    expectedIdxMap.set(combinedPaths[j].id, j);
+                }
+                
+                // Find misplaced routes with their current and expected positions
+                const misplacedRoutes: { route: Route; currentPos: number; expectedPos: number; distance: number }[] = [];
+                for (const route of routes) {
+                    const currentIdx = currentIdxMap.get(route.id)!;
+                    const expectedIdx = expectedIdxMap.get(route.id)!;
+                    
+                    if (currentIdx !== expectedIdx) {
+                        misplacedRoutes.push({
+                            route,
+                            currentPos: currentIdx + 1,  // 1-indexed for user readability
+                            expectedPos: expectedIdx + 1,
+                            distance: Math.abs(currentIdx - expectedIdx)
+                        });
+                    }
+                }
+                
+                // Sort by distance (largest first) to show most misplaced routes
+                misplacedRoutes.sort((a, b) => b.distance - a.distance);
+                
+                // Take top 5 and format message
+                const topMisplaced = misplacedRoutes.slice(0, 5).map(({ route, currentPos, expectedPos }) => {
+                    const segmentCount = route.path.split('/').filter(s => s.length > 0).length;
+                    const isVersioned = route.versionStart !== 0 && route.versionStart != null;
+                    return `"${route.id}" (path: "${route.path}", ${segmentCount} segments, ${isVersioned ? 'versioned' : 'non-versioned'}, currently at route #${currentPos}, should be at route #${expectedPos})`;
+                });
+                
                 results.push({
-                    message: `Route "${original.id}" is out of order. Move it after "${sorted.id}" to maintain correct path precedence (more specific paths must come before generic ones). Current: "${original.path}" at position ${i + 1}, Expected: "${sorted.path}" at this position.`
+                    message: `Route ordering violation. Most misplaced routes: ${topMisplaced.join(', ')}. Routes must be ordered by: 1) versioned before non-versioned, 2) more path segments before fewer, 3) static segments before variables. Move routes with more segments (e.g., /a/b/c) before routes with fewer segments (e.g., /a).`
                 });
                 return results;
             }
