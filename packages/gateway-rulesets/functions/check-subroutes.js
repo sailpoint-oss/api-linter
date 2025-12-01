@@ -6,11 +6,12 @@ export default createOptionalContextRulesetFunction({
     input: null,
     options: {},
 }, (routes, options) => {
-    const results = [];
+    let results = [];
     if (!Array.isArray(routes)) {
         results.push({
             message: `Expected routes to be an array`
         });
+        return results;
     }
     for (const route of routes) {
         if (route.subroutes === null || route.subroutes?.size == 0) {
@@ -36,14 +37,38 @@ export default createOptionalContextRulesetFunction({
                     const versionNum = version.substring(version.indexOf("v") + 1);
                     if (Number.isNaN(versionNum)) {
                         results.push({
-                            message: `subroute ${name} has an invalid version (Not A Number): ${version}`
+                            message: `subroute ${name} has an invalid version [not a number]: ${version}`
                         });
                     }
                     else if (Number.parseInt(versionNum) < versionStart) {
+                        results.push({
+                            message: `subroute ${name} has an invalid version [lower than versionStart]: ${version}`
+                        });
+                    }
+                    else if (versionEnd > 0 && Number.parseInt(versionNum) > versionEnd) {
+                        results.push({
+                            message: `subroute ${name} has an invalid version [greater than versionEnd]: ${version}`
+                        });
                     }
                 }
+                else {
+                    results.push({
+                        message: `subroute ${name} has a version that could not be parsed: ${version}`
+                    });
+                }
             });
+            if (subroute.rateLimit !== undefined && subroute.rateLimit == 0) {
+                results.push({
+                    message: `subroute ${name} must have a rateLimit value greater than 0`
+                });
+            }
+            if (subroute.rateLimitIntervalSeconds !== undefined && subroute.rateLimitIntervalSeconds == 0) {
+                results.push({
+                    message: `subroute ${name} must have a rateLimitIntervalSeconds value greater than 0`
+                });
+            }
         });
     }
+    return results;
 });
 //# sourceMappingURL=check-subroutes.js.map
