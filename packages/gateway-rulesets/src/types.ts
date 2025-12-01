@@ -98,15 +98,26 @@ export interface Route {
     // Licenses that are required to access this route
     licenses?: string[];
 
-    // Properties can be overwritten for a version usind this map.
-    versionDetailsMap?: Record<string, VersionDetails>;
+    // Properties can be overwritten for a version using this map.
+    versionDetailsMap?: Map<string, VersionDetails>;
 
     // AccessRights is an array of rights required to access this route. (optional)
     rights?: string[];
+
+    // Subroutes is a map of subroutes and their properties for a given route ID
+    subroutes?: Map<string, Subroute>;
 }
 
 export interface VersionDetails {
     apiState?: string;
     deprecation?: string;
     // Add other VersionDetails properties as needed
+}
+
+export interface Subroute {
+    rights?: string[];
+    methods?: string[];
+    versions?: string[];
+    rateLimit?: number;
+    rateLimitIntervalSeconds?: number;
 }
