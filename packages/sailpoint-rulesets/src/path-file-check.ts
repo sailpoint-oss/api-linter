@@ -1,6 +1,6 @@
+import { RulesetFunctionContext } from "@stoplight/spectral-core";
 import { OpenAPIV3 } from "openapi-types";
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
-import { RulesetFunctionContext } from "@stoplight/spectral-core";
 
 // Create the original function using Spectral's helper.
 export default createOptionalContextRulesetFunction(
@@ -26,7 +26,7 @@ export default createOptionalContextRulesetFunction(
     if (!context || !context.document || !context.document.source) {
       console.log("NO CONTEXT, SKIPPING RULE 405");
     } else {
-      const apiVersionsToValidate = ["v2024", "v2025"];
+      const apiVersionsToValidate = ["v2024", "v2025", "v2026"];
       // @ts-expect-error parserResult is valid, but not typed
       const documentData = context.document.parserResult.data;
       const validReferences = Object.keys(
@@ -94,7 +94,7 @@ function removeLastTwo(path: string) {
 function getVersionFolder(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
-    ["v3", "beta", "v2024", "v2025"].includes(part),
+    ["v3", "beta", "v2024", "v2025", "v2026"].includes(part),
   );
   return versionIndex !== -1 ? parts.slice(0, versionIndex + 1).join("/") : null;
 }
@@ -102,7 +102,7 @@ function getVersionFolder(filePath: string) {
 function getRelativePathFromVersion(filePath: string) {
   const parts = filePath.split("/");
   const versionIndex = parts.findIndex((part) =>
-    ["v3", "beta", "v2024", "v2025"].includes(part),
+    ["v3", "beta", "v2024", "v2025", "v2026"].includes(part),
   );
   return versionIndex !== -1 ? parts.slice(versionIndex).join("/") : null;
 }
