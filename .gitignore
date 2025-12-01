@@ -51,9 +51,6 @@ web_modules/
 # Optional npm cache directory
 .npm
 
-# package lock
-package-lock.json
-
 # IntelliJ configuration
 .idea
 
