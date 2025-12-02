@@ -75,14 +75,11 @@ export default createOptionalContextRulesetFunction(
                 
                 // Take top 5 and format message
                 const topMisplaced = misplacedRoutes.slice(0, 5).map(({ route, expectedPos }) => {
-                    // In the sorted array, find the route that comes AFTER this one
-                    // That's the route the user should place this one BEFORE
-                    const sortedIdx = expectedPos - 1;
-                    if (sortedIdx + 1 < combinedPaths.length) {
-                        const routeAfter = combinedPaths[sortedIdx + 1];
+                    // expectedPos is 1-indexed, so it already points to the next route in combinedPaths
+                    if (expectedPos < combinedPaths.length) {
+                        const routeAfter = combinedPaths[expectedPos];
                         return `"${route.id}" should be moved before "${routeAfter.id}"`;
                     } else {
-                        // This route should be at the end
                         return `"${route.id}" should be moved to the end of the routes list`;
                     }
                 });
