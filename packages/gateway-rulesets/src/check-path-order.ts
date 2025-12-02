@@ -74,12 +74,14 @@ export default createOptionalContextRulesetFunction(
                 misplacedRoutes.sort((a, b) => b.distance - a.distance);
                 
                 // Take top 5 and format message
-                const topMisplaced = misplacedRoutes.slice(0, 5).map(({ route, currentPos, expectedPos }) => {
-                    const segmentCount = route.path.split('/').filter(s => s.length > 0).length;
-                    const isVersioned = route.versionStart !== 0 && route.versionStart != null;
-                    // Get the id of the route that should be at this position (to help user find it)
-                    const routeAtExpectedPos = combinedPaths[expectedPos - 1];
-                    return `"${route.id}" should be placed before "${routeAtExpectedPos.id}"`;
+                const topMisplaced = misplacedRoutes.slice(0, 5).map(({ route, expectedPos }) => {
+                    // expectedPos is 1-indexed, so it already points to the next route in combinedPaths
+                    if (expectedPos < combinedPaths.length) {
+                        const routeAfter = combinedPaths[expectedPos];
+                        return `"${route.id}" should be moved before "${routeAfter.id}"`;
+                    } else {
+                        return `"${route.id}" should be moved to the end of the routes list`;
+                    }
                 });
                 
                 results.push({
