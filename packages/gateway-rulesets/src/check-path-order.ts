@@ -74,14 +74,18 @@ export default createOptionalContextRulesetFunction(
                 misplacedRoutes.sort((a, b) => b.distance - a.distance);
                 
                 // Take top 5 and format message
-                const topMisplaced = misplacedRoutes.slice(0, 5).map(({ route, currentPos, expectedPos }) => {
-                    const segmentCount = route.path.split('/').filter(s => s.length > 0).length;
-                    const isVersioned = route.versionStart !== 0 && route.versionStart != null;
-                    return `"${route.id}" (path: "${route.path}", ${segmentCount} segments, ${isVersioned ? 'versioned' : 'non-versioned'}, currently at route #${currentPos}, should be at route #${expectedPos})`;
+                const topMisplaced = misplacedRoutes.slice(0, 5).map(({ route, expectedPos }) => {
+                    // expectedPos is 1-indexed, so it already points to the next route in combinedPaths
+                    if (expectedPos < combinedPaths.length) {
+                        const routeAfter = combinedPaths[expectedPos];
+                        return `"${route.id}" should be moved before "${routeAfter.id}"`;
+                    } else {
+                        return `"${route.id}" should be moved to the end of the routes list`;
+                    }
                 });
                 
                 results.push({
-                    message: `Route ordering violation. Most misplaced routes: ${topMisplaced.join(', ')}. Routes must be ordered by: 1) versioned before non-versioned, 2) more path segments before fewer, 3) static segments before variables. Move routes with more segments (e.g., /a/b/c) before routes with fewer segments (e.g., /a).`
+                    message: `Route ordering violation. ${topMisplaced.join('; ')}. Routes must be ordered by: 1) versioned before non-versioned, 2) more path segments before fewer, 3) static segments before variables. Search for the route IDs in your file to find and move them.`
                 });
                 return results;
             }
