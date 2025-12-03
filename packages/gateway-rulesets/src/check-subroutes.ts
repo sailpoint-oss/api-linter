@@ -25,6 +25,7 @@ export default createOptionalContextRulesetFunction(
             }
 
             route.subroutes?.forEach((subroute, name) => {
+
                 subroute.methods?.forEach(method => {
                     if (!validMethods.includes(method)) {
                         results.push({
@@ -35,13 +36,12 @@ export default createOptionalContextRulesetFunction(
 
                 const versionStart: number = route.versionStart ?? 0
                 const versionEnd: number = route.versionEnd ?? 0
-
                 subroute.versions?.forEach(version => {
                     if (legacyVersions.includes(version) && !route.additionalVersions?.includes(version)) {
                         results.push({
                             message: `subroute ${name} has a version that is not included in the route's additionalVersions array: ${version}`
                         });
-                    } else if (versionPattern.test(version) && versionStart > 0) {
+                    } else if (versionPattern.test(version) && versionStart > 0) { // check versions that start with v (eg. v2025)
                         const versionNum = version.substring(version.indexOf("v") + 1)
 
                         if (Number.isNaN(versionNum)) {
@@ -63,6 +63,24 @@ export default createOptionalContextRulesetFunction(
                         });
                     }
                 })
+
+                if (subroute.rateLimit === undefined && (subroute.rights === undefined || subroute.rights.length == 0)) {
+                    results.push({
+                        message: `subroute ${name} must have either an array of rights or a defined rate limit`
+                    });
+                }
+
+                if (subroute.rateLimit === undefined && subroute.rateLimitIntervalSeconds !== undefined) {
+                    results.push({
+                        message: `subroute ${name} has attribute rateLimitIntervalSeconds but is missing rateLimit`
+                    });
+                }
+
+                if (subroute.rateLimit !== undefined && subroute.rateLimitIntervalSeconds === undefined) {
+                    results.push({
+                        message: `subroute ${name} has attribute rateLimit but is missing rateLimitIntervalSeconds`
+                    });
+                }
 
                 if (subroute.rateLimit !== undefined && subroute.rateLimit == 0) {
                     results.push({
