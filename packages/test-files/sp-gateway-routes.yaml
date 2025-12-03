@@ -28,7 +28,7 @@ sp-gateway:
           methods: ["GET", "POST"]
           versions: ["v2024", "v2025", "beta", "v3"]
           rateLimit: 100
-          rateLimitIntervalSeconds: -10
+          rateLimitIntervalSeconds: 10
 
     - id: "test-route"
       path: "/test-path"
