@@ -172,7 +172,6 @@ rules:
       function: check-latest-version-override
 
   gateway-route-check-subroutes:
-    message: "subroutes must have valid HTTP methods, versions, and rate limits"
     given: $.sp-gateway.routes
     severity: error
     then:
