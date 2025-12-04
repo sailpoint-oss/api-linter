@@ -51,6 +51,9 @@ web_modules/
 # Optional npm cache directory
 .npm
 
+# IntelliJ configuration
+.idea
+
 # Optional eslint cache
 .eslintcache
 
@@ -121,3 +124,5 @@ yarn.lock
 github-spectral-comment/node_modules
 github-spectral-comment/sample
 api-specs/
+packages/gateway-rulesets/functions
+packages/sailpoint-rulesets/functions

@@ -1,15 +1,37 @@
 sp-gateway:
   routes:
-    access-request-test:
-      path: "/access-request-test"
+    - id: "access-request-test"
+      path: "/access-request-path"
+      service: "access-request-service"
+      versionStart: 2024
       servicePath: "/test/access-request-administration"
       additionalVersions:
       - "beta"
-      - "v2027"
+      - "v3"
       routeType: "prefix"
       stripPrefix: true
       apiState: "limited-preview"
-    test-route:
+
+    - id: "subroute-test"
+      service: "identity"
+      path: "/subroute-path"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      versionStart: 2024
+      additionalVersions:
+        - "beta"
+        - "v3"
+      subroutes:
+        "/some/route/{id}":
+          rights: ["some-right"]
+          methods: ["GET", "POST"]
+          versions: ["v2024", "v2025", "beta", "v3"]
+          rateLimit: 100
+          rateLimitIntervalSeconds: 10
+
+    - id: "test-route"
+      path: "/test-path"
       service: "identity"
       versionStart: 0
       routeType: "prefix"

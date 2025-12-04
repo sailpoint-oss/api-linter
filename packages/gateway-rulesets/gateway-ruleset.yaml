@@ -1,5 +1,5 @@
 functions: [gateway-test,
-  check-version-start,check-unique-id,check-version-start-order,check-path-order,check-path-documentation,check-latest-version-override]
+  check-version-start,check-unique-id,check-version-start-order,check-path-order,check-path-documentation,check-latest-version-override,check-subroutes]
 rules:
   gateway-route-must-have-required-properties:
     message: "Mandatory properties id, path and service must be specified"
@@ -170,3 +170,9 @@ rules:
     severity: error
     then:
       function: check-latest-version-override
+
+  gateway-route-check-subroutes:
+    given: $.sp-gateway.routes
+    severity: error
+    then:
+      function: check-subroutes
