@@ -1,6 +1,6 @@
 sp-gateway:
   routes:
-    - id: "access-request-test"
+    - id: "access-request-test-route-1"
       path: "/access-request-path"
       service: "access-request-service"
       versionStart: 2024

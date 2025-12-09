@@ -1,6 +1,6 @@
 sp-gateway:
   routes:
-    - id: "subroute-test"
+    - id: "subroute-test-route-2"
       service: "identity"
       path: "/subroute-path"
       routeType: "prefix"
@@ -18,7 +18,7 @@ sp-gateway:
           rateLimit: 100
           rateLimitIntervalSeconds: 10
 
-    - id: "test-route"
+    - id: "test-route-2"
       path: "/test-path"
       service: "identity"
       versionStart: 0
