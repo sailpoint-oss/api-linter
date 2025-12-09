@@ -21,7 +21,7 @@ sp-gateway:
     - id: "test-route-2"
       path: "/test-path"
       service: "identity"
-      versionStart: 0
+      versionStart: 2024
       routeType: "prefix"
       stripPrefix: true
       apiState: "public"
