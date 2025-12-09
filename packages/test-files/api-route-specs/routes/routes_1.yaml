@@ -1,7 +1,7 @@
 sp-gateway:
   routes:
     - id: "access-request-test"
-      #path: "/access-request-path"
+      path: "/access-request-path"
       service: "access-request-service"
       versionStart: 2024
       servicePath: "/test/access-request-administration"
