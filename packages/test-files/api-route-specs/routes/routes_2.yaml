@@ -1,0 +1,27 @@
+sp-gateway:
+  routes:
+    - id: "subroute-test"
+      service: "identity"
+      path: "/subroute-path"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      versionStart: 2024
+      additionalVersions:
+        - "beta"
+        - "v3"
+      subroutes:
+        "/some/route/{id}":
+          rights: ["some-right"]
+          methods: ["GET", "POST"]
+          versions: ["v2024", "v2025", "beta", "v3"]
+          rateLimit: 100
+          rateLimitIntervalSeconds: -10
+
+    - id: "test-route"
+      path: "/test-path"
+      service: "identity"
+      versionStart: 0
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
