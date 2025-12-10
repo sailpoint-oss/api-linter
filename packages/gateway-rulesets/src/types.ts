@@ -121,3 +121,25 @@ export interface Subroute {
     rateLimit?: number;
     rateLimitIntervalSeconds?: number;
 }
+
+export interface DynamicRateLimitConfig {
+    [org: string]: OrgDynamicRateLimitConfig;
+}
+
+export interface OrgDynamicRateLimitConfig {
+    [routeId: string]: RouteDynamicRateLimitConfig;
+}
+
+export interface RouteDynamicRateLimitConfig extends DynamicRateLimitCommonConfig {
+    subroutes?: SubrouteDynamicRateLimitConfig[];
+}
+
+export interface SubrouteDynamicRateLimitConfig {
+    [path: string]: DynamicRateLimitCommonConfig;
+}
+
+export interface DynamicRateLimitCommonConfig {
+    'rate-limit': number;
+    'rate-limit-interval': number;
+    methods?: string[];
+}
