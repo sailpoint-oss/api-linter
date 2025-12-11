@@ -1,7 +1,7 @@
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
 import { DynamicRateLimitConfig, OrgDynamicRateLimitConfig, RouteDynamicRateLimitConfig, SubrouteDynamicRateLimitConfig } from "./types.js";
 
-const validMethods = ["GET", "POST", "PUT", "PATCH"];
+const validMethods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 
 export default createOptionalContextRulesetFunction(
     {
