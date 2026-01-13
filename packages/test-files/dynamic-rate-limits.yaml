@@ -1,0 +1,57 @@
+# Dynamic Rate Limit Configuration
+# This file contains an alphabetically-sorted map of all orgs that have dynamic rate limiting enabled.
+# Each org contains a map of route-ids with their specific rate limit configurations.
+
+# Structure:
+# org-name:
+#   route-id:
+#     rate-limit: <integer> - number of requests allowed in the interval
+#     rate-limit-interval: <integer> - number of seconds until rate limit resets
+#     methods: <string[]> - HTTP methods the rate limit applies to (empty array = all methods)
+#     subroutes:
+#       /normalized/path/{id}:
+#         rate-limit: <integer>
+#         rate-limit-interval: <integer>
+#         methods: <string[]>
+
+dynamic-rate-limits:
+  graphicpkg:
+    sources-synchronize-attributes:
+      rateLimit: 10
+      rateLimitIntervalSeconds: 86400
+      methods: ["POST", "GET"]
+      subroutes:
+        "some/path/here/{id}":
+          rateLimit: 1000
+          rateLimitIntervalSeconds: 10
+          methods: ["PATCH"]
+
+  graphicpkg-sb:
+    sources-synchronize-attributes:
+      rateLimit: 10
+      rateLimitIntervalSeconds: 86400
+      methods: []
+
+  mdlz:
+    saml:
+      rateLimit: 1000
+      rateLimitIntervalSeconds: 10
+      methods: []
+
+  sw:
+    saml:
+      rateLimit: 1000
+      rateLimitIntervalSeconds: 10
+      methods: []
+
+  vega:
+    roles-assigned-identities:
+      rateLimit: 20
+      rateLimitIntervalSeconds: 10
+      methods: []
+
+  vega-sb:
+    roles-assigned-identities:
+      rateLimit: 20
+      rateLimitIntervalSeconds: 10
+      methods: []
