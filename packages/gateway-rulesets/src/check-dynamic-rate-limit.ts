@@ -1,5 +1,8 @@
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
-import { DynamicRateLimitConfig, OrgDynamicRateLimitConfig, RouteDynamicRateLimitConfig, SubrouteDynamicRateLimitConfig } from "./types.js";
+import {
+    DynamicRateLimitConfig, OrgDynamicRateLimitConfig, RouteDynamicRateLimitConfig,
+    Subroute
+} from "./types.js";
 
 const validMethods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
 
@@ -39,24 +42,24 @@ export default createOptionalContextRulesetFunction(
                 const typedRouteConfig = routeConfig as RouteDynamicRateLimitConfig;
 
                 // Validate rate-limit
-                if (typedRouteConfig["rate-limit"] === undefined) {
+                if (typedRouteConfig.rateLimit === undefined) {
                     results.push({
-                        message: `Route "${orgName}:${routeId}" is missing required field "rate-limit"`
+                        message: `Route "${orgName}:${routeId}" is missing required field "rateLimit"`
                     });
-                } else if (typeof typedRouteConfig["rate-limit"] !== "number" || typedRouteConfig["rate-limit"] <= 0) {
+                } else if (typedRouteConfig.rateLimit <= 0) {
                     results.push({
-                        message: `Route "${orgName}:${routeId}" has invalid "rate-limit". Must be a positive number, got: ${typedRouteConfig["rate-limit"]}`
+                        message: `Route "${orgName}:${routeId}" has invalid "rateLimit". Must be a positive number, got: ${typedRouteConfig.rateLimit}`
                     });
                 }
 
                 // Validate rate-limit-interval
-                if (typedRouteConfig["rate-limit-interval"] === undefined) {
+                if (typedRouteConfig.rateLimitIntervalSeconds === undefined) {
                     results.push({
-                        message: `Route "${orgName}:${routeId}" is missing required field "rate-limit-interval"`
+                        message: `Route "${orgName}:${routeId}" is missing required field "rateLimitIntervalSeconds"`
                     });
-                } else if (typeof typedRouteConfig["rate-limit-interval"] !== "number" || typedRouteConfig["rate-limit-interval"] <= 0) {
+                } else if (typedRouteConfig.rateLimitIntervalSeconds <= 0) {
                     results.push({
-                        message: `Route "${orgName}:${routeId}" has invalid "rate-limit-interval". Must be a positive number, got: ${typedRouteConfig["rate-limit-interval"]}`
+                        message: `Route "${orgName}:${routeId}" has invalid "rateLimitIntervalSeconds". Must be a positive number, got: ${typedRouteConfig.rateLimitIntervalSeconds}`
                     });
                 }
 
@@ -68,11 +71,7 @@ export default createOptionalContextRulesetFunction(
                         });
                     } else {
                         for (const method of typedRouteConfig.methods) {
-                            if (typeof method !== "string") {
-                                results.push({
-                                    message: `Route "${orgName}:${routeId}" has invalid method type. Must be a string, got: ${typeof method}`
-                                });
-                            } else if (!validMethods.includes(method)) {
+                            if (!validMethods.includes(method)) {
                                 results.push({
                                     message: `Route "${orgName}:${routeId}" has invalid method: "${method}". Valid methods are: ${validMethods.join(", ")}`
                                 });
@@ -83,84 +82,48 @@ export default createOptionalContextRulesetFunction(
 
                 // Validate subroutes
                 if (typedRouteConfig.subroutes !== undefined) {
-                    if (!Array.isArray(typedRouteConfig.subroutes)) {
-                        results.push({
-                            message: `Route "${orgName}:${routeId}" has invalid "subroutes". Must be an array, got: ${typeof typedRouteConfig.subroutes}`
-                        });
-                    } else {
-                        for (let i = 0; i < typedRouteConfig.subroutes.length; i++) {
-                            const subrouteEntry = typedRouteConfig.subroutes[i];
+                    for (const [endpoint, subrouteConfig] of new Map<string, Subroute>(Object.entries(typedRouteConfig.subroutes))) {
+                        if (typeof subrouteConfig !== "object" || subrouteConfig === null) {
+                            results.push({
+                                message: `Route "${orgName}:${routeId}" subroute at "${endpoint}" must be an object`
+                            });
+                            continue;
+                        }
 
-                            if (typeof subrouteEntry !== "object" || subrouteEntry === null) {
+                        // Validate subroute rate-limit
+                        if (subrouteConfig.rateLimit === undefined) {
+                            results.push({
+                                message: `Route "${orgName}:${routeId}" subroute "${endpoint}" is missing required field "rateLimit"`
+                            });
+                        } else if (subrouteConfig.rateLimit <= 0) {
+                            results.push({
+                                message: `Route "${orgName}:${routeId}" subroute "${endpoint}" has invalid "rateLimit". Must be a positive number, got: ${subrouteConfig.rateLimit}`
+                            });
+                        }
+
+                        // Validate subroute rate-limit-interval
+                        if (subrouteConfig.rateLimitIntervalSeconds === undefined) {
+                            results.push({
+                                message: `Route "${orgName}:${routeId}" subroute "${endpoint}" is missing required field "rateLimitIntervalSeconds"`
+                            });
+                        } else if (subrouteConfig.rateLimitIntervalSeconds <= 0) {
+                            results.push({
+                                message: `Route "${orgName}:${routeId}" subroute "${endpoint}" has invalid "rateLimitIntervalSeconds". Must be a positive number, got: ${subrouteConfig.rateLimitIntervalSeconds}`
+                            });
+                        }
+
+                        // Validate subroute methods
+                        if (subrouteConfig.methods !== undefined) {
+                            if (!Array.isArray(subrouteConfig.methods)) {
                                 results.push({
-                                    message: `Route "${orgName}:${routeId}" subroute at index ${i} must be an object`
+                                    message: `Route "${orgName}:${routeId}" subroute "${endpoint}" has invalid "methods". Must be an array, got: ${typeof subrouteConfig.methods}`
                                 });
-                                continue;
-                            }
-
-                            const subrouteEntries = Object.entries(subrouteEntry as SubrouteDynamicRateLimitConfig);
-
-                            if (subrouteEntries.length === 0) {
-                                results.push({
-                                    message: `Route "${orgName}:${routeId}" subroute at index ${i} is empty`
-                                });
-                                continue;
-                            }
-
-                            if (subrouteEntries.length > 1) {
-                                results.push({
-                                    message: `Route "${orgName}:${routeId}" subroute at index ${i} should have exactly one path key, got ${subrouteEntries.length} keys`
-                                });
-                            }
-
-                            for (const [path, subrouteConfig] of subrouteEntries) {
-                                if (typeof subrouteConfig !== "object" || subrouteConfig === null) {
-                                    results.push({
-                                        message: `Route "${orgName}:${routeId}" subroute "${path}" config must be an object`
-                                    });
-                                    continue;
-                                }
-
-                                // Validate subroute rate-limit
-                                if (subrouteConfig["rate-limit"] === undefined) {
-                                    results.push({
-                                        message: `Route "${orgName}:${routeId}" subroute "${path}" is missing required field "rate-limit"`
-                                    });
-                                } else if (typeof subrouteConfig["rate-limit"] !== "number" || subrouteConfig["rate-limit"] <= 0) {
-                                    results.push({
-                                        message: `Route "${orgName}:${routeId}" subroute "${path}" has invalid "rate-limit". Must be a positive number, got: ${subrouteConfig["rate-limit"]}`
-                                    });
-                                }
-
-                                // Validate subroute rate-limit-interval
-                                if (subrouteConfig["rate-limit-interval"] === undefined) {
-                                    results.push({
-                                        message: `Route "${orgName}:${routeId}" subroute "${path}" is missing required field "rate-limit-interval"`
-                                    });
-                                } else if (typeof subrouteConfig["rate-limit-interval"] !== "number" || subrouteConfig["rate-limit-interval"] <= 0) {
-                                    results.push({
-                                        message: `Route "${orgName}:${routeId}" subroute "${path}" has invalid "rate-limit-interval". Must be a positive number, got: ${subrouteConfig["rate-limit-interval"]}`
-                                    });
-                                }
-
-                                // Validate subroute methods
-                                if (subrouteConfig.methods !== undefined) {
-                                    if (!Array.isArray(subrouteConfig.methods)) {
+                            } else {
+                                for (const method of subrouteConfig.methods) {
+                                    if (!validMethods.includes(method)) {
                                         results.push({
-                                            message: `Route "${orgName}:${routeId}" subroute "${path}" has invalid "methods". Must be an array, got: ${typeof subrouteConfig.methods}`
+                                            message: `Route "${orgName}:${routeId}" subroute "${endpoint}" has invalid method: "${method}". Valid methods are: ${validMethods.join(", ")}`
                                         });
-                                    } else {
-                                        for (const method of subrouteConfig.methods) {
-                                            if (typeof method !== "string") {
-                                                results.push({
-                                                    message: `Route "${orgName}:${routeId}" subroute "${path}" has invalid method type. Must be a string, got: ${typeof method}`
-                                                });
-                                            } else if (!validMethods.includes(method)) {
-                                                results.push({
-                                                    message: `Route "${orgName}:${routeId}" subroute "${path}" has invalid method: "${method}". Valid methods are: ${validMethods.join(", ")}`
-                                                });
-                                            }
-                                        }
                                     }
                                 }
                             }
