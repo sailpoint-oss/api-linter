@@ -111,7 +111,12 @@ function confluenceEscapeCell(text) {
   return String(text ?? "").replaceAll("|", "\\|");
 }
 
-function buildReport(records) {
+function markdownEscapeCell(text) {
+  // Avoid accidental table breaks.
+  return String(text ?? "").replaceAll("|", "\\|");
+}
+
+function buildModel(records) {
   // Filter obvious junk.
   const filtered = records.filter((r) => r.service && r.controllerAction);
 
@@ -187,6 +192,11 @@ function buildReport(records) {
 
   services.sort((a, b) => (b.slowestInServiceNs ?? -Infinity) - (a.slowestInServiceNs ?? -Infinity));
 
+  return { overallTotal, services };
+}
+
+function buildConfluenceWikiReport(model) {
+  const { overallTotal, services } = model;
   const lines = [];
   lines.push("h1. Confluence Performance Report (PC99)");
   lines.push("");
@@ -246,6 +256,93 @@ function buildReport(records) {
   return lines.join("\n");
 }
 
+function markdownTableRow(cells) {
+  return `| ${cells.join(" | ")} |`;
+}
+
+function buildMarkdownReport(model) {
+  const { overallTotal, services } = model;
+
+  const lines = [];
+  lines.push("# Confluence Performance Report (PC99)");
+  lines.push("");
+  lines.push(
+    "Generated from CSV. Grouped by service, then controller/action. Controllers are sorted by their slowest PC99 duration (desc). Tenants are listed slowest→fastest within each controller/action.",
+  );
+  lines.push("");
+
+  if (overallTotal) {
+    lines.push("## Overall");
+    lines.push("");
+    lines.push(markdownTableRow(["Metric", "Value"]));
+    lines.push(markdownTableRow(["---", "---"]));
+    lines.push(
+      markdownTableRow([
+        "PC99 Duration",
+        `${markdownEscapeCell(formatSecondsFromNs(overallTotal.durationNs))} (${markdownEscapeCell(formatNs(overallTotal.durationNs))} ns)`,
+      ]),
+    );
+    lines.push(markdownTableRow(["Count", `${markdownEscapeCell(overallTotal.count ?? "")}`]));
+    lines.push("");
+  }
+
+  for (const svc of services) {
+    lines.push(`## Service: ${markdownEscapeCell(svc.service)}`);
+    lines.push("");
+
+    if (svc.serviceTotal) {
+      lines.push(markdownTableRow(["Service Total PC99", "Service Total Count"]));
+      lines.push(markdownTableRow(["---", "---"]));
+      lines.push(
+        markdownTableRow([
+          `${markdownEscapeCell(formatSecondsFromNs(svc.serviceTotal.durationNs))} (${markdownEscapeCell(formatNs(svc.serviceTotal.durationNs))} ns)`,
+          `${markdownEscapeCell(svc.serviceTotal.count ?? "")}`,
+        ]),
+      );
+      lines.push("");
+    }
+
+    lines.push(
+      markdownTableRow([
+        "Controller & Action",
+        "PC99 (slowest duration)",
+        "Controller __TOTAL__ PC99",
+        "Controller __TOTAL__ Count",
+        "Tenants (slowest→fastest)",
+      ]),
+    );
+    lines.push(markdownTableRow(["---", "---", "---", "---", "---"]));
+
+    for (const c of svc.controllers) {
+      const controllerTotalNs = c.controllerTotal?.durationNs ?? null;
+      const controllerTotalCount = c.controllerTotal?.count ?? "";
+      const tenantsCell =
+        c.tenants.length === 0
+          ? ""
+          : c.tenants
+              .map(
+                (t) =>
+                  `${markdownEscapeCell(t.tenant)}: ${markdownEscapeCell(formatSecondsFromNs(t.durationNs))} (${markdownEscapeCell(formatNs(t.durationNs))} ns), count ${markdownEscapeCell(t.count ?? "")}`,
+              )
+              .join("<br/>");
+
+      lines.push(
+        markdownTableRow([
+          markdownEscapeCell(c.controllerAction),
+          `${markdownEscapeCell(formatSecondsFromNs(c.slowestOverallNs))} (${markdownEscapeCell(formatNs(c.slowestOverallNs))} ns)`,
+          `${markdownEscapeCell(formatSecondsFromNs(controllerTotalNs))} (${markdownEscapeCell(formatNs(controllerTotalNs))} ns)`,
+          `${markdownEscapeCell(controllerTotalCount)}`,
+          tenantsCell,
+        ]),
+      );
+    }
+
+    lines.push("");
+  }
+
+  return lines.join("\n");
+}
+
 function main() {
   const args = process.argv.slice(2);
   const inputPath = args[0];
@@ -282,7 +379,9 @@ function main() {
     count: toNumber(r[countIdx]),
   }));
 
-  const report = buildReport(records);
+  const model = buildModel(records);
+  const format = outputPath && outputPath.toLowerCase().endsWith(".md") ? "md" : "wiki";
+  const report = format === "md" ? buildMarkdownReport(model) : buildConfluenceWikiReport(model);
 
   if (outputPath) {
     const outAbs = path.resolve(process.cwd(), outputPath);
