@@ -327,23 +327,13 @@ function buildMarkdownReport(model) {
         "PC99 (slowest duration)",
         "Controller __TOTAL__ PC99",
         "Controller __TOTAL__ Count",
-        "Tenants (slowest→fastest)",
       ]),
     );
-    lines.push(markdownTableRow(["---", "---", "---", "---", "---"]));
+    lines.push(markdownTableRow(["---", "---", "---", "---"]));
 
     for (const c of svc.controllers) {
       const controllerTotalNs = c.controllerTotal?.durationNs ?? null;
       const controllerTotalCount = c.controllerTotal?.count ?? "";
-      const tenantsCell =
-        c.tenants.length === 0
-          ? ""
-          : c.tenants
-              .map(
-                (t) =>
-                  `${markdownEscapeCell(t.tenant)}: ${markdownEscapeCell(formatSecondsFromNs(t.durationNs))}, count ${markdownEscapeCell(t.count ?? "")}`,
-              )
-              .join("<br/>");
 
       lines.push(
         markdownTableRow([
@@ -351,12 +341,44 @@ function buildMarkdownReport(model) {
           `${markdownEscapeCell(formatSecondsFromNs(c.slowestOverallNs))}`,
           `${markdownEscapeCell(formatSecondsFromNs(controllerTotalNs))}`,
           `${markdownEscapeCell(controllerTotalCount)}`,
-          tenantsCell,
         ]),
       );
     }
 
     lines.push("");
+
+    // Per-controller tenant breakdown tables (Markdown doesn't support true sub-tables in cells reliably).
+    for (const c of svc.controllers) {
+      lines.push(`### ${markdownEscapeCell(c.controllerAction)}`);
+      lines.push("");
+      lines.push(
+        `- **PC99 (slowest duration)**: ${markdownEscapeCell(formatSecondsFromNs(c.slowestOverallNs))}`,
+      );
+      lines.push(
+        `- **Controller __TOTAL__ PC99**: ${markdownEscapeCell(formatSecondsFromNs(c.controllerTotal?.durationNs ?? null))}`,
+      );
+      lines.push(`- **Controller __TOTAL__ Count**: ${markdownEscapeCell(c.controllerTotal?.count ?? "")}`);
+      lines.push("");
+
+      if (c.tenants.length === 0) {
+        lines.push("_No tenant breakdown rows provided._");
+        lines.push("");
+        continue;
+      }
+
+      lines.push(markdownTableRow(["Tenant", "PC99", "Count"]));
+      lines.push(markdownTableRow(["---", "---", "---"]));
+      for (const t of c.tenants) {
+        lines.push(
+          markdownTableRow([
+            markdownEscapeCell(t.tenant),
+            markdownEscapeCell(formatSecondsFromNs(t.durationNs)),
+            markdownEscapeCell(t.count ?? ""),
+          ]),
+        );
+      }
+      lines.push("");
+    }
   }
 
   return lines.join("\n");
