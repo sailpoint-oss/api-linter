@@ -191,7 +191,7 @@ function buildReport(records) {
   lines.push("h1. Confluence Performance Report (PC99)");
   lines.push("");
   lines.push(
-    `Generated from CSV. Grouped by service, then controller/action. Controllers are sorted by their slowest tenant PC99 (desc). Tenants are listed slowest→fastest within each controller/action.`,
+    `Generated from CSV. Grouped by service, then controller/action. Controllers are sorted by their slowest PC99 duration (desc). Tenants are listed slowest→fastest within each controller/action.`,
   );
   lines.push("");
 
