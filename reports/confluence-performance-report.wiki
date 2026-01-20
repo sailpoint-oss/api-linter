@@ -1,0 +1,57 @@
+h1. Confluence Performance Report (PC99)
+
+Generated from CSV. Grouped by service, then controller/action. Controllers are sorted by their slowest tenant PC99 (desc). Tenants are listed slowest→fastest within each controller/action.
+
+h2. Overall
+
+||Metric||Value||
+|PC99 Duration|0.131s (130982336.328 ns)|
+|Count|135930746|
+
+h2. Service: identity_suite
+
+||Service Total PC99||Service Total Count||
+|0.157s (156815268.259 ns)|56088088|
+
+||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
+|NeprofileAdmin::RolesController::create|112.231s (112230540000 ns)|112.231s (112230540000 ns)|97|nttdbxo: 112.231s (112230540000 ns), count 10\\villagemd-sb: 58.207s (58206600000 ns), count 1\\mdlz-sb: 55.010s (55009645542.161 ns), count 2\\stonybrook-sb: 46.405s (46404510000 ns), count 1\\bcc-sb: 29.354s (29353860000 ns), count 1|
+|NeprofileAdmin::RolesController::update|63.276s (63276449258.697 ns)|49.775s (49774619713.811 ns)|537|villagemd-sb: 63.276s (63276449258.697 ns), count 9\\nttdbxo: 52.853s (52852616013.991 ns), count 5\\stonybrook-sb: 28.432s (28432170000 ns), count 1\\ucdavis-prod: 28.431s (28431183177.939 ns), count 3\\southregion-nerm: 25.726s (25725512621.436 ns), count 4|
+|NeaccessAdmin::NeaccessRolesController::update|21.922s (21921718875.167 ns)|21.922s (21921718875.167 ns)|74|southregion-nerm: 21.922s (21921718875.167 ns), count 7\\deliveroo: 21.488s (21487625432.095 ns), count 6\\122gc-tst: 11.792s (11792423004.193 ns), count 7\\royalflora: 10.252s (10251792209.322 ns), count 12\\uow-preprod: 5.735s (5734930000 ns), count 1|
+|Admin::ApiKeysController::edit|10.049s (10048786422.999 ns)|10.049s (10048786422.999 ns)|1006|telusdev: 10.049s (10048786422.999 ns), count 23\\usfoods-sb: 10.049s (10048786422.999 ns), count 6\\legacyhealthdev: 6.872s (6871890194.389 ns), count 9\\orlandohealth: 4.252s (4252143483.681 ns), count 17\\mdlz-sb: 3.412s (3412400051.427 ns), count 60|
+|NeprofileAdmin::RolesController::edit|4.606s (4606304329.969 ns)|3.027s (3026515237.054 ns)|2420|wellspan: 4.606s (4606304329.969 ns), count 11\\ucsf-sb: 4.085s (4085409105.338 ns), count 8\\nttdbxo: 4.005s (4004509915.134 ns), count 34\\chs: 3.669s (3668990000 ns), count 1\\adnext-sb: 2.908s (2907839999.84 ns), count 131|
+
+h2. Service: auth_service
+
+||Service Total PC99||Service Total Count||
+|2.579s (2579012405.872 ns)|288698|
+
+||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
+|V1::Oauth::OAuthController::callback|16.568s (16567924066.656 ns)|4.699s (4699360983.1 ns)|39513|twint: 16.568s (16567924066.656 ns), count 106\\repsol-sb: 10.886s (10885749408.231 ns), count 124\\iberostar: 10.049s (10048786422.999 ns), count 41\\laboralkutxa: 10.049s (10048786422.999 ns), count 223\\sylvamo: 9.092s (9092487651.22 ns), count 70|
+|V1::Oauth::OAuthController::refresh_token|4.606s (4606304329.969 ns)|2.381s (2380722160.413 ns)|39158|alliander: 4.606s (4606304329.969 ns), count 144\\atmus: 4.338s (4338045372.24 ns), count 75\\laredoute: 4.338s (4338045372.24 ns), count 256\\iberostar: 4.168s (4167942622.618 ns), count 125\\telkom-sb: 4.168s (4167942622.618 ns), count 2|
+|V1::Oauth::OAuthController::login|0.394s (393507113.729 ns)|0.073s (73335378.243 ns)|198889|oldnational-sb: 0.394s (393507113.729 ns), count 190\\radial: 0.394s (393507113.729 ns), count 79\\ridgeview-sb: 0.335s (335322854.377 ns), count 190\\pvhmc-sb: 0.212s (211680587.944 ns), count 63\\ohsu: 0.195s (195405289.832 ns), count 350|
+|V1::Oauth::OAuthController::logout|0.044s (43598633.497 ns)|0.041s (41059564.616 ns)|11077|wsl: 0.044s (43598633.497 ns), count 8642\\mdlz-sb: 0.039s (39449543.457 ns), count 127\\skyworksinc: 0.039s (39449543.457 ns), count 37\\uchicago-sb: 0.029s (29020000 ns), count 1\\ucmedicine: 0.025s (25406570.126 ns), count 69|
+|V1::Oauth::OAuthController::idn_internal_login|0.014s (13943142.436 ns)|0.014s (13943142.436 ns)|61|mdlz-sb: 0.011s (10967976.562 ns), count 32\\costco-sb: 0.003s (2988992.785 ns), count 8\\telenet-sb: 0.003s (2988992.785 ns), count 14\\tfs-sb: 0.003s (2988992.785 ns), count 4\\aveva-sb: 0.003s (2840000 ns), count 1|
+
+h2. Service: tenant_service
+
+||Service Total PC99||Service Total Count||
+|0.105s (105115016.212 ns)|78804869|
+
+||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
+|Internal::V1::TenantsController::create|9.850s (9849800553.236 ns)|9.850s (9849800553.236 ns)|13|(blank): 9.850s (9849800553.236 ns), count 13|
+|Internal::V1::TenantsController::destroy|2.759s (2759440000 ns)|2.759s (2759440000 ns)|1|(blank): 2.759s (2759440000 ns), count 1|
+|Internal::V1::TenantsController::index|0.160s (159983253.477 ns)|0.160s (159983253.477 ns)|22081917|(blank): 0.160s (159983253.477 ns), count 22081917|
+|Internal::V1::TenantsController::update|0.112s (111615189.048 ns)|0.112s (111615189.048 ns)|45|(blank): 0.112s (111615189.048 ns), count 45|
+|Internal::V1::TenantsController::show|0.078s (77870340.523 ns)|0.078s (77870340.523 ns)|17349057|(blank): 0.078s (77870340.523 ns), count 17349057|
+
+h2. Service: portal
+
+||Service Total PC99||Service Total Count||
+|0.761s (761371298.164 ns)|749091|
+
+||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
+|SessionsController::new|7.444s (7444249630.561 ns)|0.703s (702832416.67 ns)|738496|devmcprofile: 7.444s (7444249630.561 ns), count 950\\adventhealthdev: 6.218s (6217922652.831 ns), count 1358\\chubb-sb: 5.974s (5974106452.347 ns), count 69\\franciscandev: 5.974s (5974106452.347 ns), count 766\\globalcu-sb: 5.740s (5739850734.188 ns), count 60|
+|SessionsController::create|4.168s (4167942622.618 ns)|1.911s (1910560274.79 ns)|7794|mbie: 4.168s (4167942622.618 ns), count 67\\telkom-sb: 3.847s (3847340000 ns), count 1\\ne-smoke-canary: 3.345s (3344827773.181 ns), count 60\\telus: 2.478s (2477884578.958 ns), count 547\\iberostar: 2.242s (2242075210.571 ns), count 34|
+|SessionsController::update|1.989s (1988534370.282 ns)|1.307s (1306541891.274 ns)|301|mbie: 1.989s (1988534370.282 ns), count 55\\ssmhc: 1.007s (1007402465.803 ns), count 77\\multicare: 0.717s (717031051.351 ns), count 22\\peacehealth: 0.662s (661901319.19 ns), count 16\\122gc-tst: 0.649s (648794362.375 ns), count 18|
+|SessionsController::edit|1.415s (1415363708.718 ns)|1.049s (1048516738.461 ns)|305|mbie: 1.415s (1415363708.718 ns), count 54\\myfreseniusid: 0.674s (674340000 ns), count 1\\telus: 0.322s (322174227.6 ns), count 36\\ssmhc: 0.225s (224770634.041 ns), count 75\\122gc-tst: 0.184s (184025403.565 ns), count 15|
+|SessionsController::resend|0.718s (718030000 ns)|0.322s (322174227.6 ns)|14|122gc-tst: 0.718s (718030000 ns), count 1\\mbie: 0.212s (211680587.944 ns), count 3\\multicare: 0.163s (163215238.395 ns), count 3\\ssmhc: 0.145s (144758351.447 ns), count 2\\peacehealth: 0.123s (122650000 ns), count 1|
