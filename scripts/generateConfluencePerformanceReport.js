@@ -99,13 +99,6 @@ function formatSecondsFromNs(ns) {
   return `${(ns / 1e9).toFixed(3)}s`;
 }
 
-function formatNs(ns) {
-  if (ns == null) return "";
-  // Keep some decimals if present, but avoid huge noise.
-  const rounded = Math.abs(ns) >= 1 ? ns.toFixed(3) : String(ns);
-  return rounded.replace(/\.?0+$/, "");
-}
-
 function confluenceEscapeCell(text) {
   // Avoid accidental table breaks.
   return String(text ?? "").replaceAll("|", "\\|");
@@ -201,7 +194,7 @@ function buildConfluenceWikiReport(model) {
   lines.push("h1. Confluence Performance Report (PC99)");
   lines.push("");
   lines.push(
-    `Generated from CSV. Grouped by service, then controller/action. Controllers are sorted by their slowest PC99 duration (desc). Tenants are listed slowest→fastest within each controller/action.`,
+    `Generated from CSV. Grouped by service, then controller/action. Durations are shown in seconds (converted from nanoseconds). Controllers are sorted by their slowest PC99 duration (desc). Tenants are listed slowest→fastest within each controller/action.`,
   );
   lines.push("");
 
@@ -210,7 +203,7 @@ function buildConfluenceWikiReport(model) {
     lines.push("");
     lines.push("||Metric||Value||");
     lines.push(
-      `|PC99 Duration|${confluenceEscapeCell(formatSecondsFromNs(overallTotal.durationNs))} (${confluenceEscapeCell(formatNs(overallTotal.durationNs))} ns)|`,
+      `|PC99 Duration|${confluenceEscapeCell(formatSecondsFromNs(overallTotal.durationNs))}|`,
     );
     lines.push(`|Count|${confluenceEscapeCell(overallTotal.count ?? "")}|`);
     lines.push("");
@@ -222,7 +215,7 @@ function buildConfluenceWikiReport(model) {
     if (svc.serviceTotal) {
       lines.push("||Service Total PC99||Service Total Count||");
       lines.push(
-        `|${confluenceEscapeCell(formatSecondsFromNs(svc.serviceTotal.durationNs))} (${confluenceEscapeCell(formatNs(svc.serviceTotal.durationNs))} ns)|${confluenceEscapeCell(svc.serviceTotal.count ?? "")}|`,
+        `|${confluenceEscapeCell(formatSecondsFromNs(svc.serviceTotal.durationNs))}|${confluenceEscapeCell(svc.serviceTotal.count ?? "")}|`,
       );
       lines.push("");
     }
@@ -241,13 +234,13 @@ function buildConfluenceWikiReport(model) {
           : c.tenants
               .map(
                 (t) =>
-                  `${confluenceEscapeCell(t.tenant)}: ${confluenceEscapeCell(formatSecondsFromNs(t.durationNs))} (${confluenceEscapeCell(formatNs(t.durationNs))} ns), count ${confluenceEscapeCell(t.count ?? "")}`,
+                  `${confluenceEscapeCell(t.tenant)}: ${confluenceEscapeCell(formatSecondsFromNs(t.durationNs))}, count ${confluenceEscapeCell(t.count ?? "")}`,
               )
               // Confluence line break inside table cell.
               .join("\\\\");
 
       lines.push(
-        `|${confluenceEscapeCell(c.controllerAction)}|${confluenceEscapeCell(formatSecondsFromNs(c.slowestOverallNs))} (${confluenceEscapeCell(formatNs(c.slowestOverallNs))} ns)|${confluenceEscapeCell(formatSecondsFromNs(controllerTotalNs))} (${confluenceEscapeCell(formatNs(controllerTotalNs))} ns)|${confluenceEscapeCell(controllerTotalCount)}|${tenantsCell}|`,
+        `|${confluenceEscapeCell(c.controllerAction)}|${confluenceEscapeCell(formatSecondsFromNs(c.slowestOverallNs))}|${confluenceEscapeCell(formatSecondsFromNs(controllerTotalNs))}|${confluenceEscapeCell(controllerTotalCount)}|${tenantsCell}|`,
       );
     }
     lines.push("");
@@ -267,7 +260,7 @@ function buildMarkdownReport(model) {
   lines.push("# Confluence Performance Report (PC99)");
   lines.push("");
   lines.push(
-    "Generated from CSV. Grouped by service, then controller/action. Controllers are sorted by their slowest PC99 duration (desc). Tenants are listed slowest→fastest within each controller/action.",
+    "Generated from CSV. Grouped by service, then controller/action. Durations are shown in seconds (converted from nanoseconds). Controllers are sorted by their slowest PC99 duration (desc). Tenants are listed slowest→fastest within each controller/action.",
   );
   lines.push("");
 
@@ -279,7 +272,7 @@ function buildMarkdownReport(model) {
     lines.push(
       markdownTableRow([
         "PC99 Duration",
-        `${markdownEscapeCell(formatSecondsFromNs(overallTotal.durationNs))} (${markdownEscapeCell(formatNs(overallTotal.durationNs))} ns)`,
+        `${markdownEscapeCell(formatSecondsFromNs(overallTotal.durationNs))}`,
       ]),
     );
     lines.push(markdownTableRow(["Count", `${markdownEscapeCell(overallTotal.count ?? "")}`]));
@@ -295,7 +288,7 @@ function buildMarkdownReport(model) {
       lines.push(markdownTableRow(["---", "---"]));
       lines.push(
         markdownTableRow([
-          `${markdownEscapeCell(formatSecondsFromNs(svc.serviceTotal.durationNs))} (${markdownEscapeCell(formatNs(svc.serviceTotal.durationNs))} ns)`,
+          `${markdownEscapeCell(formatSecondsFromNs(svc.serviceTotal.durationNs))}`,
           `${markdownEscapeCell(svc.serviceTotal.count ?? "")}`,
         ]),
       );
@@ -322,15 +315,15 @@ function buildMarkdownReport(model) {
           : c.tenants
               .map(
                 (t) =>
-                  `${markdownEscapeCell(t.tenant)}: ${markdownEscapeCell(formatSecondsFromNs(t.durationNs))} (${markdownEscapeCell(formatNs(t.durationNs))} ns), count ${markdownEscapeCell(t.count ?? "")}`,
+                  `${markdownEscapeCell(t.tenant)}: ${markdownEscapeCell(formatSecondsFromNs(t.durationNs))}, count ${markdownEscapeCell(t.count ?? "")}`,
               )
               .join("<br/>");
 
       lines.push(
         markdownTableRow([
           markdownEscapeCell(c.controllerAction),
-          `${markdownEscapeCell(formatSecondsFromNs(c.slowestOverallNs))} (${markdownEscapeCell(formatNs(c.slowestOverallNs))} ns)`,
-          `${markdownEscapeCell(formatSecondsFromNs(controllerTotalNs))} (${markdownEscapeCell(formatNs(controllerTotalNs))} ns)`,
+          `${markdownEscapeCell(formatSecondsFromNs(c.slowestOverallNs))}`,
+          `${markdownEscapeCell(formatSecondsFromNs(controllerTotalNs))}`,
           `${markdownEscapeCell(controllerTotalCount)}`,
           tenantsCell,
         ]),
