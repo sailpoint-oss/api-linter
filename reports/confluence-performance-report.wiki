@@ -14,11 +14,11 @@ h2. Service: identity_suite
 |0.157s|56088088|
 
 ||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
-|NeprofileAdmin::RolesController::create|112.231s|112.231s|97|nttdbxo: 112.231s, count 10\\villagemd-sb: 58.207s, count 1\\mdlz-sb: 55.010s, count 2\\stonybrook-sb: 46.405s, count 1\\bcc-sb: 29.354s, count 1|
-|NeprofileAdmin::RolesController::update|63.276s|49.775s|537|villagemd-sb: 63.276s, count 9\\nttdbxo: 52.853s, count 5\\stonybrook-sb: 28.432s, count 1\\ucdavis-prod: 28.431s, count 3\\southregion-nerm: 25.726s, count 4|
-|NeaccessAdmin::NeaccessRolesController::update|21.922s|21.922s|74|southregion-nerm: 21.922s, count 7\\deliveroo: 21.488s, count 6\\122gc-tst: 11.792s, count 7\\royalflora: 10.252s, count 12\\uow-preprod: 5.735s, count 1|
-|Admin::ApiKeysController::edit|10.049s|10.049s|1006|telusdev: 10.049s, count 23\\usfoods-sb: 10.049s, count 6\\legacyhealthdev: 6.872s, count 9\\orlandohealth: 4.252s, count 17\\mdlz-sb: 3.412s, count 60|
-|NeprofileAdmin::RolesController::edit|4.606s|3.027s|2420|wellspan: 4.606s, count 11\\ucsf-sb: 4.085s, count 8\\nttdbxo: 4.005s, count 34\\chs: 3.669s, count 1\\adnext-sb: 2.908s, count 131|
+|NeprofileAdmin::RolesController::create|112.231s|112.231s|97|{{TENANT         PC99      COUNT}}\\{{-------------  --------  -----}}\\{{nttdbxo        112.231s  10   }}\\{{villagemd-sb   58.207s   1    }}\\{{mdlz-sb        55.010s   2    }}\\{{stonybrook-sb  46.405s   1    }}\\{{bcc-sb         29.354s   1    }}|
+|NeprofileAdmin::RolesController::update|63.276s|49.775s|537|{{TENANT            PC99     COUNT}}\\{{----------------  -------  -----}}\\{{villagemd-sb      63.276s  9    }}\\{{nttdbxo           52.853s  5    }}\\{{stonybrook-sb     28.432s  1    }}\\{{ucdavis-prod      28.431s  3    }}\\{{southregion-nerm  25.726s  4    }}|
+|NeaccessAdmin::NeaccessRolesController::update|21.922s|21.922s|74|{{TENANT            PC99     COUNT}}\\{{----------------  -------  -----}}\\{{southregion-nerm  21.922s  7    }}\\{{deliveroo         21.488s  6    }}\\{{122gc-tst         11.792s  7    }}\\{{royalflora        10.252s  12   }}\\{{uow-preprod       5.735s   1    }}|
+|Admin::ApiKeysController::edit|10.049s|10.049s|1006|{{TENANT           PC99     COUNT}}\\{{---------------  -------  -----}}\\{{telusdev         10.049s  23   }}\\{{usfoods-sb       10.049s  6    }}\\{{legacyhealthdev  6.872s   9    }}\\{{orlandohealth    4.252s   17   }}\\{{mdlz-sb          3.412s   60   }}|
+|NeprofileAdmin::RolesController::edit|4.606s|3.027s|2420|{{TENANT     PC99    COUNT}}\\{{---------  ------  -----}}\\{{wellspan   4.606s  11   }}\\{{ucsf-sb    4.085s  8    }}\\{{nttdbxo    4.005s  34   }}\\{{chs        3.669s  1    }}\\{{adnext-sb  2.908s  131  }}|
 
 h2. Service: auth_service
 
@@ -26,11 +26,11 @@ h2. Service: auth_service
 |2.579s|288698|
 
 ||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
-|V1::Oauth::OAuthController::callback|16.568s|4.699s|39513|twint: 16.568s, count 106\\repsol-sb: 10.886s, count 124\\iberostar: 10.049s, count 41\\laboralkutxa: 10.049s, count 223\\sylvamo: 9.092s, count 70|
-|V1::Oauth::OAuthController::refresh_token|4.606s|2.381s|39158|alliander: 4.606s, count 144\\atmus: 4.338s, count 75\\laredoute: 4.338s, count 256\\iberostar: 4.168s, count 125\\telkom-sb: 4.168s, count 2|
-|V1::Oauth::OAuthController::login|0.394s|0.073s|198889|oldnational-sb: 0.394s, count 190\\radial: 0.394s, count 79\\ridgeview-sb: 0.335s, count 190\\pvhmc-sb: 0.212s, count 63\\ohsu: 0.195s, count 350|
-|V1::Oauth::OAuthController::logout|0.044s|0.041s|11077|wsl: 0.044s, count 8642\\mdlz-sb: 0.039s, count 127\\skyworksinc: 0.039s, count 37\\uchicago-sb: 0.029s, count 1\\ucmedicine: 0.025s, count 69|
-|V1::Oauth::OAuthController::idn_internal_login|0.014s|0.014s|61|mdlz-sb: 0.011s, count 32\\costco-sb: 0.003s, count 8\\telenet-sb: 0.003s, count 14\\tfs-sb: 0.003s, count 4\\aveva-sb: 0.003s, count 1|
+|V1::Oauth::OAuthController::callback|16.568s|4.699s|39513|{{TENANT        PC99     COUNT}}\\{{------------  -------  -----}}\\{{twint         16.568s  106  }}\\{{repsol-sb     10.886s  124  }}\\{{iberostar     10.049s  41   }}\\{{laboralkutxa  10.049s  223  }}\\{{sylvamo       9.092s   70   }}|
+|V1::Oauth::OAuthController::refresh_token|4.606s|2.381s|39158|{{TENANT     PC99    COUNT}}\\{{---------  ------  -----}}\\{{alliander  4.606s  144  }}\\{{atmus      4.338s  75   }}\\{{laredoute  4.338s  256  }}\\{{iberostar  4.168s  125  }}\\{{telkom-sb  4.168s  2    }}|
+|V1::Oauth::OAuthController::login|0.394s|0.073s|198889|{{TENANT          PC99    COUNT}}\\{{--------------  ------  -----}}\\{{oldnational-sb  0.394s  190  }}\\{{radial          0.394s  79   }}\\{{ridgeview-sb    0.335s  190  }}\\{{pvhmc-sb        0.212s  63   }}\\{{ohsu            0.195s  350  }}|
+|V1::Oauth::OAuthController::logout|0.044s|0.041s|11077|{{TENANT       PC99    COUNT}}\\{{-----------  ------  -----}}\\{{wsl          0.044s  8642 }}\\{{mdlz-sb      0.039s  127  }}\\{{skyworksinc  0.039s  37   }}\\{{uchicago-sb  0.029s  1    }}\\{{ucmedicine   0.025s  69   }}|
+|V1::Oauth::OAuthController::idn_internal_login|0.014s|0.014s|61|{{TENANT      PC99    COUNT}}\\{{----------  ------  -----}}\\{{mdlz-sb     0.011s  32   }}\\{{costco-sb   0.003s  8    }}\\{{telenet-sb  0.003s  14   }}\\{{tfs-sb      0.003s  4    }}\\{{aveva-sb    0.003s  1    }}|
 
 h2. Service: tenant_service
 
@@ -38,11 +38,11 @@ h2. Service: tenant_service
 |0.105s|78804869|
 
 ||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
-|Internal::V1::TenantsController::create|9.850s|9.850s|13|(blank): 9.850s, count 13|
-|Internal::V1::TenantsController::destroy|2.759s|2.759s|1|(blank): 2.759s, count 1|
-|Internal::V1::TenantsController::index|0.160s|0.160s|22081917|(blank): 0.160s, count 22081917|
-|Internal::V1::TenantsController::update|0.112s|0.112s|45|(blank): 0.112s, count 45|
-|Internal::V1::TenantsController::show|0.078s|0.078s|17349057|(blank): 0.078s, count 17349057|
+|Internal::V1::TenantsController::create|9.850s|9.850s|13|{{TENANT   PC99    COUNT}}\\{{-------  ------  -----}}\\{{(blank)  9.850s  13   }}|
+|Internal::V1::TenantsController::destroy|2.759s|2.759s|1|{{TENANT   PC99    COUNT}}\\{{-------  ------  -----}}\\{{(blank)  2.759s  1    }}|
+|Internal::V1::TenantsController::index|0.160s|0.160s|22081917|{{TENANT   PC99    COUNT   }}\\{{-------  ------  --------}}\\{{(blank)  0.160s  22081917}}|
+|Internal::V1::TenantsController::update|0.112s|0.112s|45|{{TENANT   PC99    COUNT}}\\{{-------  ------  -----}}\\{{(blank)  0.112s  45   }}|
+|Internal::V1::TenantsController::show|0.078s|0.078s|17349057|{{TENANT   PC99    COUNT   }}\\{{-------  ------  --------}}\\{{(blank)  0.078s  17349057}}|
 
 h2. Service: portal
 
@@ -50,8 +50,8 @@ h2. Service: portal
 |0.761s|749091|
 
 ||Controller & Action||PC99 (slowest duration)||Controller __TOTAL__ PC99||Controller __TOTAL__ Count||Tenants (slowest→fastest)||
-|SessionsController::new|7.444s|0.703s|738496|devmcprofile: 7.444s, count 950\\adventhealthdev: 6.218s, count 1358\\chubb-sb: 5.974s, count 69\\franciscandev: 5.974s, count 766\\globalcu-sb: 5.740s, count 60|
-|SessionsController::create|4.168s|1.911s|7794|mbie: 4.168s, count 67\\telkom-sb: 3.847s, count 1\\ne-smoke-canary: 3.345s, count 60\\telus: 2.478s, count 547\\iberostar: 2.242s, count 34|
-|SessionsController::update|1.989s|1.307s|301|mbie: 1.989s, count 55\\ssmhc: 1.007s, count 77\\multicare: 0.717s, count 22\\peacehealth: 0.662s, count 16\\122gc-tst: 0.649s, count 18|
-|SessionsController::edit|1.415s|1.049s|305|mbie: 1.415s, count 54\\myfreseniusid: 0.674s, count 1\\telus: 0.322s, count 36\\ssmhc: 0.225s, count 75\\122gc-tst: 0.184s, count 15|
-|SessionsController::resend|0.718s|0.322s|14|122gc-tst: 0.718s, count 1\\mbie: 0.212s, count 3\\multicare: 0.163s, count 3\\ssmhc: 0.145s, count 2\\peacehealth: 0.123s, count 1|
+|SessionsController::new|7.444s|0.703s|738496|{{TENANT           PC99    COUNT}}\\{{---------------  ------  -----}}\\{{devmcprofile     7.444s  950  }}\\{{adventhealthdev  6.218s  1358 }}\\{{chubb-sb         5.974s  69   }}\\{{franciscandev    5.974s  766  }}\\{{globalcu-sb      5.740s  60   }}|
+|SessionsController::create|4.168s|1.911s|7794|{{TENANT           PC99    COUNT}}\\{{---------------  ------  -----}}\\{{mbie             4.168s  67   }}\\{{telkom-sb        3.847s  1    }}\\{{ne-smoke-canary  3.345s  60   }}\\{{telus            2.478s  547  }}\\{{iberostar        2.242s  34   }}|
+|SessionsController::update|1.989s|1.307s|301|{{TENANT       PC99    COUNT}}\\{{-----------  ------  -----}}\\{{mbie         1.989s  55   }}\\{{ssmhc        1.007s  77   }}\\{{multicare    0.717s  22   }}\\{{peacehealth  0.662s  16   }}\\{{122gc-tst    0.649s  18   }}|
+|SessionsController::edit|1.415s|1.049s|305|{{TENANT         PC99    COUNT}}\\{{-------------  ------  -----}}\\{{mbie           1.415s  54   }}\\{{myfreseniusid  0.674s  1    }}\\{{telus          0.322s  36   }}\\{{ssmhc          0.225s  75   }}\\{{122gc-tst      0.184s  15   }}|
+|SessionsController::resend|0.718s|0.322s|14|{{TENANT       PC99    COUNT}}\\{{-----------  ------  -----}}\\{{122gc-tst    0.718s  1    }}\\{{mbie         0.212s  3    }}\\{{multicare    0.163s  3    }}\\{{ssmhc        0.145s  2    }}\\{{peacehealth  0.123s  1    }}|

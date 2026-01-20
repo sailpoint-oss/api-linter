@@ -228,16 +228,36 @@ function buildConfluenceWikiReport(model) {
       const controllerTotalNs = c.controllerTotal?.durationNs ?? null;
       const controllerTotalCount = c.controllerTotal?.count ?? "";
 
-      const tenantsCell =
-        c.tenants.length === 0
-          ? ""
-          : c.tenants
-              .map(
-                (t) =>
-                  `${confluenceEscapeCell(t.tenant)}: ${confluenceEscapeCell(formatSecondsFromNs(t.durationNs))}, count ${confluenceEscapeCell(t.count ?? "")}`,
-              )
-              // Confluence line break inside table cell.
-              .join("\\\\");
+      const tenantsCell = (() => {
+        if (c.tenants.length === 0) return "";
+
+        const tenantHeader = "TENANT";
+        const pc99Header = "PC99";
+        const countHeader = "COUNT";
+
+        const tenantWidth = Math.max(tenantHeader.length, ...c.tenants.map((t) => t.tenant.length));
+        const pc99Values = c.tenants.map((t) => formatSecondsFromNs(t.durationNs));
+        const pc99Width = Math.max(pc99Header.length, ...pc99Values.map((v) => v.length));
+        const countValues = c.tenants.map((t) => String(t.count ?? ""));
+        const countWidth = Math.max(countHeader.length, ...countValues.map((v) => v.length));
+
+        const subLines = [];
+        subLines.push(
+          `${padRight(tenantHeader, tenantWidth)}  ${padRight(pc99Header, pc99Width)}  ${padRight(countHeader, countWidth)}`,
+        );
+        subLines.push(
+          `${"-".repeat(tenantWidth)}  ${"-".repeat(pc99Width)}  ${"-".repeat(countWidth)}`,
+        );
+
+        for (let i = 0; i < c.tenants.length; i += 1) {
+          subLines.push(
+            `${padRight(c.tenants[i].tenant, tenantWidth)}  ${padRight(pc99Values[i], pc99Width)}  ${padRight(countValues[i], countWidth)}`,
+          );
+        }
+
+        // Preserve alignment inside a table cell via monospace per-line.
+        return subLines.map((l) => `{{${l}}}`).join("\\\\");
+      })();
 
       lines.push(
         `|${confluenceEscapeCell(c.controllerAction)}|${confluenceEscapeCell(formatSecondsFromNs(c.slowestOverallNs))}|${confluenceEscapeCell(formatSecondsFromNs(controllerTotalNs))}|${confluenceEscapeCell(controllerTotalCount)}|${tenantsCell}|`,
@@ -251,6 +271,12 @@ function buildConfluenceWikiReport(model) {
 
 function markdownTableRow(cells) {
   return `| ${cells.join(" | ")} |`;
+}
+
+function padRight(text, width) {
+  const s = String(text ?? "");
+  if (s.length >= width) return s;
+  return s + " ".repeat(width - s.length);
 }
 
 function buildMarkdownReport(model) {
