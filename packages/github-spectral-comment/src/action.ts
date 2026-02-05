@@ -76,7 +76,7 @@ export async function runSpectralAnalysis(
           workspace,
           true,
         );
-      } else if (file.includes("sp-gateway-routes")) {
+      } else if (file.includes("sp-gateway-routes") || file.includes("dynamic-rate-limits")) {
         core.debug(`Running gateway spectral ruleset on ${file}`);
         pbs = await runSpectral(
           spectralInstances.gatewaySpectral,
