@@ -139,3 +139,77 @@ export interface DynamicRateLimitCommonConfig {
     rateLimitIntervalSeconds: number;
     methods?: string[];
 }
+
+// Required type forces KeysEnum to include all fields from the interface
+// Adding/removing a field from the interface will cause compiler error
+export type KeysEnum<T> = { [P in keyof Required<T>]: true };
+const RouteKeyType: KeysEnum<Route> = {
+    additionalVersions: true,
+    apiState: true,
+    circuitBreakerEnabled: true,
+    circuitBreakerInterval: true,
+    circuitBreakerMaxRequests: true,
+    circuitBreakerPercentage: true,
+    circuitBreakerThresholdCount: true,
+    circuitBreakerTimeout: true,
+    circuitBreakerType: true,
+    clientIPHeader: true,
+    clientType: true,
+    deprecation: true,
+    endOfLifeDateFeatureFlag: true,
+    featureFlag: true,
+    featureFlagServiceId: true,
+    featureFlagServicePath: true,
+    id: true,
+    latestVersionOverride: true,
+    licenses: true,
+    methods: true,
+    path: true,
+    rateLimit: true,
+    rateLimitExtraRule: true,
+    rateLimitIntervalSeconds: true,
+    rateLimitType: true,
+    rights: true,
+    routeType: true,
+    service: true,
+    servicePath: true,
+    stripPrefix: true,
+    stripPrefixPath: true,
+    subroutes: true,
+    unauthenticatedPaths: true,
+    versionDetailsMap: true,
+    versionEnd: true,
+    versionStart: true
+}
+
+const VersionDetailsKeyType: KeysEnum<VersionDetails> = {
+    apiState: true,
+    deprecation: true
+}
+
+const SubroutesKeyType: KeysEnum<Subroute> = {
+    rights: true,
+    methods: true,
+    versions: true,
+    rateLimit: true,
+    rateLimitIntervalSeconds: true
+}
+
+const RouteDynamicRateLimitConfigKeyType: KeysEnum<RouteDynamicRateLimitConfig> = {
+    subroutes: true,
+    rateLimit: true,
+    rateLimitIntervalSeconds: true,
+    methods: true
+}
+
+const DynamicRateLimitCommonConfigKeyType: KeysEnum<DynamicRateLimitCommonConfig> = {
+    methods: true,
+    rateLimit: true,
+    rateLimitIntervalSeconds: true
+}
+
+export const RouteKeys = Object.keys(RouteKeyType)
+export const SubrouteKeys = Object.keys(SubroutesKeyType)
+export const VersionDetailsKeys = Object.keys(VersionDetailsKeyType)
+export const RouteDynamicRateLimitConfigKeys = Object.keys(RouteDynamicRateLimitConfigKeyType)
+export const DynamicRateLimitCommonConfigKeys = Object.keys(DynamicRateLimitCommonConfigKeyType)
