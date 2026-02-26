@@ -141,7 +141,7 @@ export interface DynamicRateLimitCommonConfig {
 }
 
 // Required type forces KeysEnum to include all fields from the interface
-// Adding/removing a field from the interface will cause compiler error
+// Adding/removing a field from the interface, without also updating the types below, will cause a compiler error
 export type KeysEnum<T> = { [P in keyof Required<T>]: true };
 const RouteKeyType: KeysEnum<Route> = {
     additionalVersions: true,
