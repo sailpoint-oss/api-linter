@@ -1,7 +1,5 @@
-import {RouteKeys} from "./types.js";
-
+// Copyright (c) 2026. SailPoint Technologies, Inc. All rights reserved.
 export function CheckInterfaceForField(objectName: string, objectToValidate: Object, interfaceKeys: string[], errors: {message: string}[]): void{
-    let results: {message: string}[] = [];
 
     for (const field in objectToValidate) {
         if (interfaceKeys.includes(field)) {
