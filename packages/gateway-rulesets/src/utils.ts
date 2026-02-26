@@ -1,9 +1,9 @@
 import {RouteKeys} from "./types.js";
 
-export function CheckInterfaceForField(objectName: string, incomingObject: Object, interfaceKeys: string[], errors: {message: string}[]): void{
+export function CheckInterfaceForField(objectName: string, objectToValidate: Object, interfaceKeys: string[], errors: {message: string}[]): void{
     let results: {message: string}[] = [];
 
-    for (const field in incomingObject) {
+    for (const field in objectToValidate) {
         if (interfaceKeys.includes(field)) {
             continue;
         }
