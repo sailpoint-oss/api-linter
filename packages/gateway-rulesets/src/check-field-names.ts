@@ -50,7 +50,7 @@ export default createOptionalContextRulesetFunction(
                 break
             default:
                 errors.push({
-                    message: `${options} is not valid`
+                    message: `${options} is not a valid case for this function`
                 });
                 break
         }
