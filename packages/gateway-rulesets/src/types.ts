@@ -119,6 +119,7 @@ export interface VersionDetails {
     featureFlagServicePath?: string;
     // Feature flag specifies end of life date of an API, for this version
     endOfLifeDateFeatureFlag?: string;
+    // Add other VersionDetails properties as needed
 }
 
 export interface Subroute {
