@@ -119,6 +119,8 @@ export interface VersionDetails {
     featureFlagServicePath?: string;
     // Feature flag specifies end of life date of an API, for this version
     endOfLifeDateFeatureFlag?: string;
+    // Array of unauthenticated path prefixes for this version
+    unauthenticatedPaths?: string[];
     // Add other VersionDetails properties as needed
 }
 
@@ -196,7 +198,8 @@ const VersionDetailsKeyType: KeysEnum<VersionDetails> = {
     service: true,
     servicePath: true,
     featureFlagServicePath: true,
-    endOfLifeDateFeatureFlag: true
+    endOfLifeDateFeatureFlag: true,
+    unauthenticatedPaths: true
 }
 
 const SubroutesKeyType: KeysEnum<Subroute> = {
