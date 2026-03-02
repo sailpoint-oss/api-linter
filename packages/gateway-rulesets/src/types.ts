@@ -111,7 +111,14 @@ export interface Route {
 export interface VersionDetails {
     apiState?: string;
     deprecation?: string;
-    // Add other VersionDetails properties as needed
+    // Service override for this version
+    service?: string;
+    // Backend service path override for this version
+    servicePath?: string;
+    // Backend service path when featureFlag is enabled, for this version
+    featureFlagServicePath?: string;
+    // Feature flag specifies end of life date of an API, for this version
+    endOfLifeDateFeatureFlag?: string;
 }
 
 export interface Subroute {
@@ -184,7 +191,11 @@ const RouteKeyType: KeysEnum<Route> = {
 
 const VersionDetailsKeyType: KeysEnum<VersionDetails> = {
     apiState: true,
-    deprecation: true
+    deprecation: true,
+    service: true,
+    servicePath: true,
+    featureFlagServicePath: true,
+    endOfLifeDateFeatureFlag: true
 }
 
 const SubroutesKeyType: KeysEnum<Subroute> = {
