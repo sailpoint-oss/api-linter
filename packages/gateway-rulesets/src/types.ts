@@ -115,6 +115,10 @@ export interface VersionDetails {
     service?: string;
     // Backend service path override for this version
     servicePath?: string;
+    // Feature flag to check to route to another service, for this version
+    featureFlag?: string;
+    // Service to route to when featureFlag is enabled, for this version
+    featureFlagServiceId?: string;
     // Backend service path when featureFlag is enabled, for this version
     featureFlagServicePath?: string;
     // Feature flag specifies end of life date of an API, for this version
@@ -197,6 +201,8 @@ const VersionDetailsKeyType: KeysEnum<VersionDetails> = {
     deprecation: true,
     service: true,
     servicePath: true,
+    featureFlag: true,
+    featureFlagServiceId: true,
     featureFlagServicePath: true,
     endOfLifeDateFeatureFlag: true,
     unauthenticatedPaths: true
