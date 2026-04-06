@@ -1,5 +1,5 @@
 functions: [gateway-test,
-  check-version-start,check-unique-id,check-version-start-order,check-path-documentation,check-latest-version-override,check-subroutes,check-dynamic-rate-limit,check-field-names]
+  check-version-start,check-unique-id,check-version-start-order,check-path-documentation,check-latest-version-override,check-version-details-map-vs-version-end,check-subroutes,check-dynamic-rate-limit,check-field-names]
 rules:
   gateway-route-must-have-valid-properties:
     given: $.sp-gateway.routes.*
@@ -196,6 +196,13 @@ rules:
     severity: error
     then:
       function: check-latest-version-override
+
+  gateway-route-version-details-map-keys-must-not-exceed-version-end:
+    message: "versionDetailsMap keys for yearly API versions (v20XX) must not be greater than versionEnd, or sp-gateway will ignore them"
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      function: check-version-details-map-vs-version-end
 
   gateway-route-check-subroutes:
     given: $.sp-gateway.routes
