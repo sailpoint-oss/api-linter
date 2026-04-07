@@ -198,7 +198,7 @@ rules:
       function: check-latest-version-override
 
   gateway-route-version-details-map-keys-must-not-exceed-version-end:
-    message: "versionDetailsMap keys for yearly API versions (v20XX) must not be greater than versionEnd, or sp-gateway will ignore them"
+    message: "{{error}}"
     given: $.sp-gateway.routes.*
     severity: error
     then:
