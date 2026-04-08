@@ -33,6 +33,19 @@ sp-gateway:
         beta:
           apiState: "public"
 
+    # Intentional violation: v2028 in versionDetailsMap is greater than versionEnd (2026) — expect gateway-route-version-details-map-keys-must-not-exceed-version-end
+    - id: "version-details-map-exceeds-version-end"
+      path: "/lint/version-details-map-vs-end"
+      service: "identity"
+      versionStart: 2024
+      versionEnd: 2026
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      versionDetailsMap:
+        v2028:
+          apiState: "public-preview"
+
     - id: "test-route"
       path: "/test-path"
       service: "identity"
