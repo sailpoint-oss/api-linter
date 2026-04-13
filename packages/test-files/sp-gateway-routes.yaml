@@ -53,3 +53,20 @@ sp-gateway:
       routeType: "prefix"
       stripPrefix: true
       apiState: "public"
+
+    # Intentional violations for backOffConfig rules
+    - id: "back-off-config-test"
+      path: "/back-off-config-test"
+      service: "identity"
+      versionStart: 2024
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        enabled: "yes"          # violation: must be boolean, not string
+        intervalThreshold: -5   # violation: must be a positive integer
+        tiers: [30, "sixty", 90] # violation: tiers must be an array of integers
+        violationWindow: 0      # violation: must be >= 1
+        tierMemoryWindow: 300
+        redisTimeoutMs: 50
+        unknownField: "oops"    # violation: unknown property

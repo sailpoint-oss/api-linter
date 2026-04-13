@@ -106,6 +106,29 @@ export interface Route {
 
     // Subroutes is a map of subroutes and their properties for a given route ID
     subroutes?: Map<string, Subroute>;
+
+    // BackOffConfig defines the adaptive backoff configuration for this route. (optional)
+    backOffConfig?: BackOffConfig;
+}
+
+export interface BackOffConfig {
+    // Whether backoff is enabled for this route.
+    enabled?: boolean;
+
+    // IntervalThreshold is the number of distinct violated rate-limit intervals before backoff triggers.
+    intervalThreshold?: number;
+
+    // Tiers defines the backoff duration per escalation tier, in seconds.
+    tiers?: number[];
+
+    // ViolationWindow is the time window in which violated intervals are counted, in seconds.
+    violationWindow?: number;
+
+    // TierMemoryWindow is how long a tier is remembered after expiry, in seconds.
+    tierMemoryWindow?: number;
+
+    // RedisTimeoutMs is the max time allowed per Redis backoff operation, in milliseconds.
+    redisTimeoutMs?: number;
 }
 
 export interface VersionDetails {
@@ -160,6 +183,7 @@ export type KeysEnum<T> = { [P in keyof Required<T>]: true };
 const RouteKeyType: KeysEnum<Route> = {
     additionalVersions: true,
     apiState: true,
+    backOffConfig: true,
     circuitBreakerEnabled: true,
     circuitBreakerInterval: true,
     circuitBreakerMaxRequests: true,
@@ -229,8 +253,18 @@ const DynamicRateLimitCommonConfigKeyType: KeysEnum<DynamicRateLimitCommonConfig
     rateLimitIntervalSeconds: true
 }
 
+const BackOffConfigKeyType: KeysEnum<BackOffConfig> = {
+    enabled: true,
+    intervalThreshold: true,
+    tiers: true,
+    violationWindow: true,
+    tierMemoryWindow: true,
+    redisTimeoutMs: true,
+}
+
 export const RouteKeys = Object.keys(RouteKeyType)
 export const SubrouteKeys = Object.keys(SubroutesKeyType)
 export const VersionDetailsKeys = Object.keys(VersionDetailsKeyType)
 export const RouteDynamicRateLimitConfigKeys = Object.keys(RouteDynamicRateLimitConfigKeyType)
 export const DynamicRateLimitCommonConfigKeys = Object.keys(DynamicRateLimitCommonConfigKeyType)
+export const BackOffConfigKeys = Object.keys(BackOffConfigKeyType)

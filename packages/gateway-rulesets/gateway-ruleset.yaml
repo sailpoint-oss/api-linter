@@ -215,3 +215,64 @@ rules:
     severity: error
     then:
       function: check-dynamic-rate-limit
+
+  gateway-route-back-off-config-must-have-valid-properties:
+    given: $.sp-gateway.routes.*.backOffConfig
+    severity: error
+    then:
+      function: check-field-names
+      functionOptions:
+        value: "backOffConfig"
+
+  gateway-route-back-off-config-enabled-must-be-boolean:
+    message: "Invalid value for backOffConfig.enabled. Must be a boolean."
+    given: "$.sp-gateway.routes.*.backOffConfig.enabled"
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: boolean
+
+  gateway-route-back-off-config-integer-fields-must-be-positive:
+    message: "Invalid value for backOffConfig integer field. Must be a positive integer."
+    given: "$.sp-gateway.routes.*.backOffConfig"
+    severity: error
+    then:
+      - field: intervalThreshold
+        function: schema
+        functionOptions:
+          schema:
+            type: integer
+            minimum: 1
+      - field: violationWindow
+        function: schema
+        functionOptions:
+          schema:
+            type: integer
+            minimum: 1
+      - field: tierMemoryWindow
+        function: schema
+        functionOptions:
+          schema:
+            type: integer
+            minimum: 1
+      - field: redisTimeoutMs
+        function: schema
+        functionOptions:
+          schema:
+            type: integer
+            minimum: 1
+
+  gateway-route-back-off-config-tiers-must-be-valid:
+    message: "Invalid value for backOffConfig.tiers. Must be an array of positive integers."
+    given: "$.sp-gateway.routes.*.backOffConfig.tiers"
+    severity: error
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: array
+          items:
+            type: integer
+            minimum: 1
