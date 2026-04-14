@@ -1,6 +1,7 @@
 // Copyright (c) 2026. SailPoint Technologies, Inc. All rights reserved.
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
 import {
+    BackOffConfigKeys,
     DynamicRateLimitCommonConfigKeys,
     Route, RouteDynamicRateLimitConfigKeys, RouteKeys, SubrouteKeys, VersionDetailsKeys
 } from "./types.js";
@@ -35,6 +36,9 @@ export default createOptionalContextRulesetFunction(
                 new Map<string, Object>(Object.entries(objectToValidate)).forEach((details, id) => {
                     CheckInterfaceForField(id, details, VersionDetailsKeys, errors)
                 })
+                break
+            case "backOffConfig":
+                CheckInterfaceForField("backOffConfig", objectToValidate, BackOffConfigKeys, errors)
                 break
             case "dynamicRateLimit":
                 new Map<string, Object>(Object.entries(objectToValidate)).forEach((rateLimitConfig, routeId) => {
