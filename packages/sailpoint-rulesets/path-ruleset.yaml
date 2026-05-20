@@ -18,6 +18,7 @@ functions:
     tag-check,
     path-parameter-resource-id-check,
     path-file-check,
+    docusaurus-variable-check,
   ]
 rules:
   path-list-endpoints-must-support-pagination:
@@ -189,6 +190,14 @@ rules:
       function: path-file-check
       functionOptions:
         rule: 405
+  path-must-not-contain-docusaurus-variable-syntax:
+    message: "{{error}}"
+    given: $
+    severity: error
+    then:
+      function: docusaurus-variable-check
+      functionOptions:
+        rule: 406
   # path-parameters-must-not-use-reserved-keywords:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
   #   given: $.[*].parameters[?(@.$ref == null)]

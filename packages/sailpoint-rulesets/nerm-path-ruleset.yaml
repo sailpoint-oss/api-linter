@@ -9,6 +9,7 @@ functions:
     path-descriptions-check,
     path-oauth-scope-check,
     path-operation-check,
+    docusaurus-variable-check,
   ]
 rules:
   path-parameters-must-have-description:
@@ -69,3 +70,11 @@ rules:
       function: path-operation-check
       functionOptions:
         rule: 400
+  path-must-not-contain-docusaurus-variable-syntax:
+    message: "{{error}}"
+    given: $
+    severity: error
+    then:
+      function: docusaurus-variable-check
+      functionOptions:
+        rule: 406

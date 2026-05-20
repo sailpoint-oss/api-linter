@@ -7,6 +7,7 @@ functions:
     ascii,
     schema-reserved-keywords-check,
     path-file-check,
+    docusaurus-variable-check,
   ]
 rules:
   schema-properties-must-have-example:
@@ -68,6 +69,14 @@ rules:
       function: path-file-check
       functionOptions:
         rule: 405
+  schema-must-not-contain-docusaurus-variable-syntax:
+    message: "{{error}}"
+    given: $
+    severity: error
+    then:
+      function: docusaurus-variable-check
+      functionOptions:
+        rule: 406
   # schema-properties-must-not-contain-reserved-keywords:
   #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#504"
   #   given: $

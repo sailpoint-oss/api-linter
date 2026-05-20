@@ -3,6 +3,7 @@ functions:
     schema-properties-field-check,
     schema-object-field-check,
     validate-schema-integer-number-formats,
+    docusaurus-variable-check,
   ]
 rules:
   schema-properties-must-have-example:
@@ -31,3 +32,11 @@ rules:
       function: validate-schema-integer-number-formats
       functionOptions:
         rule: 171
+  schema-must-not-contain-docusaurus-variable-syntax:
+    message: "{{error}}"
+    given: $
+    severity: error
+    then:
+      function: docusaurus-variable-check
+      functionOptions:
+        rule: 406
