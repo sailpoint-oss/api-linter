@@ -7,7 +7,8 @@
     "build": "pnpm -r build",
     "test": "pnpm build && pnpm -r test",
     "run": "pnpm build && pnpm -r run",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "confluence:perf-table": "node scripts/generateConfluencePerformanceTable.js"
   },
   "author": "",
   "license": "ISC",
