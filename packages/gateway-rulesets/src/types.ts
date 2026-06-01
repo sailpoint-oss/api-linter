@@ -157,6 +157,17 @@ export interface Subroute {
     versions?: string[];
     rateLimit?: number;
     rateLimitIntervalSeconds?: number;
+    // Per-method rate limiting configuration for this subroute. (optional)
+    methodConfig?: MethodConfig[];
+}
+
+export interface MethodConfig {
+    // HTTP methods this rate limit applies to, for example ["GET"], ["POST"]
+    methods: string[];
+    // Number of requests allowed per rateLimitIntervalSeconds
+    rateLimit: number;
+    // Interval in seconds for rate limiting
+    rateLimitIntervalSeconds: number;
 }
 
 export interface DynamicRateLimitConfig {
@@ -237,7 +248,8 @@ const SubroutesKeyType: KeysEnum<Subroute> = {
     methods: true,
     versions: true,
     rateLimit: true,
-    rateLimitIntervalSeconds: true
+    rateLimitIntervalSeconds: true,
+    methodConfig: true
 }
 
 const RouteDynamicRateLimitConfigKeyType: KeysEnum<RouteDynamicRateLimitConfig> = {
