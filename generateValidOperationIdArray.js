@@ -1,6 +1,8 @@
 import fs from "fs";
 import yaml from "js-yaml";
 
+const HTTP_METHODS = ["get", "post", "put", "patch", "delete", "head", "options", "trace"];
+
 async function getOperationIds(filePaths) {
   const operationIds = new Set();
 
@@ -10,11 +12,21 @@ async function getOperationIds(filePaths) {
       const spec = yaml.load(fileContent);
 
       if (spec.paths) {
+        // Compiled/root spec (e.g. sailpoint-api.yaml, speccy-resolved files):
+        // paths.$path.$method.operationId
         for (const path in spec.paths) {
           for (const method in spec.paths[path]) {
             if (spec.paths[path][method].operationId) {
               operationIds.add(spec.paths[path][method].operationId);
             }
+          }
+        }
+      } else {
+        // Individual path file (e.g. api-specs/idn/apis/<tag>/paths/*.yaml):
+        // $method.operationId at the root of the file
+        for (const method of HTTP_METHODS) {
+          if (spec[method]?.operationId) {
+            operationIds.add(spec[method].operationId);
           }
         }
       }

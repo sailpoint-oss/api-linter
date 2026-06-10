@@ -1,0 +1,12 @@
+openapi: 3.0.1
+info:
+  title: Identity Security Cloud API - Transforms
+  version: v1
+tags:
+  - name: Transforms
+    description: Use this API to manage transforms.
+paths:
+  /transforms/v1:
+    $ref: ./paths/transforms-v1.yaml
+  /transforms/v1/{id}:
+    $ref: ./paths/transforms-v1-by-id.yaml
