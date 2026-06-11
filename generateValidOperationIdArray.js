@@ -1,5 +1,5 @@
 import fs from "fs";
-import glob from "glob";
+import { globSync } from "glob";
 import yaml from "js-yaml";
 
 const HTTP_METHODS = ["get", "post", "put", "patch", "delete", "head", "options", "trace"];
@@ -50,7 +50,7 @@ async function getOperationIds(filePaths) {
   }
 
   const filePaths = args.flatMap((arg) =>
-    arg.includes("*") || arg.includes("?") ? glob.sync(arg) : [arg],
+    arg.includes("*") || arg.includes("?") ? globSync(arg) : [arg],
   );
 
   const uniqueOperationIds = await getOperationIds(filePaths);
