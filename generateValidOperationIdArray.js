@@ -1,4 +1,5 @@
 import fs from "fs";
+import glob from "glob";
 import yaml from "js-yaml";
 
 const HTTP_METHODS = ["get", "post", "put", "patch", "delete", "head", "options", "trace"];
@@ -41,10 +42,17 @@ async function getOperationIds(filePaths) {
 (async () => {
   const args = process.argv.slice(2);
   if (args.length === 0) {
-    console.error("Usage: node script.js <file1> <file2> ... <fileN>");
+    console.error("Usage: node script.js <glob-or-file> [<glob-or-file> ...]");
+    console.error("  Examples:");
+    console.error("    node script.js 'api-specs/idn/apis/*/paths/*.yaml'");
+    console.error("    node script.js sailpoint-api.yaml");
     process.exit(1);
   }
 
-  const uniqueOperationIds = await getOperationIds(args);
+  const filePaths = args.flatMap((arg) =>
+    arg.includes("*") || arg.includes("?") ? glob.sync(arg) : [arg],
+  );
+
+  const uniqueOperationIds = await getOperationIds(filePaths);
   console.log(JSON.stringify(uniqueOperationIds));
 })();
