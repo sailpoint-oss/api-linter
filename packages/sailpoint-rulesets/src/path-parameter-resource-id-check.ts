@@ -1,5 +1,47 @@
+import { RulesetFunctionContext } from "@stoplight/spectral-core";
 import { OpenAPIV3 } from "openapi-types";
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
+
+const VERSION_SEGMENTS = ["v3", "beta", "v2024", "v2025", "v2026"];
+
+function resolveOperationIdArray(source: string | undefined): string[] {
+  if (!source) {
+    console.error(
+      "No source file found, this will not run the valid operation id check.",
+    );
+    return [];
+  }
+
+  const isVersioned = VERSION_SEGMENTS.some((v) => source.includes(`/${v}/`));
+  const isApis = source.includes("/apis/");
+
+  let envVar: string | undefined;
+  if (isVersioned) {
+    envVar = process.env.VERSIONED_OPERATION_IDS;
+    if (!envVar) {
+      console.error(
+        "VERSIONED_OPERATION_IDS not found in environment, this will not run the valid operation id check.",
+      );
+    }
+  } else if (isApis) {
+    envVar = process.env.APIS_OPERATION_IDS;
+    if (!envVar) {
+      console.error(
+        "APIS_OPERATION_IDS not found in environment, this will not run the valid operation id check.",
+      );
+    }
+  } else {
+    // Fallback for files that don't match either pattern (e.g. test files)
+    envVar = process.env.VERSIONED_OPERATION_IDS ?? process.env.APIS_OPERATION_IDS;
+    if (!envVar) {
+      console.error(
+        "No operation ID environment variable found, this will not run the valid operation id check.",
+      );
+    }
+  }
+
+  return envVar ? JSON.parse(envVar) : [];
+}
 
 // Create the original function using Spectral's helper.
 export default createOptionalContextRulesetFunction(
@@ -14,21 +56,18 @@ export default createOptionalContextRulesetFunction(
       required: ["rule"],
     },
   },
-  (targetVal: OpenAPIV3.OperationObject, options: { rule: string }) => {
+  (
+    targetVal: OpenAPIV3.OperationObject,
+    options: { rule: string },
+    context: RulesetFunctionContext,
+  ) => {
     const { rule } = options;
     let results: { message: string }[] = [];
-    let operationIdArray: string[] = [];
-    
-    if (targetVal.parameters !== undefined) {
-      const rawString = process.env.VALID_OPERATION_IDS;
 
-      if (rawString) {
-        operationIdArray = JSON.parse(rawString);
-      } else {
-        console.error(
-          "Preloaded OperationIds data not found in environment, this will not run the valid operation id check.",
-        );
-      }
+    if (targetVal.parameters !== undefined) {
+      const operationIdArray = resolveOperationIdArray(
+        context?.document?.source ?? undefined,
+      );
 
       targetVal.parameters.forEach((parameter) => {
         // @ts-expect-error OpenAPI Extenstions are valid

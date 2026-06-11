@@ -7,8 +7,60 @@
 //   functionOptions:
 //     rule: 402
 
+import fs from "node:fs";
+import path from "node:path";
 import { IRuleResult } from "@stoplight/spectral-core";
 import { OpenAPIV3 } from "openapi-types";
+import yaml from "js-yaml";
+
+// Match version as a path segment (/v3/, /v2024/, etc.) to avoid false
+// positives on versioned filenames like transforms-v3.yaml inside apis/.
+function hasVersionSegment(source: string, version: string): boolean {
+  return source.includes(`/${version}/`);
+}
+
+function getTagsForVersionedSource(source: string): string[] {
+  const versionEnvMap: Array<[string, string]> = [
+    ["v3", "V3_TAGS_JSON"],
+    ["v2024", "V2024_TAGS_JSON"],
+    ["v2025", "V2025_TAGS_JSON"],
+    ["v2026", "V2026_TAGS_JSON"],
+    ["beta", "BETA_TAGS_JSON"],
+  ];
+
+  for (const [version, envKey] of versionEnvMap) {
+    if (hasVersionSegment(source, version)) {
+      const raw = process.env[envKey];
+      if (raw) {
+        return JSON.parse(raw);
+      }
+      console.error(
+        `${envKey} not found in environment, this will not run the tags check.`,
+      );
+      return [];
+    }
+  }
+
+  return [];
+}
+
+function getTagsForApisSource(source: string): string[] {
+  try {
+    const openapiPath = path.resolve(path.dirname(source), "..", "openapi.yaml");
+    const spec = yaml.load(fs.readFileSync(openapiPath, "utf8")) as any;
+    if (spec?.tags?.[0]?.name) {
+      return [spec.tags[0].name];
+    }
+    console.error(
+      `No tags found in ${openapiPath}, this will not run the tags check.`,
+    );
+  } catch {
+    console.error(
+      `Could not read collection openapi.yaml for ${source}, this will not run the tags check.`,
+    );
+  }
+  return [];
+}
 
 export default (
   targetVal: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject,
@@ -19,58 +71,14 @@ export default (
   let results: IRuleResult[] = [];
   let tagArray: string[] = [];
 
-  if (
-    context.document.source === undefined ||
-    context.document.source === null
-  ) {
+  const source: string | undefined = context?.document?.source;
+
+  if (!source) {
     console.error("No source file found.");
+  } else if (source.includes("/apis/")) {
+    tagArray = getTagsForApisSource(source);
   } else {
-    if (context.document.source.includes("v3")) {
-      const preloadedTags = process.env.V3_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded V3 tags data not found in environment, this will not run the tags check.",
-        );
-      }
-    } else if (context.document.source.includes("v2024")) {
-      const preloadedTags = process.env.V2024_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded V2024 tags data not found in environment, this will not run the tags check.",
-        );
-      }
-    } else if (context.document.source.includes("v2025")) {
-      const preloadedTags = process.env.V2025_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded V2025 tags data not found in environment, this will not run the tags check.",
-        );
-      }
-    } else if (context.document.source.includes("v2026")) {
-      const preloadedTags = process.env.V2026_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded V2026 tags data not found in environment, this will not run the tags check.",
-        );
-      }
-    } else if (context.document.source.includes("beta")) {
-      const preloadedTags = process.env.BETA_TAGS_JSON;
-      if (preloadedTags) {
-        tagArray = JSON.parse(preloadedTags);
-      } else {
-        console.error(
-          "Preloaded Beta tags data not found in environment, this will not run the tags check.",
-        );
-      }
-    }
+    tagArray = getTagsForVersionedSource(source);
   }
 
   for (const [key, value] of Object.entries(targetVal)) {

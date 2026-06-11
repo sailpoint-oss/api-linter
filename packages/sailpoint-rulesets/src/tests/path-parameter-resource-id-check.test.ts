@@ -3,8 +3,15 @@ import { OpenAPIV3 } from "openapi-types";
 import parameterOperationIdCheck from "../path-parameter-resource-id-check.js";
 const ruleNumber = "404";
 
-process.env.VALID_OPERATION_IDS =
+process.env.VERSIONED_OPERATION_IDS =
   '["listAccounts","listEntitlements","listAccessProfiles"]';
+process.env.APIS_OPERATION_IDS =
+  '["listAccounts","listEntitlements","listAccessProfiles"]';
+
+// Simulated versioned source path so the checker picks up VERSIONED_OPERATION_IDS.
+const versionedContext = {
+  document: { source: "/workspace/api-specs/idn/v3/paths/access-profiles.yaml" },
+} as any;
 
 const jsonParameterWithValidOperationId: OpenAPIV3.OperationObject = {
   tags: ["Access Profiles"],
@@ -183,6 +190,7 @@ describe("Path Parameter Operation Id Check Test", function () {
     const result = parameterOperationIdCheck(
       jsonParameterWithValidOperationId,
       { rule: ruleNumber },
+      versionedContext,
     );
     expect(result).to.be.an("array").that.is.empty;
   });
@@ -190,7 +198,7 @@ describe("Path Parameter Operation Id Check Test", function () {
   it("should return an error message if path parameter is missing x-sailpoint-resource-operation-id", function () {
     const result = parameterOperationIdCheck(jsonParameterWithNoOperationId, {
       rule: ruleNumber,
-    });
+    }, versionedContext);
     expect(result).to.deep.equal([
       {
         // @ts-expect-error OpenAPI Extenstions are valid
@@ -202,9 +210,8 @@ describe("Path Parameter Operation Id Check Test", function () {
   test("should return an error message if path parameter has an invalid operation id", () => {
     const result = parameterOperationIdCheck(
       jsonParameterWithInvalidOperationId,
-      {
-        rule: ruleNumber,
-      },
+      { rule: ruleNumber },
+      versionedContext,
     );
     expect(result).toEqual([
       {
@@ -217,9 +224,8 @@ describe("Path Parameter Operation Id Check Test", function () {
   test("should return an error message if path parameter operation id references itself.", () => {
     const result = parameterOperationIdCheck(
       jsonParameterWithInvalidOperationIdSelfRef,
-      {
-        rule: ruleNumber,
-      },
+      { rule: ruleNumber },
+      versionedContext,
     );
     expect(result).toEqual([
       {
@@ -232,9 +238,8 @@ describe("Path Parameter Operation Id Check Test", function () {
   it("should not return an error message if path parameter has valid operation ids defined under x-sailpoint-resource-operation-id", function () {
     const result = parameterOperationIdCheck(
       jsonParameterWithValidOperationIds,
-      {
-        rule: ruleNumber,
-      },
+      { rule: ruleNumber },
+      versionedContext,
     );
     expect(result).to.deep.equal([]);
   });
