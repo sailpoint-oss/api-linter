@@ -1,5 +1,5 @@
 functions: [gateway-test,
-  check-version-start,check-unique-id,check-version-start-order,check-path-documentation,check-latest-version-override,check-version-details-map-vs-version-end,check-subroutes,check-dynamic-rate-limit,check-field-names]
+  check-version-start,check-unique-id,check-version-in-id,check-version-in-id-matches-path,check-strip-prefix-path-matches-path,check-version-start-order,check-path-documentation,check-latest-version-override,check-version-details-map-vs-version-end,check-subroutes,check-dynamic-rate-limit,check-field-names]
 rules:
   gateway-route-must-have-valid-properties:
     given: $.sp-gateway.routes.*
@@ -17,13 +17,13 @@ rules:
       functionOptions:
         value: "subroute"
 
-  gateway-version-details-must-have-valid-properties:
-    given: $.sp-gateway.routes.*.versionDetailsMap
-    severity: error
-    then:
-      function: check-field-names
-      functionOptions:
-        value: "versionDetail"
+#  gateway-version-details-must-have-valid-properties:
+#    given: $.sp-gateway.routes.*.versionDetailsMap
+#    severity: error
+#    then:
+#      function: check-field-names
+#      functionOptions:
+#        value: "versionDetail"
 
   gateway-dynamic-rate-limit-must-have-valid-properties:
     given: $.dynamic-rate-limits.*
@@ -45,16 +45,16 @@ rules:
       - field: id
         function: truthy
 
-  gateway-route-additional-versions-must-be-valid:
-    message: "Invalid value specified for additionalVersion. Must be beta or v3."
-    given: $.sp-gateway.routes.*.additionalVersions.*
-    severity: error
-    then: 
-      function: enumeration
-      functionOptions:
-        values:
-          - beta
-          - v3
+#  gateway-route-additional-versions-must-be-valid:
+#    message: "Invalid value specified for additionalVersion. Must be beta or v3."
+#    given: $.sp-gateway.routes.*.additionalVersions.*
+#    severity: error
+#    then:
+#      function: enumeration
+#      functionOptions:
+#        values:
+#          - beta
+#          - v3
   gateway-route-api-state-must-be-valid:
     message: "Invalid value for apiState. Valid value is one of private, limited-preview, public-preview and public."
     given: $.sp-gateway.routes.*
@@ -69,19 +69,19 @@ rules:
           - public-preview
           - public
 
-  gateway-route-api-state-in-version-details-map-must-be-valid:
-    message: "Invalid value for apiState. Valid value is one of private, limited-preview, public-preview and public."
-    given: $.sp-gateway.routes.*.versionDetailsMap.*
-    severity: error
-    then:
-      - field: apiState
-        function: enumeration
-        functionOptions:
-          values:
-            - private
-            - limited-preview
-            - public-preview
-            - public
+#  gateway-route-api-state-in-version-details-map-must-be-valid:
+#    message: "Invalid value for apiState. Valid value is one of private, limited-preview, public-preview and public."
+#    given: $.sp-gateway.routes.*.versionDetailsMap.*
+#    severity: error
+#    then:
+#      - field: apiState
+#        function: enumeration
+#        functionOptions:
+#          values:
+#            - private
+#            - limited-preview
+#            - public-preview
+#            - public
 
   gateway-route-route-type-must-be-valid:
     message: "Invalid value for routeType. Valid value is one of prefix and path."
@@ -95,12 +95,12 @@ rules:
             - prefix
             - path
 
-  gateway-route-must-have-valid-version-start:
-    given: $.sp-gateway.routes.*
-    severity: error
-    then:
-      - field: versionStart
-        function: check-version-start
+#  gateway-route-must-have-valid-version-start:
+#    given: $.sp-gateway.routes.*
+#    severity: error
+#    then:
+#      - field: versionStart
+#        function: check-version-start
 
   gateway-route-must-have-unique-id:
     given: $.sp-gateway.routes.*
@@ -109,12 +109,31 @@ rules:
       - field: id
         function: check-unique-id
 
-  gateway-route-must-have-version-start-in-order:
+  gateway-route-must-have-version-in-id:
     given: $.sp-gateway.routes.*
     severity: error
     then:
-      - field: versionStart
-        function: check-version-start-order
+      - field: id
+        function: check-version-in-id
+
+  gateway-route-id-and-path-must-have-matching-version:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - function: check-version-in-id-matches-path
+
+  gateway-route-path-must-start-with-strip-prefix-path:
+    given: $.sp-gateway.routes.*
+    severity: error
+    then:
+      - function: check-strip-prefix-path-matches-path
+
+#  gateway-route-must-have-version-start-in-order:
+#    given: $.sp-gateway.routes.*
+#    severity: error
+#    then:
+#      - field: versionStart
+#        function: check-version-start-order
 
   # gateway-route-must-have-path-documentation:
   #   given: $.sp-gateway.routes.*
@@ -165,14 +184,14 @@ rules:
         schema:
           type: boolean
 
-  gateway-route-allowed-fields-in-version-details-map:
-    message: "Invalid field in versionDetailsMap. Must be a valid api version e.g. beta, v3 or v20XX"
-    severity: error
-    given: "$.sp-gateway.routes.*.versionDetailsMap.*~"
-    then:
-      - function: pattern
-        functionOptions:
-          "match" : "^beta$|^v3$|^v(202[4-9]|20[3-9][0-9]|2[1-9][0-9]{2})$"
+#  gateway-route-allowed-fields-in-version-details-map:
+#    message: "Invalid field in versionDetailsMap. Must be a valid api version e.g. beta, v3 or v20XX"
+#    severity: error
+#    given: "$.sp-gateway.routes.*.versionDetailsMap.*~"
+#    then:
+#      - function: pattern
+#        functionOptions:
+#          "match" : "^beta$|^v3$|^v(202[4-9]|20[3-9][0-9]|2[1-9][0-9]{2})$"
 
 
   # check-on-prefix-routes-only:
@@ -190,19 +209,19 @@ rules:
   #     functionOptions:
   #       rule: 403
 
-  gateway-route-latest-version-override-must-be-valid:
-    message: "latestVersionOverride must be a valid version and not greater than endVersion"
-    given: $.sp-gateway.routes.*
-    severity: error
-    then:
-      function: check-latest-version-override
+#  gateway-route-latest-version-override-must-be-valid:
+#    message: "latestVersionOverride must be a valid version and not greater than endVersion"
+#    given: $.sp-gateway.routes.*
+#    severity: error
+#    then:
+#      function: check-latest-version-override
 
-  gateway-route-version-details-map-keys-must-not-exceed-version-end:
-    message: "{{error}}"
-    given: $.sp-gateway.routes.*
-    severity: error
-    then:
-      function: check-version-details-map-vs-version-end
+#  gateway-route-version-details-map-keys-must-not-exceed-version-end:
+#    message: "{{error}}"
+#    given: $.sp-gateway.routes.*
+#    severity: error
+#    then:
+#      function: check-version-details-map-vs-version-end
 
   gateway-route-check-subroutes:
     given: $.sp-gateway.routes

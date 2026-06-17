@@ -14,15 +14,6 @@ export interface Route {
     // Backend service path, if not specified the path is used including the version. (optional)
     servicePath?: string;
 
-    // Integer version start indicates the starting version of API for example 2024. Should be set to 0 for non versionsed APIs for example /oauth (optional)
-    versionStart?: number;
-
-    // Version end indicates that the API should not be supported after a certain version (optional)
-    versionEnd?: number;
-
-    // Array of additional versions for eg. ["beta""v3"]. Default is []. (optional)
-    additionalVersions?: string[];
-
     // Override for the latest version mapping. If set, /latest will map to this version instead of the global latestVersion. (optional)
     latestVersionOverride?: number;
 
@@ -98,9 +89,6 @@ export interface Route {
     // Licenses that are required to access this route
     licenses?: string[];
 
-    // Properties can be overwritten for a version using this map.
-    versionDetailsMap?: Map<string, VersionDetails>;
-
     // AccessRights is an array of rights required to access this route. (optional)
     rights?: string[];
 
@@ -131,30 +119,9 @@ export interface BackOffConfig {
     redisTimeoutMs?: number;
 }
 
-export interface VersionDetails {
-    apiState?: string;
-    deprecation?: string;
-    // Service override for this version
-    service?: string;
-    // Backend service path override for this version
-    servicePath?: string;
-    // Feature flag to check to route to another service, for this version
-    featureFlag?: string;
-    // Service to route to when featureFlag is enabled, for this version
-    featureFlagServiceId?: string;
-    // Backend service path when featureFlag is enabled, for this version
-    featureFlagServicePath?: string;
-    // Feature flag specifies end of life date of an API, for this version
-    endOfLifeDateFeatureFlag?: string;
-    // Array of unauthenticated path prefixes for this version
-    unauthenticatedPaths?: string[];
-    // Add other VersionDetails properties as needed
-}
-
 export interface Subroute {
     rights?: string[];
     methods?: string[];
-    versions?: string[];
     rateLimit?: number;
     rateLimitIntervalSeconds?: number;
     // Per-method rate limiting configuration for this subroute. (optional)
@@ -192,7 +159,6 @@ export interface DynamicRateLimitCommonConfig {
 // Adding/removing a field from the interface, without also updating the types below, will cause a compiler error
 export type KeysEnum<T> = { [P in keyof Required<T>]: true };
 const RouteKeyType: KeysEnum<Route> = {
-    additionalVersions: true,
     apiState: true,
     backOffConfig: true,
     circuitBreakerEnabled: true,
@@ -226,27 +192,11 @@ const RouteKeyType: KeysEnum<Route> = {
     stripPrefixPath: true,
     subroutes: true,
     unauthenticatedPaths: true,
-    versionDetailsMap: true,
-    versionEnd: true,
-    versionStart: true
-}
-
-const VersionDetailsKeyType: KeysEnum<VersionDetails> = {
-    apiState: true,
-    deprecation: true,
-    service: true,
-    servicePath: true,
-    featureFlag: true,
-    featureFlagServiceId: true,
-    featureFlagServicePath: true,
-    endOfLifeDateFeatureFlag: true,
-    unauthenticatedPaths: true
 }
 
 const SubroutesKeyType: KeysEnum<Subroute> = {
     rights: true,
     methods: true,
-    versions: true,
     rateLimit: true,
     rateLimitIntervalSeconds: true,
     methodConfig: true
@@ -276,7 +226,6 @@ const BackOffConfigKeyType: KeysEnum<BackOffConfig> = {
 
 export const RouteKeys = Object.keys(RouteKeyType)
 export const SubrouteKeys = Object.keys(SubroutesKeyType)
-export const VersionDetailsKeys = Object.keys(VersionDetailsKeyType)
 export const RouteDynamicRateLimitConfigKeys = Object.keys(RouteDynamicRateLimitConfigKeyType)
 export const DynamicRateLimitCommonConfigKeys = Object.keys(DynamicRateLimitCommonConfigKeyType)
 export const BackOffConfigKeys = Object.keys(BackOffConfigKeyType)
