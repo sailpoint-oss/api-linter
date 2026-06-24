@@ -1,7 +1,7 @@
 import {
-  createRulesetFunction as createSpectralFn,
-  RulesetFunction,
-  RulesetFunctionContext,
+    createRulesetFunction as createSpectralFn,
+    RulesetFunction,
+    RulesetFunctionContext,
 } from "@stoplight/spectral-core";
 
 /**
@@ -14,29 +14,29 @@ import {
  * @returns A wrapper function for the ruleset function.
  */
 export function createOptionalContextRulesetFunction<I, O>(
-  params: {
-    input: any;
-    options: any;
-  },
-  fn: RulesetFunction<I, O>,
+    params: {
+        input: any;
+        options: any;
+    },
+    fn: RulesetFunction<I, O>,
 ) {
-  // Create the original spectral function.
-  const originalFn = createSpectralFn(params, fn);
+    // Create the original spectral function.
+    const originalFn = createSpectralFn(params, fn);
 
-  // Return a wrapper that makes the third parameter (context) optional.
-  return ((
-    targetVal: I,
-    opts: O,
-    context?: Parameters<typeof originalFn>[2],
-  ) => {
-    return originalFn(
-      targetVal,
-      opts,
-      context || ({} as RulesetFunctionContext),
-    ); // default to an empty object if context is not provided.
-  }) as (
-    targetVal: I,
-    opts: O,
-    context?: Parameters<typeof originalFn>[2],
-  ) => ReturnType<typeof originalFn>;
+    // Return a wrapper that makes the third parameter (context) optional.
+    return ((
+        targetVal: I,
+        opts: O,
+        context?: Parameters<typeof originalFn>[2],
+    ) => {
+        return originalFn(
+            targetVal,
+            opts,
+            context || ({} as RulesetFunctionContext),
+        ); // default to an empty object if context is not provided.
+    }) as (
+        targetVal: I,
+        opts: O,
+        context?: Parameters<typeof originalFn>[2],
+    ) => ReturnType<typeof originalFn>;
 }

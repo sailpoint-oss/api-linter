@@ -3,7 +3,7 @@ import { createOptionalContextRulesetFunction } from "./createOptionalContextRul
 import {
     BackOffConfigKeys,
     DynamicRateLimitCommonConfigKeys,
-    Route, RouteDynamicRateLimitConfigKeys, RouteKeys, SubrouteKeys, VersionDetailsKeys
+    Route, RouteDynamicRateLimitConfigKeys, RouteKeys, SubrouteKeys
 } from "./types.js";
 import {CheckInterfaceForField} from "./utils.js";
 
@@ -32,11 +32,11 @@ export default createOptionalContextRulesetFunction(
                     CheckInterfaceForField(id, subroute, SubrouteKeys, errors)
                 })
                 break
-            case "versionDetail":
-                new Map<string, Object>(Object.entries(objectToValidate)).forEach((details, id) => {
-                    CheckInterfaceForField(id, details, VersionDetailsKeys, errors)
-                })
-                break
+            // case "versionDetail":
+            //     new Map<string, Object>(Object.entries(objectToValidate)).forEach((details, id) => {
+            //         CheckInterfaceForField(id, details, VersionDetailsKeys, errors)
+            //     })
+            //     break
             case "backOffConfig":
                 CheckInterfaceForField("backOffConfig", objectToValidate, BackOffConfigKeys, errors)
                 break

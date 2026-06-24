@@ -1,64 +1,60 @@
 sp-gateway:
   routes:
-    - id: "access-request-test"
-      path: "/access-request-path"
+    # Good routes
+    - id: "access-request-test-v1"
+      path: "/access-request-path/v1"
       service: "access-request-service"
-      versionStart: 2024
       servicePath: "/test/access-request-administration"
-      additionalVersions:
-      - "beta"
-      - "v3"
       routeType: "prefix"
       stripPrefix: true
+      stripPrefixPath: "/access-request-path/v1"
       apiState: "limited-preview"
 
-    - id: "subroute-test"
+    - id: "subroute-test-internal"
       service: "identity"
-      path: "/subroute-path"
+      path: "/subroute-path/internal"
       routeType: "prefix"
       stripPrefix: true
       apiState: "public"
-      versionStart: 2024
-      additionalVersions:
-        - "beta"
-        - "v3"
       subroutes:
         "/some/route/{id}":
           rights: ["some-right"]
           methods: ["GET", "POST"]
-          versions: ["v2024", "v2025", "beta", "v3"]
           rateLimit: 100
           rateLimitIntervalSeconds: 10
-      versionDetailsMap:
-        beta:
-          apiState: "public"
 
-    # Intentional violation: v2028 in versionDetailsMap is greater than versionEnd (2026) — expect gateway-route-version-details-map-keys-must-not-exceed-version-end
-    - id: "version-details-map-exceeds-version-end"
-      path: "/lint/version-details-map-vs-end"
-      service: "identity"
-      versionStart: 2024
-      versionEnd: 2026
+    # Bad routes - should return errors
+    - id: "access-request-test-internal"
+      path: "/access-request-path/v1"
+      service: "access-request-service"
+      servicePath: "/test/access-request-administration"
       routeType: "prefix"
       stripPrefix: true
-      apiState: "public"
-      versionDetailsMap:
-        v2028:
-          apiState: "public-preview"
+      stripPrefixPath: "/access-request-path/v1"
+      apiState: "limited-preview"
 
-    - id: "test-route"
-      path: "/test-path"
-      service: "identity"
-      versionStart: 0
+    - id: "access-request-test"
+      path: "/access-request-path/v1"
+      service: "access-request-service"
+      servicePath: "/test/access-request-administration"
       routeType: "prefix"
       stripPrefix: true
-      apiState: "public"
+      stripPrefixPath: "/access-request-path/v1"
+      apiState: "limited-preview"
+
+    - id: "access-request-test-v2"
+      path: "/access-request-path"
+      service: "access-request-service"
+      servicePath: "/test/access-request-administration"
+      routeType: "prefix"
+      stripPrefix: true
+      stripPrefixPath: "/access-request-path/v2"
+      apiState: "limited-preview"
 
     # Intentional violations for backOffConfig rules
-    - id: "back-off-config-test"
-      path: "/back-off-config-test"
+    - id: "back-off-config-test-v2"
+      path: "/back-off-config-test/v2"
       service: "identity"
-      versionStart: 2024
       routeType: "prefix"
       stripPrefix: true
       apiState: "public"

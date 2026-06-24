@@ -36,34 +36,6 @@ export default createOptionalContextRulesetFunction(
                     }
                 })
 
-                const versionStart: number = route.versionStart ?? 0
-                const versionEnd: number = route.versionEnd ?? 0
-                subroute.versions?.forEach(version => {
-                    if (legacyVersions.includes(version)) {
-                        if (!route.additionalVersions?.includes(version)) {
-                            results.push({
-                                message: `subroute ${name} has a version that is not included in the route's additionalVersions array: ${version}`
-                            });
-                        }
-                    } else if (versionPattern.test(version) && versionStart > 0) { // check versions that start with v (eg. v2025)
-
-                        const versionNum = version.substring(version.indexOf("v") + 1)
-                        if (Number.parseInt(versionNum) < versionStart) {
-                            results.push({
-                                message: `subroute ${name} has an invalid version [lower than versionStart]: ${version}`
-                            });
-                        } else if (versionEnd > 0 && Number.parseInt(versionNum) > versionEnd) {
-                            results.push({
-                                message: `subroute ${name} has an invalid version [greater than versionEnd]: ${version}`
-                            });
-                        }
-                    } else {
-                        results.push({
-                            message: `subroute ${name} has a version that could not be parsed: ${version}`
-                        });
-                    }
-                })
-
                 if (subroute.rateLimit === undefined && (subroute.rights === undefined || subroute.rights.length == 0)) {
                     results.push({
                         message: `subroute ${name} must have either an array of rights or a defined rate limit`
