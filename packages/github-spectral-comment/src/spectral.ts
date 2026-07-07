@@ -10,6 +10,7 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { ISpectralDiagnostic } from "@stoplight/spectral-core";
 import { devLog, isDev } from "./utils.js";
+import { isGatewayRoutesPath } from "./diff.js";
 
 interface ProcessedPbs {
   filteredPbs: {
@@ -58,6 +59,57 @@ export const processPbs = (
   });
 
   return processedPbs;
+};
+
+/**
+ * Scope the gateway routes file to a PR's changed lines: drop its findings that
+ * are not on added/edited lines so that pre-existing violations on untouched
+ * routes are ignored. Every other file passes through unchanged. The returned
+ * object has a freshly recomputed severitiesCount so the pass/fail gate matches
+ * what is reported.
+ *
+ * `changedLinesByFile` comes from getChangedLinesForPr: a `null` value means the
+ * gateway file changed but its specific lines are unknown (no patch), so its
+ * findings are kept as-is; a missing entry means the file was not changed, so
+ * all of its findings are dropped.
+ */
+export const filterGatewayToChangedLines = (
+  processedPbs: ProcessedPbs,
+  changedLinesByFile: Map<string, Set<number> | null>,
+): ProcessedPbs => {
+  const gatewayEntry = [...changedLinesByFile.entries()].find(([file]) =>
+    isGatewayRoutesPath(file),
+  );
+  const gatewayFileChanged = gatewayEntry !== undefined;
+  const changedLines = gatewayEntry?.[1] ?? null;
+
+  const filtered = initProcessedPbs();
+
+  for (const [code, issues] of Object.entries(processedPbs.filteredPbs)) {
+    for (const issue of issues) {
+      let keep = true;
+
+      if (isGatewayRoutesPath(issue.source)) {
+        if (!gatewayFileChanged) {
+          keep = false; // file not touched in this PR — nothing to report
+        } else if (changedLines === null) {
+          keep = true; // changed but no patch available — keep everything
+        } else {
+          keep = changedLines.has(issue.range.start.line + 1);
+        }
+      }
+
+      if (keep) {
+        if (!filtered.filteredPbs[code]) {
+          filtered.filteredPbs[code] = [];
+        }
+        filtered.filteredPbs[code].push(issue);
+        filtered.severitiesCount[issue.severity]++;
+      }
+    }
+  }
+
+  return filtered;
 };
 
 const __dirname = isDev

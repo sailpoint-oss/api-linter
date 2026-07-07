@@ -10,9 +10,19 @@ import {
   updateGithubComment,
 } from "./action.js";
 import { ActionInputs } from "./types.js";
-import { createSpectral, initProcessedPbs, processPbs } from "./spectral.js";
+import {
+  createSpectral,
+  initProcessedPbs,
+  processPbs,
+  filterGatewayToChangedLines,
+} from "./spectral.js";
 import { readFilesToAnalyze } from "./read_files.js";
 import { toMarkdown, truncateForComment } from "./to_markdown.js";
+import {
+  getChangedLinesForPr,
+  isGatewayRoutesPath,
+  expandChangedLinesToBlocks,
+} from "./diff.js";
 import { getDevInputs } from "./config.js";
 import { isDev } from "./utils.js";
 
@@ -101,6 +111,53 @@ async function run(): Promise<void> {
 
     core.debug(`Processed ${Object.keys(processedPbs.filteredPbs).length} PBs`);
 
+    // Scope the gateway routes file to the PR's changed lines so pre-existing
+    // violations on untouched routes neither fail the build nor spam the
+    // comment. Every other file keeps its full report. On any lookup failure we
+    // fall back to the full file rather than silently hiding findings.
+    let octokit: ReturnType<typeof github.getOctokit> | undefined;
+    if (!isDev) {
+      octokit = github.getOctokit(inputs["github-token"]!);
+      try {
+        const changedLines = await getChangedLinesForPr(
+          octokit,
+          github.context,
+          isGatewayRoutesPath,
+        );
+        // Widen changed lines to whole route blocks so route-level findings
+        // (anchored at the `- id:` line) on an edited route are still caught.
+        const gatewayContent = fileContents.find((f) =>
+          isGatewayRoutesPath(f.file),
+        )?.content;
+        if (gatewayContent) {
+          for (const [filename, lines] of changedLines) {
+            if (lines !== null) {
+              changedLines.set(
+                filename,
+                expandChangedLinesToBlocks(gatewayContent, lines),
+              );
+            }
+          }
+        }
+        const before = Object.values(processedPbs.severitiesCount).reduce(
+          (a, b) => a + b,
+          0,
+        );
+        processedPbs = filterGatewayToChangedLines(processedPbs, changedLines);
+        const after = Object.values(processedPbs.severitiesCount).reduce(
+          (a, b) => a + b,
+          0,
+        );
+        core.debug(
+          `Gateway diff-scoping: ${before} -> ${after} findings after limiting sp-gateway-routes to changed lines`,
+        );
+      } catch (error) {
+        core.warning(
+          `Could not scope gateway findings to changed lines; reporting the full file. ${error}`,
+        );
+      }
+    }
+
     core.debug("Generating markdown");
 
     // Generate markdown and post comment
@@ -134,19 +191,19 @@ async function run(): Promise<void> {
       }\n`;
       const commentBody = truncateForComment(markdown, truncationFooter);
 
-      const octokit = github.getOctokit(inputs["github-token"]!);
-      const comment = await getGithubComment(octokit, github.context);
+      const client = octokit ?? github.getOctokit(inputs["github-token"]!);
+      const comment = await getGithubComment(client, github.context);
       if (comment) {
         core.debug("Updating comment");
         await updateGithubComment(
           comment.id,
           commentBody,
-          octokit,
+          client,
           github.context,
         );
       } else {
         core.debug("Creating comment");
-        await createGithubComment(commentBody, octokit, github.context);
+        await createGithubComment(commentBody, client, github.context);
       }
 
       if (processedPbs.severitiesCount[0] > 0) {

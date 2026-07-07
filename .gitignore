@@ -126,3 +126,7 @@ github-spectral-comment/sample
 api-specs/
 packages/gateway-rulesets/functions
 packages/sailpoint-rulesets/functions
+
+# Local lint preview output (pnpm lint:local)
+lint-report.md
+lint-report.comment.md

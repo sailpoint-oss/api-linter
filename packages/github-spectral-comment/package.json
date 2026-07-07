@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "NODE_ENV=test node dist/index.js"
+    "test": "NODE_ENV=test node dist/index.js",
+    "lint:local": "tsc && NODE_ENV=development node dist/local.js"
   },
   "author": "",
   "license": "ISC",
