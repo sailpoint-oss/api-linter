@@ -56,6 +56,41 @@ export function fromKebabCaseToTitleCase(str: string): string {
   return str.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+// GitHub rejects issue/PR comment bodies longer than 65,536 characters.
+export const GITHUB_COMMENT_MAX_LENGTH = 65536;
+
+/**
+ * Truncate a markdown report so it fits within GitHub's comment size limit.
+ * Cuts on a line boundary, re-closes any dangling <details> blocks left open
+ * by the cut, and appends a footer pointing at the full report. Returns the
+ * markdown unchanged when it already fits.
+ */
+export const truncateForComment = (
+  markdown: string,
+  footer: string,
+  maxLength: number = GITHUB_COMMENT_MAX_LENGTH,
+): string => {
+  if (markdown.length <= maxLength) {
+    return markdown;
+  }
+
+  const budget = Math.max(0, maxLength - footer.length);
+  let truncated = markdown.slice(0, budget);
+
+  // Avoid cutting in the middle of a line.
+  const lastNewline = truncated.lastIndexOf("\n");
+  if (lastNewline > 0) {
+    truncated = truncated.slice(0, lastNewline);
+  }
+
+  // Re-close any <details> blocks the cut left open so the comment renders.
+  const openCount = (truncated.match(/<details/g) || []).length;
+  const closeCount = (truncated.match(/<\/details>/g) || []).length;
+  truncated += "</details>\n".repeat(Math.max(0, openCount - closeCount));
+
+  return truncated + footer;
+};
+
 export const toMarkdown = async (
   processedPbs: ProcessedPbs
 ): Promise<string> => {

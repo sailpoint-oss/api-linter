@@ -12,7 +12,7 @@ import {
 import { ActionInputs } from "./types.js";
 import { createSpectral, initProcessedPbs, processPbs } from "./spectral.js";
 import { readFilesToAnalyze } from "./read_files.js";
-import { toMarkdown } from "./to_markdown.js";
+import { toMarkdown, truncateForComment } from "./to_markdown.js";
 import { getDevInputs } from "./config.js";
 import { isDev } from "./utils.js";
 
@@ -111,19 +111,42 @@ async function run(): Promise<void> {
     core.debug("Posting comment");
 
     if (markdown && !isDev) {
+      // Always write the full, untruncated report to the job summary (~1 MiB
+      // limit) so nothing is lost when the PR comment has to be shortened.
+      try {
+        await core.summary.addRaw(markdown).write();
+      } catch (error) {
+        core.warning(`Failed to write job summary: ${error}`);
+      }
+
+      // GitHub rejects comment bodies over 65,536 characters, so the comment
+      // gets a truncated view with a pointer to the full report above.
+      const runUrl =
+        process.env.GITHUB_SERVER_URL &&
+        process.env.GITHUB_REPOSITORY &&
+        process.env.GITHUB_RUN_ID
+          ? `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`
+          : undefined;
+      const truncationFooter = `\n\n---\n\n> :warning: This report was truncated because it exceeded GitHub's comment size limit (65,536 characters). ${
+        runUrl
+          ? `See the full report in the [workflow run summary](${runUrl}).`
+          : "See the full report in the workflow run summary."
+      }\n`;
+      const commentBody = truncateForComment(markdown, truncationFooter);
+
       const octokit = github.getOctokit(inputs["github-token"]!);
       const comment = await getGithubComment(octokit, github.context);
       if (comment) {
         core.debug("Updating comment");
         await updateGithubComment(
           comment.id,
-          markdown,
+          commentBody,
           octokit,
           github.context,
         );
       } else {
         core.debug("Creating comment");
-        await createGithubComment(markdown, octokit, github.context);
+        await createGithubComment(commentBody, octokit, github.context);
       }
 
       if (processedPbs.severitiesCount[0] > 0) {
