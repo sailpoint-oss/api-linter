@@ -1,5 +1,6 @@
 import {createOptionalContextRulesetFunction} from "./createOptionalContextRulesetFunction.js";
 import {Route} from "./types.js";
+import {IsPathExemptFromVersioning} from "./utils.js";
 
 export default createOptionalContextRulesetFunction(
     {
@@ -8,6 +9,11 @@ export default createOptionalContextRulesetFunction(
         },
     },
     (route: Route, options: {}) => {
+        if (IsPathExemptFromVersioning(route.path) || (route.versionStart && route.versionStart > 0)) {
+            let results: {message: string}[] = []; // without initialization, return value is ambiguous
+            return results;
+        }
+
         const versionPattern = /v\d$/
         const internalPattern = /internal$/
 
