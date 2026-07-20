@@ -135,6 +135,7 @@ export default createOptionalContextRulesetFunction(
                 }
 
                 if (route.versionDetailsMap) {
+                    // javascript doesn't like maps, so we have to manually convert this to a Record
                     const versionMap = route.versionDetailsMap as unknown as Record<string, VersionDetails>;
                     Object.keys(versionMap).forEach((key) => {
                         const details = versionMap[key]
