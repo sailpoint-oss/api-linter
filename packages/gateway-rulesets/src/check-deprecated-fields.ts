@@ -1,13 +1,14 @@
 // check against master branch, if route does not exist, return error
 
 import {createOptionalContextRulesetFunction} from "./createOptionalContextRulesetFunction.js";
-import {Route} from "./types.js";
+import {Route, VersionDetails} from "./types.js";
 import path from "path";
 import core from "@actions/core";
+import * as yaml from 'js-yaml';
 import {existsSync, readFileSync} from "node:fs";
 
-const versionPattern = /-v\d$/
-const internalPattern = /-internal$/
+const newVersionIdPattern = /-v\d$|-internal$/
+const newPathPattern = /v\d$|internal$/
 const validAdditionalVersions: string[] = ["v3", "beta"]
 const versionYearPattern = /^v(\d{4})$/;
 const validVersionMapKeyPattern = /^beta$|^v3$|^v(202[4-9]|20[3-9][0-9]|2[1-9][0-9]{2})$/
@@ -18,10 +19,26 @@ interface MasterFileInput {
     "file-glob"?: string
 }
 
-const getDevMasterInput = (): MasterFileInput => {
-    return {
-        "file-glob": "../../packages/test-files/master/sp-gateway-routes.yaml"
+interface RouteYamlFile {
+    "sp-gateway": { routes: Route[] }
+}
+
+const getDevMasterInput = (isDev: boolean): MasterFileInput => {
+    const localInput = {
+        "file-glob": "../packages/test-files/master/sp-gateway-routes.yaml"
     }
+
+    if (process.env.GITHUB_WORKSPACE) {
+        Object.fromEntries(
+            Object.keys(localInput).map((key) => [
+                key,
+                core.getInput(key, { required: !isDev }) ||
+                (isDev ? localInput[key as keyof MasterFileInput] : undefined),
+            ]),
+        );
+    }
+
+    return localInput
 };
 
 function readFilesToAnalyze (githubWorkspace: string, fileGlob: string): { file: string; content: string }[] {
@@ -32,7 +49,7 @@ function readFilesToAnalyze (githubWorkspace: string, fileGlob: string): { file:
         const filePath = path.join(githubWorkspace, files[i]);
         console.log(`Checking File in master branch #${i} ${filePath}`);
 
-        if (!filePath.includes("api-route-specs")) {
+        if (!filePath.includes("sp-gateway-routes")) {
             console.log("Skipping unrelated files");
             continue;
         }
@@ -57,22 +74,17 @@ function readFilesToAnalyze (githubWorkspace: string, fileGlob: string): { file:
 }
 
 function getMasterRouteIds(): Set<string> {
-    const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
-    const workspace: string = process.env.GITHUB_WORKSPACE || path.resolve()
-    const inputs: MasterFileInput = Object.fromEntries(
-        Object.keys(getDevMasterInput()).map((key) => [
-            key,
-            core.getInput(key, { required: !isDev }) ||
-            (isDev ? getDevMasterInput()[key as keyof MasterFileInput] : undefined),
-        ]),
-    );
+    const workspace: string = process.env.GITHUB_WORKSPACE ? process.env.GITHUB_WORKSPACE + "/master/" : path.resolve()
+    const inputs: MasterFileInput = getDevMasterInput(process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test")
 
-    const masterFileContents = readFilesToAnalyze(workspace, inputs['file-glob']!)
+    const masterFileContents = readFilesToAnalyze(workspace, inputs["file-glob"]!)
 
     return new Set<string>(masterFileContents.map(file => {
-        const route = JSON.parse(file.content) as Route;
-        return route.id;
-    }))
+        const routeFile = yaml.load(file.content) as RouteYamlFile;
+        return routeFile["sp-gateway"].routes
+    }).flat().map(route => {
+        return route.id
+    }));
 }
 
 export default createOptionalContextRulesetFunction(
@@ -83,8 +95,9 @@ export default createOptionalContextRulesetFunction(
         let results: {message: string}[] = [];
 
         const masterRouteIds = getMasterRouteIds();
+        console.log(masterRouteIds)
         routes.forEach(route => {
-            if (!masterRouteIds.has(route.id) || versionPattern.test(route.id) || internalPattern.test(route.id)) {
+            if (!masterRouteIds.has(route.id) || (newVersionIdPattern.test(route.id) && newPathPattern.test(route.path))) {
                 if (route.versionStart && route.versionStart > 0) {
                     results.push({
                         message: `route ${route.id} uses a deprecated field: 'versionStart', and cannot be added to the route spec. Refer to **** for the new API versioning strategy.`
@@ -122,26 +135,27 @@ export default createOptionalContextRulesetFunction(
                 }
 
                 if (route.versionDetailsMap) {
-
-                    for (const [k, v] of route.versionDetailsMap) {
-                        if (!validVersionMapKeyPattern.test(k)) {
+                    const versionMap = route.versionDetailsMap as unknown as Record<string, VersionDetails>;
+                    Object.keys(versionMap).forEach((key) => {
+                        const details = versionMap[key]
+                        if (!validVersionMapKeyPattern.test(key)) {
                             results.push({
-                                message: `route ${route.id} has a versionDetailsMap entry with an invalid key: ${k}. Must be a valid api version e.g. beta, v3 or v20XX.`
+                                message: `route ${route.id} has a versionDetailsMap entry with an invalid key: ${key}. Must be a valid api version e.g. beta, v3 or v20XX.`
                             })
                         }
 
-                        if (v.apiState && !validApiStates.includes(v.apiState)) {
+                        if (details.apiState && !validApiStates.includes(details.apiState)) {
                             results.push({
-                                message: `route ${route.id} has a versionDetailsMap entry ${k} with an invalid API state: ${v.apiState}. Must be private, limited-preview, public-preview, or public.`
+                                message: `route ${route.id} has a versionDetailsMap entry ${key} with an invalid API state: ${details.apiState}. Must be private, limited-preview, public-preview, or public.`
                             })
                         }
 
-                        if (v.deprecation && !deprecationYearPattern.test(v.deprecation)) {
+                        if (details.deprecation && !deprecationYearPattern.test(details.deprecation)) {
                             results.push({
-                                message: `route ${route.id} has a versionDetailsMap entry ${k} with an improperly formatted deprecation date: ${v.deprecation}. Must be a valid date in yyyy-mm-dd format.`
+                                message: `route ${route.id} has a versionDetailsMap entry ${key} with an improperly formatted deprecation date: ${details.deprecation}. Must be a valid date in yyyy-mm-dd format.`
                             })
                         }
-                    }
+                    })
 
                     results.push(...checkVersionDetailsVsVersionEnd(route))
                 }
@@ -171,7 +185,7 @@ function checkVersionStart(versionStart: number): {message: string}[] {
 function checkAdditionalVersions(additionalVersions: string[]): {message: string}[] {
     let results: {message: string}[] = [];
 
-    for (const version in additionalVersions) {
+    for (const version of additionalVersions) {
         if (!validAdditionalVersions.includes(version)) {
             results.push({
                 message: `${version} is not a valid entry in additionalVersions. Valid entries are ${validAdditionalVersions}.`

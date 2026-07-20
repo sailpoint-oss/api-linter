@@ -1,5 +1,5 @@
 functions: [gateway-test,
-  check-version-start,check-unique-id,check-version-in-id,check-version-in-id-matches-path,check-strip-prefix-path-matches-path,check-version-start-order,check-path-documentation,check-latest-version-override,check-version-details-map-vs-version-end,check-subroutes,check-dynamic-rate-limit,check-field-names]
+  check-version-start,check-unique-id,check-version-in-id,check-version-in-id-matches-path,check-strip-prefix-path-matches-path,check-version-start-order,check-path-documentation,check-latest-version-override,check-version-details-map-vs-version-end,check-subroutes,check-dynamic-rate-limit,check-field-names,check-deprecated-fields]
 rules:
   gateway-route-must-have-valid-properties:
     given: $.sp-gateway.routes.*
@@ -51,6 +51,12 @@ rules:
     then:
       - field: id
         function: check-unique-id
+
+  gateway-route-deprecated-fields-only-valid-for-existing-routes:
+    given: $.sp-gateway.routes
+    severity: error
+    then:
+        function: check-deprecated-fields
 
   gateway-route-must-have-version-in-id:
     given: $.sp-gateway.routes.*

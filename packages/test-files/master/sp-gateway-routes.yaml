@@ -1,14 +1,22 @@
 sp-gateway:
   routes:
     # Good routes
-    - id: "access-request-test-v1"
-      path: "/access-request-path/v1"
+    - id: "access-request-test-old"
+      path: "/access-request-path"
       service: "access-request-service"
       servicePath: "/test/access-request-administration"
       routeType: "prefix"
       stripPrefix: true
-      stripPrefixPath: "/access-request-path/v1"
+      versionStart: 2025
+      versionEnd: 2026
+      stripPrefixPath: "/access-request-path"
       apiState: "limited-preview"
+      additionalVersions:
+        - "beta"
+      versionDetailsMap:
+        v2026:
+          apiState: "public"
+          deprecation: "2026-12-01"
 
     - id: "subroute-test-internal"
       service: "identity"
