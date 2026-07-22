@@ -18,21 +18,12 @@ sp-gateway:
           apiState: "public"
           deprecation: "2026-12-01"
 
-    - id: "access-request-test-v1"
-      path: "/access-request-path/v1"
-      service: "access-request-service"
-      servicePath: "/test/access-request-administration"
-      routeType: "prefix"
-      stripPrefix: true
-      stripPrefixPath: "/access-request-path/v1"
-      apiState: "limited-preview"
-
     - id: "subroute-test-internal"
       service: "identity"
-      path: "/subroute-path"
+      path: "/subroute-path/internal"
       routeType: "prefix"
       stripPrefix: true
-      apiState: "private"
+      apiState: "public"
       subroutes:
         "/some/route/{id}":
           rights: ["some-right"]
