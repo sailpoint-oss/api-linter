@@ -53,7 +53,7 @@ rules:
         function: check-unique-id
 
   gateway-route-deprecated-fields-only-valid-for-existing-routes:
-    given: $.sp-gateway.routes
+    given: $.sp-gateway.routes.*
     severity: error
     then:
         function: check-deprecated-fields

@@ -29,10 +29,10 @@ sp-gateway:
 
     - id: "subroute-test-internal"
       service: "identity"
-      path: "/subroute-path/internal"
+      path: "/subroute-path"
       routeType: "prefix"
       stripPrefix: true
-      apiState: "public"
+      apiState: "private"
       subroutes:
         "/some/route/{id}":
           rights: ["some-right"]
