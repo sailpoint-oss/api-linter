@@ -2,7 +2,7 @@ import core from "@actions/core";
 import spectralCore from "@stoplight/spectral-core";
 const { Spectral, Document } = spectralCore;
 import Parsers from "@stoplight/spectral-parsers"; // make sure to install the package if you intend to use default parsers!
-import { httpAndFileResolver } from "@stoplight/spectral-ref-resolver";
+import { createHttpAndFileResolver } from "@stoplight/spectral-ref-resolver";
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
 import spectralRuntime from "@stoplight/spectral-runtime";
 import path from "node:path";
@@ -70,7 +70,7 @@ const __dirname = isDev
 const { fetch } = spectralRuntime;
 
 export const createSpectral = async (rulesetFilePath: string) => {
-  const spectral = new Spectral({ resolver: httpAndFileResolver });
+  const spectral = new Spectral({ resolver: createHttpAndFileResolver() });
 
   const rulesetPath = path.join(__dirname, rulesetFilePath);
   core.debug("Ruleset Path: " + rulesetPath);
@@ -98,7 +98,7 @@ export const runSpectral = async (
   );
 
   return spectral.runWithResolved(documentToLint, {
-    resolver: httpAndFileResolver,
+    resolver: createHttpAndFileResolver(),
     ignoreUnknownFormat: ignoreUnknownFormatFlag,
   });
 };
