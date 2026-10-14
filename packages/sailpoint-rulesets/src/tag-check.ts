@@ -48,8 +48,11 @@ function getTagsForApisSource(source: string): string[] {
   try {
     const openapiPath = path.resolve(path.dirname(source), "..", "openapi.yaml");
     const spec = yaml.load(fs.readFileSync(openapiPath, "utf8")) as any;
-    if (spec?.tags?.[0]?.name) {
-      return [spec.tags[0].name];
+    const tags: string[] = Array.isArray(spec?.tags)
+      ? spec.tags.map((tag: any) => tag?.name).filter((name: unknown) => typeof name === "string")
+      : [];
+    if (tags.length > 0) {
+      return tags;
     }
     console.error(
       `No tags found in ${openapiPath}, this will not run the tags check.`,
@@ -82,6 +85,8 @@ export default (
   }
 
   for (const [key, value] of Object.entries(targetVal)) {
+    console.log(`Tags ${tagArray}`)
+
     if (value.tags === undefined || value.tags == null) {
       // @ts-ignore
       results.push({

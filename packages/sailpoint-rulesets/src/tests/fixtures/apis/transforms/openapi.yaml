@@ -5,6 +5,8 @@ info:
 tags:
   - name: Transforms
     description: Use this API to manage transforms.
+  - name: Transform Templates
+    description: Use this API to manage transform templates.
 paths:
   /transforms/v1:
     $ref: ./paths/transforms-v1.yaml

@@ -104,6 +104,15 @@ describe("tag-check — apis/ collections (reads sibling openapi.yaml)", () => {
     expect(result).toEqual([]);
   });
 
+  it("passes when the tag matches a non-first tag in the collection openapi.yaml", () => {
+    const result = tagCheck(
+      makeTargetVal(["Transform Templates"]),
+      { rule: ruleNumber },
+      makeContext(TRANSFORMS_PATH_SOURCE),
+    );
+    expect(result).toEqual([]);
+  });
+
   it("errors when the tag does not match the collection openapi.yaml", () => {
     const result = tagCheck(
       makeTargetVal(["Access Profiles"]),
