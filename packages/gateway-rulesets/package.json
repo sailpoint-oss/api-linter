@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
     "@stoplight/spectral-core": "^1.19.1",
     "@stoplight/spectral-ruleset-bundler": "^1.6.0",
     "js-yaml": "^4.1.0",
