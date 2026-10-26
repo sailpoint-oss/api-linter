@@ -29,7 +29,7 @@ export default createOptionalContextRulesetFunction(
 
     if (
       parts[0] !==
-      "Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)"
+      "Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)"
     ) {
       return [
         {
