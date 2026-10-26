@@ -3,7 +3,7 @@ import parameterFilterDescriptionCheck from "../parameter-filter-description-che
 
 const ruleNumber = "324";
 
-const validFilterDescription = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const validFilterDescription = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 
 Filtering is supported for the following fields and operators:
 
@@ -13,19 +13,19 @@ Filtering is supported for the following fields and operators:
 
 **created**: *gt, lt, ge, le*`;
 
-const multiplePropertiesOnSameLine = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const multiplePropertiesOnSameLine = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 
 Filtering is supported for the following fields and operators:
 
 **created, modified**: *gt, lt, ge, le*`;
 
-const unsupportedOperator = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const unsupportedOperator = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 
 Filtering is supported for the following fields and operators:
 
 **id**: *eq, un*`;
 
-const singleNewLine = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const singleNewLine = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 Filtering is supported for the following fields and operators:
 **id**: *eq, un*
 **created**: *gt, lt, ge, le*`;
@@ -36,25 +36,25 @@ Filtering is supported for the following fields and operators:
 
 **id**: *eq, co*`;
 
-const propertyNotBolded = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const propertyNotBolded = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 
 Filtering is supported for the following fields and operators:
 
 id: *eq, co*`;
 
-const operatorNotItalicized = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const operatorNotItalicized = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 
 Filtering is supported for the following fields and operators:
 
 **id**: **eq, co**`;
 
-const operatorsNotSeparated = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const operatorsNotSeparated = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 
 Filtering is supported for the following fields and operators:
 
 **id**: *eq co*`;
 
-const additionalInfoInOperator = `Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)
+const additionalInfoInOperator = `Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
 
 Filtering is supported for the following fields and operators:
 

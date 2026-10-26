@@ -3,34 +3,34 @@ import parameterSorterDescriptionCheck from "../parameter-sorter-description-che
 
 const ruleNumber = "325";
 
-const validSorterDescription = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
+const validSorterDescription = `Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)
 
 Sorting is supported for the following fields: **owner.name, name, identity.manager, modified, identityId**`;
 
-const badKeyForFields = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
+const badKeyForFields = `Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)
 
 You can sort on the following fields: **name, created, modified**`;
 
-const dashInFieldName = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
+const dashInFieldName = `Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)
 
 Sorting is supported for the following fields: **name, -created, modified**`;
 
-const singleNewLine = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
+const singleNewLine = `Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)
 Sorting is supported for the following fields: **name, created, modified**`;
 
 const badIntro = `This is a bad intro
 
 Sorting is supported for the following fields: **name, created, modified**`;
 
-const fieldsNotBolded = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
+const fieldsNotBolded = `Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)
 
 Sorting is supported for the following fields: name, created, modified`;
 
-const fieldsNotSeparated = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
+const fieldsNotSeparated = `Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)
 
 Sorting is supported for the following fields: **name created modified**`;
 
-const fieldsOnSeparateLines = `Sort results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#sorting-results)
+const fieldsOnSeparateLines = `Sort results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#sorting-results)
 
 Sorting is supported for the following fields:
 

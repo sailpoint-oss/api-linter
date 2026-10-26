@@ -29,7 +29,7 @@ export default createOptionalContextRulesetFunction(
 
     if (
       parts[0] !==
-      "Filter results using the standard syntax described in [V3 API Standard Collection Parameters](https://developer.sailpoint.com/idn/api/standard-collection-parameters#filtering-results)"
+      "Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)"
     ) {
       return [
         {
