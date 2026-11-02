@@ -1,0 +1,10 @@
+# The description contains non-ASCII characters (curly quotes and an em dash).
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get the identity’s details — for example its “lifecycleState”.
+  responses:
+    "200":
+      description: The identity.

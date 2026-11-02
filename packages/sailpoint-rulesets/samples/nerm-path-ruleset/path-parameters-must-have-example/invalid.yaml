@@ -1,0 +1,18 @@
+# The path parameter has no example, schema.example or examples.
+get:
+  operationId: getUser
+  tags:
+    - Users
+  summary: Get a user
+  description: Returns a single NERM user by its ID.
+  parameters:
+    - in: path
+      name: id
+      required: true
+      description: The ID of the user.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: The requested user.

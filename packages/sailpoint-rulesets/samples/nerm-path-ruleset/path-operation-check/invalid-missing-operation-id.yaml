@@ -1,0 +1,9 @@
+# Bug check: an operation with no operationId must be reported. Fails while isOperationObject skips values that have no operationId.
+get:
+  tags:
+    - Users
+  summary: Get a user
+  description: Returns a single NERM user by its ID.
+  responses:
+    "200":
+      description: The requested user.

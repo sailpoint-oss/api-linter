@@ -1,0 +1,12 @@
+# The "name" property has no description.
+type: object
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: The ID of the identity.
+    example: 2c9180835d2e5168015d32f890ca1581
+  name:
+    type: string
+    example: john.doe

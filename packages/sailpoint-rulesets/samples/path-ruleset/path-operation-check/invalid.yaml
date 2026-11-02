@@ -1,0 +1,16 @@
+# The get operation that returns an array starts with "fetch", which is not an allowed verb.
+get:
+  operationId: fetchIdentities
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to get a list of identities.
+  responses:
+    "200":
+      description: The list of identities.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object

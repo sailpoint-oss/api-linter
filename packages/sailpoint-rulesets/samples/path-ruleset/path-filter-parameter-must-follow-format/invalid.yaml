@@ -1,0 +1,23 @@
+# The filters description does not start with the standard intro text.
+get:
+  operationId: listAccessProfiles
+  tags:
+    - Access Profiles
+  summary: List access profiles
+  description: Use this API to get a list of access profiles.
+  parameters:
+    - in: query
+      name: filters
+      required: false
+      schema:
+        type: string
+      example: name eq "Finance Access"
+      description: |-
+        Filter the access profiles by name or ID.
+
+        Filtering is supported for the following fields and operators:
+
+        **name**: *eq, sw*
+  responses:
+    "200":
+      description: List of access profiles.

@@ -1,0 +1,26 @@
+# The integer query parameter has no format.
+get:
+  operationId: getUser
+  tags:
+    - Users
+  summary: Get a user
+  description: Returns a single NERM user by its ID.
+  parameters:
+    - in: path
+      name: id
+      required: true
+      description: The ID of the user.
+      schema:
+        type: string
+        format: uuid
+      example: 7b3c2f6a-1d4e-4c8a-9f2b-5e6d7a8b9c0d
+    - in: query
+      name: limit
+      required: false
+      description: Maximum number of results to return.
+      schema:
+        type: integer
+      example: 50
+  responses:
+    "200":
+      description: The requested user.

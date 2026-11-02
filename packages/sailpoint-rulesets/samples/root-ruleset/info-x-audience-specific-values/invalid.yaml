@@ -1,0 +1,9 @@
+# x-audience is "everyone", which is not an allowed value.
+openapi: 3.0.3
+info:
+  title: Sample API
+  version: 1.0.0
+  x-audience: everyone
+tags:
+  - name: Identities
+paths: {}

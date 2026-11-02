@@ -1,0 +1,18 @@
+# Every parameter has the required key.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  parameters:
+    - in: path
+      name: id
+      required: true
+      description: The ID of the identity.
+      schema:
+        type: string
+      example: 2c9180835d2e5168015d32f890ca1581
+  responses:
+    "200":
+      description: The identity.

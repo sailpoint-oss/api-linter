@@ -1,0 +1,9 @@
+# The operation has no summary.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.

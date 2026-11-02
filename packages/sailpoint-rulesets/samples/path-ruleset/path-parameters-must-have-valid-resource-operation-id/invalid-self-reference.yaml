@@ -1,0 +1,19 @@
+# The x-sailpoint-resource-operation-id references the operation itself.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      x-sailpoint-resource-operation-id: getIdentity
+      description: The ID of the identity.
+      example: 2c9180835d2e5168015d32f890ca1581
+  responses:
+    "200":
+      description: The identity.

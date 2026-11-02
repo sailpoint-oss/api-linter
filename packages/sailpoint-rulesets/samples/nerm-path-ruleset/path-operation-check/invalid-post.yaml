@@ -1,0 +1,19 @@
+# The post operationId starts with "add", which is not allowed for post endpoints.
+post:
+  operationId: addUser
+  tags:
+    - Users
+  summary: Create a user
+  description: Creates a new NERM user.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+  responses:
+    "201":
+      description: The created user.

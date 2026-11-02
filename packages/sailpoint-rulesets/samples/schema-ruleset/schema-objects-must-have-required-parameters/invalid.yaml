@@ -1,0 +1,12 @@
+# The "required" list is empty.
+type: object
+required: []
+properties:
+  id:
+    type: string
+    description: The ID of the access profile.
+    example: 2c91808a7190d06e01719938fcd20792
+  name:
+    type: string
+    description: The name of the access profile.
+    example: Employee Access

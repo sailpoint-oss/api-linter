@@ -1,0 +1,9 @@
+# The description and example contain non-ASCII characters (an accented letter and curly quotes).
+type: object
+required:
+  - displayName
+properties:
+  displayName:
+    type: string
+    description: The display name of the identity, for example “José García”.
+    example: José García

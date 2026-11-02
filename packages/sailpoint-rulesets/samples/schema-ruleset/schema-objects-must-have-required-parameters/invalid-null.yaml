@@ -1,0 +1,8 @@
+# The "required" key is set but has no value.
+type: object
+required:
+properties:
+  id:
+    type: string
+    description: The ID of the access profile.
+    example: 2c91808a7190d06e01719938fcd20792

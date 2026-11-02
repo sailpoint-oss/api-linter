@@ -3,7 +3,19 @@ import { ActionInputs, Project, SpectralAnalysisResult } from "./types.js";
 import path from "path";
 import github from "@actions/github";
 import { runSpectral } from "./spectral.js";
-import { isDev } from "./utils.js";
+import { isDev, ProjectRoot } from "./utils.js";
+
+// Rule samples live in samples/<ruleset-name>/, so the folder names the ruleset.
+// The NERM rulesets are not loaded by this action.
+const SAMPLE_RULESETS: Record<
+  string,
+  "rootSpectral" | "pathSpectral" | "schemaSpectral" | "gatewaySpectral"
+> = {
+  "root-ruleset": "rootSpectral",
+  "path-ruleset": "pathSpectral",
+  "schema-ruleset": "schemaSpectral",
+  "gateway-ruleset": "gatewaySpectral",
+};
 
 export async function validateInputs(inputs: ActionInputs): Promise<void> {
   if (!isDev) {
@@ -23,7 +35,8 @@ export function getProjectConfig(workspace?: string): Project {
       "github-url": undefined,
       repository: undefined,
       headRef: undefined,
-      workspace: workspace || path.resolve(),
+      // In dev mode, file paths are relative to the repo root, as in the workflow.
+      workspace: workspace || ProjectRoot,
     };
   } else {
     projectConfig = {
@@ -52,7 +65,22 @@ export async function runSpectralAnalysis(
     let pbs;
 
     try {
-      if (file.includes("sailpoint-api.")) {
+      const sampleRuleset = file.match(/samples\/([a-z-]+-ruleset)\//)?.[1];
+
+      if (sampleRuleset) {
+        const instance = SAMPLE_RULESETS[sampleRuleset];
+        if (!instance) {
+          core.warning(`The ${sampleRuleset} is not loaded by this action, skipping ${file}`);
+          return { file, pbs };
+        }
+        core.debug(`Running ${sampleRuleset} on sample ${file}`);
+        pbs = await runSpectral(
+          spectralInstances[instance],
+          fileContent,
+          workspace,
+          sampleRuleset !== "root-ruleset",
+        );
+      } else if (file.includes("sailpoint-api.")) {
         core.debug(`Running root spectral ruleset on ${file}`);
         pbs = await runSpectral(
           spectralInstances.rootSpectral,
@@ -84,6 +112,8 @@ export async function runSpectralAnalysis(
           workspace,
           true,
         );
+      } else {
+        core.warning(`No ruleset matches ${file}, skipping it`);
       }
     } catch (error) {
       if (error instanceof AggregateError) {

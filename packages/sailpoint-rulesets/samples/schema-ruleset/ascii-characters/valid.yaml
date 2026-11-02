@@ -1,0 +1,9 @@
+# All text uses plain ASCII characters.
+type: object
+required:
+  - displayName
+properties:
+  displayName:
+    type: string
+    description: The display name of the identity, for example "Jose Garcia".
+    example: Jose Garcia

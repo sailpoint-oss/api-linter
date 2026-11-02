@@ -1,0 +1,10 @@
+# The collection URL path is /identities/v1/{id}/reset, but the operationId does not end with "V1".
+post:
+  operationId: resetIdentity
+  tags:
+    - Identities
+  summary: Reset an identity
+  description: Use this API to reset an identity.
+  responses:
+    "202":
+      description: The reset request is accepted.

@@ -1,0 +1,12 @@
+# The operation uses userAuth but does not define x-sailpoint-userLevels.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - userAuth: [idn:identity:read]
+  responses:
+    "200":
+      description: The identity.

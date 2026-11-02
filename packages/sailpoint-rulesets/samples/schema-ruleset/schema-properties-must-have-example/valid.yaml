@@ -1,0 +1,17 @@
+# Every property has an example, and the nullable property may leave it out.
+type: object
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: The ID of the identity.
+    example: 2c9180835d2e5168015d32f890ca1581
+  name:
+    type: string
+    description: The name of the identity.
+    example: john.doe
+  managerId:
+    type: string
+    nullable: true
+    description: The ID of the identity's manager, if one is set.

@@ -1,0 +1,9 @@
+# Bug check: an operation with no operationId must be reported. Fails while isOperationObject skips values that have no operationId.
+get:
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.

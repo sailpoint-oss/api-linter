@@ -1,0 +1,9 @@
+# The description uses the Docusaurus variable ${identityId}.
+type: object
+required:
+  - identityId
+properties:
+  identityId:
+    type: string
+    description: The ID of the identity. Use ${identityId} from the previous call.
+    example: 2c9180835d2e5168015d32f890ca1581

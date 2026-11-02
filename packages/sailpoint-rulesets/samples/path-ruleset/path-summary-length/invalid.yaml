@@ -1,0 +1,10 @@
+# The summary has more than 5 words.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get a single identity by its unique ID
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.

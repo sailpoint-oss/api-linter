@@ -1,0 +1,6 @@
+# Helper: a v2024 schema that the v2025 invalid sample references.
+type: object
+properties:
+  id:
+    type: string
+    example: 2c9180835d2e5168015d32f890ca1581

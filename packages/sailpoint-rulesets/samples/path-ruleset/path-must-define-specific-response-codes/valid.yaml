@@ -1,0 +1,20 @@
+# The operation defines a 2xx response and all of the error codes 400, 401, 403, 429 and 500.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.
+    "400":
+      description: Client error due to bad request.
+    "401":
+      description: Unauthorized, the request has no valid credentials.
+    "403":
+      description: Forbidden, the caller has no access to this identity.
+    "429":
+      description: Too many requests.
+    "500":
+      description: Internal server error.

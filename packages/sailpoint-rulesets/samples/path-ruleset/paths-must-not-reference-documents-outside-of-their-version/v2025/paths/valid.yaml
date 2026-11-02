@@ -1,0 +1,14 @@
+# The v2025 path file references a schema in its own v2025 folder.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/Identity.yaml
