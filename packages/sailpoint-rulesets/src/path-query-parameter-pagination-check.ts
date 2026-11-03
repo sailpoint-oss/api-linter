@@ -27,15 +27,18 @@ export default createOptionalContextRulesetFunction(
     const { rule } = options;
     let results = [];
 
-    if (
-      "200" in targetVal.responses &&
-      "content" in targetVal.responses["200"] &&
-      targetVal.responses["200"]?.content?.["application/json"]?.schema &&
-      "type" in
-        targetVal.responses["200"]?.content?.["application/json"]?.schema &&
-      targetVal.responses["200"]?.content?.["application/json"]?.schema?.type ==
-        "array"
-    ) {
+    // Check every JSON media type, for example application/json;charset=utf-8.
+    const response = targetVal.responses?.["200"];
+    const content = response && "content" in response ? response.content ?? {} : {};
+    const returnsArray = Object.entries(content).some(
+      ([mediaType, media]) =>
+        /^application\/(.+\+)?json\b/.test(mediaType) &&
+        media.schema != null &&
+        "type" in media.schema &&
+        media.schema.type === "array",
+    );
+
+    if (returnsArray) {
       let offsetFound = false;
       let limitFound = false;
 

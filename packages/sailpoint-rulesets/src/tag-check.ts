@@ -13,6 +13,8 @@ import { IRuleResult } from "@stoplight/spectral-core";
 import { OpenAPIV3 } from "openapi-types";
 import yaml from "js-yaml";
 
+const HTTP_METHODS = ["get", "put", "post", "delete", "options", "head", "patch", "trace"];
+
 // Match version as a path segment (/v3/, /v2024/, etc.) to avoid false
 // positives on versioned filenames like transforms-v3.yaml inside apis/.
 function hasVersionSegment(source: string, version: string): boolean {
@@ -85,7 +87,8 @@ export default (
   }
 
   for (const [key, value] of Object.entries(targetVal)) {
-    console.log(`Tags ${tagArray}`)
+    // A path item also has keys like summary and parameters, which have no tags.
+    if (!HTTP_METHODS.includes(key)) continue;
 
     if (value.tags === undefined || value.tags == null) {
       // @ts-ignore

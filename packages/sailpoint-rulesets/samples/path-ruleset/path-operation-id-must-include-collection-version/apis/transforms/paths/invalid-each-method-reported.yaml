@@ -1,0 +1,28 @@
+# Two of three operations miss the "V1" suffix; each is reported on its own.
+# expect: operationId "createTransform" must end with the collection version suffix "V1".
+# expect: operationId "removeTransform" must end with the collection version suffix "V1".
+# expect-count: 2
+get:
+  operationId: listTransformsV1
+  tags:
+    - Transforms
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.
+post:
+  operationId: createTransform
+  tags:
+    - Transforms
+  summary: Create a transform
+  responses:
+    "201":
+      description: The new transform.
+delete:
+  operationId: removeTransform
+  tags:
+    - Transforms
+  summary: Delete a transform
+  responses:
+    "204":
+      description: The transform is deleted.

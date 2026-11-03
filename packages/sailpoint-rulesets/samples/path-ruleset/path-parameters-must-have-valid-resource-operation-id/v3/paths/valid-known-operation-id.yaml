@@ -1,0 +1,18 @@
+# The resource operation ID listAccounts is in VERSIONED_OPERATION_IDS (file under /v3/).
+# env: VERSIONED_OPERATION_IDS=["listAccounts","listEntitlements","listAccessProfiles"]
+get:
+  tags:
+    - Access Profiles
+  summary: List Access Profiles
+  operationId: pathAccessProfiles
+  description: This API returns a list of Access Profiles.
+  parameters:
+    - in: path
+      name: id
+      example: "1234"
+      schema:
+        type: string
+      x-sailpoint-resource-operation-id: listAccounts
+  responses:
+    "200":
+      description: List of Access Profiles

@@ -1,0 +1,16 @@
+# The id and the path have the same version.
+sp-gateway:
+  routes:
+    - id: "sample-match-v2"
+      path: "/sample-match/v2"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+
+    - id: "sample-match-internal"
+      path: "/sample-match/internal"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

@@ -30,7 +30,7 @@ export default createOptionalContextRulesetFunction(
 
       targetVal.security.forEach((item) => {
         const keys = Object.keys(item);
-        invalidKeys = keys.filter((key) => !validKeys.includes(key));
+        invalidKeys.push(...keys.filter((key) => !validKeys.includes(key)));
       });
 
       if (invalidKeys.length > 0) {
@@ -85,16 +85,10 @@ export default createOptionalContextRulesetFunction(
 
         return results;
       }
-    } else if (targetVal.security == null) {
-      return [
-        {
-          message: `Rule ${rule}: Operations must have at least one scope defined to access the endpoint`,
-        },
-      ];
     } else {
       return [
         {
-          message: `Rule ${rule}: security key must be defined for operations`,
+          message: `Rule ${rule}: Operations must have at least one scope defined to access the endpoint`,
         },
       ];
     }

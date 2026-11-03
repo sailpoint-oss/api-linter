@@ -1,0 +1,30 @@
+# Each route uses one of the four valid states.
+sp-gateway:
+  routes:
+    - id: "sample-route-6-v1"
+      path: "/sample-route-6/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "private"
+
+    - id: "sample-route-7-v1"
+      path: "/sample-route-7/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "limited-preview"
+
+    - id: "sample-route-8-v1"
+      path: "/sample-route-8/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public-preview"
+
+    - id: "sample-route-9-v1"
+      path: "/sample-route-9/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

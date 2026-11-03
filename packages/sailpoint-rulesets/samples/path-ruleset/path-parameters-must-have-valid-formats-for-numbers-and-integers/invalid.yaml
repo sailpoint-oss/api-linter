@@ -1,0 +1,22 @@
+# The integer parameter has no format.
+# expect: Rule 171: limit is type integer and must be one of the following values: int32, int64, bigint
+# expect-count: 1
+get:
+  operationId: listIdentityOutliers
+  tags:
+    - Identity Outliers
+  summary: List identity outliers
+  description: Use this API to get a list of identity outliers.
+  parameters:
+    - in: query
+      name: limit
+      required: false
+      description: Max number of results to return.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 250
+      example: 250
+  responses:
+    "200":
+      description: List of identity outliers.

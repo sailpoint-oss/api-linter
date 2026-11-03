@@ -1,0 +1,21 @@
+# The oldApproverName and newApproverName properties of the object have no example.
+# expect: The property oldApproverName must have a example
+# expect: The property newApproverName must have a example
+# expect-count: 2
+type: object
+properties:
+  oldApproverName:
+    type: string
+    description: Display name of approver that forwarded the approval.
+  newApproverName:
+    type: string
+    description: Display name of approver to whom the approval was forwarded.
+  comment:
+    type: string
+    description: Comment made by old approver when forwarding.
+    example: Fusce id orci vel consectetur amet ipsum quam.
+  modified:
+    type: string
+    format: date-time
+    description: Time at which approval was forwarded.
+    example: '2019-08-23T18:52:57.398Z'

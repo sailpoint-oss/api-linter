@@ -1,0 +1,16 @@
+# intervalThreshold is negative, and violationWindow is 0.
+# expect: Invalid value for backOffConfig integer field
+# expect-count: 2
+sp-gateway:
+  routes:
+    - id: "sample-route-48-v1"
+      path: "/sample-route-48/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        intervalThreshold: -5
+        violationWindow: 0
+        tierMemoryWindow: 300
+        redisTimeoutMs: 50

@@ -1,0 +1,9 @@
+# The operation has no tags.
+# expect: You must include one tag to group an endpoint under
+# expect-count: 1
+get:
+  operationId: listTransforms
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

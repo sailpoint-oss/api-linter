@@ -46,7 +46,7 @@ export function createFileLink(
   column: number
 ): string {
   if (isDev) {
-    return `${file.replace(ProjectRoot, ".").replace("/packages/test-files", "")}`;
+    return `${file.replace(ProjectRoot, ".")}`;
   } else {
     return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/blob/${process.env.GITHUB_HEAD_REF}/${file.replace(process.env.GITHUB_WORKSPACE!, "")}#L${line}`;
   }

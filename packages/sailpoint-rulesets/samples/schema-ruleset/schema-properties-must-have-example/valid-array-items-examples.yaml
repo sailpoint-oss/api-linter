@@ -1,0 +1,77 @@
+# Array properties whose items have examples, with object items whose properties have examples.
+type: object
+properties:
+  requestedFor:
+    description: A list of Identity IDs for whom the Access is requested. If it's a Revoke request, there can only be one Identity ID.
+    type: array
+    items:
+      type: string
+      example: 2c918084660f45d6016617daa9210584
+  requestType:
+    type: string
+    enum:
+      - GRANT_ACCESS
+      - REVOKE_ACCESS
+    description: Access request type. Defaults to GRANT_ACCESS. REVOKE_ACCESS type can only have a single Identity ID in the requestedFor field. Currently REVOKE_ACCESS is not supported for entitlements.
+    example: GRANT_ACCESS
+  requestedItems:
+    type: array
+    items:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ACCESS_PROFILE
+            - ROLE
+            - ENTITLEMENT
+          description: The type of the item being requested.
+          example: ACCESS_PROFILE
+        id:
+          type: string
+          description: ID of Role, Access Profile or Entitlement being requested.
+          example: 2c9180835d2e5168015d32f890ca1581
+        comment:
+          type: string
+          description: |
+            Comment provided by requester.
+            * Comment is required when the request is of type Revoke Access.
+          example: Requesting access profile for John Doe
+        clientMetadata:
+          type: object
+          additionalProperties:
+            type: string
+            example:
+              requestedAppId: 2c91808f7892918f0178b78da4a305a1
+              requestedAppName: test-app
+          example:
+            requestedAppName: test-app
+            requestedAppId: 2c91808f7892918f0178b78da4a305a1
+          description: Arbitrary key-value pairs. They will never be processed by the IdentityNow system but will be returned on associated APIs such as /account-activities.
+        removeDate:
+          type: string
+          description: |
+            The date the role or access profile is no longer assigned to the specified identity.
+            * Specify a date in the future.
+            * The current SLA for the deprovisioning is 24 hours.
+            * This date can be modified to either extend or decrease the duration of access item assignments for the specified identity.
+            * Currently it is not supported for entitlements.
+          format: date-time
+          example: '2020-07-11T21:23:15.000Z'
+      required:
+        - id
+        - type
+  clientMetadata:
+    type: object
+    additionalProperties:
+      type: string
+      example:
+        requestedAppId: 2c91808f7892918f0178b78da4a305a1
+        requestedAppName: test-app
+    example:
+      requestedAppId: 2c91808f7892918f0178b78da4a305a1
+      requestedAppName: test-app
+    description: Arbitrary key-value pairs. They will never be processed by the IdentityNow system but will be returned on associated APIs such as /account-activities.
+required:
+  - requestedFor
+  - requestedItems

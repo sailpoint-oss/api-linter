@@ -1,0 +1,14 @@
+# The date is not in yyyy-mm-dd format.
+# expect: Must be a valid date in yyyy-mm-dd format
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-29-v1"
+      path: "/sample-route-29/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      versionDetailsMap:
+        v1:
+          deprecation: "01/31/2026"

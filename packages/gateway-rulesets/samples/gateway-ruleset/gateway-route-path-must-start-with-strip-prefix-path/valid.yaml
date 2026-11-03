@@ -1,0 +1,10 @@
+# The path starts with stripPrefixPath.
+sp-gateway:
+  routes:
+    - id: "sample-strip-v1"
+      path: "/sample-strip/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      stripPrefixPath: "/sample-strip"

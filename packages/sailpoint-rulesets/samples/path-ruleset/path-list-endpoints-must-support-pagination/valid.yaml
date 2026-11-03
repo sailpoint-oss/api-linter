@@ -1,0 +1,36 @@
+# The list operation has offset and limit query parameters, and limit has a minimum and a maximum.
+get:
+  operationId: listIdentities
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to get a list of identities.
+  parameters:
+    - in: query
+      name: offset
+      required: false
+      description: Offset into the full result set.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+      example: 0
+    - in: query
+      name: limit
+      required: false
+      description: Max number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 250
+      example: 250
+  responses:
+    "200":
+      description: List of identities.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object

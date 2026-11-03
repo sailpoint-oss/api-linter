@@ -1,0 +1,19 @@
+# Properties with nullable: true may leave out the example.
+type: object
+properties:
+  oldApproverName:
+    type: string
+    nullable: true
+  newApproverName:
+    type: string
+    description: Display name of approver to whom the approval was forwarded.
+    nullable: true
+  comment:
+    type: string
+    description: Comment made by old approver when forwarding.
+    example: Fusce id orci vel consectetur amet ipsum quam.
+  modified:
+    type: string
+    format: date-time
+    description: Time at which approval was forwarded.
+    example: '2019-08-23T18:52:57.398Z'

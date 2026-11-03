@@ -1,0 +1,11 @@
+# tiers is an array of positive integers.
+sp-gateway:
+  routes:
+    - id: "sample-route-50-v1"
+      path: "/sample-route-50/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        tiers: [30, 60, 90]

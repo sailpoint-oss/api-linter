@@ -1,6 +1,7 @@
 import core from "@actions/core";
 import github from "@actions/github";
 import { writeFileSync } from "fs";
+import path from "node:path";
 import {
   validateInputs,
   getProjectConfig,
@@ -14,7 +15,7 @@ import { createSpectral, initProcessedPbs, processPbs } from "./spectral.js";
 import { readFilesToAnalyze } from "./read_files.js";
 import { toMarkdown } from "./to_markdown.js";
 import { getDevInputs } from "./config.js";
-import { isDev } from "./utils.js";
+import { isDev, ProjectRoot } from "./utils.js";
 
 async function run(): Promise<void> {
   try {
@@ -110,7 +111,17 @@ async function run(): Promise<void> {
 
     core.debug("Posting comment");
 
-    if (markdown && !isDev) {
+    if (markdown && !isDev && !github.context.payload.pull_request) {
+      // A manual run has no pull request to comment on, so show the result on the run page.
+      core.debug("No pull request, writing job summary");
+      await core.summary.addRaw(markdown).write();
+
+      if (processedPbs.severitiesCount[0] > 0) {
+        core.setFailed(
+          `There are ${processedPbs.severitiesCount[0]} lint errors!`,
+        );
+      }
+    } else if (markdown && !isDev) {
       const octokit = github.getOctokit(inputs["github-token"]!);
       const comment = await getGithubComment(octokit, github.context);
       if (comment) {
@@ -132,7 +143,10 @@ async function run(): Promise<void> {
         );
       }
     } else if (isDev) {
-      writeFileSync("../../packages/test-files/output.md", markdown);
+      writeFileSync(
+        path.join(ProjectRoot, "packages/github-spectral-comment/output.md"),
+        markdown,
+      );
     }
   } catch (error) {
     core.error(error as string | Error);

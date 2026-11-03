@@ -1,0 +1,18 @@
+# The optional boolean query parameter has no default value.
+get:
+  operationId: listIdentities
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to get a list of identities.
+  parameters:
+    - in: query
+      name: count
+      required: false
+      schema:
+        type: boolean
+      description: If true, the X-Total-Count header is returned with the total number of identities.
+      example: true
+  responses:
+    "200":
+      description: The list of identities.

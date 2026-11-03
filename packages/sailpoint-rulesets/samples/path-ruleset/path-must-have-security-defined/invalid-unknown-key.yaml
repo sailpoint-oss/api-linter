@@ -1,0 +1,14 @@
+# The security array uses an unknown key (oauth2) instead of userAuth or applicationAuth.
+# expect: oauth2 is not a valid key
+# expect-count: 1
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - oauth2: [idn:identity:read]
+  responses:
+    "200":
+      description: The identity.

@@ -1,0 +1,11 @@
+# A full dynamic rate limit for one org and one route.
+dynamic-rate-limits:
+  acme:
+    sample-dyn-valid-v1:
+      rateLimit: 10
+      rateLimitIntervalSeconds: 60
+      methods: ["GET", "DELETE"]
+      subroutes:
+        "/items":
+          rateLimit: 5
+          rateLimitIntervalSeconds: 60

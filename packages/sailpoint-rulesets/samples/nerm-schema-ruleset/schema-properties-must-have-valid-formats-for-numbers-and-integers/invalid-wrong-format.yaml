@@ -1,0 +1,10 @@
+# The number property "riskScore" uses "int32", which is not a number format.
+type: object
+required:
+  - riskScore
+properties:
+  riskScore:
+    type: number
+    format: int32
+    description: The risk score of the identity.
+    example: 0.75

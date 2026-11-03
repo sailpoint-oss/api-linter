@@ -43,7 +43,7 @@ function getRoutesFromYaml(routeSet: Set<string>) {
         }
     }
 }
-// Function to get all YAML file paths from the test-files directory
+// Function to get all YAML file paths from the api-specs directory
 function getYamlFilePaths(): string[] {
     const testFilesDir = 'api-specs/src/main/yaml';
     if (!fs.existsSync(testFilesDir)) {

@@ -1,0 +1,10 @@
+# The description contains ${identity_id}, which is Docusaurus variable syntax.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: "Use this API to get a single identity, for example: GET /v3/identities/${identity_id}"
+  responses:
+    "200":
+      description: The identity.

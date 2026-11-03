@@ -26,7 +26,7 @@ export default createOptionalContextRulesetFunction(
   },
   (targetVal: string, options: { rule: string; maxWordCount: number }) => {
     const { rule, maxWordCount } = options;
-    if (targetVal.split(" ").length > maxWordCount) {
+    if (targetVal.trim().split(/\s+/).length > maxWordCount) {
       return [
         {
           message: `Rule ${rule}: The summary value for a path should not exceed ${maxWordCount} words`,

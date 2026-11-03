@@ -1,0 +1,11 @@
+# exact is not a valid routeType.
+# expect: Invalid value for routeType
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-13-v1"
+      path: "/sample-route-13/v1"
+      service: "identity"
+      routeType: "exact"
+      stripPrefix: true
+      apiState: "public"

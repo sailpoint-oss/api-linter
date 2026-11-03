@@ -1,0 +1,7 @@
+# The v2025 schema references a schema in the v2024 folder.
+type: object
+required:
+  - owner
+properties:
+  owner:
+    $ref: "../../v2024/schemas/Owner.yaml"

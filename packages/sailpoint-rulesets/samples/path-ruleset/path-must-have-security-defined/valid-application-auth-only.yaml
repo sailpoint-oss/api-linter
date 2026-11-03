@@ -1,0 +1,12 @@
+# The security array contains only applicationAuth with a valid scope.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - applicationAuth: [idn:identity:read]
+  responses:
+    "200":
+      description: The identity.

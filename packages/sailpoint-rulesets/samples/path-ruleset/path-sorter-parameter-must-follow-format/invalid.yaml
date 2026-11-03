@@ -1,0 +1,24 @@
+# The sorters description does not start with the standard intro text.
+# expect: Rule 325: The first line in the description for sorters must follow the example provided in the guide for rule 325.
+# expect-count: 1
+get:
+  operationId: listAccessProfiles
+  tags:
+    - Access Profiles
+  summary: List access profiles
+  description: Use this API to get a list of access profiles.
+  parameters:
+    - in: query
+      name: sorters
+      required: false
+      schema:
+        type: string
+        format: comma-separated
+      example: name,-modified
+      description: |-
+        Sort the access profiles by name.
+
+        Sorting is supported for the following fields: **name, created, modified**
+  responses:
+    "200":
+      description: List of access profiles.

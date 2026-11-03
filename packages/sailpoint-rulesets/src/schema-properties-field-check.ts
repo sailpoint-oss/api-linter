@@ -50,7 +50,7 @@ function parseYamlProperties(
 
     // Loop through each key under properties
     for (const [key, value] of Object.entries(targetYaml.properties)) {
-      if ("$ref" in value) return;
+      if ("$ref" in value) continue;
       // If you run into a key that is an object that has more properties call the function again passing in the lower level object to parse
       if (
         value.properties != undefined &&

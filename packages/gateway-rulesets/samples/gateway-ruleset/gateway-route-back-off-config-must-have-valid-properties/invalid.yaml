@@ -1,0 +1,14 @@
+# backOffConfig has a property that the gateway does not know.
+# expect: backOffConfig has an invalid field: unknownField
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-44-v1"
+      path: "/sample-route-44/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        enabled: true
+        unknownField: "oops"

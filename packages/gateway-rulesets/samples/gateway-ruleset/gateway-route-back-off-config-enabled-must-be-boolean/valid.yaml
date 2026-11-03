@@ -1,0 +1,11 @@
+# enabled is a boolean.
+sp-gateway:
+  routes:
+    - id: "sample-route-45-v1"
+      path: "/sample-route-45/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        enabled: false

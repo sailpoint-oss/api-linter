@@ -1,0 +1,12 @@
+# Helper: the collection root file. The rule reads the version (v1) from the URL path that references each path file.
+openapi: 3.0.3
+info:
+  title: Identities
+  version: 1.0.0
+tags:
+  - name: Identities
+paths:
+  /identities/v1/{id}:
+    $ref: ./paths/valid.yaml
+  /identities/v1/{id}/reset:
+    $ref: ./paths/invalid.yaml

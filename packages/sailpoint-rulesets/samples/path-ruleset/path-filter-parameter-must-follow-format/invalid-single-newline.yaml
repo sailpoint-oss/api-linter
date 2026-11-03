@@ -1,0 +1,23 @@
+# The filters description separates lines with a single newline instead of a blank line.
+# expect: Rule 324: Each line in the description for filters must always be separated by two lines.
+# expect-count: 1
+get:
+  operationId: listAccessProfiles
+  tags:
+    - Access Profiles
+  summary: List access profiles
+  description: Use this API to get a list of access profiles.
+  parameters:
+    - in: query
+      name: filters
+      required: false
+      schema:
+        type: string
+      example: name eq "Finance Access"
+      description: |-
+        Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
+        Filtering is supported for the following fields and operators:
+        **name**: *eq, sw*
+  responses:
+    "200":
+      description: List of access profiles.

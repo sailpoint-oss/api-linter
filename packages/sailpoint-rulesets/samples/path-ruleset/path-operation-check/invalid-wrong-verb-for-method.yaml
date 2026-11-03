@@ -1,0 +1,10 @@
+# The patch operationId starts with "set", but patch endpoints must start with "patch" or "update".
+patch:
+  operationId: setIdentityAttributes
+  tags:
+    - Identities
+  summary: Update an identity
+  description: Use this API to update the attributes of an identity.
+  responses:
+    "200":
+      description: The updated identity.

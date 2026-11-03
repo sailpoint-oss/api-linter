@@ -1,0 +1,13 @@
+# The optional boolean "authoritative" has no default.
+type: object
+required:
+  - enabled
+properties:
+  enabled:
+    type: boolean
+    description: Whether the source is enabled.
+    example: true
+  authoritative:
+    type: boolean
+    description: Whether the source is authoritative.
+    example: false

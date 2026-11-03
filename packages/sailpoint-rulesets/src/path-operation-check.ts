@@ -4,8 +4,12 @@ import { createOptionalContextRulesetFunction } from "./createOptionalContextRul
 type OperationObject = OpenAPIV3.OperationObject;
 type ResponseObject = OpenAPIV3.ResponseObject;
 
-function isOperationObject(value: unknown): value is OperationObject {
-  return typeof value === "object" && value !== null && "operationId" in value;
+const HTTP_METHODS = ["get", "put", "post", "delete", "options", "head", "patch", "trace"];
+
+// A path item also has keys like summary and parameters, so only HTTP method
+// keys hold operations.
+function isOperationObject(key: string, value: unknown): value is OperationObject {
+  return HTTP_METHODS.includes(key) && typeof value === "object" && value !== null;
 }
 
 function isResponseObject(value: unknown): value is ResponseObject {
@@ -88,7 +92,7 @@ export default createOptionalContextRulesetFunction(
     const allowedOperationsForDeleteMethods = ["delete", "remove"];
 
     for (const [key, value] of Object.entries(targetVal)) {
-      if (!isOperationObject(value)) continue;
+      if (!isOperationObject(key, value)) continue;
 
       if (!value.operationId) {
         results.push({

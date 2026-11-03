@@ -1,0 +1,11 @@
+# The operation has two tags, but it must have only one.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+    - Identity Profiles
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.

@@ -1,0 +1,26 @@
+# One parameter has an example and the other has schema.example.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  parameters:
+    - in: path
+      name: id
+      required: true
+      description: The ID of the identity.
+      schema:
+        type: string
+      example: 2c9180835d2e5168015d32f890ca1581
+    - in: query
+      name: count
+      required: false
+      description: If true, the X-Total-Count header is returned.
+      schema:
+        type: boolean
+        default: false
+        example: true
+  responses:
+    "200":
+      description: The identity.

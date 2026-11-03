@@ -1,0 +1,14 @@
+# The "required" list is empty.
+# expect: If a required key is defined for a schema object, it must not be null or empty
+# expect-count: 1
+type: object
+required: []
+properties:
+  id:
+    type: string
+    description: The ID of the access profile.
+    example: 2c91808a7190d06e01719938fcd20792
+  name:
+    type: string
+    description: The name of the access profile.
+    example: Employee Access

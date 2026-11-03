@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "NODE_ENV=test node dist/index.js"
+    "preview": "NODE_ENV=test node dist/index.js"
   },
   "author": "",
   "license": "ISC",

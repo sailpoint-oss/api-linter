@@ -1,0 +1,15 @@
+# The integer and number properties use allowed formats.
+type: object
+required:
+  - accessCount
+properties:
+  accessCount:
+    type: integer
+    format: int32
+    description: The number of access items the identity has.
+    example: 12
+  riskScore:
+    type: number
+    format: float
+    description: The risk score of the identity.
+    example: 0.75

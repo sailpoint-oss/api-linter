@@ -1,0 +1,10 @@
+# The tag "Accounts" is not defined in the collection openapi.yaml.
+get:
+  operationId: getAccount
+  tags:
+    - Accounts
+  summary: Get an account
+  description: Use this API to get a single account by its ID.
+  responses:
+    "200":
+      description: The account.

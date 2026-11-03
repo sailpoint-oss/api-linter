@@ -1,0 +1,16 @@
+# Bug check: a list operation that returns an array as "application/json;charset=utf-8" must have offset and limit. Fails while the rule only looks at the "application/json" media type.
+get:
+  operationId: listIdentities
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to get a list of identities.
+  responses:
+    "200":
+      description: List of identities.
+      content:
+        application/json;charset=utf-8:
+          schema:
+            type: array
+            items:
+              type: object

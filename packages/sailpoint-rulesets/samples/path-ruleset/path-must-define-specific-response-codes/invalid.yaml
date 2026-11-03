@@ -1,0 +1,13 @@
+# The operation has a 200 response but does not define the 401, 403, 429 and 500 error codes.
+# expect: Operation must have the following error codes defined: 401,403,429,500
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.
+    "400":
+      description: Client error due to bad request.

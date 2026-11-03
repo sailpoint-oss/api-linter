@@ -1,0 +1,29 @@
+# The integer parameter uses int32 and the number parameter uses double.
+get:
+  operationId: listIdentityOutliers
+  tags:
+    - Identity Outliers
+  summary: List identity outliers
+  description: Use this API to get a list of identity outliers.
+  parameters:
+    - in: query
+      name: limit
+      required: false
+      description: Max number of results to return.
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 250
+      example: 250
+    - in: query
+      name: minScore
+      required: false
+      description: Only return outliers with a score at or above this value.
+      schema:
+        type: number
+        format: double
+      example: 0.75
+  responses:
+    "200":
+      description: List of identity outliers.

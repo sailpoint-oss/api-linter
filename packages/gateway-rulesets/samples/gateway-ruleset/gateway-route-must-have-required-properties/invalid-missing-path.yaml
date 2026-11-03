@@ -1,0 +1,6 @@
+# The route has no path.
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-required-no-path-v1"
+      service: "identity"

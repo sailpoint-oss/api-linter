@@ -1,0 +1,15 @@
+# The route uses only known properties.
+sp-gateway:
+  routes:
+    - id: "sample-route-1-v1"
+      path: "/sample-route-1/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      servicePath: "/identities"
+      methods: ["GET", "POST"]
+      rights: ["idn:identity:read"]
+      rateLimit: 100
+      rateLimitIntervalSeconds: 10
+      clientType: "clientTimeout1m"

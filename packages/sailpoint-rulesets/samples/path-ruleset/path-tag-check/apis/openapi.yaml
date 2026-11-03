@@ -1,0 +1,10 @@
+# Helper: the collection root file. The rule reads its tags for files under apis/.
+openapi: 3.0.3
+info:
+  title: Identities
+  version: 1.0.0
+tags:
+  - name: Identities
+paths:
+  /identities/v1/{id}:
+    $ref: ./paths/valid.yaml

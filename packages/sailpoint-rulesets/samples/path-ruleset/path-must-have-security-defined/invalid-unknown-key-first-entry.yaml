@@ -1,0 +1,14 @@
+# Bug check: an unknown key (oauth2) in an earlier security entry must be reported. Fails while invalidKeys is overwritten by each later entry.
+# expect: oauth2 is not a valid key
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - oauth2: [idn:identity:read]
+    - userAuth: [idn:identity:read]
+  responses:
+    "200":
+      description: The identity.

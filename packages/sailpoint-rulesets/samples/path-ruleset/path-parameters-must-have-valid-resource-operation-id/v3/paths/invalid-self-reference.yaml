@@ -1,0 +1,20 @@
+# The resource operation ID is the operation's own operationId (it is in VERSIONED_OPERATION_IDS, so only the self-reference is reported).
+# env: VERSIONED_OPERATION_IDS=["listAccounts","listEntitlements","listAccessProfiles"]
+# expect: listAccessProfiles is invalid, the x-sailpoint-resource-operation-id must not reference itself.
+# expect-count: 1
+get:
+  tags:
+    - Access Profiles
+  summary: List Access Profiles
+  operationId: listAccessProfiles
+  description: This API returns a list of Access Profiles.
+  parameters:
+    - in: path
+      name: id
+      example: "1234"
+      schema:
+        type: string
+      x-sailpoint-resource-operation-id: listAccessProfiles
+  responses:
+    "200":
+      description: List of Access Profiles

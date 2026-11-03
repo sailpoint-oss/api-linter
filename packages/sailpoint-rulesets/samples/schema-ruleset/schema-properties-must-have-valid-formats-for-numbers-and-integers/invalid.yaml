@@ -1,0 +1,9 @@
+# The integer property "accessCount" has no format.
+type: object
+required:
+  - accessCount
+properties:
+  accessCount:
+    type: integer
+    description: The number of access items the identity has.
+    example: 12

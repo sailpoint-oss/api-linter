@@ -1,0 +1,10 @@
+# The example URL uses a plain placeholder, not Docusaurus ${...} variable syntax.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: "Use this API to get a single identity, for example: GET /v3/identities/{identityId}"
+  responses:
+    "200":
+      description: The identity.

@@ -1,0 +1,11 @@
+# "Sources" comes before "Identities", so the tags are not in alphabetical order.
+openapi: 3.0.3
+info:
+  title: Sample API
+  version: 1.0.0
+  x-audience: external-public
+tags:
+  - name: Access Profiles
+  - name: Sources
+  - name: Identities
+paths: {}

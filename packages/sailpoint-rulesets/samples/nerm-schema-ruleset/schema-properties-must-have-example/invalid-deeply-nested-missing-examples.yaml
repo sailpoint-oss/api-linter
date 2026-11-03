@@ -1,0 +1,292 @@
+# A large schema with nested objects and array items: 10 properties have no example and warnings has a null example.
+# expect: The property completed must have a example
+# expect: The property warnings must have a example that is not null
+# expect: The property name must have a example
+# expect: The property approvalStatus must have a example
+# expect: The property provisioningStatus must have a example
+# expect: The property operation must have a example
+# expect: The property executionStatus must have a example
+# expect: The property clientMetadata must have a example
+# expect: The property cancelable must have a example
+# expect-count: 11
+type: object
+properties:
+  id:
+    type: string
+    description: ID of the account activity itself
+    example: 2c9180835d2e5168015d32f890ca1581
+  name:
+    type: string
+    example: 2c9180835d2e5168015d32f890ca1581
+  created:
+    type: string
+    format: date-time
+    example: '2017-07-11T18:45:37.098Z'
+  modified:
+    type: string
+    format: date-time
+    example: '2018-06-25T20:22:28.104Z'
+  completed:
+    type: string
+    format: date-time
+    example: '2018-10-19T13:49:37.385Z'
+  completionStatus:
+    nullable: true
+    type: string
+    enum:
+      - SUCCESS
+      - FAILURE
+      - INCOMPLETE
+      - PENDING
+  type:
+    type: string
+    example: appRequest
+  requesterIdentitySummary:
+    type: object
+    nullable: true
+    properties:
+      id:
+        type: string
+        description: ID of this identity summary
+        example: ff80818155fe8c080155fe8d925b0316
+      name:
+        type: string
+        description: Human-readable display name of identity
+        example: SailPoint Services
+      identityId:
+        type: string
+        description: ID of the identity that this summary represents
+        example: c15b9f5cca5a4e9599eaa0e64fa921bd
+      completed:
+        type: boolean
+        description: Indicates if all access items for this summary have been decided on
+  targetIdentitySummary:
+    type: object
+    nullable: true
+    properties:
+      id:
+        type: string
+        description: ID of this identity summary
+        example: ff80818155fe8c080155fe8d925b0316
+      name:
+        type: string
+        description: Human-readable display name of identity
+        example: SailPoint Services
+      identityId:
+        type: string
+        description: ID of the identity that this summary represents
+        example: c15b9f5cca5a4e9599eaa0e64fa921bd
+      completed:
+        type: boolean
+        description: Indicates if all access items for this summary have been decided on
+  errors:
+    type: array
+    items:
+      type: string
+    example:
+      - 'sailpoint.connector.ConnectorException: java.lang.InterruptedException: Timeout waiting for response to message 0 from client 57a4ab97-ab3f-4aef-9fe2-0eaf15c73d26 after 60 seconds.'
+  warnings:
+    type: array
+    items:
+      type: string
+    example: null
+  items:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Item id
+          example: 2725138ee34949beb0d6cc982d2d4625
+        name:
+          type: string
+          description: Human-readable display name of item
+        requested:
+          type: string
+          format: date-time
+          description: Date and time item was requested
+          example: '2017-07-11T18:45:37.098Z'
+        approvalStatus:
+          type: string
+          enum:
+            - FINISHED
+            - REJECTED
+            - RETURNED
+            - EXPIRED
+            - PENDING
+            - CANCELED
+        provisioningStatus:
+          type: string
+          enum:
+            - PENDING
+            - FINISHED
+            - UNVERIFIABLE
+            - COMMITED
+            - FAILED
+            - RETRY
+          description: Provisioning state of an account activity item
+        requesterComment:
+          type: object
+          nullable: true
+          properties:
+            commenterId:
+              type: string
+              description: Id of the identity making the comment
+              example: 2c918084660f45d6016617daa9210584
+            commenterName:
+              type: string
+              description: Human-readable display name of the identity making the comment
+              example: Adam Kennedy
+            body:
+              type: string
+              description: Content of the comment
+              example: Et quam massa maximus vivamus nisi ut urna tincidunt metus elementum erat.
+            date:
+              type: string
+              format: date-time
+              description: Date and time comment was made
+              example: '2017-07-11T18:45:37.098Z'
+        reviewerIdentitySummary:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: string
+              description: ID of this identity summary
+              example: ff80818155fe8c080155fe8d925b0316
+            name:
+              type: string
+              description: Human-readable display name of identity
+              example: SailPoint Services
+            identityId:
+              type: string
+              description: ID of the identity that this summary represents
+              example: c15b9f5cca5a4e9599eaa0e64fa921bd
+            completed:
+              type: boolean
+              description: Indicates if all access items for this summary have been decided on
+        reviewerComment:
+          type: object
+          nullable: true
+          properties:
+            commenterId:
+              type: string
+              description: Id of the identity making the comment
+              example: 2c918084660f45d6016617daa9210584
+            commenterName:
+              type: string
+              description: Human-readable display name of the identity making the comment
+              example: Adam Kennedy
+            body:
+              type: string
+              description: Content of the comment
+              example: Et quam massa maximus vivamus nisi ut urna tincidunt metus elementum erat.
+            date:
+              type: string
+              format: date-time
+              description: Date and time comment was made
+              example: '2017-07-11T18:45:37.098Z'
+        operation:
+          type: string
+          enum:
+            - ADD
+            - CREATE
+            - MODIFY
+            - DELETE
+            - DISABLE
+            - ENABLE
+            - UNLOCK
+            - LOCK
+            - REMOVE
+          description: Represents an operation in an account activity item
+        attribute:
+          type: string
+          description: Attribute to which account activity applies
+          nullable: true
+          example: detectedRoles
+        value:
+          type: string
+          description: Value of attribute
+          nullable: true
+          example: Treasury Analyst [AccessProfile-1529010191212]
+        nativeIdentity:
+          nullable: true
+          type: string
+          description: Native identity in the target system to which the account activity applies
+          example: Sandie.Camero
+        sourceId:
+          type: string
+          description: Id of Source to which account activity applies
+          example: 2c91808363ef85290164000587130c0c
+        accountRequestInfo:
+          type: object
+          nullable: true
+          properties:
+            requestedObjectId:
+              type: string
+              description: Id of requested object
+              example: 2c91808563ef85690164001c31140c0c
+            requestedObjectName:
+              type: string
+              description: Human-readable name of requested object
+              example: Treasury Analyst
+            requestedObjectType:
+              type: string
+              enum:
+                - ACCESS_PROFILE
+                - ROLE
+              description: Enum represented the currently supported requestable object types. Additional values may be added in the future without notice.
+              example: ACCESS_PROFILE
+          description: If an account activity item is associated with an access request, captures details of that request.
+        clientMetadata:
+          nullable: true
+          type: object
+          additionalProperties:
+            type: string
+          description: Arbitrary key-value pairs, if any were included in the corresponding access request item
+        removeDate:
+          nullable: true
+          type: string
+          description: The date the role or access profile is no longer assigned to the specified identity.
+          format: date-time
+          example: '2020-07-11T00:00:00Z'
+      required:
+        - id
+        - type
+  executionStatus:
+    type: string
+    enum:
+      - EXECUTING
+      - VERIFYING
+      - TERMINATED
+      - COMPLETED
+  clientMetadata:
+    type: object
+    additionalProperties:
+      type: string
+    description: Arbitrary key-value pairs, if any were included in the corresponding access request
+  cancelable:
+    type: boolean
+    description: Whether the account activity can be canceled before completion
+  cancelComment:
+    type: object
+    nullable: true
+    properties:
+      commenterId:
+        type: string
+        description: Id of the identity making the comment
+        example: 2c918084660f45d6016617daa9210584
+      commenterName:
+        type: string
+        description: Human-readable display name of the identity making the comment
+        example: Adam Kennedy
+      body:
+        type: string
+        description: Content of the comment
+        example: Et quam massa maximus vivamus nisi ut urna tincidunt metus elementum erat.
+      date:
+        type: string
+        format: date-time
+        description: Date and time comment was made
+        example: '2017-07-11T18:45:37.098Z'

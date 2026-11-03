@@ -1,0 +1,11 @@
+# Positive integers.
+sp-gateway:
+  routes:
+    - id: "sample-route-30-v1"
+      path: "/sample-route-30/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      rateLimit: 100
+      rateLimitIntervalSeconds: 10

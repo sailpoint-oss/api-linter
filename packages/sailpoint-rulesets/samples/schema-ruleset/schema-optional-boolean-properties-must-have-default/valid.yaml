@@ -1,0 +1,14 @@
+# The optional boolean has a default, and the required boolean does not need one.
+type: object
+required:
+  - enabled
+properties:
+  enabled:
+    type: boolean
+    description: Whether the source is enabled.
+    example: true
+  authoritative:
+    type: boolean
+    description: Whether the source is authoritative.
+    default: false
+    example: false

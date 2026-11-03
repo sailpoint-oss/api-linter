@@ -1,0 +1,14 @@
+# The userAuth scope does not match the pattern <a>:<b>:<c> (for example idn:identity:read).
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - userAuth: [identity-read]
+  x-sailpoint-userLevels:
+    - ORG_ADMIN
+  responses:
+    "200":
+      description: The identity.

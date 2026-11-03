@@ -1,0 +1,7 @@
+# The $ref points to a schema in the same v2025 folder.
+type: object
+required:
+  - owner
+properties:
+  owner:
+    $ref: "./Owner.yaml"

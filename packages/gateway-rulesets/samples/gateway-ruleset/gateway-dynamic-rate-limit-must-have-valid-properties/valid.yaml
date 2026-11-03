@@ -1,0 +1,12 @@
+# The dynamic rate limit uses only known properties.
+dynamic-rate-limits:
+  acme:
+    sample-dynamic-valid-v1:
+      rateLimit: 10
+      rateLimitIntervalSeconds: 60
+      methods: ["GET"]
+      subroutes:
+        "/items":
+          rateLimit: 5
+          rateLimitIntervalSeconds: 60
+          methods: ["GET"]

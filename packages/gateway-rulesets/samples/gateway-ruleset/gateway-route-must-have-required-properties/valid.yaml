@@ -1,0 +1,9 @@
+# The route has id, path and service.
+sp-gateway:
+  routes:
+    - id: "sample-route-5-v1"
+      path: "/sample-route-5/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

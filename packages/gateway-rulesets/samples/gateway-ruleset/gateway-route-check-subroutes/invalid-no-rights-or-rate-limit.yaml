@@ -1,0 +1,14 @@
+# The subroute has neither rights nor a rate limit.
+# expect: must have either an array of rights or a defined rate limit
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-39-v1"
+      path: "/sample-route-39/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      subroutes:
+        "/items":
+          methods: ["GET"]

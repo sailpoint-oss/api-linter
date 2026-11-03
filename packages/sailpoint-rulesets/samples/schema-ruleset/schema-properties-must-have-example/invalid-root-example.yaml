@@ -1,0 +1,11 @@
+# The example is at the root of an object that has properties and no additionalProperties.
+type: object
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: The ID of the identity.
+    example: 2c9180835d2e5168015d32f890ca1581
+example:
+  id: 2c9180835d2e5168015d32f890ca1581

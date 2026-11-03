@@ -1,0 +1,43 @@
+# The first allOf object has an empty required list.
+# expect: If a required key is defined for a schema object, it must not be null or empty
+# expect-count: 1
+allOf:
+  - type: object
+    properties:
+      oldApproverName:
+        type: string
+        description: Display name of approver that forwarded the approval.
+        example: frank.mir
+      newApproverName:
+        type: string
+        description: Display name of approver to whom the approval was forwarded.
+        example: al.volta
+      comment:
+        type: string
+        description: Comment made by old approver when forwarding.
+        example: Fusce id orci vel consectetur amet ipsum quam.
+      modified:
+        type: string
+        format: date-time
+        description: Time at which approval was forwarded.
+        example: '2019-08-23T18:52:57.398Z'
+    required: []
+  - type: object
+    properties:
+      oldApproverName:
+        type: string
+        description: Display name of approver that forwarded the approval.
+        example: frank.mir
+      newApproverName:
+        type: string
+        description: Display name of approver to whom the approval was forwarded.
+        example: al.volta
+      comment:
+        type: string
+        description: Comment made by old approver when forwarding.
+        example: Fusce id orci vel consectetur amet ipsum quam.
+      modified:
+        type: string
+        format: date-time
+        description: Time at which approval was forwarded.
+        example: '2019-08-23T18:52:57.398Z'

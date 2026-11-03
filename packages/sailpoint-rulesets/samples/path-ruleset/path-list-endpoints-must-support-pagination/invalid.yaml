@@ -1,0 +1,19 @@
+# The list operation returns an array but has no offset or limit query parameter.
+# expect: must have offset as a query parameter
+# expect: must have limit as a query parameter
+# expect-count: 2
+get:
+  operationId: listIdentities
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to get a list of identities.
+  responses:
+    "200":
+      description: List of identities.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object

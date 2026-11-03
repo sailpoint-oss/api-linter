@@ -1,0 +1,19 @@
+# The operation defines all of the error codes but has no 2xx response.
+# expect: Operation must have at least one 200 level response code defined: 
+delete:
+  operationId: deleteIdentity
+  tags:
+    - Identities
+  summary: Delete an identity
+  description: Use this API to delete a single identity by its ID.
+  responses:
+    "400":
+      description: Client error due to bad request.
+    "401":
+      description: Unauthorized, the request has no valid credentials.
+    "403":
+      description: Forbidden, the caller has no access to this identity.
+    "429":
+      description: Too many requests.
+    "500":
+      description: Internal server error.

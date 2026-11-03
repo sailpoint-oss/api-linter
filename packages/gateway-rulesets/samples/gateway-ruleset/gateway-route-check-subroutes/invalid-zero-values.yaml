@@ -1,0 +1,16 @@
+# The rate limit values must be greater than 0.
+# expect: must have a rateLimit value greater than 0
+# expect: must have a rateLimitIntervalSeconds value greater than 0
+# expect-count: 2
+sp-gateway:
+  routes:
+    - id: "sample-route-42-v1"
+      path: "/sample-route-42/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      subroutes:
+        "/items":
+          rateLimit: 0
+          rateLimitIntervalSeconds: 0

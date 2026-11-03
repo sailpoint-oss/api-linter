@@ -1,0 +1,16 @@
+# stripPrefix is a boolean.
+sp-gateway:
+  routes:
+    - id: "sample-route-32-v1"
+      path: "/sample-route-32/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+
+    - id: "sample-route-33-v1"
+      path: "/sample-route-33/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: false
+      apiState: "public"

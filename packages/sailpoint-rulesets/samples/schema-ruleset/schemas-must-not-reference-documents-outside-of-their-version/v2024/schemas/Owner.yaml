@@ -1,0 +1,9 @@
+# Helper schema in another version folder, referenced by the invalid sample.
+type: object
+required:
+  - id
+properties:
+  id:
+    type: string
+    description: The ID of the owner.
+    example: 2c9180835d2e5168015d32f890ca1581

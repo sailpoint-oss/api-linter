@@ -1,0 +1,15 @@
+# The user levels key is misspelled as x-sailpoint-userlevels (lowercase l).
+# expect: Improper spelling of x-sailpoint-userLevels. Please check your spelling, including capital letters.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - userAuth: [idn:identity:read]
+  x-sailpoint-userlevels:
+    - ORG_ADMIN
+  responses:
+    "200":
+      description: The identity.

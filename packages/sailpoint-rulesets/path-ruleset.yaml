@@ -98,7 +98,7 @@ rules:
         rule: 405
   path-must-have-security-defined:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#104"
-    given: $.*
+    given: $[get,put,post,delete,options,head,patch,trace]
     severity: error
     then:
       function: path-oauth-scope-check

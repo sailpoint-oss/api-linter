@@ -1,0 +1,12 @@
+# The file is under /v3/ and its tag "Unknown Tag" is not in V3_TAGS_JSON.
+# env: V3_TAGS_JSON=["Transforms","Access Profiles","Accounts"]
+# expect: Tag "Unknown Tag" is not defined in the root API spec
+# expect-count: 1
+get:
+  operationId: listTransforms
+  tags:
+    - Unknown Tag
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

@@ -1,0 +1,12 @@
+# The path does not start with stripPrefixPath.
+# expect: stripPrefixPath must match path when stripPrefix is true
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-strip-bad-v1"
+      path: "/sample-strip-bad/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      stripPrefixPath: "/other"

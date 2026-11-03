@@ -1,0 +1,19 @@
+# The path parameter has no example, schema.example, or examples.
+# expect: Rule 304: An example for id must be provided under one of the following keys: example, schema.example, examples
+# expect-count: 1
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  parameters:
+    - in: path
+      name: id
+      required: true
+      description: The ID of the identity.
+      schema:
+        type: string
+  responses:
+    "200":
+      description: The identity.

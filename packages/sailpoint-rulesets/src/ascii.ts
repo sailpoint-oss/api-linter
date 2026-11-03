@@ -18,7 +18,8 @@ export default createOptionalContextRulesetFunction(
     const { rule } = options;
 
     // ASCII Character Regex
-    const ascii = /[^\x00-\x7F]/gm;
+    // No "g" flag: with it, test() keeps lastIndex between values and misses matches.
+    const ascii = /[^\x00-\x7F]/;
 
     // Array of ASCII Characters
     let asciiCharacters: string[] = [];

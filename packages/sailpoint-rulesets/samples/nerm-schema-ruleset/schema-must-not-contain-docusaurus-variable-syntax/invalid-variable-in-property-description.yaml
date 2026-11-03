@@ -1,0 +1,9 @@
+# A property description contains ${your_identity_id}.
+# expect: Docusaurus variable syntax is not allowed in API specs. Found: [${your_identity_id}]. This syntax causes Docusaurus to crash when the variable is not defined.
+# expect-count: 1
+type: object
+properties:
+  approverId:
+    type: string
+    description: The identity ID of the approver. Defaults to ${your_identity_id} when not provided.
+    example: 2c9180835d191a86015d28455b4a2329

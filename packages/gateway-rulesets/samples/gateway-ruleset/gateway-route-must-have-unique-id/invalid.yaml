@@ -1,0 +1,18 @@
+# Two routes have the same id.
+# expect: id must be unique
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-duplicate-v1"
+      path: "/sample-duplicate/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+
+    - id: "sample-duplicate-v1"
+      path: "/sample-duplicate/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

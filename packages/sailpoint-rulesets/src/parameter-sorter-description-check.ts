@@ -38,7 +38,7 @@ export default createOptionalContextRulesetFunction(
       ];
     }
 
-    if (!parts[1].includes("Sorting is supported for the following fields:")) {
+    if (!parts[1]?.includes("Sorting is supported for the following fields:")) {
       return [
         {
           message: `Rule ${rule}: Must use the following format when describing sortable fields: "Sorting is supported for the following fields: **name, created, etc**".`,
@@ -46,7 +46,10 @@ export default createOptionalContextRulesetFunction(
       ];
     }
 
-    const properties = parts[1].split(":")[1].trim().replace(".", "");
+    const properties = parts[1]
+      .split("Sorting is supported for the following fields:")[1]
+      .trim()
+      .replace(".", "");
 
     // Check that the properties are bolded
     let regex = new RegExp("^\\*\\*[a-z].*[a-z]\\*\\*$");

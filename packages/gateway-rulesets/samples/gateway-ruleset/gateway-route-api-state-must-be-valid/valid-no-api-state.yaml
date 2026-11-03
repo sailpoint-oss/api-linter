@@ -1,0 +1,6 @@
+# apiState is optional.
+sp-gateway:
+  routes:
+    - id: "sample-no-api-state-v1"
+      path: "/sample-no-api-state/v1"
+      service: "identity"

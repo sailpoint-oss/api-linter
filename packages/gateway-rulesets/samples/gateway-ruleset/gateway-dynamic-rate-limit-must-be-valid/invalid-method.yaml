@@ -1,0 +1,8 @@
+# OPTIONS is not a valid method.
+# expect: has invalid method: "OPTIONS"
+dynamic-rate-limits:
+  acme:
+    sample-dyn-method-v1:
+      rateLimit: 10
+      rateLimitIntervalSeconds: 60
+      methods: ["OPTIONS"]

@@ -1,0 +1,13 @@
+# enabled is a string.
+# expect: Invalid value for backOffConfig.enabled
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-46-v1"
+      path: "/sample-route-46/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        enabled: "yes"

@@ -1,0 +1,12 @@
+# The summary has more than 5 words.
+# expect: Rule 305: The summary value for a path should not exceed 5 words
+# expect-count: 1
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get a single identity by its unique ID
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.

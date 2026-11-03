@@ -1,0 +1,25 @@
+# Each operationId starts with a verb that is allowed for its HTTP method.
+get:
+  operationId: listIdentities
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to get a list of identities.
+  responses:
+    "200":
+      description: The list of identities.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+post:
+  operationId: createIdentity
+  tags:
+    - Identities
+  summary: Create an identity
+  description: Use this API to create an identity.
+  responses:
+    "201":
+      description: The new identity.

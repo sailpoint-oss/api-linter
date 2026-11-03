@@ -1,0 +1,36 @@
+# The limit query parameter has no minimum and no maximum.
+# expect: must have a minimum defined for the 'limit' query parameter
+# expect: must have a maximum defined for the 'limit' query parameter
+# expect-count: 2
+get:
+  operationId: listIdentities
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to get a list of identities.
+  parameters:
+    - in: query
+      name: offset
+      required: false
+      description: Offset into the full result set.
+      schema:
+        type: integer
+        format: int32
+      example: 0
+    - in: query
+      name: limit
+      required: false
+      description: Max number of results to return.
+      schema:
+        type: integer
+        format: int32
+      example: 250
+  responses:
+    "200":
+      description: List of identities.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object

@@ -1,0 +1,9 @@
+# A property example contains ${your_identity_id}.
+# expect: Found: [${your_identity_id}].
+# expect-count: 1
+type: object
+properties:
+  filter:
+    type: string
+    description: Filter expression
+    example: approverId eq ${your_identity_id}

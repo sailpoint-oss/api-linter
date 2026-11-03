@@ -1,0 +1,10 @@
+# Bug check: the summary has only 4 words, so the rule must not report it. Fails while words are counted with split(" ") and the double spaces count as extra words.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: "Get  a  single  identity"
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.

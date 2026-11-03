@@ -1,0 +1,10 @@
+# The description contains HTML tags.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its <b>ID</b>.
+  responses:
+    "200":
+      description: The identity.
