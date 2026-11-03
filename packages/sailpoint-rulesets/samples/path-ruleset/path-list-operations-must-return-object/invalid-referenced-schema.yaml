@@ -1,0 +1,13 @@
+# The array schema is in a referenced file, and the operation does not turn off the rule.
+# expect-count: 1
+get:
+  operationId: listWorkflows
+  summary: List workflows
+  description: Use this API to get a list of workflows.
+  responses:
+    "200":
+      description: List of workflows.
+      content:
+        application/json:
+          schema:
+            $ref: "./response-list.yaml"

@@ -1,0 +1,18 @@
+# The optional property of the inline response schema defines a default.
+get:
+  operationId: getWorkflow
+  responses:
+    "200":
+      description: The workflow.
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+              description:
+                type: string
+                default: ""

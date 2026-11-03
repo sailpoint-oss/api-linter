@@ -72,6 +72,7 @@ rules:
         rule: 400
   path-must-not-contain-docusaurus-variable-syntax:
     message: "{{error}}"
+    resolved: false
     given: $
     severity: error
     then:

@@ -1,0 +1,14 @@
+# The array schema is in a referenced file. The x-sailpoint-lint-ignore on the operation still turns off the rule.
+get:
+  operationId: listWorkflows
+  summary: List workflows
+  description: Use this API to get a list of workflows.
+  x-sailpoint-lint-ignore:
+    path-list-operations-must-return-object: This existing list operation returns a top-level array, and a change breaks clients. In the next version of this API, return an object with an items array.
+  responses:
+    "200":
+      description: List of workflows.
+      content:
+        application/json:
+          schema:
+            $ref: "./response-list.yaml"

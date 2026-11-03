@@ -1,0 +1,19 @@
+# The inline response schema has an optional property with no default.
+# expect: The optional property description must define a default value
+# expect-count: 1
+get:
+  operationId: getWorkflow
+  responses:
+    "200":
+      description: The workflow.
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+              description:
+                type: string

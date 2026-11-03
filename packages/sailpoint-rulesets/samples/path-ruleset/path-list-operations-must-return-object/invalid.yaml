@@ -1,0 +1,16 @@
+# The list operation returns a top-level array.
+# expect: must return an object with an items array
+# expect-count: 1
+get:
+  operationId: listWorkflows
+  summary: List workflows
+  description: Use this API to get a list of workflows.
+  responses:
+    "200":
+      description: List of workflows.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object

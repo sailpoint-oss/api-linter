@@ -1,7 +1,6 @@
 functions:
   [
     schema-properties-field-check,
-    schema-object-field-check,
     validate-schema-integer-number-formats,
     schema-boolean-field-check,
     ascii,
@@ -30,15 +29,32 @@ rules:
       functionOptions:
         field: description
         rule: 303
+  # A missing required list is allowed (rule 317). The rule checks every
+  # object in the file, not only the root.
   schema-objects-must-have-required-parameters:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
-    given: $
+    resolved: false
+    given:
+      - "$"
+      - "$..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
     severity: error
     then:
-      function: schema-object-field-check
+      function: schema-node-check
       functionOptions:
-        field: required
+        check: required
         rule: 317
+  schema-optional-properties-must-have-default:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#316"
+    resolved: false
+    given:
+      - "$"
+      - "$..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: defaults
+        rule: 316
   schema-properties-must-have-valid-formats-for-numbers-and-integers:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171"
     given: $
@@ -71,8 +87,11 @@ rules:
       function: path-file-check
       functionOptions:
         rule: 405
+  # With resolved: false, the rule reports only the file where the text is
+  # written, and not each file that reaches the text through $ref.
   schema-must-not-contain-docusaurus-variable-syntax:
     message: "{{error}}"
+    resolved: false
     given: $
     severity: error
     then:

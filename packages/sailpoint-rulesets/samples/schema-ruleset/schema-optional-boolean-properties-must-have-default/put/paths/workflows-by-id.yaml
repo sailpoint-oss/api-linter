@@ -1,0 +1,15 @@
+# A helper file for the samples in ../schemas/. It is not a sample.
+put:
+  operationId: putWorkflow
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/valid-put-request-body.yaml"
+post:
+  operationId: testWorkflow
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/invalid-post-request-body.yaml"

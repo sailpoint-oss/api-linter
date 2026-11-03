@@ -1,0 +1,16 @@
+# The list has a fixed size, so the operation turns off the rule with x-sailpoint-lint-ignore and gives the reason.
+get:
+  operationId: listWorkflowTriggerTypes
+  summary: List workflow trigger types
+  description: Use this API to get the trigger types that a workflow can use.
+  x-sailpoint-lint-ignore:
+    path-list-endpoints-must-support-pagination: The list has at most 5 entries, so it needs no pagination.
+  responses:
+    "200":
+      description: List of trigger types.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string

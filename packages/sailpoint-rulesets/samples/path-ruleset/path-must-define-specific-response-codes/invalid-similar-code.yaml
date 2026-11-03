@@ -1,6 +1,13 @@
-# The key 4001 is not the 400 code, so 400 is missing.
+# The key 4001 is not the 400 code, so 400 is missing. The path-level id parameter means that 400 is required.
 # expect: 400
 # expect-count: 1
+parameters:
+  - in: path
+    name: id
+    required: true
+    description: The ID of the identity.
+    schema:
+      type: string
 get:
   operationId: getIdentity
   tags:

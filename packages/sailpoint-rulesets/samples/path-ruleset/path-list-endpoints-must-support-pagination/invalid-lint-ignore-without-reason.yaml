@@ -1,0 +1,17 @@
+# The x-sailpoint-lint-ignore extension gives no reason, so the rule is not turned off.
+# expect-count: 2
+get:
+  operationId: listWorkflowTriggerTypes
+  summary: List workflow trigger types
+  description: Use this API to get the trigger types that a workflow can use.
+  x-sailpoint-lint-ignore:
+    path-list-endpoints-must-support-pagination: ""
+  responses:
+    "200":
+      description: List of trigger types.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string

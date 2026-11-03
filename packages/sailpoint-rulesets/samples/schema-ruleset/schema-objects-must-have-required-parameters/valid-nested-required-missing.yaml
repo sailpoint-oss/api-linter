@@ -1,0 +1,11 @@
+# A nested object has no required list, so all of its properties are optional. This is allowed.
+type: object
+required:
+  - owner
+properties:
+  owner:
+    type: object
+    properties:
+      id:
+        type: string
+        description: The ID of the owner.

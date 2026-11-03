@@ -1,0 +1,12 @@
+# A nested object has an empty required list.
+# expect: If a required key is defined for a schema object, it must not be null or empty
+# expect-count: 1
+type: object
+properties:
+  owner:
+    type: object
+    required: []
+    properties:
+      id:
+        type: string
+        description: The ID of the owner.

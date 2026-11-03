@@ -26,6 +26,7 @@ functions:
     error-response-ref-check,
     example-format-check,
     schema-node-check,
+    list-response-check,
   ]
 rules:
   path-list-endpoints-must-support-pagination:
@@ -36,6 +37,14 @@ rules:
       function: path-query-parameter-pagination-check
       functionOptions:
         rule: 159
+  path-list-operations-must-return-object:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#110"
+    given: $.get
+    severity: error
+    then:
+      function: list-response-check
+      functionOptions:
+        rule: 110
   path-parameters-must-have-description:
     description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     given: $.*.parameters.*
@@ -137,7 +146,7 @@ rules:
       function: defined
   path-must-define-specific-response-codes:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#151"
-    given: $.*.responses
+    given: $
     severity: error
     then:
       function: response-validator
@@ -197,8 +206,11 @@ rules:
       function: path-file-check
       functionOptions:
         rule: 405
+  # With resolved: false, the rule reports only the file where the text is
+  # written, and not each file that reaches the text through $ref.
   path-must-not-contain-docusaurus-variable-syntax:
     message: "{{error}}"
+    resolved: false
     given: $
     severity: error
     then:
@@ -534,6 +546,26 @@ rules:
       function: pattern
       functionOptions:
         match: "^([A-Z][A-Z0-9]*(_[A-Z0-9]+)*|[a-z]{2,3}(-[A-Z]{2})?)$"
+  schema-objects-must-have-required-parameters:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
+    resolved: false
+    given: "$..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: required
+        rule: 317
+  schema-optional-properties-must-have-default:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#316"
+    resolved: false
+    given: "$..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: defaults
+        rule: 316
   schema-booleans-must-not-be-nullable:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#122"
     resolved: false

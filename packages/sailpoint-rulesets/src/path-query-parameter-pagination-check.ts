@@ -28,6 +28,7 @@ export default createOptionalContextRulesetFunction(
     let results = [];
 
     // Check every JSON media type, for example application/json;charset=utf-8.
+    // A list is a top-level array, or an object with an items array (rule 110).
     const response = targetVal.responses?.["200"];
     const content = response && "content" in response ? response.content ?? {} : {};
     const returnsArray = Object.entries(content).some(
@@ -35,7 +36,9 @@ export default createOptionalContextRulesetFunction(
         /^application\/(.+\+)?json\b/.test(mediaType) &&
         media.schema != null &&
         "type" in media.schema &&
-        media.schema.type === "array",
+        (media.schema.type === "array" ||
+          (media.schema.type === "object" &&
+            (media.schema.properties?.items as OpenAPIV3.SchemaObject | undefined)?.type === "array")),
     );
 
     if (returnsArray) {

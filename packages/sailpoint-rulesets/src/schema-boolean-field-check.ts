@@ -7,9 +7,59 @@
 //   functionOptions:
 //     rule: 310
 
+import fs from "node:fs";
+import path from "node:path";
+import yaml from "js-yaml";
 import { OpenAPIV3 } from "openapi-types";
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
-import { IRuleResult } from "@stoplight/spectral-core";
+import { IRuleResult, RulesetFunctionContext } from "@stoplight/spectral-core";
+
+// In a PUT request body, a missing field means "keep the stored value", so a
+// default has no meaning. A schema file does not know where it is used, so
+// look for a PUT in the paths folder next to the schemas folder, for example
+// apis/<name>/paths/ for apis/<name>/schemas/x.yaml.
+const putBodyCache = new Map<string, Set<string>>();
+
+function findPathsDir(source: string): string | undefined {
+  let dir = path.dirname(source);
+  for (let i = 0; i < 4; i++) {
+    const candidate = path.join(dir, "paths");
+    if (fs.existsSync(candidate) && fs.statSync(candidate).isDirectory()) return candidate;
+    dir = path.dirname(dir);
+  }
+  return undefined;
+}
+
+function putRequestBodySchemas(pathsDir: string): Set<string> {
+  const cached = putBodyCache.get(pathsDir);
+  if (cached) return cached;
+
+  const schemas = new Set<string>();
+  const files = (fs.readdirSync(pathsDir, { recursive: true }) as string[]).filter((f) => /\.ya?ml$/.test(f));
+  for (const file of files) {
+    const fullPath = path.join(pathsDir, file);
+    try {
+      const doc = yaml.load(fs.readFileSync(fullPath, "utf8")) as any;
+      const content = doc?.put?.requestBody?.content ?? {};
+      for (const media of Object.values(content) as any[]) {
+        const ref = media?.schema?.$ref;
+        if (typeof ref === "string" && !ref.startsWith("#")) {
+          schemas.add(path.resolve(path.dirname(fullPath), ref.split("#")[0]));
+        }
+      }
+    } catch {
+      // A file that does not parse is reported by other rules.
+    }
+  }
+  putBodyCache.set(pathsDir, schemas);
+  return schemas;
+}
+
+function isPutRequestBody(source: string | null | undefined): boolean {
+  if (!source || !path.isAbsolute(source)) return false;
+  const pathsDir = findPathsDir(source);
+  return pathsDir !== undefined && putRequestBodySchemas(pathsDir).has(path.resolve(source));
+}
 
 const toNumbers = (arr: string[]) =>
   arr.map(function (item) {
@@ -333,11 +383,14 @@ export default createOptionalContextRulesetFunction(
   (
     targetYaml: OpenAPIV3.SchemaObject,
     options: { rule: string; field: string },
+    context?: RulesetFunctionContext,
   ) => {
     const { rule, field } = options;
     //console.log(JSON.stringify(targetYaml));
 
     let results: IRuleResult[] = [];
+
+    if (isPutRequestBody(context?.document?.source)) return results;
 
     // All Of - If the root level yaml contains the key allOf
     if ("allOf" in targetYaml && targetYaml.allOf != undefined) {

@@ -10,6 +10,7 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { ISpectralDiagnostic } from "@stoplight/spectral-core";
 import { devLog, isDev } from "./utils.js";
+import { filterIgnoredResults } from "./lint-ignore.js";
 
 interface ProcessedPbs {
   filteredPbs: {
@@ -97,8 +98,14 @@ export const runSpectral = async (
     documentPath,
   );
 
-  return spectral.runWithResolved(documentToLint, {
+  const pbs = await spectral.runWithResolved(documentToLint, {
     resolver: createHttpAndFileResolver(),
     ignoreUnknownFormat: ignoreUnknownFormatFlag,
   });
+
+  // Remove the results that an x-sailpoint-lint-ignore extension turns off.
+  return {
+    ...pbs,
+    results: filterIgnoredResults(pbs.results, documentPath, document.content),
+  };
 };

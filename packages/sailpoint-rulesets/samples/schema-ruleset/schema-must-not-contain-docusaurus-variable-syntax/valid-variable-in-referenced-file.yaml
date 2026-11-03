@@ -1,0 +1,5 @@
+# The ${...} text is in a referenced file, not in this file. The rule reports only the file where the text is written.
+type: object
+properties:
+  owner:
+    $ref: "./referenced-schema.yaml"

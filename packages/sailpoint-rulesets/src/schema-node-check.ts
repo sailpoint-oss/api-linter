@@ -18,7 +18,9 @@
 //   boolean - a boolean is not nullable (rule 122)
 //   array   - an array is not nullable and has no null default (rule 124)
 //   null    - a null example, default or enum value needs nullable: true (rule 318)
-//   map     - a map that uses additionalProperties has no properties (rule 216)
+//   map      - a map that uses additionalProperties has no properties (rule 216)
+//   required - a required list is not null or empty (rule 317)
+//   defaults - each optional property defines a default (rule 316)
 
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
 
@@ -30,6 +32,7 @@ type SchemaNode = {
   enum?: unknown;
   additionalProperties?: unknown;
   properties?: unknown;
+  required?: unknown;
 };
 
 function checkBoolean(node: SchemaNode) {
@@ -72,11 +75,36 @@ function checkMap(node: SchemaNode) {
   return [];
 }
 
+// A missing required list is allowed: it means that all properties are optional.
+function checkRequired(node: SchemaNode) {
+  if (!("required" in node)) return [];
+  if (node.required === null || (Array.isArray(node.required) && node.required.length === 0)) {
+    return [{ message: "If a required key is defined for a schema object, it must not be null or empty", path: ["required"] }];
+  }
+  return [];
+}
+
+// Booleans are checked by rule 310. A $ref property gets its default from the
+// referenced schema.
+function checkDefaults(node: SchemaNode) {
+  if (!node.properties || typeof node.properties !== "object") return [];
+  const required = Array.isArray(node.required) ? node.required : [];
+  const results = [];
+  for (const [name, property] of Object.entries(node.properties as Record<string, any>)) {
+    if (required.includes(name) || !property || typeof property !== "object") continue;
+    if ("$ref" in property || property.type === "boolean" || "default" in property) continue;
+    results.push({ message: `The optional property ${name} must define a default value`, path: ["properties", name] });
+  }
+  return results;
+}
+
 const CHECKS: Record<string, (node: SchemaNode) => { message: string; path: string[] }[]> = {
   boolean: checkBoolean,
   array: checkArray,
   null: checkNull,
   map: checkMap,
+  required: checkRequired,
+  defaults: checkDefaults,
 };
 
 export default createOptionalContextRulesetFunction(

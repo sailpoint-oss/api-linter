@@ -1,0 +1,7 @@
+# A helper file for valid.yaml. It is not a sample.
+type: object
+required:
+  - id
+properties:
+  id:
+    type: string

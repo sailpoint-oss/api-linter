@@ -72,6 +72,21 @@ The linter will print the path to the file that it linted, one or more problems,
 
 If the linter reports no problems, then the spec has passed the linter.
 
+## Turning Off a Rule in a Spec
+
+If a rule does not fit one part of a spec, add the `x-sailpoint-lint-ignore` extension to the node that the rule reports, or to one of its parents. Each key is a rule name, and each value is the reason. A key without a reason does not turn off the rule.
+
+```yaml
+get:
+  operationId: listWorkflowTriggerTypes
+  x-sailpoint-lint-ignore:
+    path-list-endpoints-must-support-pagination: The list has at most 5 entries, so it needs no pagination.
+```
+
+The extension turns off the rule for that node and for all nodes below it. Put it on an operation or on a schema, not at the root of a path file. At the root of a path file, the linter reads each key as an operation.
+
+Only the PR comment action and the sample tests apply the extension. Spectral has no way to turn off a rule from inside a spec, so `spectral lint`, `lint.sh` and `lint-parallel.sh` still report the problem.
+
 ## Local Development
 
 You will need to clone an api-specs repo for local development.

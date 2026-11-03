@@ -1,0 +1,6 @@
+# A helper file for valid-variable-in-referenced-file.yaml. It is not a sample.
+type: object
+properties:
+  identityId:
+    type: string
+    description: The ID of the identity, for example ${your_identity_id}.

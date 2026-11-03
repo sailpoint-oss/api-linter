@@ -1,0 +1,23 @@
+# The operation has a request body, so it needs a 400 response.
+# expect: Operation must have the following error codes defined: 400
+# expect-count: 1
+post:
+  operationId: createWorkflow
+  summary: Create a workflow
+  description: Use this API to create a workflow.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+  responses:
+    "201":
+      description: The workflow was created.
+    "401":
+      description: Unauthorized, the request has no valid credentials.
+    "403":
+      description: Forbidden, the caller has no access.
+    "429":
+      description: Too many requests.
+    "500":
+      description: Internal server error.

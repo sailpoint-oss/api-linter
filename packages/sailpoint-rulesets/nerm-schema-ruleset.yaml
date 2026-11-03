@@ -34,6 +34,7 @@ rules:
         rule: 171
   schema-must-not-contain-docusaurus-variable-syntax:
     message: "{{error}}"
+    resolved: false
     given: $
     severity: error
     then:

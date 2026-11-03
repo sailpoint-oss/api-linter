@@ -1,0 +1,15 @@
+# The inline request body schema has an empty required list.
+# expect: If a required key is defined for a schema object, it must not be null or empty
+# expect-count: 1
+post:
+  operationId: createWorkflow
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required: []
+          properties:
+            name:
+              type: string
+              default: ""
