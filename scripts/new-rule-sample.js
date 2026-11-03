@@ -113,4 +113,4 @@ for (const { file, block } of matches) {
   console.log(`\nThe rule, from ${file}:\n${block}\n`);
 }
 
-console.log(`Run the samples with: npm run test:rules -- -t ${rule}`);
+console.log(`Run the samples with: npm test -- -t ${rule}`);

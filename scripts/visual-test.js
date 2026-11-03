@@ -230,7 +230,7 @@ async function previewPrComment() {
   }
 
   if (!buildIfNeeded()) return;
-  // The same command as `pnpm --filter github-spectral-comment test`.
+  // The same command as `pnpm --filter github-spectral-comment preview`.
   const result = run("node", ["dist/index.js"], {
     env: { NODE_ENV: "test", FILE_GLOB: files.join(",") },
     cwd: path.join(REPO_ROOT, "packages/github-spectral-comment"),

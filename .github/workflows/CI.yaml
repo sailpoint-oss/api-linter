@@ -27,11 +27,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Build Project
-        run: pnpm build
-
+      # Builds the packages, then runs every test.
       - name: Run Tests
         run: pnpm test
-
-      - name: Run Vitest
-        run: npx vitest run

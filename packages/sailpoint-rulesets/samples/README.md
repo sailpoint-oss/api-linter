@@ -54,16 +54,16 @@ get:
 4. Run the samples for the rule:
 
    ```sh
-   npm run test:rules -- -t <rule-name>
+   npm test -- -t <rule-name>
    ```
 
-## Run all samples
+## Run all tests
 
 ```sh
-npm run test:rules
+npm test
 ```
 
-This command builds the rule functions first, because the rulesets load the compiled `functions/` folder. A rule that has no samples shows as "todo" in the output, so the output also tells you which rules still need samples.
+This command runs the samples and the unit tests for the PR action. It builds the packages first, because the rulesets load the compiled `functions/` folder. A rule that has no samples shows as "todo" in the output, so the output also tells you which rules still need samples.
 
 If a test fails, the message shows the sample file and every problem that Spectral reported for it.
 
@@ -74,7 +74,7 @@ The `github-spectral-comment` action makes the lint comment on a PR. It uses the
 To make the comment locally, run this command from the repo root. The comment goes to `packages/github-spectral-comment/output.md`.
 
 ```sh
-FILE_GLOB=packages/sailpoint-rulesets/samples/path-ruleset/path-tag-check/invalid.yaml pnpm --filter github-spectral-comment test
+FILE_GLOB=packages/sailpoint-rulesets/samples/path-ruleset/path-tag-check/invalid.yaml npm run preview
 ```
 
 To list more than one file, separate the paths with commas. If you do not set `FILE_GLOB`, the command uses a default set of samples.

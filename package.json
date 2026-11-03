@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
-    "test": "pnpm build && pnpm -r test",
+    "test": "pnpm build && vitest run --silent",
+    "preview": "pnpm build && pnpm --filter github-spectral-comment preview",
     "run": "pnpm build && pnpm -r run",
-    "test:rules": "pnpm build && vitest run test/rule-samples.test.ts --silent",
     "new-rule-sample": "node scripts/new-rule-sample.js",
     "visual-test": "node scripts/visual-test.js",
     "format": "prettier . --write"
