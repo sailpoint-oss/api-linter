@@ -1,0 +1,14 @@
+# All integer fields are 1 or more.
+sp-gateway:
+  routes:
+    - id: "sample-route-47-v1"
+      path: "/sample-route-47/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        intervalThreshold: 1
+        violationWindow: 60
+        tierMemoryWindow: 300
+        redisTimeoutMs: 50

@@ -1,0 +1,19 @@
+# The subroute uses only known properties.
+sp-gateway:
+  routes:
+    - id: "sample-route-3-v1"
+      path: "/sample-route-3/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      subroutes:
+        "/items/{id}":
+          rights: ["some-right"]
+          methods: ["GET"]
+          rateLimit: 100
+          rateLimitIntervalSeconds: 10
+          methodConfig:
+            - methods: ["GET"]
+              rateLimit: 50
+              rateLimitIntervalSeconds: 10

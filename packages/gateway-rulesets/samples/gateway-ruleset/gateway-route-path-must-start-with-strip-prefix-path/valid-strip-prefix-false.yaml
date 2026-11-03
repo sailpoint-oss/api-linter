@@ -1,0 +1,10 @@
+# The rule only applies when stripPrefix is true.
+sp-gateway:
+  routes:
+    - id: "sample-strip-off-v1"
+      path: "/sample-strip-off/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: false
+      apiState: "public"
+      stripPrefixPath: "/other"

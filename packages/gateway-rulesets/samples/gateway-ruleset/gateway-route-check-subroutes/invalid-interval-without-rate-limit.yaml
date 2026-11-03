@@ -1,0 +1,14 @@
+# rateLimitIntervalSeconds without rateLimit.
+# expect: has attribute rateLimitIntervalSeconds but is missing rateLimit
+sp-gateway:
+  routes:
+    - id: "sample-route-40-v1"
+      path: "/sample-route-40/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      subroutes:
+        "/items":
+          rights: ["some-right"]
+          rateLimitIntervalSeconds: 10

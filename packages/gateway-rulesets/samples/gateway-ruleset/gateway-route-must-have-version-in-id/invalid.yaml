@@ -1,0 +1,11 @@
+# The id has no version at the end.
+# expect: route id must end with a version
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-version-id-missing"
+      path: "/sample-version-id-missing"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

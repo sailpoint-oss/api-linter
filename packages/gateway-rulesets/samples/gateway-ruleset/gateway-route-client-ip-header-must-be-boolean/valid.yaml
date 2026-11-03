@@ -1,0 +1,10 @@
+# clientIPHeader is a boolean.
+sp-gateway:
+  routes:
+    - id: "sample-route-35-v1"
+      path: "/sample-route-35/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      clientIPHeader: true

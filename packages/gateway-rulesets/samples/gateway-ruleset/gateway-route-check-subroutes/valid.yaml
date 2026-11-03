@@ -1,0 +1,16 @@
+# One subroute has rights, and one has a full rate limit.
+sp-gateway:
+  routes:
+    - id: "sample-route-37-v1"
+      path: "/sample-route-37/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      subroutes:
+        "/items":
+          rights: ["some-right"]
+          methods: ["GET", "POST", "PUT", "PATCH"]
+        "/items/{id}":
+          rateLimit: 100
+          rateLimitIntervalSeconds: 10

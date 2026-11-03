@@ -1,0 +1,11 @@
+# stripPrefix is a string.
+# expect: Invalid value for stripPrefix
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-34-v1"
+      path: "/sample-route-34/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: "true"
+      apiState: "public"

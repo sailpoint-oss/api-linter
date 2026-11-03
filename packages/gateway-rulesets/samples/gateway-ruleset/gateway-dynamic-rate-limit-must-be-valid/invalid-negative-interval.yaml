@@ -1,0 +1,7 @@
+# rateLimitIntervalSeconds is negative.
+# expect: has invalid "rateLimitIntervalSeconds". Must be a positive number, got: -1
+dynamic-rate-limits:
+  acme:
+    sample-dyn-negative-v1:
+      rateLimit: 10
+      rateLimitIntervalSeconds: -1

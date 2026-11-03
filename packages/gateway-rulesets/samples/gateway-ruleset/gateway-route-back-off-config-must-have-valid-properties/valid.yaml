@@ -1,0 +1,16 @@
+# backOffConfig uses only known properties.
+sp-gateway:
+  routes:
+    - id: "sample-route-43-v1"
+      path: "/sample-route-43/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        enabled: true
+        intervalThreshold: 3
+        tiers: [30, 60, 90]
+        violationWindow: 60
+        tierMemoryWindow: 300
+        redisTimeoutMs: 50

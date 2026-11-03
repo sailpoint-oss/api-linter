@@ -1,0 +1,11 @@
+# The id has a version, but the path does not.
+# expect: route id and path must contain the same API version
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-no-path-version-v1"
+      path: "/sample-no-path-version"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

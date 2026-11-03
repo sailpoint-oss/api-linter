@@ -1,0 +1,15 @@
+# DELETE is not a valid subroute method.
+# expect: subroute /items has an invalid method: DELETE
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-38-v1"
+      path: "/sample-route-38/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      subroutes:
+        "/items":
+          rights: ["some-right"]
+          methods: ["DELETE"]

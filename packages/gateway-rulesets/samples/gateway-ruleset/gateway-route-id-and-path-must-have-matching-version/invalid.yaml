@@ -1,0 +1,11 @@
+# The id has v1, but the path has v2.
+# expect: must match the API version of the route id: v1
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-mismatch-v1"
+      path: "/sample-mismatch/v2"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

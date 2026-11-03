@@ -1,0 +1,7 @@
+# The route config has no rateLimit.
+# expect: Route "acme:sample-dyn-missing-v1" is missing required field "rateLimit"
+# expect-count: 1
+dynamic-rate-limits:
+  acme:
+    sample-dyn-missing-v1:
+      rateLimitIntervalSeconds: 60

@@ -1,0 +1,16 @@
+# The ids end with a version or with -internal.
+sp-gateway:
+  routes:
+    - id: "sample-route-18-v1"
+      path: "/sample-route-18/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+
+    - id: "sample-version-id-internal"
+      path: "/sample-version-id/internal"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

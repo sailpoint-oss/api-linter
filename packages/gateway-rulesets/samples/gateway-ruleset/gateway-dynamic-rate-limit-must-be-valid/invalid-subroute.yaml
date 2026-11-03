@@ -1,0 +1,13 @@
+# The subroute has no rateLimit.
+# The function puts all errors in one message.
+# expect: Found 1 validation error(s)
+# expect: subroute "/items" is missing required field "rateLimit"
+# expect-count: 1
+dynamic-rate-limits:
+  acme:
+    sample-dyn-sub-v1:
+      rateLimit: 10
+      rateLimitIntervalSeconds: 60
+      subroutes:
+        "/items":
+          rateLimitIntervalSeconds: 60

@@ -1,0 +1,8 @@
+# The route config has a property that the gateway does not know.
+# expect: sample-dynamic-invalid-v1 has an invalid field: burst
+dynamic-rate-limits:
+  acme:
+    sample-dynamic-invalid-v1:
+      rateLimit: 10
+      rateLimitIntervalSeconds: 60
+      burst: 5

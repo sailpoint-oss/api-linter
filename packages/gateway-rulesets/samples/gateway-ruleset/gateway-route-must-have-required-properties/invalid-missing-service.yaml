@@ -1,0 +1,7 @@
+# The route has no service.
+# expect: Mandatory properties id, path and service must be specified
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-required-no-service-v1"
+      path: "/sample-required-no-service/v1"

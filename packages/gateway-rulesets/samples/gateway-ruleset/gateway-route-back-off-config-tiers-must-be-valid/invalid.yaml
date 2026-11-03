@@ -1,0 +1,12 @@
+# One tier is a string.
+# expect: Invalid value for backOffConfig.tiers
+sp-gateway:
+  routes:
+    - id: "sample-route-51-v1"
+      path: "/sample-route-51/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      backOffConfig:
+        tiers: [30, "sixty", 90]

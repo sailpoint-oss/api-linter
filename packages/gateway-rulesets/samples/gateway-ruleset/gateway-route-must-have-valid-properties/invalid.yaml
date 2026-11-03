@@ -1,0 +1,12 @@
+# The route has a property that the gateway does not know.
+# expect: has an invalid field: unknownField
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-2-v1"
+      path: "/sample-route-2/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      unknownField: "oops"

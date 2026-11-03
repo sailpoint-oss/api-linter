@@ -1,0 +1,15 @@
+# The subroute has a property that the gateway does not know.
+# expect: /items/{id} has an invalid field: timeout
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-4-v1"
+      path: "/sample-route-4/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      subroutes:
+        "/items/{id}":
+          rights: ["some-right"]
+          timeout: 5

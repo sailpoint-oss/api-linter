@@ -1,0 +1,13 @@
+# rateLimit is not a number.
+# expect: Invalid value for rateLimit or rateLimitIntervalSeconds
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-route-31-v1"
+      path: "/sample-route-31/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      rateLimit: "abc"
+      rateLimitIntervalSeconds: 10

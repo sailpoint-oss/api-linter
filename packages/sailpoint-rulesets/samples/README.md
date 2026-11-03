@@ -2,7 +2,7 @@
 
 Each lint rule can have sample files that show what the rule accepts and what it rejects. A test runs the real ruleset on every sample. The result tells you whether the rule works.
 
-The same layout is used for the gateway ruleset, in `packages/gateway-rulesets/samples/`.
+The same layout is used for the gateway ruleset, in `packages/gateway-rulesets/samples/gateway-ruleset/`. In gateway samples, give each route an id that no other sample uses. The unique id rule remembers ids from the files that it checked before.
 
 To do the tasks in this guide from a menu, run `npm run visual-test` from the repo root. Use the arrow keys to move, Enter to pick, and type to filter the rule list.
 

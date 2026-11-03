@@ -1,0 +1,16 @@
+# The two routes have different ids.
+sp-gateway:
+  routes:
+    - id: "sample-route-14-v1"
+      path: "/sample-route-14/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+
+    - id: "sample-route-15-v1"
+      path: "/sample-route-15/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

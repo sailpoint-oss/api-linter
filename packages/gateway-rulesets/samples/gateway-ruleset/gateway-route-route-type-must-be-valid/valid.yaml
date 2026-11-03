@@ -1,0 +1,16 @@
+# Both valid route types.
+sp-gateway:
+  routes:
+    - id: "sample-route-11-v1"
+      path: "/sample-route-11/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+
+    - id: "sample-route-12-v1"
+      path: "/sample-route-12/v1"
+      service: "identity"
+      routeType: "path"
+      stripPrefix: true
+      apiState: "public"

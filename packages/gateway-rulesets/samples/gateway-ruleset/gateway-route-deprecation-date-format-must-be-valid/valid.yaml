@@ -1,0 +1,13 @@
+# The rule checks versionDetailsMap.*.deprecation only.
+# Note: gateway-route-must-have-valid-properties rejects versionDetailsMap.
+sp-gateway:
+  routes:
+    - id: "sample-route-28-v1"
+      path: "/sample-route-28/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+      versionDetailsMap:
+        v1:
+          deprecation: "2026-01-31"
