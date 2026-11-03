@@ -184,7 +184,8 @@ async function testWithSamples() {
   });
   if (!buildIfNeeded()) return;
   const args = ["vitest", "run", "test/rule-samples.test.ts", "--silent", `--reporter=${output}`];
-  if (pattern) args.push("-t", pattern);
+  // The filter skips the other tests. Hide them so that only the tests that ran are shown.
+  if (pattern) args.push("-t", pattern, "--hideSkippedTests");
   run("npx", args);
 }
 
