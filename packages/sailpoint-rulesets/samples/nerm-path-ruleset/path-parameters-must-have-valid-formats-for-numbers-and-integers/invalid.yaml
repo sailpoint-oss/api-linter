@@ -1,4 +1,6 @@
 # The integer query parameter has no format.
+# expect: Rule 171: limit is type integer and must be one of the following values: int32, int64, bigint
+# expect-count: 1
 get:
   operationId: getUser
   tags:

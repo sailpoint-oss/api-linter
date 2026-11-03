@@ -1,4 +1,6 @@
 # The security array uses an unknown key (oauth2) instead of userAuth or applicationAuth.
+# expect: oauth2 is not a valid key
+# expect-count: 1
 get:
   operationId: getIdentity
   tags:

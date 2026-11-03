@@ -1,0 +1,25 @@
+# Two properties share one line in the filters description.
+# expect: Rule 324: The properties created, modified must be on separate lines.
+# expect-count: 1
+get:
+  operationId: listAccessProfiles
+  tags:
+    - Access Profiles
+  summary: List access profiles
+  description: Use this API to get a list of access profiles.
+  parameters:
+    - in: query
+      name: filters
+      required: false
+      schema:
+        type: string
+      example: name eq "Finance Access"
+      description: |-
+        Filter results using the standard syntax described in [API Standard Collection Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
+
+        Filtering is supported for the following fields and operators:
+
+        **created, modified**: *gt, lt, ge, le*
+  responses:
+    "200":
+      description: List of access profiles.

@@ -1,0 +1,9 @@
+# The tag "Transforms" is defined in the collection openapi.yaml.
+get:
+  operationId: listTransforms
+  tags:
+    - Transforms
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

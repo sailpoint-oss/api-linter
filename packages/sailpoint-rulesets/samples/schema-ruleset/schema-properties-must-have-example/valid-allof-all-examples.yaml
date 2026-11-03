@@ -1,0 +1,44 @@
+# Every property in each allOf object has an example.
+allOf:
+  - type: object
+    required:
+      - name
+    properties:
+      id:
+        description: System-generated unique ID of the Object
+        type: string
+        example: id12345
+        readOnly: true
+      name:
+        description: Name of the Object
+        type: string
+        example: aName
+      created:
+        description: Creation date of the Object
+        type: string
+        format: date-time
+        readOnly: true
+        example: '2019-08-23T18:52:57.398Z'
+      modified:
+        description: Last modification date of the Object
+        type: string
+        format: date-time
+        readOnly: true
+        example: '2019-08-23T18:52:57.398Z'
+  - type: object
+    properties:
+      sourceId:
+        type: string
+        example: 2c9180835d2e5168015d32f890ca1581
+      identityId:
+        type: string
+        example: 2c9180835d2e5168015d32f890ca1581
+      authoritative:
+        type: boolean
+        example: true
+      description:
+        type: string
+        example: This is a description
+      disabled:
+        type: boolean
+        example: false

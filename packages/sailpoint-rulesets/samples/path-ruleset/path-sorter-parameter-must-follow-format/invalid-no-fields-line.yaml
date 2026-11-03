@@ -1,4 +1,6 @@
 # Bug check: the description has the standard intro but no "Sorting is supported for the following fields" line, so the rule must report it. Fails while the function crashes on parts[1].includes when there is no second paragraph.
+# expect: Rule 325: Must use the following format when describing sortable fields
+# expect-count: 1
 get:
   operationId: listAccessProfiles
   tags:

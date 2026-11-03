@@ -22,6 +22,23 @@ To test more than one case, add more files. Each file name must start with `vali
 
 Some rules look at the path of the file, for example at a `v3` folder. For these rules, put the sample in subfolders, for example `<rule-name>/v3/schemas/invalid.yaml`.
 
+## Check the message, the count, or the environment
+
+A sample can have more checks in the comment lines at the top of the file. Put the comment that tells about the case first, and the checks after it:
+
+```yaml
+# The summary has 7 words, and the limit is 5.
+# expect: should not exceed 5 words
+# expect-count: 1
+# env: VERSIONED_OPERATION_IDS=["getIdentity","listIdentities"]
+get:
+  ...
+```
+
+- `# expect: <text>`: a problem from the rule must contain this text. You can use more than one line. This check works only in `invalid` files.
+- `# expect-count: <n>`: the rule must report exactly this number of problems in the file.
+- `# env: NAME=value`: the test sets this environment variable while it runs the sample. Some rules read environment variables, for example `VERSIONED_OPERATION_IDS` or `V3_TAGS_JSON`.
+
 ## Add samples for a rule
 
 1. Create the folder and two starter files:

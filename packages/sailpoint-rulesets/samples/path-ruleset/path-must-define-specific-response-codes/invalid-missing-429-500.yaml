@@ -1,0 +1,17 @@
+# The operation has a 200 response and 400, 401 and 403, but does not define 429 and 500.
+# expect: Operation must have the following error codes defined: 429,500
+get:
+  operationId: listAccounts
+  tags:
+    - Accounts
+  summary: List accounts
+  description: Use this API to get a list of accounts.
+  responses:
+    "200":
+      description: List of accounts.
+    "400":
+      description: Client error due to bad request.
+    "401":
+      description: Unauthorized, the request has no valid credentials.
+    "403":
+      description: Forbidden, the caller has no access to the accounts.

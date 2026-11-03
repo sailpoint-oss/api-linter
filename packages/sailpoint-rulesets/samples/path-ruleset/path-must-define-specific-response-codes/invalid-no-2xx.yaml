@@ -1,4 +1,5 @@
 # The operation defines all of the error codes but has no 2xx response.
+# expect: Operation must have at least one 200 level response code defined: 
 delete:
   operationId: deleteIdentity
   tags:

@@ -1,4 +1,6 @@
 # The path parameter has no example, schema.example or examples.
+# expect: Rule 304: An example for id must be provided under one of the following keys: example, schema.example, examples
+# expect-count: 1
 get:
   operationId: getUser
   tags:

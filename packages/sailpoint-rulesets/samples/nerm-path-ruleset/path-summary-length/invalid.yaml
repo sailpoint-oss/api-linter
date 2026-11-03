@@ -1,4 +1,6 @@
 # The summary has more than 5 words.
+# expect: Rule 305: The summary value for a path should not exceed 5 words
+# expect-count: 1
 get:
   operationId: getUser
   tags:

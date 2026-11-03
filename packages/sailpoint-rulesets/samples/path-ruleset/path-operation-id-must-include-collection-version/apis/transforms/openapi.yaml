@@ -1,0 +1,18 @@
+# Helper: the transforms collection root file. The rule reads the version (v1) from the URL path that references each path file.
+openapi: 3.0.1
+info:
+  title: Identity Security Cloud API - Transforms
+  version: v1
+tags:
+  - name: Transforms
+paths:
+  /transforms/v1:
+    $ref: ./paths/valid-correct-suffix.yaml
+  /transforms/v1/missing-suffix:
+    $ref: ./paths/invalid-missing-suffix.yaml
+  /transforms/v1/wrong-suffix:
+    $ref: ./paths/invalid-wrong-suffix.yaml
+  /transforms/v1/no-operation-id:
+    $ref: ./paths/invalid-no-operation-id.yaml
+  /transforms/v1/{id}:
+    $ref: ./paths/invalid-each-method-reported.yaml

@@ -1,4 +1,5 @@
 # The operation uses userAuth but does not define x-sailpoint-userLevels.
+# expect: Operations that specify security.userAuth must define the necessary user levels
 get:
   operationId: getIdentity
   tags:

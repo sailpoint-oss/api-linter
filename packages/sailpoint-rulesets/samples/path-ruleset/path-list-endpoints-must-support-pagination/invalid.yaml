@@ -1,4 +1,7 @@
 # The list operation returns an array but has no offset or limit query parameter.
+# expect: must have offset as a query parameter
+# expect: must have limit as a query parameter
+# expect-count: 2
 get:
   operationId: listIdentities
   tags:

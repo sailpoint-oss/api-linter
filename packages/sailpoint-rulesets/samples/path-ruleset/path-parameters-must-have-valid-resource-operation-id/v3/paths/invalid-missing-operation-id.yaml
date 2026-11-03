@@ -1,0 +1,19 @@
+# The string path parameter has no x-sailpoint-resource-operation-id.
+# env: VERSIONED_OPERATION_IDS=["listAccounts","listEntitlements","listAccessProfiles"]
+# expect: x-sailpoint-resource-operation-id is required for the path parameter: {id}. Please provide an operation ID for where the resource ID can be found
+# expect-count: 1
+get:
+  tags:
+    - Access Profiles
+  summary: List Access Profiles
+  operationId: pathAccessProfiles
+  description: This API returns a list of Access Profiles.
+  parameters:
+    - in: path
+      name: id
+      example: "1234"
+      schema:
+        type: string
+  responses:
+    "200":
+      description: List of Access Profiles

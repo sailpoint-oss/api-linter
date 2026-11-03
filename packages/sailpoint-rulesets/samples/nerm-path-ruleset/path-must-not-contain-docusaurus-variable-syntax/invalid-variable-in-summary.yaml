@@ -1,0 +1,12 @@
+# The operation summary contains ${resource_type}.
+# expect: Found: [${resource_type}].
+# expect-count: 1
+get:
+  operationId: getItem
+  summary: Get ${resource_type}
+  description: Gets an item.
+  tags:
+    - Items
+  responses:
+    "200":
+      description: The item

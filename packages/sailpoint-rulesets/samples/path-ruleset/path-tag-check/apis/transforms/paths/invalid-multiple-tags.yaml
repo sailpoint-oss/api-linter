@@ -1,0 +1,13 @@
+# The operation has two tags; "Access Profiles" is also not in the collection openapi.yaml.
+# expect: You must include only one tag to group an endpoint under
+# expect: Tag "Access Profiles" is not defined in the root API spec
+# expect-count: 2
+get:
+  operationId: listTransforms
+  tags:
+    - Transforms
+    - Access Profiles
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

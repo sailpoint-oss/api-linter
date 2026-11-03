@@ -1,4 +1,5 @@
 # Bug check: an unknown key (oauth2) in an earlier security entry must be reported. Fails while invalidKeys is overwritten by each later entry.
+# expect: oauth2 is not a valid key
 get:
   operationId: getIdentity
   tags:

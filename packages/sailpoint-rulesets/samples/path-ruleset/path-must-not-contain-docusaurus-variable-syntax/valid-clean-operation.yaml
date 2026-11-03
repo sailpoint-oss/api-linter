@@ -1,0 +1,11 @@
+# A clean operation: no string uses the ${...} variable syntax.
+get:
+  operationId: getApprovals
+  summary: Get approvals
+  description: "Gets a list of approvals. One of the following query parameters should be present: mine, approverId."
+  tags:
+    - Approvals
+  parameters: []
+  responses:
+    "200":
+      description: List of approvals

@@ -1,0 +1,13 @@
+# The operation description contains ${your_identity_id}.
+# expect: Docusaurus variable syntax is not allowed in API specs. Found: [${your_identity_id}]. This syntax causes Docusaurus to crash when the variable is not defined.
+# expect-count: 1
+get:
+  operationId: getApprovals
+  summary: Get approvals
+  description: "Gets a list of approvals. The absence of all query parameters for non admins will default to mine=true (which is the equivalent of 'approverId=${your_identity_id}') while admins will default to mine=false."
+  tags:
+    - Approvals
+  parameters: []
+  responses:
+    "200":
+      description: List of approvals

@@ -54,6 +54,40 @@ function listSampleFiles(ruleDir: string) {
     }));
 }
 
+// Optional checks in the comment lines at the top of a sample:
+//   # expect: <text>       a problem from the rule must contain this text (repeatable)
+//   # expect-count: <n>    the rule must report exactly n problems
+//   # env: NAME=value      set this environment variable while the sample runs (repeatable)
+function readDirectives(content: string) {
+  const directives = { expect: [] as string[], expectCount: undefined as number | undefined, env: {} as Record<string, string> };
+  for (const line of content.split("\n")) {
+    if (!line.startsWith("#")) break;
+    const match = line.match(/^#\s*(expect|expect-count|env):\s*(.*?)\s*$/);
+    if (!match) continue;
+    const [, key, value] = match;
+    if (key === "expect") directives.expect.push(value);
+    if (key === "expect-count") directives.expectCount = Number(value);
+    if (key === "env") {
+      const eq = value.indexOf("=");
+      directives.env[value.slice(0, eq)] = value.slice(eq + 1);
+    }
+  }
+  return directives;
+}
+
+async function withEnv<T>(env: Record<string, string>, fn: () => Promise<T>): Promise<T> {
+  const saved = Object.fromEntries(Object.keys(env).map((k) => [k, process.env[k]]));
+  Object.assign(process.env, env);
+  try {
+    return await fn();
+  } finally {
+    for (const [k, v] of Object.entries(saved)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  }
+}
+
 function format(results: ISpectralDiagnostic[]): string {
   if (results.length === 0) return "  (no results)";
   return results
@@ -106,9 +140,12 @@ for (const ruleset of RULESETS) {
 
           test(`${sample.name} ${label}`, async () => {
             const content = fs.readFileSync(sample.file, "utf8");
-            const results = await spectral.run(new Document(content, Parsers.Yaml, sample.file), {
-              ignoreUnknownFormat: ruleset.ignoreUnknownFormat,
-            });
+            const directives = readDirectives(content);
+            const results = await withEnv(directives.env, () =>
+              spectral.run(new Document(content, Parsers.Yaml, sample.file), {
+                ignoreUnknownFormat: ruleset.ignoreUnknownFormat,
+              }),
+            );
 
             const parseErrors = results.filter((r) => r.code === "parser");
             expect(parseErrors, `YAML errors in ${sample.file}:\n${format(parseErrors)}`).toEqual([]);
@@ -117,8 +154,20 @@ for (const ruleset of RULESETS) {
             const detail = `${sample.file}\nAll results:\n${format(results)}`;
             if (sample.expectProblem) {
               expect(hits.length, `Expected "${rule}" to report a problem.\n${detail}`).toBeGreaterThan(0);
+              if (directives.expectCount !== undefined) {
+                expect(hits.length, `Expected "${rule}" to report ${directives.expectCount} problems.\n${detail}`).toBe(
+                  directives.expectCount,
+                );
+              }
+              for (const text of directives.expect) {
+                expect(
+                  hits.some((r) => r.message.includes(text)),
+                  `Expected a "${rule}" problem that contains: ${text}\n${detail}`,
+                ).toBe(true);
+              }
             } else {
               expect(hits.length, `Expected "${rule}" to report no problem.\n${detail}`).toBe(0);
+              expect(directives.expect, `"# expect:" lines only work in invalid samples: ${sample.file}`).toEqual([]);
             }
           });
         }

@@ -1,4 +1,7 @@
 # The limit query parameter has no minimum and no maximum.
+# expect: must have a minimum defined for the 'limit' query parameter
+# expect: must have a maximum defined for the 'limit' query parameter
+# expect-count: 2
 get:
   operationId: listIdentities
   tags:

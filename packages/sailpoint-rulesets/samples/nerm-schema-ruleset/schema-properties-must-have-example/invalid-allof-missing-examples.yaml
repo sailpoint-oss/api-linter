@@ -1,0 +1,45 @@
+# Properties in the allOf objects have no example: modified in the first object, description and disabled in the second.
+# expect: The property modified must have a example
+# expect: The property description must have a example
+# expect: The property disabled must have a example
+# expect-count: 3
+allOf:
+  - type: object
+    required:
+      - name
+    properties:
+      id:
+        description: System-generated unique ID of the Object
+        type: string
+        example: id12345
+        readOnly: true
+      name:
+        description: Name of the Object
+        type: string
+        example: aName
+      created:
+        description: Creation date of the Object
+        type: string
+        format: date-time
+        readOnly: true
+        example: '2019-08-23T18:52:57.398Z'
+      modified:
+        description: Last modification date of the Object
+        type: string
+        format: date-time
+        readOnly: true
+  - type: object
+    properties:
+      sourceId:
+        type: string
+        example: 2c9180835d2e5168015d32f890ca1581
+      identityId:
+        type: string
+        example: 2c9180835d2e5168015d32f890ca1581
+      authoritative:
+        type: boolean
+        example: true
+      description:
+        type: string
+      disabled:
+        type: boolean

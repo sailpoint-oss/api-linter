@@ -1,0 +1,17 @@
+# The operation has no 2xx response and does not define the 500 error code.
+# expect: Operation must have at least one 200 level response code defined and the following error codes defined: 500
+delete:
+  operationId: deleteAccount
+  tags:
+    - Accounts
+  summary: Delete an account
+  description: Use this API to delete a single account by its ID.
+  responses:
+    "400":
+      description: Client error due to bad request.
+    "401":
+      description: Unauthorized, the request has no valid credentials.
+    "403":
+      description: Forbidden, the caller has no access to this account.
+    "429":
+      description: Too many requests.

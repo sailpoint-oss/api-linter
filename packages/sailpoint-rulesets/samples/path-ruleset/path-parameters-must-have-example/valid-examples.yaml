@@ -1,0 +1,23 @@
+# The query parameter has its examples under the root-level examples key.
+get:
+  operationId: listIdentityOutliers
+  tags:
+    - Identity Outliers
+  summary: List identity outliers
+  description: Use this API to get a list of identity outliers.
+  parameters:
+    - in: query
+      name: minScore
+      required: false
+      description: Only return outliers with a score at or above this value.
+      schema:
+        type: number
+        format: double
+      examples:
+        ten:
+          value: 10.0
+        fifty:
+          value: 50.0
+  responses:
+    "200":
+      description: List of identity outliers.

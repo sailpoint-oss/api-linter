@@ -1,0 +1,9 @@
+# The tag "Transform Templates" is the second tag in the collection openapi.yaml.
+get:
+  operationId: listTransforms
+  tags:
+    - Transform Templates
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

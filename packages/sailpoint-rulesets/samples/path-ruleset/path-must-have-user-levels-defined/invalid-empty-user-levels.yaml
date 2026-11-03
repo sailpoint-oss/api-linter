@@ -1,0 +1,14 @@
+# The operation uses userAuth but x-sailpoint-userLevels is an empty list.
+# expect: Operations that specify security.userAuth must define the necessary user levels
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - userAuth: [idn:identity:read]
+  x-sailpoint-userLevels: []
+  responses:
+    "200":
+      description: The identity.

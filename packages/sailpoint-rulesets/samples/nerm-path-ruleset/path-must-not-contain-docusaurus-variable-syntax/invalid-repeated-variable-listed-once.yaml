@@ -1,0 +1,14 @@
+# ${your_identity_id} is used three times (description and parameter); the message lists it only once.
+# expect: Found: [${your_identity_id}].
+# expect-count: 1
+get:
+  operationId: getApprovals
+  summary: Get approvals
+  description: Filter by approverId=${your_identity_id} or requesterId=${your_identity_id} to narrow results.
+  parameters:
+    - name: approverId
+      in: query
+      description: The approver's ID, e.g. ${your_identity_id}
+      schema:
+        type: string
+  responses: {}

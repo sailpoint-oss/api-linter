@@ -1,4 +1,5 @@
 # The user levels key is misspelled as x-sailpoint-userlevels (lowercase l).
+# expect: Improper spelling of x-sailpoint-userLevels. Please check your spelling, including capital letters.
 get:
   operationId: getIdentity
   tags:

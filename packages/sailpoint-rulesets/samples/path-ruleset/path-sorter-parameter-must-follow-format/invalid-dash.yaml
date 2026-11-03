@@ -1,4 +1,6 @@
 # The sortable fields include a dash, which is not allowed.
+# expect: Rule 325: Dashes are not allowed when listing supported fields.  Fields must support both ascending and descending.
+# expect-count: 1
 get:
   operationId: listAccessProfiles
   tags:

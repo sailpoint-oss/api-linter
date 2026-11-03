@@ -1,4 +1,6 @@
 # The number parameter uses int64, which is not a valid number format.
+# expect: Rule 171: minScore is type number and must be one of the following values: float, double, decimal
+# expect-count: 1
 get:
   operationId: listIdentityOutliers
   tags:

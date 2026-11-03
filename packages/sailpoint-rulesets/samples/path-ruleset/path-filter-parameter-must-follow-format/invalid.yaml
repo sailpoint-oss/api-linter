@@ -1,4 +1,6 @@
 # The filters description does not start with the standard intro text.
+# expect: Rule 324: The first two lines in the description for filters must follow the example provided in the guide for rule 324.
+# expect-count: 1
 get:
   operationId: listAccessProfiles
   tags:

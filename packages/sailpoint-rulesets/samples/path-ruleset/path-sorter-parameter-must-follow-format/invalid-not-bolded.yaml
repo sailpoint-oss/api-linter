@@ -1,4 +1,6 @@
 # The sortable fields list is not bolded.
+# expect: Rule 325: The sortable fields list must be bolded (ex. **name, created, modified**).
+# expect-count: 1
 get:
   operationId: listAccessProfiles
   tags:

@@ -1,0 +1,10 @@
+# The file name has "-v3" but no /v3/ folder, so the collection openapi.yaml is used, not V3_TAGS_JSON (which here lacks "Transforms").
+# env: V3_TAGS_JSON=["Access Profiles"]
+get:
+  operationId: listTransforms
+  tags:
+    - Transforms
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

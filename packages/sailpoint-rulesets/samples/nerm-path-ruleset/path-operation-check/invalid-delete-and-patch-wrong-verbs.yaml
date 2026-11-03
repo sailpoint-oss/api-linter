@@ -1,0 +1,32 @@
+# The delete operationId starts with "rid" and the patch operationId starts with "check"; both are reported, the valid get and post are not.
+# expect: rid is invalid, the operationId must start with one of the allowed values [delete,remove] for delete endpoints
+# expect: check is invalid, the operationId must start with one of the allowed values [patch,update] for patch endpoints
+# expect-count: 2
+get:
+  tags:
+    - Access Profiles
+  summary: List Access Profiles
+  operationId: listAccessProfiles
+  description: This API returns a list of Access Profiles.
+  responses:
+    "200":
+      description: List of Access Profiles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+post:
+  tags:
+    - Access Profiles
+  summary: Create an Access Profile
+  operationId: createAccessProfile
+  description: This API creates an Access Profile.
+  responses: {}
+delete:
+  operationId: ridAccessProfile
+  responses: {}
+patch:
+  operationId: checkAccessProfile
+  responses: {}

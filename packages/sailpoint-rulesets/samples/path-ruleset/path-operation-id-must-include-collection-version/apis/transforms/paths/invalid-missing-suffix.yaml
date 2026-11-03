@@ -1,0 +1,11 @@
+# The operationId "listTransforms" has no "V1" suffix.
+# expect: operationId "listTransforms" must end with the collection version suffix "V1".
+# expect-count: 1
+get:
+  operationId: listTransforms
+  tags:
+    - Transforms
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

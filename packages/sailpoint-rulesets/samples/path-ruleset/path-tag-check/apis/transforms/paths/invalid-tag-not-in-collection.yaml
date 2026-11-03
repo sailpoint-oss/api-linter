@@ -1,0 +1,11 @@
+# The tag "Access Profiles" is not defined in the collection openapi.yaml.
+# expect: Tag "Access Profiles" is not defined in the root API spec
+# expect-count: 1
+get:
+  operationId: listTransforms
+  tags:
+    - Access Profiles
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

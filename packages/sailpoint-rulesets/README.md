@@ -98,6 +98,6 @@ spectral lint C:/users/username/documents/git/cloud-api-client-common/api-specs/
 
 ## Testing for Local Development
 
-1. Install mocha testing framework: `npm install --global mocha`
-2. Tests must be written for custom functions and placed in the functions/tests folder. Tests are not required to be written for rules utlizing spectral core functions.
-3. Run the tests on any of the files in the functions/tests folder: `mocha functions/tests/deprecation-test.js`
+Each rule is tested with sample OpenAPI files in the `samples/` folder. To add or run the samples, read [samples/README.md](samples/README.md).
+
+To pick and run tests from a menu, run `npm run visual-test` from the repo root.

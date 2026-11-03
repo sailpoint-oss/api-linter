@@ -1,0 +1,10 @@
+# The delete operation has no operationId.
+# expect: operationId is missing. It must be provided and end with the collection version suffix "V1" (e.g. listTransformsV1).
+# expect-count: 1
+delete:
+  tags:
+    - Transforms
+  summary: Delete a transform
+  responses:
+    "204":
+      description: The transform is deleted.

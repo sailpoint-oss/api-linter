@@ -1,4 +1,6 @@
 # The filters description separates lines with a single newline instead of a blank line.
+# expect: Rule 324: Each line in the description for filters must always be separated by two lines.
+# expect-count: 1
 get:
   operationId: listAccessProfiles
   tags:

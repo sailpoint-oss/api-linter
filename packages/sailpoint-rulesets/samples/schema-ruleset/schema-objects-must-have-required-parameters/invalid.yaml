@@ -1,4 +1,6 @@
 # The "required" list is empty.
+# expect: If a required key is defined for a schema object, it must not be null or empty
+# expect-count: 1
 type: object
 required: []
 properties:

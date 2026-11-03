@@ -1,4 +1,6 @@
 # The number query parameter uses a format that is not float, double or decimal.
+# expect: Rule 171: score is type number and must be one of the following values: float, double, decimal
+# expect-count: 1
 get:
   operationId: getUser
   tags:

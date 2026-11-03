@@ -1,0 +1,20 @@
+# The resource operation ID getAccounts is not in VERSIONED_OPERATION_IDS.
+# env: VERSIONED_OPERATION_IDS=["listAccounts","listEntitlements","listAccessProfiles"]
+# expect: getAccounts is invalid, the x-sailpoint-resource-operation-id must match an existing operationId in the API specs.
+# expect-count: 1
+get:
+  tags:
+    - Access Profiles
+  summary: List Access Profiles
+  operationId: pathAccessProfiles
+  description: This API returns a list of Access Profiles.
+  parameters:
+    - in: path
+      name: id
+      example: "1234"
+      schema:
+        type: string
+      x-sailpoint-resource-operation-id: getAccounts
+  responses:
+    "200":
+      description: List of Access Profiles

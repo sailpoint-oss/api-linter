@@ -1,4 +1,6 @@
 # The sorters description does not start with the standard intro text.
+# expect: Rule 325: The first line in the description for sorters must follow the example provided in the guide for rule 325.
+# expect-count: 1
 get:
   operationId: listAccessProfiles
   tags:

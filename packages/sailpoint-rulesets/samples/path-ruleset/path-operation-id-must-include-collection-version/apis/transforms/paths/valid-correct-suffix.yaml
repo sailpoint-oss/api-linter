@@ -1,0 +1,17 @@
+# The URL path is /transforms/v1 and every operationId ends with "V1".
+get:
+  operationId: listTransformsV1
+  tags:
+    - Transforms
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.
+post:
+  operationId: createTransformV1
+  tags:
+    - Transforms
+  summary: Create a transform
+  responses:
+    "201":
+      description: The new transform.

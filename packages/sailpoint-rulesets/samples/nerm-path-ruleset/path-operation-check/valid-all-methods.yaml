@@ -1,0 +1,34 @@
+# Each operationId (get array, post, put, patch, delete) starts with a verb that is allowed for its HTTP method.
+get:
+  tags:
+    - Access Profiles
+  summary: List Access Profiles
+  operationId: listAccessProfiles
+  description: This API returns a list of Access Profiles.
+  responses:
+    "200":
+      description: List of Access Profiles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+post:
+  tags:
+    - Access Profiles
+  summary: Create an Access Profile
+  operationId: createAccessProfile
+  description: This API creates an Access Profile.
+  responses:
+    "201":
+      description: The created Access Profile.
+put:
+  operationId: putAccessProfile
+  responses: {}
+patch:
+  operationId: patchAccessProfile
+  responses: {}
+delete:
+  operationId: deleteAccessProfile
+  responses: {}

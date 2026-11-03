@@ -1,0 +1,13 @@
+# Helper: the transforms collection root file. tag-check reads its tags (Transforms, Transform Templates) for path files in ./paths/.
+openapi: 3.0.1
+info:
+  title: Identity Security Cloud API - Transforms
+  version: v1
+tags:
+  - name: Transforms
+    description: Use this API to manage transforms.
+  - name: Transform Templates
+    description: Use this API to manage transform templates.
+paths:
+  /transforms/v1:
+    $ref: ./paths/valid-tag-in-collection.yaml

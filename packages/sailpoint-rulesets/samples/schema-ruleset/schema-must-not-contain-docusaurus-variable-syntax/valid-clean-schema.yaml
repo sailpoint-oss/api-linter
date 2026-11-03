@@ -1,0 +1,12 @@
+# A clean schema: no description or example uses the ${...} variable syntax.
+type: object
+description: An approval object
+properties:
+  id:
+    type: string
+    description: The unique ID of the approval.
+    example: 2c9180835d191a86015d28455b4a2329
+  name:
+    type: string
+    description: The name of the approval.
+    example: Access Request Approval

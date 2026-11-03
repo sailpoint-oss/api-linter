@@ -1,0 +1,25 @@
+# The get operation returns an array but its operationId starts with "path"; the valid post next to it is not reported.
+# expect: path is invalid, the operationId must start with one of the allowed values [compare,export,get,list,search] for get endpoints that return an array of results
+# expect-count: 1
+get:
+  tags:
+    - Access Profiles
+  summary: List Access Profiles
+  operationId: pathAccessProfiles
+  description: This API returns a list of Access Profiles.
+  responses:
+    "200":
+      description: List of Access Profiles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+post:
+  tags:
+    - Access Profiles
+  summary: Create an Access Profile
+  operationId: createAccessProfile
+  description: This API creates an Access Profile.
+  responses: {}

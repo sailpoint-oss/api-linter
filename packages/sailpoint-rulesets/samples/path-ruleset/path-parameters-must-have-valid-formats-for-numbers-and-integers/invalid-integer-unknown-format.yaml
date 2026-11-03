@@ -1,0 +1,21 @@
+# The integer parameter uses an unknown format (largeInteger).
+# expect: Rule 171: integerTest is type integer and must be one of the following values: int32, int64, bigint
+# expect-count: 1
+get:
+  operationId: listIdentityOutliers
+  tags:
+    - Identity Outliers
+  summary: List identity outliers
+  description: Use this API to get a list of identity outliers.
+  parameters:
+    - in: query
+      name: integerTest
+      required: false
+      description: A test parameter.
+      schema:
+        type: integer
+        format: largeInteger
+      example: 10
+  responses:
+    "200":
+      description: List of identity outliers.

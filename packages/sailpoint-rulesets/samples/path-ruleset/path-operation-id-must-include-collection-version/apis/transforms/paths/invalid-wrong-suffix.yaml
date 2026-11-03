@@ -1,0 +1,11 @@
+# The operationId "updateTransformV2" has the wrong version suffix.
+# expect: operationId "updateTransformV2" must end with the collection version suffix "V1".
+# expect-count: 1
+put:
+  operationId: updateTransformV2
+  tags:
+    - Transforms
+  summary: Update a transform
+  responses:
+    "200":
+      description: The transform.

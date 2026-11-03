@@ -1,0 +1,10 @@
+# The file is under /v3/ and its tag "Transforms" is in V3_TAGS_JSON.
+# env: V3_TAGS_JSON=["Transforms","Access Profiles","Accounts"]
+get:
+  operationId: listTransforms
+  tags:
+    - Transforms
+  summary: List transforms
+  responses:
+    "200":
+      description: The transforms.

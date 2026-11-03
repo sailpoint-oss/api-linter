@@ -1,0 +1,14 @@
+# The security array uses the unknown key userAuthentication instead of userAuth.
+# expect: Operations must have security.userAuth and/or security.applicationAuth defined with at least one scope to access the endpoint. userAuthentication is not a valid key
+# expect-count: 1
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  security:
+    - userAuthentication: [idn:identity:read]
+  responses:
+    "200":
+      description: The identity.
