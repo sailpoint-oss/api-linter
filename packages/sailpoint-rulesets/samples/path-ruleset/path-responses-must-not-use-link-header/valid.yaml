@@ -1,0 +1,10 @@
+# The response defines a custom header.
+get:
+  operationId: listIdentitiesV1
+  responses:
+    "200":
+      description: OK
+      headers:
+        x-total-count:
+          schema:
+            type: integer

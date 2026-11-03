@@ -1,0 +1,13 @@
+# The properties use qualified names. The type keyword and example data are not property names.
+type: object
+properties:
+  workflowType:
+    type: string
+  trigger:
+    type: object
+    properties:
+      triggerType:
+        type: string
+example:
+  properties:
+    type: EVENT

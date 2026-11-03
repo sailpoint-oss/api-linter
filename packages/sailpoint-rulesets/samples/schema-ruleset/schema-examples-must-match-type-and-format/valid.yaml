@@ -1,0 +1,30 @@
+# Each example matches its type and format.
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+    example: 2c9180a4-6b4e-4a2c-9f3e-8d7c6b5a4f3e
+  created:
+    type: string
+    format: date-time
+    example: "2024-05-28T14:07:17.252Z"
+  day:
+    type: string
+    format: date
+    example: "2024-05-28"
+  email:
+    type: string
+    format: email
+    example: jane.doe@example.com
+  homepage:
+    type: string
+    format: uri
+    example: https://example.com
+  count:
+    type: integer
+    format: int32
+    example: 5
+  enabled:
+    type: boolean
+    example: true

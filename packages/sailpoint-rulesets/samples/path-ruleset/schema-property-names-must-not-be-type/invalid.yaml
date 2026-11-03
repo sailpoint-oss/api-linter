@@ -1,0 +1,23 @@
+# The request body and the response both have a property named type.
+# expect: too generic
+# expect-count: 2
+post:
+  operationId: createWorkflowV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            type:
+              type: string
+  responses:
+    "201":
+      description: The workflow was created.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              type:
+                type: string

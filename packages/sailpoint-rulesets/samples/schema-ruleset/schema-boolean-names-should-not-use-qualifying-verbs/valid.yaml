@@ -1,0 +1,8 @@
+# The boolean has no qualifying verb. A string is not checked.
+type: object
+properties:
+  enabled:
+    type: boolean
+    default: true
+  isoCode:
+    type: string

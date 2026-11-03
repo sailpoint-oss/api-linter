@@ -1,0 +1,8 @@
+# The array is not nullable and its default is an empty list.
+type: object
+properties:
+  tags:
+    type: array
+    default: []
+    items:
+      type: string

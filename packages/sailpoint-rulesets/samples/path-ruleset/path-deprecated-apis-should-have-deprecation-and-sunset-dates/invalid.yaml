@@ -1,0 +1,13 @@
+# The deprecated operation does not return the sunset header.
+# expect: sunset header
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  deprecated: true
+  responses:
+    "200":
+      description: OK
+      headers:
+        deprecation:
+          schema:
+            type: string

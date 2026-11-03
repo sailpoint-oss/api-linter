@@ -1,0 +1,19 @@
+# metadata names a collection, and the version segment is skipped.
+openapi: 3.0.3
+info:
+  title: Sample API
+  version: v1
+  description: Use this API to manage identities.
+  x-audience: external-public
+externalDocs:
+  url: https://developer.sailpoint.com/docs/api
+servers:
+  - url: https://{tenant}.api.identitynow.com
+tags:
+  - name: Identities
+    description: Use this API to manage identities.
+paths:
+  /access-model-metadata/v1/{key}:
+    get: {}
+  /sources/v1/{sourceId}/schemas/{schemaId}:
+    get: {}

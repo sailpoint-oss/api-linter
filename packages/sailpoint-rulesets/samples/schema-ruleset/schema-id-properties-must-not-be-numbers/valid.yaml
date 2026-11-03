@@ -1,0 +1,10 @@
+# The IDs are strings.
+type: object
+properties:
+  id:
+    type: string
+  sourceId:
+    type: string
+  count:
+    type: integer
+    format: int32

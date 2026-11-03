@@ -1,0 +1,11 @@
+# The response defines a link header.
+# expect-count: 1
+get:
+  operationId: listIdentitiesV1
+  responses:
+    "200":
+      description: OK
+      headers:
+        link:
+          schema:
+            type: string

@@ -1,0 +1,11 @@
+# The response uses the content-location header.
+# expect-count: 1
+post:
+  operationId: createIdentityV1
+  responses:
+    "201":
+      description: Created
+      headers:
+        content-location:
+          schema:
+            type: string

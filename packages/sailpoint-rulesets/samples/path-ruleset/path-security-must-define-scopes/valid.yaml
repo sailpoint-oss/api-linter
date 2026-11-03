@@ -1,0 +1,6 @@
+# userAuth lists a scope.
+get:
+  operationId: getIdentityV1
+  security:
+    - userAuth:
+        - idn:identity:read

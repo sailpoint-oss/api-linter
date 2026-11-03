@@ -1,0 +1,11 @@
+# The date properties have no date format.
+# expect: modified
+# expect: completedAt
+# expect-count: 2
+type: object
+properties:
+  modified:
+    type: string
+  completedAt:
+    type: string
+    format: uuid

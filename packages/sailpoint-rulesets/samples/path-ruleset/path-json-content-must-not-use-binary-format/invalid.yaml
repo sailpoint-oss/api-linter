@@ -1,0 +1,14 @@
+# The JSON payload uses format: binary.
+# expect: the property file uses format: binary
+# expect-count: 1
+post:
+  operationId: importIdentitiesV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            file:
+              type: string
+              format: binary

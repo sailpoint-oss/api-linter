@@ -1,0 +1,8 @@
+# The bulk operation returns 200.
+# expect: deleteIdentitiesInBulkV1
+# expect-count: 1
+post:
+  operationId: deleteIdentitiesInBulkV1
+  responses:
+    "200":
+      description: OK

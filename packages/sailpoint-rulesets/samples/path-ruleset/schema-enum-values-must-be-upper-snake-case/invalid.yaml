@@ -1,0 +1,15 @@
+# The enum values use PascalCase.
+# expect: Active
+# expect: Inactive
+# expect-count: 2
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - in: query
+      name: state
+      required: false
+      schema:
+        type: string
+        enum:
+          - Active
+          - Inactive

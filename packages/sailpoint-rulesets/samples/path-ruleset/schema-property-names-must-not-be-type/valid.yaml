@@ -1,0 +1,21 @@
+# The request body and the response use workflowType.
+post:
+  operationId: createWorkflowV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            workflowType:
+              type: string
+  responses:
+    "201":
+      description: The workflow was created.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              workflowType:
+                type: string

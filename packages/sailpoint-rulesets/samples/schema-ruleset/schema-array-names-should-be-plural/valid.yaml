@@ -1,0 +1,11 @@
+# The array names are plural.
+type: object
+properties:
+  owners:
+    type: array
+    items:
+      type: string
+  metadata:
+    type: array
+    items:
+      type: string

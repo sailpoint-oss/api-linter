@@ -1,0 +1,26 @@
+# The response headers use uppercase letters and an underscore.
+# expect: X-Total-Count
+# expect: Location
+# expect: x_request_id
+# expect-count: 3
+get:
+  operationId: listWorkflowsV1
+  responses:
+    "200":
+      description: The list of workflows.
+      headers:
+        X-Total-Count:
+          schema:
+            type: integer
+        x_request_id:
+          schema:
+            type: string
+post:
+  operationId: createWorkflowV1
+  responses:
+    "201":
+      description: The workflow was created.
+      headers:
+        Location:
+          schema:
+            type: string

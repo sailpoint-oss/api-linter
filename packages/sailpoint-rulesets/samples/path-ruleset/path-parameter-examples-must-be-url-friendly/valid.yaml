@@ -1,0 +1,16 @@
+# The path parameter examples use only URL-friendly characters.
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: path
+      name: id
+      required: true
+      example: 2c9180835d2e5168015d32f890ca1581
+      schema:
+        type: string
+    - in: path
+      name: key
+      required: true
+      schema:
+        type: string
+        example: iscFederalClassifications

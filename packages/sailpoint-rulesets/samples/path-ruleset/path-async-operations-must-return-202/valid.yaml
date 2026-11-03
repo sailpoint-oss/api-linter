@@ -1,0 +1,6 @@
+# The async operation returns 202.
+post:
+  operationId: deleteIdentityAsyncV1
+  responses:
+    "202":
+      description: Accepted

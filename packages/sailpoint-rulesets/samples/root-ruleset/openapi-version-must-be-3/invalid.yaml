@@ -1,0 +1,19 @@
+# The specification uses OpenAPI 2.
+openapi: "2.0"
+info:
+  title: Sample API
+  version: v1
+  description: Use this API to manage identities.
+  x-audience: external-public
+externalDocs:
+  url: https://developer.sailpoint.com/docs/api
+servers:
+  - url: https://{tenant}.api.identitynow.com
+tags:
+  - name: Identities
+    description: Use this API to manage identities.
+paths:
+  /identities/v1:
+    get: {}
+  /identities/v1/{id}:
+    get: {}

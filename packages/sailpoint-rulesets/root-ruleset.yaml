@@ -1,4 +1,4 @@
-functions: [path-validator, tag-alpha-check]
+functions: [path-validator, tag-alpha-check, path-segment-check, path-version-check]
 rules:
   root-tags-must-be-in-alphabetical-order:
     description: "Rule 403: Tags must be in alphabetical order: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#403"
@@ -8,13 +8,13 @@ rules:
       function: tag-alpha-check
       functionOptions:
         rule: 403
-  # root-tags-must-have-description:
-  #   description: "Rule 302: Tags must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#302"
-  #   given: $.tags[*]
-  #   severity: error
-  #   then:
-  #     field: description
-  #     function: truthy
+  root-tags-must-have-description:
+    message: "Rule 409: Every root tag must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#409"
+    given: $.tags[*]
+    severity: error
+    then:
+      field: description
+      function: truthy
   # root-tags-must-have-externalDocs:
   #   description: "Rule 102: Tags must have externalDocs: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#102"
   #   given: $.tags[*]
@@ -22,13 +22,26 @@ rules:
   #   then:
   #     field: externalDocs
   #     function: truthy
-  # info-x-audience-rule:
-  #   description: "Rule 218: Info object must have a target audience specified by key x-audience: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#218"
-  #   given: $
-  #   severity: error
-  #   then:
-  #     field: info.x-audience
-  #     function: truthy
+  root-should-link-to-api-user-manual:
+    message: "Rule 102: Link to the API user manual with #/externalDocs/url: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#102"
+    given: $
+    severity: warn
+    then:
+      field: externalDocs.url
+      function: truthy
+  info-must-contain-meta-information:
+    message: "Rule 218: {{error}}. The info object must have a title, version, description and x-audience: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#218"
+    given: $
+    severity: error
+    then:
+      - field: info.title
+        function: truthy
+      - field: info.version
+        function: truthy
+      - field: info.description
+        function: truthy
+      - field: info.x-audience
+        function: truthy
   info-x-audience-specific-values:
     description: "Rule 219: info.x-audience value must be either internal-company or external-public: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#219"
     given: $.info
@@ -40,17 +53,82 @@ rules:
         values:
           - internal-company
           - external-public
-  # paths-should-not-have-more-than-three-sub-resources:
-  #   description: "Rule 147: The path must not exceed 3 sub-resources: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#147"
-  #   given: $.paths.*~
-  #   severity: warn
-  #   then:
-  #     function: path-validator
-  #     functionOptions:
-  #       rule: 147
-  # paths-counter:
-  #   description: "Rule 147: The path must not exceed 3 sub-resources: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#147"
-  #   given: $
-  #   severity: warn
-  #   then:
-  #     function: path-counter
+  openapi-version-must-be-3:
+    message: "Rule 101: The specification must use OpenAPI 3, but the openapi field is {{value}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#101"
+    given: $
+    severity: error
+    then:
+      field: openapi
+      function: pattern
+      functionOptions:
+        match: "^3\\."
+  paths-must-include-version:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#115"
+    given: $
+    severity: error
+    then:
+      function: path-version-check
+      functionOptions:
+        rule: 115
+  paths-must-not-use-api-base-path:
+    message: "Rule 135: Do not use /api as the base path: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#135"
+    given:
+      - $.paths.*~
+      - $.servers[*].url
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^([a-z]+://[^/]+)?/api(/|$)"
+  paths-must-be-normalized:
+    message: "Rule 136: The path {{property}} must not have empty segments or a trailing slash: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#136"
+    given: $.paths.*~
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "(//|.+/$)"
+  paths-must-not-contain-org-name:
+    message: "Rule 319: The path {{property}} must not have an org or tenant parameter. The org comes from the session context: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#319"
+    given: $.paths.*~
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/\\{(org|orgName|orgId|tenant|tenantName|tenantId)\\}/i"
+  path-segments-must-be-kebab-case:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#129"
+    given: $.paths.*~
+    severity: error
+    then:
+      function: path-segment-check
+      functionOptions:
+        check: casing
+        rule: 129
+  path-resource-names-must-be-plural:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#134"
+    given: $.paths.*~
+    severity: error
+    then:
+      function: path-segment-check
+      functionOptions:
+        check: plural
+        rule: 134
+  path-segments-should-not-contain-verbs:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#141"
+    given: $.paths.*~
+    severity: warn
+    then:
+      function: path-segment-check
+      functionOptions:
+        check: verbs
+        rule: 141
+  paths-should-not-have-more-than-three-sub-resources:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#147"
+    given: $.paths.*~
+    severity: warn
+    then:
+      function: path-segment-check
+      functionOptions:
+        check: depth
+        rule: 147

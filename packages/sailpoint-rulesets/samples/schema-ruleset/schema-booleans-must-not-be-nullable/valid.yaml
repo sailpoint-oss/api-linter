@@ -1,0 +1,9 @@
+# The boolean is not nullable, and the nullable string is not a boolean.
+type: object
+properties:
+  enabled:
+    type: boolean
+    default: false
+  name:
+    type: string
+    nullable: true

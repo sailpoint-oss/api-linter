@@ -1,0 +1,10 @@
+# A path-level query parameter is not camelCase.
+# expect-count: 1
+parameters:
+  - in: query
+    name: Search-Term
+    required: false
+    schema:
+      type: string
+get:
+  operationId: listIdentitiesV1

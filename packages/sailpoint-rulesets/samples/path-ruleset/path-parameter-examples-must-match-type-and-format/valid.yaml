@@ -1,0 +1,18 @@
+# The header example is a quoted string, and the uuid example is a UUID.
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: header
+      name: X-SailPoint-Experimental
+      required: true
+      example: "true"
+      schema:
+        type: string
+        default: "true"
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 2c9180a4-6b4e-4a2c-9f3e-8d7c6b5a4f3e

@@ -1,0 +1,17 @@
+# offset is a string and count is an integer.
+# expect: offset query parameter must be of type integer
+# expect: count query parameter must be of type boolean
+# expect-count: 2
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - in: query
+      name: offset
+      required: false
+      schema:
+        type: string
+    - in: query
+      name: count
+      required: false
+      schema:
+        type: integer

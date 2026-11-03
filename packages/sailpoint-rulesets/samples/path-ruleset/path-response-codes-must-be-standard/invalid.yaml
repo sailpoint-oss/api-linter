@@ -1,0 +1,17 @@
+# 413 is not in the standard list, and a GET must not return 201 or 412.
+# expect: uses 413, which is not a standard status code
+# expect: uses 201, which a GET operation must not return
+# expect: uses 412, which a GET operation must not return
+# expect-count: 3
+get:
+  operationId: getIdentityV1
+  responses:
+    "201":
+      description: Created
+    "412":
+      description: Precondition Failed
+post:
+  operationId: createIdentityV1
+  responses:
+    "413":
+      description: Payload Too Large

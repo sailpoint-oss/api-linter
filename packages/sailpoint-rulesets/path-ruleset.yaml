@@ -20,6 +20,12 @@ functions:
     path-file-check,
     docusaurus-variable-check,
     path-operation-id-version-check,
+    path-response-check,
+    media-type-check,
+    collection-parameter-check,
+    error-response-ref-check,
+    example-format-check,
+    schema-node-check,
   ]
 rules:
   path-list-endpoints-must-support-pagination:
@@ -95,7 +101,7 @@ rules:
     then:
       function: path-descriptions-check
       functionOptions:
-        rule: 405
+        rule: 408
   path-must-have-security-defined:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#104"
     given: $[get,put,post,delete,options,head,patch,trace]
@@ -113,14 +119,14 @@ rules:
       functionOptions:
         rule: 321
 
-  # path-deprecated-apis-should-have-deprecation-and-sunset-dates:
-  #   message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
-  #   given: $[*]
-  #   severity: warn
-  #   then:
-  #     function: deprecation
-  #     functionOptions:
-  #       rule: 189
+  path-deprecated-apis-should-have-deprecation-and-sunset-dates:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#189"
+    given: $[get,put,post,patch,delete,head,options]
+    severity: warn
+    then:
+      function: deprecation
+      functionOptions:
+        rule: 189
 
   path-must-have-required-key-on-all-parameters:
     description: "Rule 317: Operations must have required key on all parameters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#317"
@@ -231,3 +237,348 @@ rules:
   #     functionOptions:
   #       field: embed
   #       rule: 158
+
+  # Parameters. Each rule checks operation parameters and path-level parameters.
+  path-query-parameters-must-be-camel-case:
+    message: "Rule 130: The query parameter {{value}} must be camelCase: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#130"
+    given: &queryParameterNames
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'query')].name"
+      - "$.parameters[?(@ && @.in === 'query')].name"
+    severity: error
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+  path-parameters-must-not-be-named-type:
+    message: "Rule 410: The parameter name type is too generic. Add the resource name, for example workflowType: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#410"
+    given:
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.name === 'type')].name"
+      - "$.parameters[?(@ && @.name === 'type')].name"
+    severity: error
+    then:
+      function: falsy
+  path-query-parameters-must-use-standard-names:
+    message: "Rule 137: Do not use the query parameter {{value}}. Use limit, offset, count, filters or sorters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#137"
+    given: *queryParameterNames
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^(page|pageSize|page_size|perPage|per_page|size|skip|top|start|sort|sortBy|sort_by|orderBy|order_by|filter)$"
+  path-collection-parameters-must-have-standard-types:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#137"
+    given:
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'query')]"
+      - "$.parameters[?(@ && @.in === 'query')]"
+    severity: error
+    then:
+      function: collection-parameter-check
+      functionOptions:
+        rule: 137
+  path-collection-parameters-should-use-shared-definition:
+    message: "Rule 137: Use $ref to the shared {{value}} parameter file, for example ../../shared/parameters/limit.yaml, instead of an inline definition: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#137"
+    resolved: false
+    given: "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'query' && @.name && @.name.match(/^(limit|offset|count)$/))].name"
+    severity: warn
+    then:
+      function: falsy
+  path-parameter-examples-must-be-url-friendly:
+    message: "Rule 228: The path parameter example {{value}} must only use the characters a-z, A-Z, 0-9, colon, period, underscore, hyphen and slash: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#228"
+    given:
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'path' && @.example === '' + @.example)].example"
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'path' && @.schema && @.schema.example === '' + @.schema.example)].schema.example"
+      - "$.parameters[?(@ && @.in === 'path' && @.example === '' + @.example)].example"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-zA-Z0-9:._\\-/]*$"
+  path-id-parameters-must-not-be-numbers:
+    message: "Rule 320: The path parameter {{value}} is an ID, so it must be a string and not a number: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#320"
+    given:
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'path' && @.name && @.name.match(/^id$|Id$/) && @.schema && (@.schema.type === 'integer' || @.schema.type === 'number'))].name"
+      - "$.parameters[?(@ && @.in === 'path' && @.name && @.name.match(/^id$|Id$/) && @.schema && (@.schema.type === 'integer' || @.schema.type === 'number'))].name"
+    severity: error
+    then:
+      function: falsy
+  path-must-not-define-standard-headers-as-parameters:
+    message: "Rule 178: Do not define the {{value}} header as a parameter. OpenAPI 3 ignores it. Use content, the request body media type or security instead: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#178"
+    given:
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'header')].name"
+      - "$.parameters[?(@ && @.in === 'header')].name"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/^(content-type|accept|authorization)$/i"
+  path-parameter-examples-must-match-type-and-format:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
+    given:
+      - "$[get,put,post,patch,delete,head,options].parameters[*]"
+      - "$.parameters[*]"
+    severity: error
+    then:
+      function: example-format-check
+      functionOptions:
+        rule: 304
+
+  # Methods and responses.
+  path-get-and-head-must-not-have-request-body:
+    message: "Rule 148: A GET or HEAD operation must not have a request body. Use query parameters, or a POST that is documented as GET with body: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#148"
+    given: "$[get,head]"
+    severity: error
+    then:
+      field: requestBody
+      function: undefined
+  path-response-codes-must-be-standard:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#150"
+    given: $
+    severity: error
+    then:
+      function: path-response-check
+      functionOptions:
+        check: standard-codes
+        rule: 150
+  path-create-operations-must-return-201:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#150"
+    given: $
+    severity: error
+    then:
+      function: path-response-check
+      functionOptions:
+        check: create-201
+        rule: 150
+  path-async-operations-must-return-202:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#150"
+    given: $
+    severity: error
+    then:
+      function: path-response-check
+      functionOptions:
+        check: async-202
+        rule: 150
+  path-201-responses-must-define-location-header:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#150"
+    given: $
+    severity: error
+    then:
+      function: path-response-check
+      functionOptions:
+        check: location-201
+        rule: 150
+  path-single-resource-operations-must-define-404:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#148"
+    given: $
+    severity: error
+    then:
+      function: path-response-check
+      functionOptions:
+        check: not-found-404
+        rule: 148
+  path-bulk-operations-must-return-207:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#152"
+    given: $
+    severity: error
+    then:
+      function: path-response-check
+      functionOptions:
+        check: bulk-207
+        rule: 152
+  # Rule 153 is a MUST, but the shared 429.yaml response files do not define
+  # the headers yet. Change this rule to error when they do. Until then, each
+  # path file reports the shared file.
+  path-429-responses-must-define-rate-limit-headers:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#153"
+    given: $
+    severity: warn
+    then:
+      function: path-response-check
+      functionOptions:
+        check: rate-limit-429
+        rule: 153
+  path-error-responses-must-use-standard-error-schema:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#326"
+    given: $
+    severity: error
+    then:
+      function: path-response-check
+      functionOptions:
+        check: error-schema
+        rule: 326
+  path-error-responses-should-use-shared-responses:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#151"
+    resolved: false
+    given: "$[get,put,post,patch,delete,head,options].responses"
+    severity: warn
+    then:
+      function: error-response-ref-check
+      functionOptions:
+        rule: 151
+  # HTTP/2 sends header names in lowercase (RFC 9113, section 8.2.2).
+  path-response-headers-must-be-lowercase-kebab-case:
+    message: "Rule 132: The response header {{property}} must be lowercase kebab-case, for example x-total-count: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#132"
+    given: "$[get,put,post,patch,delete,head,options].responses.*.headers.*~"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z0-9]+(-[a-z0-9]+)*$"
+  path-responses-must-not-use-link-header:
+    message: "Rule 166: Do not use the link header with JSON responses. Put links in the response body: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#166"
+    given: "$[get,put,post,patch,delete,head,options].responses.*.headers.*~"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/^link$/i"
+  path-responses-should-use-location-instead-of-content-location:
+    message: "Rule 180: Use the location header instead of the content-location header: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#180"
+    given: "$[get,put,post,patch,delete,head,options].responses.*.headers.*~"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "/^content-location$/i"
+  path-deprecated-operations-must-be-explained:
+    message: "Rule 187: A deprecated operation or parameter must explain the deprecation in its description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#187"
+    resolved: false
+    given:
+      - "$[?(@ && @.deprecated === true)]"
+      - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.deprecated === true)]"
+      - "$.parameters[?(@ && @.deprecated === true)]"
+    severity: error
+    then:
+      field: description
+      function: pattern
+      functionOptions:
+        match: "/deprecat/i"
+
+  # Media types.
+  path-content-must-use-json-media-type:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#167"
+    given: &contentMaps
+      - "$[get,put,post,patch,delete,head,options].requestBody.content"
+      - "$[get,put,post,patch,delete,head,options].responses.*.content"
+    severity: error
+    then:
+      function: media-type-check
+      functionOptions:
+        check: json
+        rule: 167
+  path-json-content-must-not-use-binary-format:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#239"
+    given: *contentMaps
+    severity: error
+    then:
+      function: media-type-check
+      functionOptions:
+        check: binary
+        rule: 239
+  path-media-types-should-be-standard:
+    message: "Rule 172: Use a standard media type instead of {{property}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#172"
+    resolved: false
+    given:
+      - "$[get,put,post,patch,delete,head,options].requestBody.content.*~"
+      - "$[get,put,post,patch,delete,head,options].responses.*.content.*~"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^application/x[.-](?!www-form-urlencoded$)"
+
+  # Security and descriptions.
+  path-security-must-define-scopes:
+    message: "Rule 105: {{property}} must list at least one scope. Use security: [{}] for an operation that needs no authentication: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#105"
+    given: "$[get,put,post,patch,delete,head,options].security[*][userAuth,applicationAuth]"
+    severity: error
+    then:
+      function: length
+      functionOptions:
+        min: 1
+  path-descriptions-should-link-to-operations:
+    message: "Rule 302: Link to another operation with its developer portal page, for example [List Transforms](https://developer.sailpoint.com/docs/api/v2025/list-transforms), and not with text such as GET /transforms: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#302"
+    given: "$[get,put,post,patch,delete,head,options].description"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "(^|[\\s`(])(GET|POST|PUT|PATCH|DELETE) /[a-z{]"
+
+  # Inline schemas in path files. The schema ruleset checks the schema files.
+  # With resolved: false, these rules do not report problems in referenced files.
+  schema-property-names-must-be-camel-case:
+    message: "Rule 118: The property name {{property}} must be ASCII camelCase, and ID must be written as id or Id: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#118"
+    resolved: false
+    given: "$..properties[?(@ && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+        notMatch: "ID"
+  schema-property-names-must-not-be-type:
+    message: "Rule 410: The property name type is too generic. Add the resource name, for example workflowType: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#410"
+    resolved: false
+    given: "$..properties[?(@property === 'type' && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: falsy
+  schema-enum-values-must-be-upper-snake-case:
+    message: "Rule 240: The enum value {{value}} must be UPPER_SNAKE_CASE. Only ISO language and country codes, for example en or en-US, can use another case: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#240"
+    resolved: false
+    given:
+      - "$..enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+      - "$..x-extensible-enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^([A-Z][A-Z0-9]*(_[A-Z0-9]+)*|[a-z]{2,3}(-[A-Z]{2})?)$"
+  schema-booleans-must-not-be-nullable:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#122"
+    resolved: false
+    given: "$..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: boolean
+        rule: 122
+  schema-formats-must-be-standard:
+    message: "Rule 238: The format {{value}} is not a standard format. Use one of the formats in the guideline, for example date-time, duration or uuid: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#238"
+    resolved: false
+    given: "$..[?(@property === 'format' && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: enumeration
+      functionOptions:
+        values:
+          - int32
+          - int64
+          - bigint
+          - float
+          - double
+          - decimal
+          - bcp47
+          - binary
+          - byte
+          - comma-separated
+          - date
+          - date-time
+          - duration
+          - email
+          - gtin-13
+          - hostname
+          - ipv4
+          - ipv6
+          - iso-3166
+          - iso-4217
+          - iso-639
+          - json-pointer
+          - password
+          - regex
+          - time
+          - uri
+          - uri-reference
+          - uri-template
+          - uuid

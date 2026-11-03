@@ -1,0 +1,9 @@
+# All property names are camelCase. Keys inside the example are data.
+type: object
+properties:
+  id:
+    type: string
+  ownerId:
+    type: string
+example:
+  owner_name: Jane Doe

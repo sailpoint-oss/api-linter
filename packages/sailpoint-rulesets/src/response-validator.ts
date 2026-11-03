@@ -35,31 +35,14 @@ export default createOptionalContextRulesetFunction(
     let error_response_codes = ["400", "401", "403", "429", "500"]; // Error Codes to check
     let contains_2xx_code = false;
 
-    // Loop through each key in the reponses objects
-    for (const [key, value] of Object.entries(targetVal)) {
-      if (key.substring(0, 1).includes("2")) {
+    // Loop through each key in the reponses objects. Match the codes exactly,
+    // so that a key such as 4001 does not count as 400.
+    for (const key of Object.keys(targetVal)) {
+      if (/^2(\d\d|XX)$/.test(key)) {
         contains_2xx_code = true;
       }
 
-      if (key.includes("400")) {
-        removeErrorCode(error_response_codes, "400");
-      }
-
-      if (key.includes("401")) {
-        removeErrorCode(error_response_codes, "401");
-      }
-
-      if (key.includes("403")) {
-        removeErrorCode(error_response_codes, "403");
-      }
-
-      if (key.includes("429")) {
-        removeErrorCode(error_response_codes, "429");
-      }
-
-      if (key.includes("500")) {
-        removeErrorCode(error_response_codes, "500");
-      }
+      removeErrorCode(error_response_codes, key);
     }
 
     // If the responses have a 2xx level response, but one or more error codes need to be defined

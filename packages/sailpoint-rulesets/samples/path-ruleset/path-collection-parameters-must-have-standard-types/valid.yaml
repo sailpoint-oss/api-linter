@@ -1,0 +1,15 @@
+# limit is an integer and count is a boolean.
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - in: query
+      name: limit
+      required: false
+      schema:
+        type: integer
+    - in: query
+      name: count
+      required: false
+      schema:
+        type: boolean
+        default: false

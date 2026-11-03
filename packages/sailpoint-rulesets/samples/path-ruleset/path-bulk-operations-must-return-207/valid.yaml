@@ -1,0 +1,6 @@
+# The bulk operation returns 207.
+post:
+  operationId: deleteIdentitiesInBulkV1
+  responses:
+    "207":
+      description: Multi-Status

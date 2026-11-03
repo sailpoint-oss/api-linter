@@ -1,0 +1,10 @@
+in: query
+name: offset
+description: Offset into the full result set.
+required: false
+example: 0
+schema:
+  type: integer
+  format: int32
+  minimum: 0
+  default: 0

@@ -1,0 +1,5 @@
+# The deprecated operation explains the deprecation.
+get:
+  operationId: getIdentityV1
+  deprecated: true
+  description: Deprecated. Use getIdentityV2 instead.

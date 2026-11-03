@@ -1,0 +1,17 @@
+# The versioned route has no versionStart. A route without a version segment can keep it.
+sp-gateway:
+  routes:
+    - id: "sample-no-version-start-v1"
+      path: "/sample-no-version-start/v1"
+      service: "identity"
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"
+
+    - id: "sample-legacy-version-start-internal"
+      path: "/sample-legacy-version-start"
+      service: "identity"
+      versionStart: 0
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

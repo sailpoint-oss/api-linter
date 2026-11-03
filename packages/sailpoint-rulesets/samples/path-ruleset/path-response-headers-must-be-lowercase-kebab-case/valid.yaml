@@ -1,0 +1,22 @@
+# The response headers are lowercase kebab-case.
+get:
+  operationId: listWorkflowsV1
+  responses:
+    "200":
+      description: The list of workflows.
+      headers:
+        x-total-count:
+          schema:
+            type: integer
+        x-request-id:
+          schema:
+            type: string
+post:
+  operationId: createWorkflowV1
+  responses:
+    "201":
+      description: The workflow was created.
+      headers:
+        location:
+          schema:
+            type: string

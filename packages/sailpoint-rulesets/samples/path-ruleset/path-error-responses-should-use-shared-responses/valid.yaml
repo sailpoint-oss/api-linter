@@ -1,0 +1,8 @@
+# The error responses use $ref to the shared files.
+get:
+  operationId: getIdentityV1
+  responses:
+    "400":
+      $ref: ../../shared/responses/400.yaml
+    "500":
+      $ref: ../../shared/responses/500.yaml

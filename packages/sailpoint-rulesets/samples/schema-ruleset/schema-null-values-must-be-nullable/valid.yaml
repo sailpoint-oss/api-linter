@@ -1,0 +1,7 @@
+# The property has a null example and sets nullable: true.
+type: object
+properties:
+  description:
+    type: string
+    nullable: true
+    example: null

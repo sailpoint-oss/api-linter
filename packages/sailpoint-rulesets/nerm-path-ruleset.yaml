@@ -61,7 +61,7 @@ rules:
     then:
       function: path-descriptions-check
       functionOptions:
-        rule: 405
+        rule: 408
   path-operation-check:
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#400"
     given: $

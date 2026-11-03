@@ -1,0 +1,15 @@
+# The ID path parameter is a string. A number that is not an ID is allowed.
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: path
+      name: identityId
+      required: true
+      schema:
+        type: string
+    - in: path
+      name: version
+      required: true
+      schema:
+        type: integer
+        format: int32

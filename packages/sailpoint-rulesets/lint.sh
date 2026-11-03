@@ -1,10 +1,11 @@
 #!/bin/sh
 
-LINTER_URL="https://raw.githubusercontent.com/sailpoint-oss/api-linter/main"
+LINTER_URL="https://raw.githubusercontent.com/sailpoint-oss/api-linter/main/packages/sailpoint-rulesets"
 
 for file in $(git diff --name-only HEAD master)
 do
-    if echo $file | grep "sailpoint-api.*" --quiet
+    # A collection in apis/<name>/ has an openapi.yaml root file.
+    if echo $file | grep -E "sailpoint-api\.|(^|/)openapi\.ya?ml$" --quiet
     then
 	# Don't ignore unkown format because we want to know if the root API spec is a valid OpenAPI version
         spectral lint $file --ruleset "${LINTER_URL}/root-ruleset.yaml" 

@@ -1,0 +1,10 @@
+# The response uses the location header.
+post:
+  operationId: createIdentityV1
+  responses:
+    "201":
+      description: Created
+      headers:
+        location:
+          schema:
+            type: string

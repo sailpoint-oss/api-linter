@@ -8,6 +8,8 @@ functions:
     schema-reserved-keywords-check,
     path-file-check,
     docusaurus-variable-check,
+    schema-node-check,
+    example-format-check,
   ]
 rules:
   schema-properties-must-have-example:
@@ -86,3 +88,220 @@ rules:
   #     functionOptions:
   #       field: description
   #       rule: 504
+
+  # The rules below check one schema node each. The JSONPath selector does
+  # the recursion. Each selector skips nodes inside example, examples and
+  # default values, because those are data and not schemas. With
+  # resolved: false, each rule checks only the file that it lints.
+  schema-property-names-must-be-camel-case:
+    message: "Rule 118: The property name {{property}} must be ASCII camelCase, and ID must be written as id or Id: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#118"
+    resolved: false
+    given: "$..properties[?(@ && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+        notMatch: "ID"
+  schema-property-names-must-not-be-type:
+    message: "Rule 410: The property name type is too generic. Add the resource name, for example workflowType: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#410"
+    resolved: false
+    given: "$..properties[?(@property === 'type' && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: falsy
+  schema-enum-values-must-be-upper-snake-case:
+    message: "Rule 240: The enum value {{value}} must be UPPER_SNAKE_CASE. Only ISO language and country codes, for example en or en-US, can use another case: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#240"
+    resolved: false
+    given:
+      - "$..enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+      - "$..x-extensible-enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "^([A-Z][A-Z0-9]*(_[A-Z0-9]+)*|[a-z]{2,3}(-[A-Z]{2})?)$"
+  schema-additional-properties-must-not-be-false:
+    message: "Rule 111: Do not set additionalProperties to false. Clients must accept new properties: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#111"
+    resolved: false
+    given: "$..[?(@property === 'additionalProperties' && @ === false && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: truthy
+  schema-booleans-must-not-be-nullable:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#122"
+    resolved: false
+    given: &schemaNodes
+      - "$"
+      - "$..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: boolean
+        rule: 122
+  schema-arrays-must-not-be-nullable:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#124"
+    resolved: false
+    given: *schemaNodes
+    severity: error
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: array
+        rule: 124
+  schema-null-values-must-be-nullable:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#318"
+    resolved: false
+    given: *schemaNodes
+    severity: error
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: "null"
+        rule: 318
+  schema-examples-must-match-type-and-format:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
+    resolved: false
+    given: *schemaNodes
+    severity: error
+    then:
+      function: example-format-check
+      functionOptions:
+        rule: 304
+  schema-formats-must-be-standard:
+    message: "Rule 238: The format {{value}} is not a standard format. Use one of the formats in the guideline, for example date-time, duration or uuid: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#238"
+    resolved: false
+    given: "$..[?(@property === 'format' && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      function: enumeration
+      functionOptions:
+        values: &standardFormats
+          - int32
+          - int64
+          - bigint
+          - float
+          - double
+          - decimal
+          - bcp47
+          - binary
+          - byte
+          - comma-separated
+          - date
+          - date-time
+          - duration
+          - email
+          - gtin-13
+          - hostname
+          - ipv4
+          - ipv6
+          - iso-3166
+          - iso-4217
+          - iso-639
+          - json-pointer
+          - password
+          - regex
+          - time
+          - uri
+          - uri-reference
+          - uri-template
+          - uuid
+  schema-email-properties-must-use-email-format:
+    message: "Rule 238: The property {{property}} holds an email address, so it must set format: email: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#238"
+    resolved: false
+    given: "$..properties[?(@ && @.type === 'string' && @property.match(/^email$|Email$/) && @.format !== 'email' && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: falsy
+  schema-url-properties-must-use-uri-format:
+    message: "Rule 238: The property {{property}} holds a URL, so it must set format: uri: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#238"
+    resolved: false
+    given: "$..properties[?(@ && @.type === 'string' && @property.match(/^(url|uri)$|(Url|Uri|URL)$/) && @.format !== 'uri' && @.format !== 'uri-reference' && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: falsy
+  schema-href-must-be-uri:
+    message: "Rule 164: The href property of a hypertext control must be a string with format: uri: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#164"
+    resolved: false
+    given: "$..properties[?(@ && @property === 'href' && (@.type !== 'string' || @.format !== 'uri') && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: falsy
+  schema-date-properties-should-use-date-format:
+    message: "Rule 126: The property {{property}} holds a date, so it should set format: date or format: date-time: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#126"
+    resolved: false
+    given: "$..properties[?(@ && @.type === 'string' && @property.match(/^(created|modified|updated|date)$|[a-z](Date|At)$/) && @.format !== 'date' && @.format !== 'date-time' && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: warn
+    then:
+      function: falsy
+  schema-id-properties-must-not-be-numbers:
+    message: "Rule 320: The ID property {{property}} must not be a number. Do not use sequential, numerical IDs: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#320"
+    resolved: false
+    given: "$..properties[?(@ && @property.match(/^id$|Id$/) && (@.type === 'integer' || @.type === 'number') && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: falsy
+  schema-references-must-use-id-names:
+    message: "Rule 313: The property {{property}} holds an ID, so its name must end with Id, Ids or Ref, for example ownerId: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#313"
+    resolved: false
+    given: "$..properties[?(@ && @.type === 'string' && typeof @.example === 'string' && @.example.match(/^([0-9a-f]{32}|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$/) && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: pattern
+      functionOptions:
+        match: "(^id|^uuid|Id|Ids|Uuid|Ref|Refs)$"
+  schema-must-not-expose-stack-traces:
+    message: "Rule 177: Do not expose stack traces. Remove the property {{property}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#177"
+    resolved: false
+    given: "$..properties[?(@property.match(/^(stack_?trace|trace)$/i) && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: error
+    then:
+      function: falsy
+  schema-deprecated-must-be-explained:
+    message: "Rule 187: A deprecated schema or property must explain the deprecation in its description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#187"
+    resolved: false
+    given: "$..[?(@ && @.deprecated === true && !@path.match(/\\b(example|examples|default)\\b/))]"
+    severity: error
+    then:
+      field: description
+      function: pattern
+      functionOptions:
+        match: "/deprecat/i"
+  schema-array-names-should-be-plural:
+    message: "Rule 120: The array property {{property}} should have a plural name: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#120"
+    resolved: false
+    given: "$..properties[?(@ && @.type === 'array' && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        match: "(s|data|Data|criteria|Criteria|children|Children|people|People|metadata|Metadata|info|Info|List|history|History)$"
+  schema-boolean-names-should-not-use-qualifying-verbs:
+    message: "Rule 311: The boolean property {{property}} should not start with a qualifying verb. For example, use enabled and not isEnabled: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#311"
+    resolved: false
+    given: &booleanNames "$..properties[?(@ && @.type === 'boolean' && !@path.match(/\\b(example|examples|default)\\b/))]~"
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^(is|has|can|should|does|was|will)[A-Z]"
+  schema-boolean-names-should-be-positive:
+    message: "Rule 312: The boolean property {{property}} should have a positive name. For example, use enabled: false and not disabled: true: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#312"
+    resolved: false
+    given: *booleanNames
+    severity: warn
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: "^((not|no|non|dis)[A-Z].*|disabled|hidden|inactive|invisible|unavailable)$"
+  schema-maps-should-not-define-properties:
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#216"
+    resolved: false
+    given: *schemaNodes
+    severity: warn
+    then:
+      function: schema-node-check
+      functionOptions:
+        check: map
+        rule: 216

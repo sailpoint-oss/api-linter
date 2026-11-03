@@ -1,0 +1,15 @@
+# A string has an array example, and an integer has a string example.
+# expect: must be a string
+# expect: must be an integer
+# expect-count: 2
+type: object
+properties:
+  name:
+    type: string
+    example:
+      - first
+      - second
+  count:
+    type: integer
+    format: int32
+    example: "5"

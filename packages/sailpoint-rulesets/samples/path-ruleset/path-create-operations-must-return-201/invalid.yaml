@@ -1,0 +1,8 @@
+# The create operation returns 200.
+# expect: createIdentityV1
+# expect-count: 1
+post:
+  operationId: createIdentityV1
+  responses:
+    "200":
+      description: OK

@@ -1,0 +1,8 @@
+# A file in apis/ refers to the deprecated v3/responses/ folder.
+# expect: deprecated v3/responses/ folder
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  responses:
+    "403":
+      $ref: ../../../v3/responses/403.yaml

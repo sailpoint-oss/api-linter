@@ -1,0 +1,11 @@
+# The email properties have no email format.
+# expect: email
+# expect: managerEmail
+# expect-count: 2
+type: object
+properties:
+  email:
+    type: string
+  managerEmail:
+    type: string
+    format: uri

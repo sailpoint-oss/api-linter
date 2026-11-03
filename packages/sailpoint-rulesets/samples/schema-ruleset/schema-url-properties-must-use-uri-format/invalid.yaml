@@ -1,0 +1,7 @@
+# The URL property has no uri format.
+# expect: imageUrl
+# expect-count: 1
+type: object
+properties:
+  imageUrl:
+    type: string

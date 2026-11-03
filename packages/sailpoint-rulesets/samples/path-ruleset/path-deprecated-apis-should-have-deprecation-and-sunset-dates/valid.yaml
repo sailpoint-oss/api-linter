@@ -1,0 +1,14 @@
+# The deprecated operation returns the deprecation and sunset headers.
+get:
+  operationId: getIdentityV1
+  deprecated: true
+  responses:
+    "200":
+      description: OK
+      headers:
+        deprecation:
+          schema:
+            type: string
+        sunset:
+          schema:
+            type: string

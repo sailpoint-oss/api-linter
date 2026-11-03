@@ -1,0 +1,19 @@
+# The JSON payload uses format: byte, and the multipart payload uses binary.
+post:
+  operationId: importIdentitiesV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            file:
+              type: string
+              format: byte
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            file:
+              type: string
+              format: binary

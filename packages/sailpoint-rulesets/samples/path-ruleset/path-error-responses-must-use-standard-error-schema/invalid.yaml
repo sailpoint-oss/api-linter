@@ -1,0 +1,15 @@
+# The 404 response has its own error shape.
+# expect: missing detailCode (string), trackingId (string), messages (array), causes (array)
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  responses:
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

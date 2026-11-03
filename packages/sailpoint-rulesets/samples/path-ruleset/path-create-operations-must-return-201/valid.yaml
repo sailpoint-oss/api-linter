@@ -1,0 +1,6 @@
+# The create operation returns 201. An async create returns 202 instead.
+post:
+  operationId: createIdentityV1
+  responses:
+    "201":
+      description: Created

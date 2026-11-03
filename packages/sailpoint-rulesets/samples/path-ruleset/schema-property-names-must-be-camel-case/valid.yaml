@@ -1,0 +1,13 @@
+# The inline schema property names are camelCase.
+post:
+  operationId: createIdentityV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            displayName:
+              type: string
+        example:
+          Display_Name: data is not checked

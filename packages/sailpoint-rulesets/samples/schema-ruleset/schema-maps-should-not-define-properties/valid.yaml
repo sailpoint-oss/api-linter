@@ -1,0 +1,5 @@
+# The map uses only additionalProperties.
+type: object
+description: The keys are attribute names.
+additionalProperties:
+  type: string

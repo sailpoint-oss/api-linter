@@ -1,0 +1,12 @@
+# The inline boolean is not nullable.
+post:
+  operationId: createIdentityV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+              default: true

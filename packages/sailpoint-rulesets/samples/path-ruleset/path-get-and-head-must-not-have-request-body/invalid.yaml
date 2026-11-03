@@ -1,0 +1,10 @@
+# The GET has a request body.
+# expect-count: 1
+get:
+  operationId: searchIdentitiesV1
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object

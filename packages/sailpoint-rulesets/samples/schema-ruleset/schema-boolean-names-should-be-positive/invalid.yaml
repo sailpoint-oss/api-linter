@@ -1,0 +1,12 @@
+# The booleans have negative names.
+# expect: disabled
+# expect: notVisible
+# expect-count: 2
+type: object
+properties:
+  disabled:
+    type: boolean
+    default: false
+  notVisible:
+    type: boolean
+    default: false

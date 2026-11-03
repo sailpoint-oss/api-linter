@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 lint_file () {
-    LINTER_URL="https://raw.githubusercontent.com/sailpoint-oss/api-linter/main"
+    LINTER_URL="https://raw.githubusercontent.com/sailpoint-oss/api-linter/main/packages/sailpoint-rulesets"
 
-    if echo $1 | grep "sailpoint-api.*" --quiet
+    # A collection in apis/<name>/ has an openapi.yaml root file.
+    if echo $1 | grep -E "sailpoint-api\.|(^|/)openapi\.ya?ml$" --quiet
     then
         # Don't ignore unkown format because we want to know if the root API spec is a valid OpenAPI version
         spectral lint $1 --ruleset "${LINTER_URL}/root-ruleset.yaml"

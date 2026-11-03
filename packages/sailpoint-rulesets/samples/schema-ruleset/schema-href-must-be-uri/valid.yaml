@@ -1,0 +1,6 @@
+# The href is a string with format: uri.
+type: object
+properties:
+  href:
+    type: string
+    format: uri

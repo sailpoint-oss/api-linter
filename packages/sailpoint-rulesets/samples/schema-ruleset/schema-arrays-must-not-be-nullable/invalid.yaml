@@ -1,0 +1,16 @@
+# One array is nullable, and the other has a null default.
+# expect: must not be nullable
+# expect: must not have a null default
+# expect-count: 2
+type: object
+properties:
+  tags:
+    type: array
+    nullable: true
+    items:
+      type: string
+  owners:
+    type: array
+    default: null
+    items:
+      type: string

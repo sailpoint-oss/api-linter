@@ -1,0 +1,14 @@
+# The example is null and the enum has null, but neither schema is nullable.
+# expect: The example is null
+# expect: The enum has a null value
+# expect-count: 2
+type: object
+properties:
+  description:
+    type: string
+    example: null
+  state:
+    type: string
+    enum:
+      - ACTIVE
+      - null

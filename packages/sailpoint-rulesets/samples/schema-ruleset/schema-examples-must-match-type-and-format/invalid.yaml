@@ -1,0 +1,18 @@
+# The uuid has no hyphens, the date-time is not RFC 3339, and the boolean is a string.
+# expect: must be a UUID
+# expect: must be an RFC 3339 date-time
+# expect: must be a boolean
+# expect-count: 3
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+    example: 2c9180835d2e5168015d32f890ca1581
+  created:
+    type: string
+    format: date-time
+    example: Mon Aug 21 14:55:39 CDT 2023
+  enabled:
+    type: boolean
+    example: "true"

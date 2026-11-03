@@ -1,0 +1,16 @@
+# instant, period and UUID are not standard formats.
+# expect: instant
+# expect: period
+# expect: UUID
+# expect-count: 3
+type: object
+properties:
+  created:
+    type: string
+    format: instant
+  timeout:
+    type: string
+    format: period
+  id:
+    type: string
+    format: UUID

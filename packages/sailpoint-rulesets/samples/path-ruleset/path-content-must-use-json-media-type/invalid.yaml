@@ -1,0 +1,15 @@
+# An error object is labelled as image/png.
+# expect: image/png
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  responses:
+    "404":
+      description: Not Found
+      content:
+        image/png:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string

@@ -1,0 +1,17 @@
+# The operation defines the Accept and Authorization headers as parameters.
+# expect: Accept
+# expect: authorization
+# expect-count: 2
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: header
+      name: Accept
+      required: false
+      schema:
+        type: string
+    - in: header
+      name: authorization
+      required: true
+      schema:
+        type: string

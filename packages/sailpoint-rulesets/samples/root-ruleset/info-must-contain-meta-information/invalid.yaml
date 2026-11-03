@@ -1,0 +1,20 @@
+# The info object has no description and no x-audience.
+# expect: info.description
+# expect: info.x-audience
+# expect-count: 2
+openapi: 3.0.3
+info:
+  title: Sample API
+  version: v1
+externalDocs:
+  url: https://developer.sailpoint.com/docs/api
+servers:
+  - url: https://{tenant}.api.identitynow.com
+tags:
+  - name: Identities
+    description: Use this API to manage identities.
+paths:
+  /identities/v1:
+    get: {}
+  /identities/v1/{id}:
+    get: {}

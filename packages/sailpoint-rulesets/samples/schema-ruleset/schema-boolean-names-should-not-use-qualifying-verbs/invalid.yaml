@@ -1,0 +1,12 @@
+# The booleans start with is and has.
+# expect: isEnabled
+# expect: hasAccess
+# expect-count: 2
+type: object
+properties:
+  isEnabled:
+    type: boolean
+    default: true
+  hasAccess:
+    type: boolean
+    default: false
