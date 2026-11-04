@@ -1,9 +1,11 @@
-# The deprecated operation and parameter do not mention the deprecation.
+# The deprecated operation and parameter do not define x-deprecated-description.
+# A description that mentions the deprecation is not enough.
 # expect-count: 2
+# expect: must define x-deprecated-description
 get:
   operationId: getIdentityV1
   deprecated: true
-  description: Use this API to get an identity.
+  description: Deprecated. Use getIdentityV2 instead.
   parameters:
     - in: query
       name: detail

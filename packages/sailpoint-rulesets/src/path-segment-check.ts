@@ -145,10 +145,15 @@ function checkVerbs(segments: string[]) {
   return problems;
 }
 
+// A version segment such as v1 or v2025. The depth check ignores only this
+// form, so other segments such as beta count as resource levels.
+const NUMBERED_VERSION_SEGMENT = /^v\d+$/;
+
+// Parameters and vN version segments do not count as resource levels.
 function checkDepth(segments: string[]) {
-  const resources = segments.filter((segment) => !isParameter(segment) && !VERSION_SEGMENT.test(segment));
+  const resources = segments.filter((segment) => !isParameter(segment) && !NUMBERED_VERSION_SEGMENT.test(segment));
   if (resources.length > 3) {
-    return [`the path has ${resources.length} resource levels and must not have more than 3 sub-resources`];
+    return [`the path has ${resources.length} resource levels (${resources.join(", ")}) and must not have more than 3`];
   }
   return [];
 }

@@ -1,5 +1,6 @@
 # The path has 4 resource levels. The version segment does not count.
 # expect-count: 1
+# expect: 4 resource levels
 openapi: 3.0.3
 info:
   title: Sample API

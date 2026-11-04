@@ -1,0 +1,5 @@
+# No request body uses this schema, so its optional properties need no default.
+type: object
+properties:
+  description:
+    type: string

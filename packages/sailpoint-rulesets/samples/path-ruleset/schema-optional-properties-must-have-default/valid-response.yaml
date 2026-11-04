@@ -1,0 +1,17 @@
+# The rule does not check response schemas. The optional property has no default.
+get:
+  operationId: getWorkflow
+  responses:
+    "200":
+      description: The workflow.
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+              description:
+                type: string

@@ -1,0 +1,25 @@
+# A helper file. It is not a sample. It connects the schema samples to request
+# bodies and responses.
+post:
+  operationId: createWorkflowV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/invalid.yaml
+  responses:
+    "201":
+      description: The workflow.
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/valid-response-only.yaml
+put:
+  operationId: putWorkflowV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            $ref: ../schemas/valid.yaml

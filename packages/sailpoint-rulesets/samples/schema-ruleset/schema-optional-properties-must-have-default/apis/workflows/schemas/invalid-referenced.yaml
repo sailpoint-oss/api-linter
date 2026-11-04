@@ -1,0 +1,9 @@
+# The request body schema invalid.yaml references this schema, so it is also
+# part of the request body. The optional property timeout has no default.
+# expect: The optional property timeout must define a default value, because the schema is used in a request body
+# expect-count: 1
+type: object
+properties:
+  timeout:
+    type: integer
+    format: int32

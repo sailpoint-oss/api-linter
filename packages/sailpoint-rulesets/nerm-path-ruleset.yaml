@@ -13,6 +13,7 @@ functions:
   ]
 rules:
   path-parameters-must-have-description:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303
     description: "Rule 303: Path/Query parameters must have a description: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     given: $.*.parameters.*
     severity: error
@@ -20,6 +21,7 @@ rules:
       field: description
       function: truthy
   path-parameters-must-have-a-lengthy-description:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303
     description: "Rule 303: The description of parameters must be at least 8 characters: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     type: style
     given: $.*.parameters.*
@@ -30,6 +32,7 @@ rules:
       functionOptions:
         min: 8
   path-parameters-must-have-example:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
     given: $.*.parameters.*
     severity: error
@@ -38,6 +41,7 @@ rules:
       functionOptions:
         rule: 304
   path-parameters-must-have-valid-formats-for-numbers-and-integers:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171"
     given: $.*.parameters.*
     severity: error
@@ -46,6 +50,7 @@ rules:
       functionOptions:
         rule: 171
   path-summary-length:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#305
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#305"
     given: $.*.summary
     severity: warn
@@ -55,6 +60,7 @@ rules:
         maxWordCount: 5
         rule: 305
   path-description-html-chars:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#408
     message: "{{error}}"
     given: $.*.description
     severity: error
@@ -63,6 +69,7 @@ rules:
       functionOptions:
         rule: 408
   path-operation-check:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#400
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#400"
     given: $
     severity: error
@@ -71,6 +78,7 @@ rules:
       functionOptions:
         rule: 400
   path-must-not-contain-docusaurus-variable-syntax:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#406
     message: "{{error}}"
     resolved: false
     given: $

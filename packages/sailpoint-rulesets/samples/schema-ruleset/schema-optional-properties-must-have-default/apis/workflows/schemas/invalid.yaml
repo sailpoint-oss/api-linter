@@ -1,4 +1,4 @@
-# The optional properties description and tags have no default.
+# A POST request body uses this schema. The optional properties description and tags have no default.
 # expect: The optional property description must define a default value
 # expect: The optional property tags must define a default value
 # expect-count: 2
@@ -14,3 +14,5 @@ properties:
     type: array
     items:
       type: string
+  settings:
+    $ref: ./invalid-referenced.yaml

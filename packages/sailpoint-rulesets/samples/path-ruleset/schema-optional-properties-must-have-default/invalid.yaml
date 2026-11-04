@@ -1,19 +1,31 @@
-# The inline response schema has an optional property with no default.
+# The optional query parameter and the optional property of the inline request
+# body have no default.
+# expect: The optional query parameter limit must define a default value
 # expect: The optional property description must define a default value
-# expect-count: 1
-get:
-  operationId: getWorkflow
-  responses:
-    "200":
-      description: The workflow.
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - id
-            properties:
-              id:
-                type: string
-              description:
-                type: string
+# expect-count: 2
+post:
+  operationId: createWorkflowV1
+  parameters:
+    - in: query
+      name: limit
+      required: false
+      schema:
+        type: integer
+        format: int32
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            description:
+              type: string

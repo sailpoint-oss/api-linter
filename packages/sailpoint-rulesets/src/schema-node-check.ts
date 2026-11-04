@@ -20,9 +20,14 @@
 //   null    - a null example, default or enum value needs nullable: true (rule 318)
 //   map      - a map that uses additionalProperties has no properties (rule 216)
 //   required - a required list is not null or empty (rule 317)
-//   defaults - each optional property defines a default (rule 316)
+//   defaults - each optional property defines a default (rule 316). For a
+//              query parameter, an optional parameter defines a default.
+//
+// The "requestBodyOnly" option checks only the schema files that a request
+// body uses. See request-body-schemas.ts.
 
 import { createOptionalContextRulesetFunction } from "./createOptionalContextRulesetFunction.js";
+import { isRequestBodySchema } from "./request-body-schemas.js";
 
 type SchemaNode = {
   type?: unknown;
@@ -93,9 +98,28 @@ function checkDefaults(node: SchemaNode) {
   for (const [name, property] of Object.entries(node.properties as Record<string, any>)) {
     if (required.includes(name) || !property || typeof property !== "object") continue;
     if ("$ref" in property || property.type === "boolean" || "default" in property) continue;
-    results.push({ message: `The optional property ${name} must define a default value`, path: ["properties", name] });
+    results.push({
+      message: `The optional property ${name} must define a default value, because the schema is used in a request body. Add a default, or add ${name} to the required list`,
+      path: ["properties", name],
+    });
   }
   return results;
+}
+
+type Parameter = { in?: unknown; name?: unknown; required?: unknown; schema?: Record<string, unknown> };
+
+// An optional query parameter defines the default in its schema. A $ref
+// schema gets its default from the referenced schema.
+function checkQueryParameterDefault(parameter: Parameter) {
+  if (parameter.in !== "query" || parameter.required === true) return [];
+  const schema = parameter.schema;
+  if (!schema || typeof schema !== "object" || "$ref" in schema || "default" in schema) return [];
+  return [
+    {
+      message: `The optional query parameter ${String(parameter.name)} must define a default value in its schema, or set required: true`,
+      path: ["schema"],
+    },
+  ];
 }
 
 const CHECKS: Record<string, (node: SchemaNode) => { message: string; path: string[] }[]> = {
@@ -116,18 +140,24 @@ export default createOptionalContextRulesetFunction(
       properties: {
         check: { enum: Object.keys(CHECKS) },
         rule: true,
+        requestBodyOnly: { type: "boolean" },
       },
       required: ["check", "rule"],
     },
   },
-  (targetVal: SchemaNode, options: { check: string; rule: string }, context) => {
-    const { check, rule } = options;
+  (targetVal: SchemaNode, options: { check: string; rule: string; requestBodyOnly?: boolean }, context) => {
+    const { check, rule, requestBodyOnly } = options;
     if (targetVal === null || typeof targetVal !== "object" || Array.isArray(targetVal)) return;
-    // The root of a schema file is also passed in, so make sure that it is a schema.
-    if (typeof targetVal.type !== "string") return;
+    if (requestBodyOnly && !isRequestBodySchema(context?.document?.source)) return;
 
     const basePath = context?.path ?? [];
-    return CHECKS[check](targetVal).map(({ message, path }) => ({
+    // A parameter object is not a schema, so it has its own check.
+    const isParameter = check === "defaults" && typeof (targetVal as Parameter).in === "string";
+    // The root of a schema file is also passed in, so make sure that it is a schema.
+    if (!isParameter && typeof targetVal.type !== "string") return;
+
+    const problems = isParameter ? checkQueryParameterDefault(targetVal as Parameter) : CHECKS[check](targetVal);
+    return problems.map(({ message, path }) => ({
       message: `Rule ${rule}: ${message}`,
       path: [...basePath, ...path],
     }));
