@@ -1,0 +1,16 @@
+# The enum values of the request body property use camelCase.
+# expect: inProgress
+# expect-count: 1
+post:
+  operationId: createWorkflowV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - PENDING
+                - inProgress

@@ -14,8 +14,8 @@ post:
         application/json:
           schema:
             $ref: ../schemas/valid-response-only.yaml
-put:
-  operationId: putWorkflowV1
+patch:
+  operationId: patchWorkflowV1
   requestBody:
     content:
       application/json:
@@ -23,3 +23,10 @@ put:
           type: array
           items:
             $ref: ../schemas/valid.yaml
+put:
+  operationId: putWorkflowV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../schemas/valid-put-only.yaml

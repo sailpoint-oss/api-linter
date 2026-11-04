@@ -16,6 +16,7 @@ function isResponseObject(value: unknown): value is ResponseObject {
   return typeof value === "object" && value !== null && "content" in value;
 }
 
+// A list is a top-level array, or an object with an items array (rule 110).
 function hasArrayResponse(operation: OperationObject): boolean {
   const response = operation.responses?.["200"];
   if (!response || !isResponseObject(response)) return false;
@@ -23,7 +24,9 @@ function hasArrayResponse(operation: OperationObject): boolean {
   const schema = response.content?.["application/json"]?.schema;
   if (!schema || typeof schema !== "object" || !("type" in schema))
     return false;
-  return schema.type === "array";
+  if (schema.type === "array") return true;
+  const items = schema.properties?.items;
+  return schema.type === "object" && typeof items === "object" && items !== null && "type" in items && items.type === "array";
 }
 
 // Create the original function using Spectral's helper.

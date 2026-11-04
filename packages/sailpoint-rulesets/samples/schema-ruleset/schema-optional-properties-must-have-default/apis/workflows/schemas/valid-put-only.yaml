@@ -1,0 +1,10 @@
+# Only a PUT request body uses this schema. In a PUT, a missing field keeps the
+# stored value, so its optional properties need no default.
+type: object
+required:
+  - name
+properties:
+  name:
+    type: string
+  description:
+    type: string
