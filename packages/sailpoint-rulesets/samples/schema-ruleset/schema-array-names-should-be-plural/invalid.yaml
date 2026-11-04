@@ -1,0 +1,9 @@
+# The array name is singular.
+# expect: owner
+# expect-count: 1
+type: object
+properties:
+  owner:
+    type: array
+    items:
+      type: string

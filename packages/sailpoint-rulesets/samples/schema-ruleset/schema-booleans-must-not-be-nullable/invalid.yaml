@@ -1,0 +1,7 @@
+# The boolean property can be null.
+# expect-count: 1
+type: object
+properties:
+  enabled:
+    type: boolean
+    nullable: true

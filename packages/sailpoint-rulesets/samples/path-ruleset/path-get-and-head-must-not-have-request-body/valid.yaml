@@ -1,0 +1,11 @@
+# The POST has a body, and the GET does not.
+get:
+  operationId: getIdentityV1
+post:
+  operationId: createIdentityV1
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object

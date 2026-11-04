@@ -1,0 +1,15 @@
+# The parameters use workflowType.
+parameters:
+  - in: query
+    name: workflowType
+    required: false
+    schema:
+      type: string
+get:
+  operationId: listWorkflowsV1
+  parameters:
+    - in: header
+      name: workflowType
+      required: false
+      schema:
+        type: string

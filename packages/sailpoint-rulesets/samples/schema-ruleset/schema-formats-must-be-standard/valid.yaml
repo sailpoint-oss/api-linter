@@ -1,0 +1,12 @@
+# Each format is in the guideline list.
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+  timeout:
+    type: string
+    format: duration
+  created:
+    type: string
+    format: date-time

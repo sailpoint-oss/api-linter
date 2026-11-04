@@ -1,0 +1,10 @@
+# The optional path-level query parameter has no default.
+# expect-count: 1
+parameters:
+  - in: query
+    name: offset
+    schema:
+      type: integer
+      format: int32
+get:
+  operationId: listWorkflowsV1

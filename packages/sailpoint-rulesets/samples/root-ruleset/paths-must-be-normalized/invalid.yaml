@@ -1,0 +1,20 @@
+# One path has a trailing slash and one has an empty segment.
+# expect-count: 2
+openapi: 3.0.3
+info:
+  title: Sample API
+  version: v1
+  description: Use this API to manage identities.
+  x-audience: external-public
+externalDocs:
+  url: https://developer.sailpoint.com/docs/api
+servers:
+  - url: https://{tenant}.api.identitynow.com
+tags:
+  - name: Identities
+    description: Use this API to manage identities.
+paths:
+  /identities/v1/:
+    get: {}
+  /identities/v1//accounts:
+    get: {}

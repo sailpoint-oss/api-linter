@@ -1,0 +1,11 @@
+# The media types are standard. Form data is allowed.
+post:
+  operationId: createIdentityV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+      application/x-www-form-urlencoded:
+        schema:
+          type: object

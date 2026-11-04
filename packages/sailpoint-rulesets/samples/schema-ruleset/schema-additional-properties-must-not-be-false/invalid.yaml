@@ -1,0 +1,7 @@
+# The object closes itself for extension.
+# expect-count: 1
+type: object
+additionalProperties: false
+properties:
+  name:
+    type: string

@@ -1,0 +1,13 @@
+# The inline boolean is nullable.
+# expect-count: 1
+post:
+  operationId: createIdentityV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+              nullable: true

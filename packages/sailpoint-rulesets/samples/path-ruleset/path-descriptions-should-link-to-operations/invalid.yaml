@@ -1,0 +1,5 @@
+# The description refers to another operation with GET /path text.
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  description: Use this API to get an identity. To list identities, use `GET /identities`.

@@ -1,0 +1,10 @@
+# The 400 response is defined inline.
+# expect: The 400 response is defined inline
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  responses:
+    "400":
+      description: Bad Request
+    "500":
+      $ref: ../../shared/responses/500.yaml

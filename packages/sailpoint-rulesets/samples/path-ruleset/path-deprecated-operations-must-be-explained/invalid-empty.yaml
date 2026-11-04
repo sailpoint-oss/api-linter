@@ -1,0 +1,7 @@
+# The deprecated operation sets x-deprecated-description to an empty value.
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  deprecated: true
+  x-deprecated-description: ""
+  description: Use this API to get an identity.

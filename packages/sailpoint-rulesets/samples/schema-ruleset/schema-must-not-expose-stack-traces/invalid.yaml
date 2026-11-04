@@ -1,0 +1,9 @@
+# The error exposes a stack trace.
+# expect: stackTrace
+# expect-count: 1
+type: object
+properties:
+  message:
+    type: string
+  stackTrace:
+    type: string

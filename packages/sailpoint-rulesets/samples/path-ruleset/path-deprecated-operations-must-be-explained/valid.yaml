@@ -1,0 +1,15 @@
+# The deprecated operation and parameter define x-deprecated-description.
+get:
+  operationId: getIdentityV1
+  deprecated: true
+  x-deprecated-description: Use getIdentityV2 instead.
+  description: Use this API to get an identity.
+  parameters:
+    - in: query
+      name: detail
+      deprecated: true
+      x-deprecated-description: The detail level is no longer used. Remove this parameter.
+      required: false
+      description: The level of detail.
+      schema:
+        type: string

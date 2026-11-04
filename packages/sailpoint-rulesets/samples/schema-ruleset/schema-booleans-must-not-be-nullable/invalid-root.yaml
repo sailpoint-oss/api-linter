@@ -1,0 +1,4 @@
+# The schema file itself is a nullable boolean.
+# expect-count: 1
+type: boolean
+nullable: true

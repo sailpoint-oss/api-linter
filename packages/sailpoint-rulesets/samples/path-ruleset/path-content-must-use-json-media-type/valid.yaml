@@ -1,0 +1,14 @@
+# The JSON payload uses application/json, and the file download is binary.
+get:
+  operationId: getIdentityV1
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+        application/octet-stream:
+          schema:
+            type: string
+            format: binary

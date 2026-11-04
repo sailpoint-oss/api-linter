@@ -1,0 +1,17 @@
+# The list operation returns an object with an items array.
+get:
+  operationId: listWorkflows
+  summary: List workflows
+  description: Use this API to get a list of workflows.
+  responses:
+    "200":
+      description: List of workflows.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: object

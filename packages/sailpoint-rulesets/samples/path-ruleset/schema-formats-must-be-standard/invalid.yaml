@@ -1,0 +1,12 @@
+# The parameter uses the format datetime instead of date-time.
+# expect: datetime
+# expect-count: 1
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - in: query
+      name: since
+      required: false
+      schema:
+        type: string
+        format: datetime

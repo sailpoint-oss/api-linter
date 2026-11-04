@@ -1,0 +1,11 @@
+# The enum values are UPPER_SNAKE_CASE. Integer enums are not checked.
+type: object
+properties:
+  status:
+    type: string
+    enum:
+      - COMPLETED
+      - IN_PROGRESS
+  level:
+    type: integer
+    enum: [1, 2]

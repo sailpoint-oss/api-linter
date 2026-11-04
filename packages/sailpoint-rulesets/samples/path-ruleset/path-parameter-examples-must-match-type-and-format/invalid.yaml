@@ -1,0 +1,21 @@
+# The header example is an unquoted boolean, and the uuid example is not a UUID.
+# expect: The example true must be a string
+# expect: must be a UUID
+# expect-count: 2
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: header
+      name: X-SailPoint-Experimental
+      required: true
+      example: true
+      schema:
+        type: string
+        default: "true"
+    - in: path
+      name: id
+      required: true
+      example: 2c9180835d2e5168015d32f890ca1581
+      schema:
+        type: string
+        format: uuid

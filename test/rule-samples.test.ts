@@ -16,6 +16,7 @@ import Parsers from "@stoplight/spectral-parsers";
 import { createHttpAndFileResolver } from "@stoplight/spectral-ref-resolver";
 import { bundleAndLoadRuleset } from "@stoplight/spectral-ruleset-bundler/with-loader";
 import spectralRuntime from "@stoplight/spectral-runtime";
+import { filterIgnoredResults } from "../packages/github-spectral-comment/src/lint-ignore.js";
 
 const { Spectral, Document } = spectralCore;
 const { fetch } = spectralRuntime;
@@ -141,10 +142,16 @@ for (const ruleset of RULESETS) {
           test(`${sample.name} ${label}`, async () => {
             const content = fs.readFileSync(sample.file, "utf8");
             const directives = readDirectives(content);
-            const results = await withEnv(directives.env, () =>
-              spectral.run(new Document(content, Parsers.Yaml, sample.file), {
-                ignoreUnknownFormat: ruleset.ignoreUnknownFormat,
-              }),
+            // Filter the results as the PR action does, so that samples can
+            // show the x-sailpoint-lint-ignore extension.
+            const results = filterIgnoredResults(
+              await withEnv(directives.env, () =>
+                spectral.run(new Document(content, Parsers.Yaml, sample.file), {
+                  ignoreUnknownFormat: ruleset.ignoreUnknownFormat,
+                }),
+              ),
+              sample.file,
+              content,
             );
 
             const parseErrors = results.filter((r) => r.code === "parser");

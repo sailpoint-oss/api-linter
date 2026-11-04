@@ -1,0 +1,13 @@
+# The names use snake_case, PascalCase and ID.
+# expect: peer_group_id
+# expect: DisplayName
+# expect: ownerID
+# expect-count: 3
+type: object
+properties:
+  peer_group_id:
+    type: string
+  DisplayName:
+    type: string
+  ownerID:
+    type: string

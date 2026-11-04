@@ -1,0 +1,35 @@
+# The paging parameters use the standard names.
+get:
+  operationId: listIdentitiesV1
+  tags:
+    - Identities
+  summary: List identities
+  description: Use this API to list identities.
+  parameters:
+    - in: query
+      name: limit
+      description: Max number of results to return.
+      required: false
+      example: 250
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 250
+        default: 250
+    - in: query
+      name: forSegmentIds
+      description: Return only identities in these segments.
+      required: false
+      example: segment-1
+      schema:
+        type: string
+  responses:
+    "200":
+      description: The identities.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object

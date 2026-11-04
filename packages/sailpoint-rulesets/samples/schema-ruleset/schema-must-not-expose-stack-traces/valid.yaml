@@ -1,0 +1,5 @@
+# The error has no stack trace.
+type: object
+properties:
+  message:
+    type: string

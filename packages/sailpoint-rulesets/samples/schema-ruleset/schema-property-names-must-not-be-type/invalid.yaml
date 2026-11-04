@@ -1,0 +1,12 @@
+# A top-level property and a nested property are named type.
+# expect: too generic
+# expect-count: 2
+type: object
+properties:
+  type:
+    type: string
+  trigger:
+    type: object
+    properties:
+      type:
+        type: string

@@ -1,0 +1,16 @@
+# The operation has no parameters and no request body, so it does not need a 400 response.
+get:
+  operationId: getTenantContext
+  summary: Get tenant context
+  description: Use this API to get the context of the current tenant.
+  responses:
+    "200":
+      description: The tenant context.
+    "401":
+      description: Unauthorized, the request has no valid credentials.
+    "403":
+      description: Forbidden, the caller has no access.
+    "429":
+      description: Too many requests.
+    "500":
+      description: Internal server error.

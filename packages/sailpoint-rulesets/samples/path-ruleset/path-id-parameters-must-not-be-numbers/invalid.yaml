@@ -1,0 +1,12 @@
+# The ID path parameter is an integer.
+# expect: id
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: integer
+        format: int64

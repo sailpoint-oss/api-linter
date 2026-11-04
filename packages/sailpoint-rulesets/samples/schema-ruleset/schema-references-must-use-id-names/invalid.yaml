@@ -1,0 +1,8 @@
+# The owner property holds an ID, so it must be ownerId.
+# expect: owner
+# expect-count: 1
+type: object
+properties:
+  owner:
+    type: string
+    example: 2c9180835d2e5168015d32f890ca1581

@@ -1,0 +1,17 @@
+# The paging and sorting parameters use names that are not standard.
+# expect: pageSize
+# expect: sortBy
+# expect-count: 2
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - in: query
+      name: pageSize
+      required: false
+      schema:
+        type: integer
+    - in: query
+      name: sortBy
+      required: false
+      schema:
+        type: string

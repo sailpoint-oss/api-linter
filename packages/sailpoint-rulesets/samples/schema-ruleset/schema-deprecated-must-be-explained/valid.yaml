@@ -1,0 +1,7 @@
+# The deprecated property explains the deprecation.
+type: object
+properties:
+  owner:
+    type: string
+    deprecated: true
+    description: Deprecated. Use ownerId instead.

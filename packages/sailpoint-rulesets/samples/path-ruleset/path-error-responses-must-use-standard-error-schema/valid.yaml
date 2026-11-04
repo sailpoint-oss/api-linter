@@ -1,0 +1,32 @@
+# The 400 response uses the ErrorResponseDto shape. The gateway 401 is not checked.
+get:
+  operationId: getIdentityV1
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detailCode:
+                type: string
+              trackingId:
+                type: string
+              messages:
+                type: array
+                items:
+                  type: object
+              causes:
+                type: array
+                items:
+                  type: object
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string

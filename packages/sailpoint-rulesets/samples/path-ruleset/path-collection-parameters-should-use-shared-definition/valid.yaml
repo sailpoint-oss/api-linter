@@ -1,0 +1,6 @@
+# limit and offset use $ref to the shared parameter files.
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - $ref: ./shared-limit.yaml
+    - $ref: ./shared-offset.yaml

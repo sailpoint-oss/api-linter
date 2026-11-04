@@ -1,0 +1,8 @@
+# The async operation returns 200.
+# expect: deleteIdentityAsyncV1
+# expect-count: 1
+post:
+  operationId: deleteIdentityAsyncV1
+  responses:
+    "200":
+      description: OK

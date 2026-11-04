@@ -1,0 +1,30 @@
+# The inline schemas have a required list with values, or no required list. The required: true of a parameter is not a schema required list.
+post:
+  operationId: createWorkflow
+  parameters:
+    - in: query
+      name: dryRun
+      required: true
+      schema:
+        type: boolean
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+  responses:
+    "201":
+      description: The workflow was created.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                default: ""

@@ -1,0 +1,21 @@
+# The PATCH and DELETE on a single resource define 404. The path parameter is at the path level.
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+patch:
+  operationId: patchIdentityV1
+  responses:
+    "200":
+      description: OK
+    "404":
+      description: Not Found
+delete:
+  operationId: deleteIdentityV1
+  responses:
+    "204":
+      description: No Content
+    "404":
+      description: Not Found

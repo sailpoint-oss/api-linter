@@ -1,0 +1,17 @@
+# The query parameters use kebab-case and snake_case.
+# expect: for-segment-ids
+# expect: include_unsegmented
+# expect-count: 2
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - in: query
+      name: for-segment-ids
+      required: false
+      schema:
+        type: string
+    - in: query
+      name: include_unsegmented
+      required: false
+      schema:
+        type: boolean

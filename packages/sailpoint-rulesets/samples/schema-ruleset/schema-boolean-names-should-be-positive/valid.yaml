@@ -1,0 +1,9 @@
+# The booleans have positive names.
+type: object
+properties:
+  enabled:
+    type: boolean
+    default: true
+  notifyOwner:
+    type: boolean
+    default: false

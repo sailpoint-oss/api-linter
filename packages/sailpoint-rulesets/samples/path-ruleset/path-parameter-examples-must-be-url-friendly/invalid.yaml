@@ -1,0 +1,19 @@
+# The path parameter examples have an @ sign and a space.
+# expect: bobsmith@sailpoint.com
+# expect: Jane Doe
+# expect-count: 2
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: path
+      name: email
+      required: true
+      example: bobsmith@sailpoint.com
+      schema:
+        type: string
+    - in: path
+      name: name
+      required: true
+      schema:
+        type: string
+        example: Jane Doe

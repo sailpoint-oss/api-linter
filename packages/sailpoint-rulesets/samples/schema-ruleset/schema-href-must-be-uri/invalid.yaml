@@ -1,0 +1,6 @@
+# The href has no uri format.
+# expect-count: 1
+type: object
+properties:
+  href:
+    type: string

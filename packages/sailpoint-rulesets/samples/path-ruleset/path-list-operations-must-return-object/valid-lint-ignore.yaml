@@ -1,0 +1,16 @@
+# An existing list operation returns a top-level array. A change breaks clients, so it turns off the rule and says what to do in the next version.
+get:
+  operationId: listWorkflows
+  summary: List workflows
+  description: Use this API to get a list of workflows.
+  x-sailpoint-lint-ignore:
+    path-list-operations-must-return-object: This existing list operation returns a top-level array, and a change breaks clients. In the next version of this API, return an object with an items array.
+  responses:
+    "200":
+      description: List of workflows.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object

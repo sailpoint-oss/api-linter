@@ -40,7 +40,10 @@ function resolveOperationIdArray(source: string | undefined): string[] {
     }
   }
 
-  return envVar ? JSON.parse(envVar) : [];
+  // A resource operation ID can point to an operation that exists only in the
+  // internal specs, so the internal operation IDs are valid for every file.
+  const internal = process.env.INTERNAL_OPERATION_IDS;
+  return [...(envVar ? JSON.parse(envVar) : []), ...(internal ? JSON.parse(internal) : [])];
 }
 
 // Create the original function using Spectral's helper.

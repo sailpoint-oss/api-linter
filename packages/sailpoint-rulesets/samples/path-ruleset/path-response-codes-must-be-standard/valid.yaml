@@ -1,0 +1,17 @@
+# Each code is standard and allowed for its method.
+get:
+  operationId: getIdentityV1
+  responses:
+    "200":
+      description: OK
+    "304":
+      description: Not Modified
+    "404":
+      description: Not Found
+delete:
+  operationId: deleteIdentityV1
+  responses:
+    "204":
+      description: No Content
+    "412":
+      description: Precondition Failed

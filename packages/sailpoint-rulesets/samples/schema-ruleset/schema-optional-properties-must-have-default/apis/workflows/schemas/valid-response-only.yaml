@@ -1,0 +1,9 @@
+# Only a response uses this schema, so its optional properties need no default.
+type: object
+required:
+  - id
+properties:
+  id:
+    type: string
+  description:
+    type: string

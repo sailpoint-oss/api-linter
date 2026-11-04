@@ -1,0 +1,27 @@
+# One 429 response defines retry-after, and the other defines the x-ratelimit headers.
+get:
+  operationId: getIdentityV1
+  responses:
+    "429":
+      description: Too Many Requests
+      headers:
+        retry-after:
+          description: The number of seconds to wait.
+          schema:
+            type: integer
+            format: int32
+post:
+  operationId: createIdentityV1
+  responses:
+    "429":
+      description: Too Many Requests
+      headers:
+        x-ratelimit-limit:
+          schema:
+            type: integer
+        x-ratelimit-remaining:
+          schema:
+            type: integer
+        x-ratelimit-reset:
+          schema:
+            type: integer

@@ -1,0 +1,12 @@
+# The response uses an experimental x- media type.
+# expect: application/x-yaml
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  responses:
+    "200":
+      description: OK
+      content:
+        application/x-yaml:
+          schema:
+            type: string

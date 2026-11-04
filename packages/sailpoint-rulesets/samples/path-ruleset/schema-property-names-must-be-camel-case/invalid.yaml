@@ -1,0 +1,13 @@
+# An inline schema property name uses snake_case.
+# expect: display_name
+# expect-count: 1
+post:
+  operationId: createIdentityV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            display_name:
+              type: string

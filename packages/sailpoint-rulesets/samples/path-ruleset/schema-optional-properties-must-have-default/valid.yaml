@@ -1,0 +1,45 @@
+# The optional query parameter and the optional request body property define a
+# default. A required query parameter, a $ref schema and a header parameter need
+# no default.
+parameters:
+  - in: query
+    name: offset
+    schema:
+      type: integer
+      format: int32
+      default: 0
+post:
+  operationId: createWorkflowV1
+  parameters:
+    - in: query
+      name: limit
+      schema:
+        type: integer
+        format: int32
+        default: 250
+    - in: query
+      name: name
+      required: true
+      schema:
+        type: string
+    - in: query
+      name: sorters
+      schema:
+        $ref: ../../shared/schemas/sorters.yaml
+    - in: header
+      name: x-request-id
+      schema:
+        type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+              default: ""

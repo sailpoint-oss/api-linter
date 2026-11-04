@@ -1,0 +1,4 @@
+# A helper file for valid-lint-ignore-referenced-schema.yaml. It is not a sample.
+type: array
+items:
+  type: object

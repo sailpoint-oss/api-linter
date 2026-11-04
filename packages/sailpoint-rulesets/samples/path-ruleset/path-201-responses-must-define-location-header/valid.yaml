@@ -1,0 +1,12 @@
+# The 201 response defines the location header.
+post:
+  operationId: createIdentityV1
+  responses:
+    "201":
+      description: Created
+      headers:
+        location:
+          description: The URL of the new identity.
+          schema:
+            type: string
+            format: uri

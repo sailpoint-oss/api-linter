@@ -1,0 +1,9 @@
+# The deprecated property does not mention the deprecation.
+# expect-count: 1
+# expect: must contain the word "deprecated"
+type: object
+properties:
+  owner:
+    type: string
+    deprecated: true
+    description: The owner of the object.

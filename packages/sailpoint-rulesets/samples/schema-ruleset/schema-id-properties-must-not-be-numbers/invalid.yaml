@@ -1,0 +1,12 @@
+# The IDs are numbers.
+# expect: sourceId
+# expect: id
+# expect-count: 2
+type: object
+properties:
+  id:
+    type: integer
+    format: int64
+  sourceId:
+    type: number
+    format: double

@@ -1,0 +1,6 @@
+# An async create operation follows the 202 rule, not the 201 rule.
+post:
+  operationId: createIdentityAsyncV1
+  responses:
+    "202":
+      description: Accepted

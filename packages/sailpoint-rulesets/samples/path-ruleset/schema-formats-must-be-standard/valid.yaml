@@ -1,0 +1,10 @@
+# The parameter and the property use standard formats.
+get:
+  operationId: listIdentitiesV1
+  parameters:
+    - in: query
+      name: since
+      required: false
+      schema:
+        type: string
+        format: date-time

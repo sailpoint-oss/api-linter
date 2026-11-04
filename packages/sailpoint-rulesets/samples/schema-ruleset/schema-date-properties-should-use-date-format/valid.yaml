@@ -1,0 +1,12 @@
+# The date properties set a date format, and an integer is not checked.
+type: object
+properties:
+  created:
+    type: string
+    format: date-time
+  startDate:
+    type: string
+    format: date
+  expiresAt:
+    type: integer
+    format: int64

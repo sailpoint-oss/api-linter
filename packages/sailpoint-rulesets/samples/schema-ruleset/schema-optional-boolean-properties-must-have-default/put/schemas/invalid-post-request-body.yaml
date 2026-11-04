@@ -1,0 +1,13 @@
+# Only a POST operation in ../paths/ uses this schema, so the optional boolean needs a default.
+# expect: The boolean property enabled must have a default value
+# expect-count: 1
+type: object
+required:
+  - name
+properties:
+  name:
+    type: string
+    description: The name of the workflow.
+  enabled:
+    type: boolean
+    description: Whether the workflow is enabled.

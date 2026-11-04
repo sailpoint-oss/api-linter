@@ -1,0 +1,17 @@
+# An operation parameter and a path-level parameter are named type.
+# expect: too generic
+# expect-count: 2
+parameters:
+  - in: query
+    name: type
+    required: false
+    schema:
+      type: string
+get:
+  operationId: listWorkflowsV1
+  parameters:
+    - in: header
+      name: type
+      required: false
+      schema:
+        type: string

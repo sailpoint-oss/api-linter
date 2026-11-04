@@ -1,0 +1,10 @@
+# The header parameter is a custom header.
+get:
+  operationId: getIdentityV1
+  parameters:
+    - in: header
+      name: X-SailPoint-Experimental
+      required: true
+      schema:
+        type: string
+        default: "true"

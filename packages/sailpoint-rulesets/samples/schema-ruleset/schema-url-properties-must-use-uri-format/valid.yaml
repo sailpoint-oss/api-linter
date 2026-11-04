@@ -1,0 +1,9 @@
+# The URL properties set format: uri or uri-reference.
+type: object
+properties:
+  callbackUrl:
+    type: string
+    format: uri
+  url:
+    type: string
+    format: uri-reference

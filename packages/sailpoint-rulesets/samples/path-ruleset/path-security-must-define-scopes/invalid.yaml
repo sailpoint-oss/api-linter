@@ -1,0 +1,7 @@
+# userAuth lists no scopes.
+# expect: userAuth
+# expect-count: 1
+get:
+  operationId: getIdentityV1
+  security:
+    - userAuth: []

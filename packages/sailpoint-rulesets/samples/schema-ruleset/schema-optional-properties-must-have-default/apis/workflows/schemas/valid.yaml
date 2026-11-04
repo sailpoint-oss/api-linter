@@ -1,0 +1,19 @@
+# A PUT request body uses this schema through an array. Each optional property defines a default. A required property needs no default. Booleans are checked by rule 310, and a $ref property gets its default from the referenced schema.
+type: object
+required:
+  - name
+properties:
+  name:
+    type: string
+  description:
+    type: string
+    default: ""
+  tags:
+    type: array
+    default: []
+    items:
+      type: string
+  enabled:
+    type: boolean
+  owner:
+    $ref: "./owner.yaml"

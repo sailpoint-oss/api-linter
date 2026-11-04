@@ -1,0 +1,6 @@
+# The email property sets format: email.
+type: object
+properties:
+  workEmail:
+    type: string
+    format: email

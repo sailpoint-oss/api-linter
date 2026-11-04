@@ -80,7 +80,8 @@ export async function runSpectralAnalysis(
           workspace,
           sampleRuleset !== "root-ruleset",
         );
-      } else if (file.includes("sailpoint-api.")) {
+      } else if (file.includes("sailpoint-api.") || /(^|\/)openapi\.ya?ml$/.test(file)) {
+        // The root of a collection in apis/<name>/ is an openapi.yaml file.
         core.debug(`Running root spectral ruleset on ${file}`);
         pbs = await runSpectral(
           spectralInstances.rootSpectral,

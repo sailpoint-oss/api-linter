@@ -1,0 +1,22 @@
+# The paths contain the verbs activate and run.
+# expect: "activate"
+# expect: "run"
+# expect-count: 2
+openapi: 3.0.3
+info:
+  title: Sample API
+  version: v1
+  description: Use this API to manage identities.
+  x-audience: external-public
+externalDocs:
+  url: https://developer.sailpoint.com/docs/api
+servers:
+  - url: https://{tenant}.api.identitynow.com
+tags:
+  - name: Identities
+    description: Use this API to manage identities.
+paths:
+  /identities/v1/{id}/activate:
+    post: {}
+  /campaigns/v1/{id}/run-report:
+    post: {}

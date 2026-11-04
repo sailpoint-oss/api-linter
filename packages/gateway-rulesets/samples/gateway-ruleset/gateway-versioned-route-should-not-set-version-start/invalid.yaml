@@ -1,0 +1,11 @@
+# The route path has /v2, but the route still sets versionStart.
+# expect-count: 1
+sp-gateway:
+  routes:
+    - id: "sample-with-version-start-v2"
+      path: "/sample-with-version-start/v2"
+      service: "identity"
+      versionStart: 0
+      routeType: "prefix"
+      stripPrefix: true
+      apiState: "public"

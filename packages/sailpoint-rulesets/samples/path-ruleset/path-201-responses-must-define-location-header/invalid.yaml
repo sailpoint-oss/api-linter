@@ -1,0 +1,7 @@
+# The 201 response has no location header.
+# expect-count: 1
+post:
+  operationId: createIdentityV1
+  responses:
+    "201":
+      description: Created

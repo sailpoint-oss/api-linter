@@ -7,6 +7,7 @@ functions:
   ]
 rules:
   schema-properties-must-have-example:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#304"
     given: $
     severity: error
@@ -16,6 +17,7 @@ rules:
         field: example
         rule: 304
   schema-properties-must-have-description:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#303"
     given: $
     severity: error
@@ -25,6 +27,7 @@ rules:
         field: description
         rule: 303
   schema-properties-must-have-valid-formats-for-numbers-and-integers:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#171"
     given: $
     severity: error
@@ -33,7 +36,9 @@ rules:
       functionOptions:
         rule: 171
   schema-must-not-contain-docusaurus-variable-syntax:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#406
     message: "{{error}}"
+    resolved: false
     given: $
     severity: error
     then:

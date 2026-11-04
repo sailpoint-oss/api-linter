@@ -1,0 +1,6 @@
+# The description links to the developer portal page of the other operation.
+get:
+  operationId: getIdentityV1
+  description: >-
+    Use this API to get an identity. To list identities, use
+    [List Identities](https://developer.sailpoint.com/docs/api/v2025/list-identities).

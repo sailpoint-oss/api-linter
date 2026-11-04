@@ -1,0 +1,29 @@
+# The key 4001 is not the 400 code, so 400 is missing. The path-level id parameter means that 400 is required.
+# expect: 400
+# expect-count: 1
+parameters:
+  - in: path
+    name: id
+    required: true
+    description: The ID of the identity.
+    schema:
+      type: string
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get a single identity by its ID.
+  responses:
+    "200":
+      description: The identity.
+    "4001":
+      description: Client error due to bad request.
+    "401":
+      description: Unauthorized, the request has no valid credentials.
+    "403":
+      description: Forbidden, the caller has no access to this identity.
+    "429":
+      description: Too many requests.
+    "500":
+      description: Internal server error.

@@ -1,0 +1,8 @@
+# The map also defines properties.
+# expect-count: 1
+type: object
+additionalProperties:
+  type: string
+properties:
+  name:
+    type: string

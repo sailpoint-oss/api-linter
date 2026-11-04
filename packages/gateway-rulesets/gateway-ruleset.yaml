@@ -122,6 +122,16 @@ rules:
     then:
       - function: check-version-in-id-matches-path
 
+  # A route with a version segment in its path, for example /identities/v1,
+  # uses the new versioning strategy. It does not need versionStart.
+  gateway-versioned-route-should-not-set-version-start:
+    message: "The route path has a version segment, so the route uses the new versioning strategy. Remove versionStart."
+    given: "$.sp-gateway.routes[?(@ && @.path && @.path.match(/\\/v\\d+(\\/|$)/))]"
+    severity: warn
+    then:
+      field: versionStart
+      function: undefined
+
   gateway-route-path-must-start-with-strip-prefix-path:
     given: $.sp-gateway.routes.*
     severity: error

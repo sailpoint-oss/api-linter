@@ -1,0 +1,11 @@
+in: query
+name: limit
+description: Max number of results to return.
+required: false
+example: 250
+schema:
+  type: integer
+  format: int32
+  minimum: 0
+  maximum: 250
+  default: 250
