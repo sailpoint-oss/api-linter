@@ -1,6 +1,6 @@
 # The optional query parameter and the optional request body property define a
-# default. A required query parameter, a $ref schema and a header parameter need
-# no default.
+# default. A required query parameter, a $ref schema, a header parameter and the
+# filters query parameter need no default.
 parameters:
   - in: query
     name: offset
@@ -26,6 +26,11 @@ post:
       name: sorters
       schema:
         $ref: ../../shared/schemas/sorters.yaml
+    - in: query
+      name: filters
+      required: false
+      schema:
+        type: string
     - in: header
       name: x-request-id
       schema:

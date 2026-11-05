@@ -108,10 +108,15 @@ function checkDefaults(node: SchemaNode) {
 
 type Parameter = { in?: unknown; name?: unknown; required?: unknown; schema?: Record<string, unknown> };
 
+// Query parameters that need no default. If the client sends no filters, the
+// API applies no filter and returns all results.
+const NO_DEFAULT_QUERY_PARAMETERS = new Set(["filters"]);
+
 // An optional query parameter defines the default in its schema. A $ref
 // schema gets its default from the referenced schema.
 function checkQueryParameterDefault(parameter: Parameter) {
   if (parameter.in !== "query" || parameter.required === true) return [];
+  if (typeof parameter.name === "string" && NO_DEFAULT_QUERY_PARAMETERS.has(parameter.name)) return [];
   const schema = parameter.schema;
   if (!schema || typeof schema !== "object" || "$ref" in schema || "default" in schema) return [];
   return [
