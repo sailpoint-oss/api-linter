@@ -1,0 +1,10 @@
+# The description uses a self-closing br tag.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Use this API to get an identity.<br/>The ID is required.
+  responses:
+    "200":
+      description: The identity.

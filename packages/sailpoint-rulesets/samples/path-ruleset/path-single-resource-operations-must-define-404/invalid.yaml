@@ -1,9 +1,9 @@
-# The PUT and DELETE on a single resource have no 404.
-# expect: putIdentityV1
+# The GET and DELETE on a single resource have no 404.
+# expect: getIdentityV1
 # expect: deleteIdentityV1
 # expect-count: 2
-put:
-  operationId: putIdentityV1
+get:
+  operationId: getIdentityV1
   parameters:
     - in: path
       name: id

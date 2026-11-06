@@ -588,13 +588,18 @@ rules:
     severity: error
     then:
       function: falsy
+  # The values of the sorters parameter are field names, for example name or
+  # -created, so rule 240 does not apply to them. The first two selectors
+  # skip parameters. The last two check each parameter except sorters.
   schema-enum-values-must-be-upper-snake-case:
     documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#240
-    message: "Rule 240: The enum value {{value}} must be UPPER_SNAKE_CASE. Only ISO language and country codes, for example en or en-US, can use another case: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#240"
+    message: "Rule 240: The enum value {{value}} must be UPPER_SNAKE_CASE. Only ISO language and country codes, for example en or en-US, and the values of the sorters parameter can use another case: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#240"
     resolved: false
     given:
-      - "$..enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
-      - "$..x-extensible-enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+      - "$..enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default|parameters)\\b/))]"
+      - "$..x-extensible-enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default|parameters)\\b/))]"
+      - "$..parameters[?(@ && @.name !== 'sorters')]..enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+      - "$..parameters[?(@ && @.name !== 'sorters')]..x-extensible-enum[?(@ && typeof @ === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
     severity: error
     then:
       function: pattern
@@ -612,7 +617,7 @@ rules:
         check: required
         rule: 317
   # Only query parameters and inline request body schemas. A default has no
-  # meaning in a response.
+  # meaning in a response, or in a PUT request body (rule 316).
   schema-optional-properties-must-have-default:
     documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#316
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#316"
@@ -620,8 +625,8 @@ rules:
     given:
       - "$[get,put,post,patch,delete,head,options].parameters[?(@ && @.in === 'query')]"
       - "$.parameters[?(@ && @.in === 'query')]"
-      - "$[get,put,post,patch,delete,head,options].requestBody.content.*.schema"
-      - "$[get,put,post,patch,delete,head,options].requestBody.content.*.schema..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
+      - "$[get,post,patch,delete,head,options].requestBody.content.*.schema"
+      - "$[get,post,patch,delete,head,options].requestBody.content.*.schema..[?(@ && typeof @.type === 'string' && !@path.match(/\\b(example|examples|default)\\b/))]"
     severity: error
     then:
       function: schema-node-check

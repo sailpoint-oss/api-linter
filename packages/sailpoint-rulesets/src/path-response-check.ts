@@ -13,7 +13,8 @@
 //   create-201      - a create POST returns 201 (rule 150)
 //   async-202       - an async operation returns 202 (rule 150)
 //   location-201    - a 201 response defines a location header (rule 150)
-//   not-found-404   - PUT, PATCH and DELETE on a single resource define 404 (rule 148)
+//   not-found-404   - GET, PATCH and DELETE on a single resource define 404 (rule 148).
+//                     PUT is not checked, because a PUT can create the resource.
 //   bulk-207        - a bulk or batch POST returns 207 (rule 152)
 //   rate-limit-429  - a 429 response defines rate limit headers (rule 153)
 //   error-schema    - error responses use the ErrorResponseDto shape (rule 326).
@@ -67,11 +68,11 @@ const STANDARD_CODES: Record<string, string[]> = {
 
 const GATEWAY_CODES = ["401", "429"];
 
+// The required fields of ErrorResponseDto. The causes array is optional.
 const ERROR_FIELDS: Record<string, string> = {
   detailCode: "string",
   trackingId: "string",
   messages: "array",
-  causes: "array",
 };
 
 function asObject(value: unknown): Record<string, any> | undefined {
@@ -124,7 +125,7 @@ function checkOperation(check: string, pathItem: OpenAPIV3.PathItemObject, metho
     }
 
     case "not-found-404":
-      if (!["put", "patch", "delete"].includes(method) || !hasPathParameter(pathItem, operation)) return [];
+      if (!["get", "patch", "delete"].includes(method) || !hasPathParameter(pathItem, operation)) return [];
       if (codes.includes("404")) return [];
       return [{ message: `${name} works on a single resource, so it must define a 404 response`, path: at("responses") }];
 

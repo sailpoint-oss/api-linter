@@ -1,0 +1,19 @@
+# The 400 response uses the ErrorResponseDto shape without the optional causes array.
+get:
+  operationId: getIdentityV1
+  responses:
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detailCode:
+                type: string
+              trackingId:
+                type: string
+              messages:
+                type: array
+                items:
+                  type: object

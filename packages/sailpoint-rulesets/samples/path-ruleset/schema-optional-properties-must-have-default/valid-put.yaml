@@ -1,0 +1,16 @@
+# The optional property of the inline PUT request body has no default. In a
+# PUT, a missing field keeps the stored value, so it needs no default.
+put:
+  operationId: putWorkflowV1
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            description:
+              type: string

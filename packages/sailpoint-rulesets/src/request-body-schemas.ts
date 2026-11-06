@@ -11,7 +11,10 @@ import fs from "node:fs";
 import path from "node:path";
 import yaml from "js-yaml";
 
-const METHODS = ["get", "put", "post", "patch", "delete", "head", "options"];
+// PUT is not in the list. In a PUT, a missing field keeps the stored value, so
+// a default has no meaning there (rule 316). A schema that a PUT and a POST
+// both use is still a request body schema, because of the POST.
+const METHODS = ["get", "post", "patch", "delete", "head", "options"];
 
 // One set of request body schema files for each folder of collections.
 const cache = new Map<string, Set<string>>();

@@ -1,0 +1,10 @@
+# The description shows a template value in angle brackets (rule 406). That is not HTML.
+get:
+  operationId: getIdentity
+  tags:
+    - Identities
+  summary: Get an identity
+  description: Send the request to https://<tenant>.api.identitynow.com.
+  responses:
+    "200":
+      description: The identity.

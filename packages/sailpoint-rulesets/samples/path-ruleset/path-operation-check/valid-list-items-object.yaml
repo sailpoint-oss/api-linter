@@ -1,0 +1,19 @@
+# The get operation returns an object with an items array (rule 110), so it is a list and can start with "list".
+get:
+  tags:
+    - Workflows
+  summary: List workflows
+  operationId: listWorkflowsV1
+  description: This API returns a list of workflows.
+  responses:
+    "200":
+      description: List of workflows
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: object

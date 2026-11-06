@@ -1,0 +1,13 @@
+# The enum value of the path-level parameter uses lowercase.
+# expect: active
+# expect-count: 1
+parameters:
+  - in: query
+    name: state
+    required: false
+    schema:
+      type: string
+      enum:
+        - active
+get:
+  operationId: listIdentitiesV1

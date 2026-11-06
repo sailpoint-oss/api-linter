@@ -1,0 +1,12 @@
+# A PUT on a single resource can create the resource, so it does not need a 404.
+put:
+  operationId: putIdentityV1
+  parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+        type: string
+  responses:
+    "200":
+      description: OK
