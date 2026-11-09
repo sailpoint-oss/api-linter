@@ -38,11 +38,14 @@ rules:
       function: path-query-parameter-pagination-check
       functionOptions:
         rule: 159
+  # A warning, because most existing list operations return an array, and a
+  # change to the response shape breaks clients. New versions migrate to an
+  # object with an items array.
   path-list-operations-must-return-object:
     documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#110
     message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#110"
     given: $.get
-    severity: error
+    severity: warn
     then:
       function: list-response-check
       functionOptions:

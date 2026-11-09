@@ -1,7 +1,7 @@
 // Checks that a list operation returns an object, and not a top-level array
 // (rule 110). An existing list operation that returns an array keeps it,
-// because a change to the response shape breaks clients. It turns off the
-// rule with x-sailpoint-lint-ignore, and gives the reason.
+// because a change to the response shape breaks clients. The rule is a
+// warning, and the next version of the API migrates to an object.
 //
 // path-list-operations-must-return-object:
 //   given: $.get
@@ -46,7 +46,7 @@ export default createOptionalContextRulesetFunction(
     // reach the result.
     return [
       {
-        message: `Rule ${rule}: A list operation must return an object with an items array, not a top-level array`,
+        message: `Rule ${rule}: This list operation returns a top-level array. In the next version of this API, return an object with an items array. A new list operation must return an object`,
         path: [...(context?.path ?? [])],
       },
     ];
