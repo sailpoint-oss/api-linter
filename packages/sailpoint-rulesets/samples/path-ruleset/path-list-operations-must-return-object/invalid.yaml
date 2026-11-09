@@ -1,5 +1,5 @@
 # The list operation returns a top-level array.
-# expect: Return an object with an items array
+# expect: return an object with an items array
 # expect-count: 1
 get:
   operationId: listWorkflows
