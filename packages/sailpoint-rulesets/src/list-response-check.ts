@@ -1,7 +1,6 @@
 // Checks that a list operation returns an object, and not a top-level array
-// (rule 110). An existing list operation that returns an array keeps it,
-// because a change to the response shape breaks clients. The rule is a
-// warning, and the next version of the API migrates to an object.
+// (rule 110). It's set as a warning because most of our operations currently return an array
+// but the desire is for new APIs to conform to the rule
 //
 // path-list-operations-must-return-object:
 //   given: $.get

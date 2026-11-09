@@ -39,7 +39,7 @@ rules:
       functionOptions:
         rule: 159
   # A warning, because most existing list operations return an array, and a
-  # change to the response shape breaks clients. New versions migrate to an
+  # change to the response shape breaks clients. New versions should migrate to an
   # object with an items array.
   path-list-operations-must-return-object:
     documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#110
