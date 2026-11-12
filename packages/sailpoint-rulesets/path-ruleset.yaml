@@ -3,6 +3,7 @@ functions:
     path-query-parameter-pagination-check,
     parameter-example-check,
     parameter-filter-description-check,
+    parameter-filter-field-format-check,
     parameter-sorter-description-check,
     word-count,
     deprecation,
@@ -76,6 +77,17 @@ rules:
     severity: error
     then:
       function: parameter-filter-description-check
+      functionOptions:
+        rule: 324
+  # A warning, because a change to a filter field name breaks clients. Fix the
+  # field name in the next version of the API.
+  path-filter-fields-must-match-response-format:
+    documentationUrl: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#324
+    message: "{{error}}: https://sailpoint-oss.github.io/sailpoint-api-guidelines/#324"
+    given: $[*]
+    severity: warn
+    then:
+      function: parameter-filter-field-format-check
       functionOptions:
         rule: 324
   path-sorter-parameter-must-follow-format:

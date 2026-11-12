@@ -1,0 +1,32 @@
+# An existing API turns off the rule, because a change to the filter field breaks clients.
+get:
+  operationId: listViolations
+  summary: List violations
+  description: Use this API to get a list of violations.
+  x-sailpoint-lint-ignore:
+    path-filter-fields-must-match-response-format: A change to the filter field breaks clients. Use policy.id in the next version of this API.
+  parameters:
+  - in: query
+    name: filters
+    required: false
+    schema:
+      type: string
+    example: id eq "2c9180835d2e5168015d32f890ca1581"
+    description: >-
+      Filter results using the standard syntax described in [API Standard Collection
+      Parameters](https://developer.sailpoint.com/docs/api/standard-collection-parameters#filtering-results)
+
+
+      Filtering is supported for the following fields and operators:
+
+
+      **policyId**: *eq, in*
+  responses:
+    "200":
+      description: List of violations.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "./response-item.yaml"
